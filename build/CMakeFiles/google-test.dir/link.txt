@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/google-test.dir/src/main.cpp.o  -o google-test -rdynamic ../lib/libgtest.a -lpthread 

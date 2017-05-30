@@ -1,0 +1,15 @@
+/home/lucas/Desktop/dev/build/CMakeFiles/install.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/list_install_components.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/rebuild_cache.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/google-test.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/install/strip.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/install/local.dir
+/home/lucas/Desktop/dev/build/CMakeFiles/edit_cache.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/install.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/list_install_components.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/edit_cache.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/rebuild_cache.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/gtest.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/gtest_main.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/install/strip.dir
+/home/lucas/Desktop/dev/build/include/googletest/CMakeFiles/install/local.dir
