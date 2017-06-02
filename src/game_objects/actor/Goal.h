@@ -2,14 +2,17 @@
 #define GOAL_H
 
 #include <string>
-#include "src/game_objects/actor/Actor.h"
+
+
+class Actor;
 
 class Goal{
 public:
-    Goal(std::string name);
+    Goal(std::string name) : _name(name){};
     virtual int Priority(Actor& actor) const = 0;
     virtual bool isFulfilled(Actor& actor) const = 0;
     virtual void Finish(Actor& actor) const {};
+    virtual void Check(Actor& t) = 0;
 
     const std::string _name;
 };

@@ -3,14 +3,13 @@
 
 #include "src/game_objects/actor/GoalBase.h"
 
-template <typename T>
+class Actor;
 class GoalLog
 {
 public:
-    GoalLog(std::string goal_name, T& actor) : _goal_name(goal_name), _actor(actor){};
-
-private:
-    std::string _goal_name;
-    T& _actor;
+    GoalLog(std::string goal_name_, Actor& actor_) : goal_name(goal_name_), actor(actor_){};
+    bool operator < (const GoalLog& goal_log);
+    std::string goal_name;
+    Actor& actor;
 };
 #endif

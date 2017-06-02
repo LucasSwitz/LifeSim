@@ -2,8 +2,7 @@
 #define GOALBASE_H
 
 #include <unordered_map>
-
-class Goal;
+#include "src/game_objects/actor/Goal.h"
 
 class GoalBase
 {
@@ -19,7 +18,7 @@ public:
     void add(Goal* goal);
 
 private:
-    GoalBase();
+    GoalBase(){};
     std::unordered_map<std::string, Goal*> _goal_map;
 };
 #endif  

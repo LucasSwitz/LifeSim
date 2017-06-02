@@ -1,11 +1,13 @@
 #ifndef CONDITION_H
 #define CONDITION_H
-template <typename T>
+
+#include "src/game_objects/actor/Actor.h"
+
 class Condition
 {
-    void virtual Start(T& t) = 0;
-    void virtual Update(T& t) = 0;
-    void virtual End(T& t) = 0;
-    bool virtual isFinished(T& t) = 0;
+    void virtual Start(Actor& t) = 0;
+    void virtual Update(Actor& t) = 0;
+    void virtual End(Actor& t) = 0;
+    bool virtual isFinished(Actor& t) = 0;
 };
 #endif

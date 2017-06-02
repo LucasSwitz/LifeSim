@@ -1,9 +1,9 @@
 #include "Nutrition.h"
 
-void Nutrition::Check(&Actor actor)
+void Nutrition::Check(Actor& actor)
 {
-    if(actor.getHunger() <= 0)
+    if(actor.GetHunger() <= 10)
     {
-        actor.health--;
+        actor.ApplyCondition("Starved");
     }
 }

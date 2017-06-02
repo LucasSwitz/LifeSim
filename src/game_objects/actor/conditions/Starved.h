@@ -1,9 +1,15 @@
-#include "src/game_objects/actor/Actor.h"
+#ifndef STARVED_H
+#define STARVED_H
 
-class Starved : public Condition<Actor>
+#include "src/game_objects/actor/conditions/Condition.h"
+
+class Starved : public Condition
 {
-    void virtual Start(Actor& actor) override;
-    void virtual Update(Actor& actor) override;
-    void virtual End(Actor& actor) override;
-    bool virtual isFinished(Actor& actor) override;
-}
+    Starved();
+    void  Start(Actor& actor) override;
+    void  Update(Actor& actor) override;
+    void  End(Actor& actor) override;
+    bool  isFinished(Actor& actor) override;
+};
+
+#endif
