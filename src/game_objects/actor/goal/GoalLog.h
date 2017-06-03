@@ -1,7 +1,7 @@
 #ifndef GOALLOG_H
 #define GOALLOG_H
 
-#include "src/game_objects/actor/GoalBase.h"
+#include "src/game_objects/actor/goal/GoalBase.h"
 
 class Actor;
 class GoalLog

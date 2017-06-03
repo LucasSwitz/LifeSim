@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include "src/game_objects/Entity.h"
-#include "src/game_objects/actor/GoalLog.h"
+#include "src/game_objects/actor/goal/GoalLog.h"
 
 class Actor{
 

@@ -2,7 +2,7 @@
 #define NUTRITION_H
 
 #include "src/game_objects/actor/Actor.h"
-#include "src/game_objects/actor/Goal.h"
+#include "src/game_objects/actor/goal/Goal.h"
 
 class Nutrition : public Goal
 {

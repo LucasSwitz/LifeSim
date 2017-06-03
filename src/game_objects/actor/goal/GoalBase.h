@@ -2,7 +2,7 @@
 #define GOALBASE_H
 
 #include <unordered_map>
-#include "src/game_objects/actor/Goal.h"
+#include "src/game_objects/actor/goal/Goal.h"
 
 class GoalBase
 {

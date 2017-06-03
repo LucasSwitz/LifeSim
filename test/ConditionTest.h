@@ -1,4 +1,4 @@
-#include "src/game_objects/actor/needs/Nutrition.h"
+#include "src/game_objects/actor/goal/Nutrition.h"
 #include "src/game_objects/actor/Actor.h"
 #include <gtest/gtest.h>
 
