@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="4" failures="0" disabled="0" errors="0" timestamp="2017-06-04T23:31:30" time="0.001" name="AllTests">
+  <testsuite name="CondtionTest" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="TestStarved" status="run" time="0" classname="CondtionTest" />
+    <testcase name="TestNotStarved" status="run" time="0" classname="CondtionTest" />
+  </testsuite>
+  <testsuite name="ActionsTest" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="TestDescriptors" status="run" time="0" classname="ActionsTest" />
+    <testcase name="TestAddEatAction" status="run" time="0" classname="ActionsTest" />
+  </testsuite>
+</testsuites>

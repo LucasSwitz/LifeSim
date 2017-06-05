@@ -10,3 +10,8 @@ Goal* GoalBase::GetGoal(std::string goal_name) const
 {
     return _goal_map.at(goal_name);
 }
+
+void GoalBase::erase()
+{
+    _goal_map.clear();
+}

@@ -16,6 +16,7 @@ public:
     Goal* GetGoal(std::string goal_name) const;
 
     void add(Goal* goal);
+    void erase();
 
 private:
     GoalBase(){};

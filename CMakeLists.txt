@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-set(PROJECT_NAME_STR google-test)
+set(PROJECT_NAME_STR LifeSim-Test)
 project(${PROJECT_NAME_STR} CXX)
 
 find_package(Threads REQUIRED)

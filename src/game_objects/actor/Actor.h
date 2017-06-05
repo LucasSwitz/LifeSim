@@ -2,10 +2,14 @@
 #define ACTOR_H
 
 #include <unordered_map>
+#include <queue>
+
 #include "src/game_objects/Entity.h"
 #include "src/game_objects/actor/goal/GoalLog.h"
 
-class Actor{
+class Action;
+
+class Actor : public Entity{
 
 public:
     Actor(){};
@@ -13,16 +17,22 @@ public:
     void ApplyCondition(std::string condition_name);
     bool HasCondition(std:: string condition_name);
     void Tick();
-    int GetHunger();
+    void AddToActionQueue(Action* action);
+    Action* GetCurrentAction();
+    void UpdateInternalValue(std::string key, int value);
+    int GetInternalValue(std::string key) const;
 
 protected:
-    unsigned short _age;
-    unsigned short _health;
-    unsigned short _hunger;
+    Action* _current_action = nullptr;
     std::unordered_map<std::string, int> _conditions;
     std::unordered_map<std::string, GoalLog*> _goals;
 
-    void SetHunger(int hunger);
+    std::queue<Action*> _action_queue;
+
+    std::unordered_map<std::string, int> _internal_values;
+
+private:
+    void DoActions();
 };
 
 #endif
