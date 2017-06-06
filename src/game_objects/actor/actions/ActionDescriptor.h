@@ -17,6 +17,9 @@ struct ActionDescriptor
         //pull out action
         ss >> action;
 
+        //make action uppercase
+        for (auto & c: action) c = toupper(c);
+
         std::string input = "";
         std::string last_flag = "";
 

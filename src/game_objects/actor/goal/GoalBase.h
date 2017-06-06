@@ -2,7 +2,8 @@
 #define GOALBASE_H
 
 #include <unordered_map>
-#include "src/game_objects/actor/goal/Goal.h"
+
+class Goal;
 
 class GoalBase
 {
@@ -15,8 +16,8 @@ public:
 
     Goal* GetGoal(std::string goal_name) const;
 
-    void add(Goal* goal);
-    void erase();
+    void Add(Goal* goal);
+    void Erase();
 
 private:
     GoalBase(){};

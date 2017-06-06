@@ -1,6 +1,11 @@
 #include "ActionEat.h"
 #include "src/game_objects/actor/Actor.h"
 
+ActionEat::ActionEat() : Action("EAT")
+{
+    ActionFactory::Instance()->AddAction(this);
+}
+
 void ActionEat::Start()
 {
     if(!_target)
@@ -12,6 +17,7 @@ void ActionEat::Start()
 void ActionEat::Perform()
 {
     int added_hunger = 0;
+
     if(_target->HasAttribute("Nutrition"))
     {
         added_hunger = _target->GetAttribute("Nutrition");

@@ -1,6 +1,14 @@
 #include "Entity.h"
+#include "src/game_objects/EntityManager.h"
 int Entity::_lastId = -1;
 
+
+Entity::Entity()
+{
+    _lastId++;
+    _id = _lastId;
+    EntityManager::Instance()->RegisterEntity(*this);
+}
 
 bool Entity::HasAttribute(std::string name)
 {

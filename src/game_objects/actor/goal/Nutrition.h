@@ -2,9 +2,11 @@
 #define NUTRITION_H
 
 #include <queue>
+#include "src/game_objects/actor/goal/Goal.h"
 #include "src/game_objects/actor/actions/ActionChain.h"
 #include "src/game_objects/actor/Actor.h"
-#include "src/game_objects/actor/goal/Goal.h"
+
+class Actor;
 
 class Nutrition : public Goal
 {
@@ -21,7 +23,7 @@ public:
     };
     
 protected:
-     Nutrition() : Goal("Nutrition"){};
+     Nutrition();
 private:
    
 };

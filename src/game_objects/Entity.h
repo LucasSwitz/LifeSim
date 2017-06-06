@@ -15,11 +15,7 @@ public:
     int ID();
 
 protected:
-    Entity()
-    {
-        _lastId++;
-        _id = _lastId;
-    }
+    Entity();
 
     void AddAttribute(std::string name, int value);
 

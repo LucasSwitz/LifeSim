@@ -4,11 +4,13 @@
 #include "src/game_objects/Entity.h"
 #include "src/game_objects/actor/actions/Action.h"
 #include "src/game_objects/EntityManager.h"
+#include "src/game_objects/actor/actions/ActionFactory.h"
 
 class ActionEat : public Action
 {
   public:
-    ActionEat() : Action("Eat"){};
+    ActionEat();
+
     void Start() override;
     void Perform() override;
     bool IsFinished() override;

@@ -1,5 +1,10 @@
 #include "Nutrition.h"
 
+Nutrition::Nutrition() : Goal("Nutrition")
+{
+    GoalBase::Instance()->Add(this);
+}
+
 void Nutrition::Start(Actor& actor)
 {
     

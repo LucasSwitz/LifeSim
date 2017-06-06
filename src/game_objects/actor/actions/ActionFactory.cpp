@@ -19,8 +19,10 @@ Action* ActionFactory::GetAction(std::string script, Actor& performer)
     return _GetAction(d, performer);
 }
 
+//actions will all have capital names
 void ActionFactory::AddAction(Action* action)
-{
+{   //toupper
+    for (auto & c: action->_name) c = toupper(c);
     _action_map.insert(std::make_pair(action->_name,action));
 }
 

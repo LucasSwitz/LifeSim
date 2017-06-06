@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 class Actor;
+class ActionFactory;
 
 class Action
 {
@@ -12,14 +13,13 @@ public:
     virtual void Start() = 0;
     virtual void Perform() = 0;
     virtual bool IsFinished() = 0;
-    std::string _name;
+    std::string GetName(){return _name;}
 
 protected:
     virtual Action* BuildFromScript(std::unordered_map<std::string, std::string> flags) = 0;
-
-    Action(std::string name = "unnamed"): _name(name){};
+    Action(std::string name = "unnamed") : _name(name){};
+    std::string _name;
     Actor* _performer;
-
 };
 
 #endif

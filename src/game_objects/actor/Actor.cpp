@@ -1,5 +1,6 @@
 #include "Actor.h"
 #include "src/game_objects/actor/actions/Action.h"
+#include "src/game_objects/actor/goal/Goal.h"
 
 void Actor::AddGoal(std::string goal_name)
 {
@@ -31,10 +32,9 @@ void Actor::AddToActionQueue(Action *action)
 void Actor::Tick()
 {
     if (!_goals.empty())
-    {
+    {   
         GoalBase::Instance()->GetGoal(_goals.begin()->second->goal_name)->Check(*this);
     }
-
     DoActions();
 }
 
@@ -45,6 +45,7 @@ void Actor::DoActions()
         if (!_current_action)
         {
             _current_action = _action_queue.front();
+
             _current_action->Start();
         }
 

@@ -1,15 +1,16 @@
-#include "ActionChain.h"
 #include <iostream>
+#include "ActionChain.h"
+#include "src/game_objects/actor/actions/ActionFactory.h"
 
 ActionChain::ActionChain(std::vector<std::string> scripts, Actor& performer)
 {
+
     for(std::string script: scripts)
     {
         Action* action = ActionFactory::Instance()->GetAction(script, performer);
         AddAction(action);
     }
 }
-
 
 void ActionChain::Start()
 {
@@ -18,10 +19,11 @@ void ActionChain::Start()
 
 void ActionChain::Perform()
 {
+
     if(!_current_action)
     {
         _current_action = _action_queue.front();
-        _name = _current_action->_name;
+        _name = _current_action->GetName();
         _current_action->Start();
     }
 

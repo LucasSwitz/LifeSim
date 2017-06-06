@@ -1,3 +1,4 @@
+#include "src/game_objects/actor/Actor.h"
 #include "src/game_objects/actor/goal/Nutrition.h"
 #include <gtest/gtest.h>
 
@@ -8,7 +9,6 @@ public:
 
    void SetUp()
     {
-        GoalBase::Instance()->add(Nutrition::Instance());
         _test_actor = new Actor();
         _test_actor->AddGoal("Nutrition");
     }

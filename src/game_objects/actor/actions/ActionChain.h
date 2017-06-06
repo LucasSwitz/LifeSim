@@ -3,12 +3,12 @@
 
 #include <queue>
 #include <vector>
-
-#include "src/game_objects/actor/actions/ActionFactory.h"
+#include "src/game_objects/actor/actions/Action.h"
 
 class ActionChain : public Action
 {
 public:
+    ActionChain(){};
     ActionChain(std::vector<std::string> scripts, Actor& performer);
     void Start() override;
     void Perform() override;
