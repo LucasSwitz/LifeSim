@@ -1,4 +1,8 @@
-require "actions.ActionEat"
+testString = "LuaBridge Works!"
+number = 42
 
-s = ActionEat:new("Test")
-s:Finished()
+window = {
+    title = "Window v.0.1",
+    width = 400,
+    height = 500
+}

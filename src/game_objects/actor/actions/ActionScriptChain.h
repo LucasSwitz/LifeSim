@@ -1,5 +1,5 @@
-#ifndef ActionScriptChain_H
-#define ActionScriptChain_H
+#ifndef ACTIONCHAIN_H
+#define ACTIONCHAIN_H
 
 #include <queue>
 #include <vector>

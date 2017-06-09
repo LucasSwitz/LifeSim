@@ -8,7 +8,7 @@ digraph "source tree" {
 	"Nutrition.cpp" -> "Nutrition.h"
 	"ActionFactory.cpp" -> "ActionFactory.h"
 	"Actor.cpp" -> "Actor.h"
-	"ActionScriptChain.cpp" -> "ActionScriptChain.h"
+	"ActionChain.cpp" -> "ActionChain.h"
 	"ActionEat.cpp" -> "ActionEat.h"
 	"Starved.cpp" -> "Starved.h"
 	"Entity.cpp" -> "Entity.h"

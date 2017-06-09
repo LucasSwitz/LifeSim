@@ -1,8 +1,8 @@
 #include <iostream>
-#include "ActionScriptChain.h"
+#include "ActionChain.h"
 #include "src/game_objects/actor/actions/ActionFactory.h"
 
-ActionScriptChain::ActionScriptChain(std::vector<std::string> scripts, Actor& performer)
+ActionChain::ActionChain(std::vector<std::string> scripts, Actor& performer)
 {
 
     for(std::string script: scripts)
@@ -12,12 +12,12 @@ ActionScriptChain::ActionScriptChain(std::vector<std::string> scripts, Actor& pe
     }
 }
 
-void ActionScriptChain::Start()
+void ActionChain::Start()
 {
 
 }
 
-void ActionScriptChain::Perform()
+void ActionChain::Perform()
 {
 
     if(!_current_action)
@@ -37,12 +37,12 @@ void ActionScriptChain::Perform()
     }
 }
 
-bool ActionScriptChain::IsFinished()
+bool ActionChain::IsFinished()
 {
     return _action_queue.empty();
 }
 
-void ActionScriptChain::AddAction(Action* action)
+void ActionChain::AddAction(Action* action)
 {
     _action_queue.push(action);
 }
