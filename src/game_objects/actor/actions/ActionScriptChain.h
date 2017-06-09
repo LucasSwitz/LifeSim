@@ -3,20 +3,17 @@
 
 #include <queue>
 #include <vector>
-#include "src/game_objects/actor/actions/Action.h"
+#include "src/game_objects/actor/actions/ActionScript.h"
 
-class ActionChain : public Action
+class ActionScriptChain : public ActionScript
 {
 public:
-    ActionChain(){};
-    ActionChain(std::vector<std::string> scripts, Actor& performer);
+    ActionScriptChain(){};
+    ActionScriptChain(std::vector<std::string> scripts, Actor& performer);
     void Start() override;
     void Perform() override;
     bool IsFinished() override;
     void AddAction(Action * action);
-
-protected:
-     Action* BuildFromScript(std::unordered_map<std::string, std::string> flags){};
 
 private:
     std::queue<Action*> _action_queue;

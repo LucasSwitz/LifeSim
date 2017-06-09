@@ -6,10 +6,10 @@
 
 
 class Actor;
-class GoalLog
+class GoalScript
 {
 public:
-    GoalLog(std::string goal_name_, Actor& actor_) : goal_name(goal_name_), actor(actor_){};
+    GoalScript(std::string goal_name_, Actor& actor_) : goal_name(goal_name_), actor(actor_){};
     bool operator < (const GoalLog& goal_log);
     std::string goal_name;
     Actor& actor;

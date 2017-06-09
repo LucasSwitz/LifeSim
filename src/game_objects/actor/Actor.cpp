@@ -4,7 +4,7 @@
 
 void Actor::AddGoal(std::string goal_name)
 {
-    _goals.insert(std::make_pair(goal_name, new GoalLog(goal_name, *this)));
+    _goals.insert(std::make_pair(goal_name, GoalBase::Instance()->GetGoal(goal_name,this));
 }
 
 void Actor::ApplyCondition(std::string condition_name)
@@ -24,9 +24,9 @@ bool Actor::HasCondition(std::string condition_name)
     return _conditions.find(condition_name) != _conditions.end();
 }
 
-void Actor::AddToActionQueue(Action *action)
+void Actor::AddToActionQueue(std::string action_name)
 {
-    _action_queue.push(action);
+    _action_queue.push(ActionFactory::Instance()->GetAction(action_name,this));
 }
 
 void Actor::Tick()

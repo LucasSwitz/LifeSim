@@ -13,11 +13,11 @@ class Actor : public Entity{
 
 public:
     Actor(){};
-    void AddGoal(std::string goal_name);
+    void AddGoal(std::string goal_script);
     void ApplyCondition(std::string condition_name);
     bool HasCondition(std:: string condition_name);
     void Tick();
-    void AddToActionQueue(Action* action);
+    void AddToActionQueue(std::string action_script);
     Action* GetCurrentAction();
     void UpdateInternalValue(std::string key, int value);
     int GetInternalValue(std::string key) const;

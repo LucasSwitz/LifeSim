@@ -7,11 +7,11 @@
 
 #include <unordered_map>
 
-class ActionFactory
+class ActionScriptFactory
 {
 public:
     Action* GetAction(std::string action_script, Actor& performer);
-    static ActionFactory* Instance()
+    static ActionScriptFactory* Instance()
     {
         static ActionFactory instance;
         return &instance;
