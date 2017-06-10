@@ -5,9 +5,24 @@
 
 class Condition
 {
-    void Start(Actor& t);
-    void Update(Actor& t);
-    void End(Actor& t);
-    bool isFinished(Actor& t);
+    void Start(Actor& t)
+    {
+
+    };
+
+    void Update(Actor& t)
+    {
+
+    };
+
+    void End(Actor& t)
+    {
+
+    };
+
+    bool isFinished(Actor& t)
+    {
+        
+    };
 };
 #endif

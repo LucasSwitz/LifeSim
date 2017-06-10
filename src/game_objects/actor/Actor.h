@@ -5,29 +5,31 @@
 #include <queue>
 
 #include "src/game_objects/Entity.h"
-#include "src/game_objects/actor/goal/GoalLog.h"
+#include "src/game_objects/actor/goal/GoalScript.h"
 
-class Action;
+
+class ActionScript;
+class ActionScriptFactory;
 
 class Actor : public Entity{
 
 public:
     Actor(){};
-    void AddGoal(std::string goal_script);
+    void AddGoal(std::string goal_name);
     void ApplyCondition(std::string condition_name);
     bool HasCondition(std:: string condition_name);
     void Tick();
-    void AddToActionQueue(std::string action_script);
-    Action* GetCurrentAction();
+    void AddToActionQueue(std::string action_name);
+    ActionScript* GetCurrentAction();
     void UpdateInternalValue(std::string key, int value);
     int GetInternalValue(std::string key) const;
 
 protected:
-    Action* _current_action = nullptr;
+    ActionScript* _current_action = nullptr;
     std::unordered_map<std::string, int> _conditions;
-    std::unordered_map<std::string, GoalLog*> _goals;
+    std::vector<GoalScript*> _goals;
 
-    std::queue<Action*> _action_queue;
+    std::queue<ActionScript*> _action_queue;
 
     std::unordered_map<std::string, int> _internal_values;
 

@@ -1,10 +1,11 @@
 #include "Actor.h"
-#include "src/game_objects/actor/actions/Action.h"
-#include "src/game_objects/actor/goal/Goal.h"
+#include "src/game_objects/actor/actions/ActionScript.h"
+#include "src/game_objects/actor/goal/GoalScript.h"
+#include "src/game_objects/actor/actions/ActionScriptFactory.h"
 
 void Actor::AddGoal(std::string goal_name)
 {
-    _goals.insert(std::make_pair(goal_name, GoalBase::Instance()->GetGoal(goal_name,this));
+    _goals.push_back(GoalBase::Instance()->GetGoal(goal_name));
 }
 
 void Actor::ApplyCondition(std::string condition_name)
@@ -26,14 +27,14 @@ bool Actor::HasCondition(std::string condition_name)
 
 void Actor::AddToActionQueue(std::string action_name)
 {
-    _action_queue.push(ActionFactory::Instance()->GetAction(action_name,this));
+    _action_queue.push(ActionScriptFactory::Instance()->GetAction(action_name, this));
 }
 
 void Actor::Tick()
 {
     if (!_goals.empty())
     {   
-        GoalBase::Instance()->GetGoal(_goals.begin()->second->goal_name)->Check(*this);
+        _goals.at(0)->Check(*this);
     }
     DoActions();
 }
@@ -60,7 +61,7 @@ void Actor::DoActions()
     }
 }
 
-Action *Actor::GetCurrentAction()
+ActionScript* Actor::GetCurrentAction()
 {
     return _current_action;
 }

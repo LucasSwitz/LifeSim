@@ -1,33 +1,15 @@
-#include "ActionFactory.h"
+#include "ActionScriptFactory.h"
 
-Action* ActionFactory::_GetAction(ActionDescriptor descriptor, Actor& performer)
+ActionScript* ActionScriptFactory::GetAction(std::string action_name, Actor* performer)
 {
-    if(_action_map.find(descriptor.action) == _action_map.end())
-    {
-        return nullptr; 
-    }
-
-    Action* action = BuildActionFromScript(descriptor.action, descriptor.flags);
-    action->_performer = &performer;
-
-    return action;
-}
-
-Action* ActionFactory::GetAction(std::string script, Actor& performer)
-{
-    ActionDescriptor d(script);
-    return _GetAction(d, performer);
+    ActionScript* new_action = new ActionScript(performer);
+    std::string script_path = _action_map.at(action_name);
+    new_action->LoadScript(_lua_state,script_path, action_name);
+    return new_action;
 }
 
 //actions will all have capital names
-void ActionFactory::AddAction(Action* action)
-{   //toupper
-    for (auto & c: action->_name) c = toupper(c);
-    _action_map.insert(std::make_pair(action->_name,action));
-}
-
-Action* ActionFactory::BuildActionFromScript(std::string action_name, std::unordered_map<std::string, std::string> flags)
+void ActionScriptFactory::AddAction(std::string action_name, std::string script_path)
 {
-    Action* action = _action_map.at(action_name)->BuildFromScript(flags);
-    return action;
+    _action_map.insert(std::make_pair(action_name, script_path));
 }

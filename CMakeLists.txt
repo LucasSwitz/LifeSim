@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 2.6)
+set(CMAKE_CXX_FLAGS "-llua -ldl")
 
 set(PROJECT_NAME_STR LifeSim-Test)
 project(${PROJECT_NAME_STR} CXX)
-
 find_package(Threads REQUIRED)
+
 
 add_subdirectory($ENV{GTEST_DIR})
 
 include_directories($ENV{GTEST_DIR}/include ".")
+include_directories($ENV{LUA_INCLUDE_DIR} ".")
+include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
 
 file(GLOB_RECURSE SOURCES
     main.cpp
@@ -19,6 +22,9 @@ add_executable(${PROJECT_NAME_STR} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
 
+target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua.a)
+
+target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_DL_LIBS})
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_THREAD_LIBS_INIT})
 
-target_compile_features(${PROJECT_NAME_STR} PRIVATE cxx_range_for)
+set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD 14)

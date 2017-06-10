@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 
-class Goal;
+class GoalScript;
 
 class GoalBase
 {
@@ -14,13 +14,15 @@ public:
         return &intance;
     }
 
-    Goal* GetGoal(std::string goal_name) const;
+    GoalScript* GetGoal(std::string goal_name) const;
 
-    void Add(Goal* goal);
+    void Add(std::string goal_name, GoalScript* goal);
     void Erase();
+
+    //goals will be loaded into goal base, and their singletons will have static pointers to each scripts function
 
 private:
     GoalBase(){};
-    std::unordered_map<std::string, Goal*> _goal_map;
+    std::unordered_map<std::string, GoalScript*> _goal_map;
 };
 #endif  

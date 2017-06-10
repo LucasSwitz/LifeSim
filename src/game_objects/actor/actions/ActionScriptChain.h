@@ -8,17 +8,17 @@
 class ActionScriptChain : public ActionScript
 {
 public:
-    ActionScriptChain(){};
-    ActionScriptChain(std::vector<std::string> scripts, Actor& performer);
+    ActionScriptChain(Actor* performer, std::vector<std::string> action_names);
     void Start() override;
     void Perform() override;
     bool IsFinished() override;
-    void AddAction(Action * action);
+    std::string GetName() override;
+    void AddAction(ActionScript * action);
 
 private:
-    std::queue<Action*> _action_queue;
+    std::queue<ActionScript*> _action_queue;
     bool _is_finished = false;
-    Action* _current_action = nullptr;
+    ActionScript* _current_action = nullptr;
 
 };
 #endif
