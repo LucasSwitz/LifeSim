@@ -2,15 +2,15 @@
 #include "src/game_objects/actor/Actor.h"
 
 ActionScript::ActionScript(Actor* performer) : _performer(performer),
-    start_function(nullptr), perform_function(nullptr), is_finished_function(nullptr) {}
+    _start_function(nullptr), _perform_function(nullptr), _is_finished_function(nullptr) {}
 
 void ActionScript::Start()
 {
-    if (start_function)
+    if (_start_function)
     {
         try
         {
-            (*start_function)();
+            (*_start_function)();
         }
         catch (luabridge::LuaException const &e)
         {
@@ -21,11 +21,11 @@ void ActionScript::Start()
 
 void ActionScript::Perform()
 {
-    if (perform_function)
+    if (_perform_function)
     {
         try
         {
-            (*perform_function)();
+            (*_perform_function)();
         }
         catch (luabridge::LuaException const &e)
         {
@@ -36,11 +36,11 @@ void ActionScript::Perform()
 
 bool ActionScript::IsFinished()
 {
-    if (is_finished_function)
+    if (_is_finished_function)
     {
         try
         {
-            (*is_finished_function)();
+            (*_is_finished_function)();
         }
         catch (luabridge::LuaException const &e)
         {
@@ -62,6 +62,7 @@ void ActionScript::LoadScript(luabridge::lua_State *L, const std::string &script
     {
         using namespace luabridge;
         _action_name = action_name;
+        
         if (luaL_dofile(L, script_path.c_str()) == 0)
         {
             LuaRef action_table = getGlobal(L, action_name.c_str());
@@ -79,17 +80,17 @@ void ActionScript::LoadScript(luabridge::lua_State *L, const std::string &script
 
                 if (action_table["Start"].isFunction())
                 {
-                    start_function = std::make_unique<LuaRef>(action_table["Start"]);
+                    _start_function = std::make_unique<LuaRef>(action_table["Start"]);
                 }
 
                 if (action_table["Perform"].isFunction())
                 {
-                    perform_function = std::make_unique<LuaRef>(action_table["Perform"]);
+                    _perform_function = std::make_unique<LuaRef>(action_table["Perform"]);
                 }
 
                 if (action_table["IsFinished"].isFunction())
                 {
-                    is_finished_function = std::make_unique<LuaRef>(action_table["IsFinshed"]);
+                    _is_finished_function = std::make_unique<LuaRef>(action_table["IsFinshed"]);
                 }
             }
         }
