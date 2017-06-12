@@ -3,11 +3,11 @@ ActionEat = {
         
         _performer = performer 
     end,
-    Start=function()  print(_performer) end,
+    Start=function()  
+        _performer:SetInternalValue("Hunger",5);
+    end,
     Perform=function() 
-        print("end") 
     end,
     IsFinished=function() 
-        print("lol") 
     end
 }

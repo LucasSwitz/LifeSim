@@ -11,17 +11,11 @@ void ActionScript::Start()
         try
         {
             (*start_function)();
-            std::cout << "I think it started?" << std::endl;
         }
         catch (luabridge::LuaException const &e)
         {
             std::cout << "LuaException: " << e.what() << std::endl;
         }
-    }
-    else
-    {
-        std::cout << "NO START FUNCTIOn" << std::endl;
-
     }
 }
 
@@ -71,15 +65,12 @@ void ActionScript::LoadScript(luabridge::lua_State *L, const std::string &script
         if (luaL_dofile(L, script_path.c_str()) == 0)
         {
             LuaRef action_table = getGlobal(L, action_name.c_str());
-            std::cout << "Did File!" << std::endl;
             if (action_table.isTable())
             {
-                std::cout << "Is Table!" << std::endl;
-
                 if (action_table["SetPerformer"].isFunction())
                 {
                     luabridge::LuaRef set_performer_function = action_table["SetPerformer"];
-                    (set_performer_function)(_performer->ID());
+                    (set_performer_function)(_performer);
                 }
                 else
                 {
@@ -88,22 +79,16 @@ void ActionScript::LoadScript(luabridge::lua_State *L, const std::string &script
 
                 if (action_table["Start"].isFunction())
                 {
-                    std::cout << "Start Function!" << std::endl;
-
                     start_function = std::make_unique<LuaRef>(action_table["Start"]);
                 }
 
                 if (action_table["Perform"].isFunction())
                 {
-                    std::cout << "Perform Function!" << std::endl;
-
                     perform_function = std::make_unique<LuaRef>(action_table["Perform"]);
                 }
 
                 if (action_table["IsFinished"].isFunction())
                 {
-                    std::cout << "Finished Function!" << std::endl;
-
                     is_finished_function = std::make_unique<LuaRef>(action_table["IsFinshed"]);
                 }
             }

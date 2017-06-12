@@ -66,7 +66,7 @@ ActionScript* Actor::GetCurrentAction()
     return _current_action;
 }
 
-void Actor::UpdateInternalValue(std::string key, int value)
+void Actor::SetInternalValue(std::string key, int value)
 {
     auto it = _internal_values.find(key);
     if (it == _internal_values.end())
@@ -83,7 +83,7 @@ int Actor::GetInternalValue(std::string key) const
 {
     auto it = _internal_values.find(key);
     if (it == _internal_values.end())
-    {
+    {    
         return 0;
     }
 

@@ -21,7 +21,7 @@ public:
     void Tick();
     void AddToActionQueue(std::string action_name);
     ActionScript* GetCurrentAction();
-    void UpdateInternalValue(std::string key, int value);
+    void SetInternalValue(std::string key, int value);
     int GetInternalValue(std::string key) const;
 
 protected:
