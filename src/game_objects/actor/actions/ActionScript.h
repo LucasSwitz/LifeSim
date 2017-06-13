@@ -36,9 +36,9 @@ class ActionScript
 
   private:
     Actor* _performer;
-    std::unique_ptr<luabridge::LuaRef> start_function;
-    std::unique_ptr<luabridge::LuaRef> perform_function;
-    std::unique_ptr<luabridge::LuaRef> is_finished_function;
+    std::unique_ptr<luabridge::LuaRef> _start_function;
+    std::unique_ptr<luabridge::LuaRef> _perform_function;
+    std::unique_ptr<luabridge::LuaRef> _is_finished_function;
 
     std::string _action_name = "null";
 };

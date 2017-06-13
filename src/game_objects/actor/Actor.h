@@ -18,7 +18,7 @@ public:
     void AddGoal(std::string goal_name);
     void ApplyCondition(std::string condition_name);
     bool HasCondition(std:: string condition_name);
-    void Tick();
+    virtual void Tick();
     void AddToActionQueue(std::string action_name);
     ActionScript* GetCurrentAction();
     void SetInternalValue(std::string key, int value);
