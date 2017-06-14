@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="6" failures="0" disabled="0" errors="0" timestamp="2017-06-08T22:04:02" time="0.001" name="AllTests">
-  <testsuite name="CondtionTest" tests="2" failures="0" disabled="0" errors="0" time="0">
-    <testcase name="TestStarved" status="run" time="0" classname="CondtionTest" />
-    <testcase name="TestNotStarved" status="run" time="0" classname="CondtionTest" />
-  </testsuite>
-  <testsuite name="ActionsTest" tests="2" failures="0" disabled="0" errors="0" time="0">
-    <testcase name="TestDescriptors" status="run" time="0" classname="ActionsTest" />
-    <testcase name="TestAddEatAction" status="run" time="0" classname="ActionsTest" />
-  </testsuite>
-  <testsuite name="LuaTest" tests="2" failures="0" disabled="0" errors="0" time="0.001">
-    <testcase name="LuaBridgeTest" status="run" time="0.001" classname="LuaTest" />
-    <testcase name="TableTest" status="run" time="0" classname="LuaTest" />
+<testsuites tests="1" failures="0" disabled="0" errors="0" timestamp="2017-06-14T01:21:56" time="0.001" name="AllTests">
+  <testsuite name="ScriptableStateMachineTest" tests="1" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="TestGlobalState" status="run" time="0.001" classname="ScriptableStateMachineTest" />
   </testsuite>
 </testsuites>

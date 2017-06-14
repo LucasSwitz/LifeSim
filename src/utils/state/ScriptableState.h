@@ -2,32 +2,35 @@
 #define SCRIPTIBLE_STATE
 
 #include <memory>
-#include "State.h"
 
-template<typename T>
-class ScriptibleState : public State
+class ScriptableState
 {
-    virtual void Enter(T& t)
+  public:
+    
+    template<typename T>
+    void Enter(T *t)
     {
         if (_start_function)
         {
-            (_start_function*)(t);
+            (*_start_function)(t);
         }
     };
 
-    virtual void Execute(T& t)
+    template<typename T>
+    void Execute(T *t)
     {
-        if(_execute_function)
+        if (_execute_function)
         {
-            (_execute_function*)(t);
+            (*_execute_function)(t);
         }
     };
 
-    virtual void Exit(T& t)
+    template<typename T>
+    void Exit(T *t)
     {
-        if(_exit_function)
+        if (_exit_function)
         {
-            (_exit_function*)(t);
+            (*_exit_function)(t);
         }
     };
 
@@ -35,7 +38,7 @@ class ScriptibleState : public State
     {
         using namespace luabridge;
         _state_name = state_name;
-        
+
         if (luaL_dofile(L, script_path.c_str()) == 0)
         {
             LuaRef action_table = getGlobal(L, state_name.c_str());
@@ -63,10 +66,11 @@ class ScriptibleState : public State
         }
     }
 
-private:
+  private:
     std::unique_ptr<luabridge::LuaRef> _start_function;
     std::unique_ptr<luabridge::LuaRef> _execute_function;
     std::unique_ptr<luabridge::LuaRef> _exit_function;
+    std::string _state_name;
 };
 
 #endif

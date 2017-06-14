@@ -1,5 +1,9 @@
-#include "Character.h"
+#include "src/game_objects/actor/character/Character.h"
 
+Character::Character()
+{   
+     _state_machine = new ScriptableStateMachine<Character>(this);
+}
 
 void Character::Tick()
 {
@@ -9,5 +13,10 @@ void Character::Tick()
 
 void Character::Init()
 {
-    _state_machine = new StateMachine<Character>(this);
+      
+}
+
+ScriptableStateMachine<Character>* Character::GetStateMachine()
+{
+    return _state_machine;
 }

@@ -1,12 +1,14 @@
-CharacterGlobalState = 
-{
-    function Enter(character)
+ScriptType = "State"
+StateOwner = "Character"
+StateName = "Global"
 
+CharacterGlobalState = {
+    Enter=function(character)
+        print ("Entered Global")
     end,
-    function Execute(character)
-
+    Execute=function(character)
+        character:GetStateMachine():ChangeState("Character","Global");
     end,
-    function Exit(character)
-    
+    Exit=function(character)
     end
 }

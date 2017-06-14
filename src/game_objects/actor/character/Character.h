@@ -2,17 +2,22 @@
 #define CHARACTER_H
 
 #include "src/game_objects/actor/Actor.h"
+#include "src/utils/state/ScriptableStateMachine.h"
+
 
 class Character : public Actor
 {
 
 public:
-    virtual void Tick();
+    Character();
+    virtual void Tick() override;
 
     //this can be overriden to change a Character defaults (i.e state_machine).
     virtual void Init();
-private:
-    StateMachine<Character>* _state_machine;
+    ScriptableStateMachine<Character>* GetStateMachine();
+    
+protected:
+    ScriptableStateMachine<Character>* _state_machine;
 };
 
 #endif
