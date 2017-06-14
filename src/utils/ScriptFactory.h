@@ -23,10 +23,12 @@ class ScriptFactory
         {
             Preamble pre;
 
+            //get preabmle lines
             std::getline(stream, pre.type);
             std::getline(stream, pre.owner);
             std::getline(stream, pre.name);
 
+            //get values
             if (pre.type.find("=") != std::string::npos)
                 pre.type = pre.type.substr(pre.type.find("=") + 1);
             if (pre.owner.find("=") != std::string::npos)
@@ -34,10 +36,12 @@ class ScriptFactory
             if (pre.name.find("=") != std::string::npos)
                 pre.name = pre.name.substr(pre.name.find("=") + 1);
 
+            //remove whitespace
             pre.type.erase(remove_if(pre.type.begin(), pre.type.end(), isspace), pre.type.end());
             pre.owner.erase(remove_if(pre.owner.begin(), pre.owner.end(), isspace), pre.owner.end());
             pre.name.erase(remove_if(pre.name.begin(), pre.name.end(), isspace), pre.name.end());
 
+            //remove quotes
             pre.type.erase(std::remove( pre.type.begin(),  pre.type.end(), '"'),  pre.type.end());
             pre.owner.erase(std::remove(pre.owner.begin(), pre.owner.end(), '"'), pre.owner.end());
             pre.name.erase(std::remove(pre.name.begin(), pre.name.end(), '"'), pre.name.end());
