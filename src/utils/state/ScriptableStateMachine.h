@@ -41,6 +41,7 @@ public:
 
         _current_state->Enter<T>(_state_owner);
     }
+
     void SetCurrentState(ScriptableState* new_state)
     {
         _current_state = new_state;

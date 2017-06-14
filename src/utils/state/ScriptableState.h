@@ -10,9 +10,9 @@ class ScriptableState
     template<typename T>
     void Enter(T *t)
     {
-        if (_start_function)
+        if (_enter_function)
         {
-            (*_start_function)(t);
+            (*_enter_function)(t);
         }
     };
 
@@ -44,9 +44,9 @@ class ScriptableState
             LuaRef action_table = getGlobal(L, state_name.c_str());
             if (action_table.isTable())
             {
-                if (action_table["Start"].isFunction())
+                if (action_table["Enter"].isFunction())
                 {
-                    _start_function = std::make_unique<LuaRef>(action_table["Start"]);
+                    _enter_function = std::make_unique<LuaRef>(action_table["Enter"]);
                 }
 
                 if (action_table["Execute"].isFunction())
@@ -67,7 +67,7 @@ class ScriptableState
     }
 
   private:
-    std::unique_ptr<luabridge::LuaRef> _start_function;
+    std::unique_ptr<luabridge::LuaRef> _enter_function;
     std::unique_ptr<luabridge::LuaRef> _execute_function;
     std::unique_ptr<luabridge::LuaRef> _exit_function;
     std::string _state_name;

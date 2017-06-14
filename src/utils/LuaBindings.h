@@ -1,3 +1,6 @@
+#ifndef LUABINDINGS_H
+#define LUABINDINGS_H
+
 #include <LuaBridge/LuaBridge.h>
 #include "src/game_objects/actor/Actor.h"
 #include "src/game_objects/actor/character/Character.h"
@@ -27,3 +30,5 @@ class LuaBindings
             .endClass();
         } 
  };
+
+ #endif

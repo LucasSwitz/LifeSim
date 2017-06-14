@@ -2,10 +2,12 @@
 #define STATESCRIPTFACTORY_H
 
 #include <unordered_map>
-#include "src/utils/state/ScriptableState.h"
 #include <iostream>
+#include "src/utils/state/ScriptableState.h"
+#include "src/utils/ScriptFactory.h"
+#include "src/utils/LuaUniversal.h"
 
-class StateScriptFactory
+class StateScriptFactory : public ScriptFactory<ScriptableState>
 {
 
 public:
@@ -17,31 +19,22 @@ public:
         return _scripts_map.at(script_template_class).at(script_name);
     }
 
-    void AddScriptableState(std::string script_template_class, std::string script_name, ScriptableState* state)
+    ScriptableState* Configure(std::string full_script_path, std::string script_name)
     {
-        auto it = _scripts_map.find(script_template_class);
-        if(it == _scripts_map.end())
-        {
-            std::unordered_map<std::string, ScriptableState*> class_states;
-            class_states.insert(std::make_pair(script_name, state));
-
-            _scripts_map.insert(std::make_pair(script_template_class,class_states));
-        }
-        else
-        {
-            it->second.insert(std::make_pair(script_name, state));
-        }
+        ScriptableState* new_state = new ScriptableState();
+        new_state->LoadScript(LUA_STATE, full_script_path, script_name);
+        return new_state;
     }
 
     static StateScriptFactory* Instance()
     {
-        static StateScriptFactory instance;
+        static StateScriptFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/state", "State");
         return &instance;
     }
 
 
 private:
-    std::unordered_map<std::string, std::unordered_map<std::string, ScriptableState*>> _scripts_map;
+    StateScriptFactory(std::string script_path, std::string state_name) : ScriptFactory<ScriptableState>(script_path, state_name){};
 };
 
 #endif
