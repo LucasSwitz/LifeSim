@@ -5,7 +5,7 @@
 #include <iostream>
 #include "src/utils/state/ScriptableState.h"
 #include "src/utils/ScriptFactory.h"
-#include "src/utils/LuaUniversal.h"
+#include "src/utils/lua/LuaUniversal.h"
 
 class StateScriptFactory : public ScriptFactory<ScriptableState>
 {
@@ -28,7 +28,7 @@ public:
 
     static StateScriptFactory* Instance()
     {
-        static StateScriptFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/state", "State");
+        static StateScriptFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts", "State");
         return &instance;
     }
 

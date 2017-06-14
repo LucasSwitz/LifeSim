@@ -4,7 +4,7 @@ ActionScript* ActionScriptFactory::GetAction(std::string action_name, Actor* per
 {
     ActionScript* new_action = new ActionScript(performer);
     std::string script_path = _action_map.at(action_name);
-    new_action->LoadScript(_lua_state,script_path, action_name);
+    new_action->LoadScript(LUA_STATE,script_path, action_name);
     return new_action;
 }
 

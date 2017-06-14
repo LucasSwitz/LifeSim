@@ -21,10 +21,11 @@ file(GLOB_RECURSE SOURCES
 add_executable(${PROJECT_NAME_STR} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
-
 target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua.a)
+target_link_libraries(${PROJECT_NAME_STR} $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
 
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_DL_LIBS})
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_THREAD_LIBS_INIT})
+
 
 set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD 14)

@@ -1,7 +1,11 @@
+#ifndef LUATEST_H
+#define LUATEST_H
+
 #include <LuaBridge/LuaBridge.h>
 #include <iostream>
 #include <gtest/gtest.h>
-#include "src/utils/LuaBindings.h"
+#include "src/utils/lua/LuaBindings.h"
+#include "src/utils/lua/LuaUniversal.h"
 
 extern "C" {
 #include "lua.h"
@@ -13,22 +17,18 @@ using namespace luabridge;
 
 class LuaTest : public ::testing::Test
 {
-  public:
-    lua_State *L;
+  public: 
 
     LuaTest()
     {
-        L = luaL_newstate();
-        luaL_openlibs(L);
-    }
+        LuaUniversal::Instance()->Init();
+        LuaBindings::Bind(LUA_STATE);
+    }   
 
-    lua_State* GetLuaState()
-    {
-        return L;
-    }
-    
     void SetUp()
     {
-        LuaBindings::Bind(L);
+        
     }
 };
+
+#endif

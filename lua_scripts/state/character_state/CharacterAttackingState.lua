@@ -2,17 +2,11 @@ ScriptType = "State"
 StateOwner = "Character"
 StateName = "Attacking"
 
-CharacterAttackingState = 
-{
-    StateName = 
-    function Enter(character)
-        character:AddAction("Attack")
+CharacterAttackingState = {
+    Enter = function(character)
     end,
-    function Execute(character)
-        if(character:GetCurrentAction:IsFinished())
-            character:GetStateMachine:ChangeState("Character","Idle")
+    Execute = function(character)
     end,
-    function Exit(character)
-    
+    Exit = function(character)
     end
 }

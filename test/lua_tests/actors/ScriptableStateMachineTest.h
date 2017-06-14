@@ -6,25 +6,22 @@ class ScriptableStateMachineTest : public LuaTest
 {
     public:
     Character* scriptable_character;
+
+    ScriptableStateMachineTest()
+    {
+        StateScriptFactory::Instance()->PopulateFactory();
+    }
+    
     void SetUp()
     {
-        LuaTest::SetUp();
         scriptable_character = new Character();
-
-
-        StateScriptFactory::Instance()->PopulateFactory();
-
-        ScriptableState* global_state = new ScriptableState();
-        ScriptableState* transition_state1 = new ScriptableState();
-        ScriptableState* transition_state2 = new ScriptableState();
     }
 };
-
 
 TEST_F(ScriptableStateMachineTest, TestGlobalState)
 {
     scriptable_character->GetStateMachine()->SetGlobalState(
-        StateScriptFactory::Instance()->GetScriptableState("Character", "GlobalTest"));
+        StateScriptFactory::Instance()->GetScriptableState("Character", "GlobalStateTest"));
 
     scriptable_character->Tick();
 
@@ -35,7 +32,6 @@ TEST_F(ScriptableStateMachineTest, TestStateTransition)
 {
     scriptable_character->GetStateMachine()->SetCurrentState(
         StateScriptFactory::Instance()->GetScriptableState("Character", "TransitionState1"));
-
 
     scriptable_character->Tick();
 

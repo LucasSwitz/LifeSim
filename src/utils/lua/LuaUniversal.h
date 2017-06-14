@@ -22,21 +22,21 @@ public:
         return L;
     }
 
+    void Init()
+    {
+        L = luaL_newstate();
+        luaL_openlibs(L);
+    }
+
     static LuaUniversal* Instance()
     {
         static LuaUniversal instance;
+
         return &instance;
     }
 
     private:
-        lua_State *L;
-
-        LuaUniversal()
-        {
-            L = luaL_newstate();
-            luaL_openlibs(L);
-        }
+         lua_State *L;
 
 };
-
 #endif

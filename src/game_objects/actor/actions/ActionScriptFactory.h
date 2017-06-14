@@ -3,6 +3,7 @@
 
 #include "src/game_objects/actor/actions/ActionScript.h"
 #include "src/game_objects/actor/Actor.h"
+#include "src/utils/lua/LuaUniversal.h"
 
 #include <unordered_map>
 
@@ -18,15 +19,10 @@ public:
 
     void AddAction(std::string action_name, std::string script_name); //TODO:Make Protected
 
-    void SetLuaState(luabridge::lua_State *L)
-    {
-        _lua_state = L;
-    }
 protected:
 
 private:
     ActionScriptFactory(){};
-    luabridge::lua_State *_lua_state;
     std::unordered_map<std::string, std::string> _action_map;
 };
 

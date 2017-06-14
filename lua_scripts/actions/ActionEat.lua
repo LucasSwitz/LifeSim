@@ -1,6 +1,6 @@
 ScriptType = "Action"
 Owner = "Actor"
-Name = "Eat"
+Name = "ActionEat"
 
 ActionEat = {
     SetPerformer=function(performer) 

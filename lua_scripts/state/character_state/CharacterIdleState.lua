@@ -4,13 +4,12 @@ StateName = "Idle"
 
 CharacterIdleState = 
 {
-    function Enter(character)
+    Enter = function(character)
     
     end,
-    function Execute(character)
-    --if key press start moving or attack
+    Execute = function(character)
     end,
-    function Exit(character)
+    Exit = function(character)
     
     end
 }

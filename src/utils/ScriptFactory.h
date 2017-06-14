@@ -10,7 +10,7 @@ template <typename T>
 class ScriptFactory
 {
   public:
-    ScriptFactory(std::string search_directory, std::string script_type) : _search_direcory(search_directory), _script_type(script_type) {}
+    ScriptFactory(std::string search_directory, std::string script_type) : _search_directory(search_directory), _script_type(script_type) {}
 
     struct Preamble
     {
@@ -34,12 +34,20 @@ class ScriptFactory
             if (pre.name.find("=") != std::string::npos)
                 pre.name = pre.name.substr(pre.name.find("=") + 1);
 
+            pre.type.erase(remove_if(pre.type.begin(), pre.type.end(), isspace), pre.type.end());
+            pre.owner.erase(remove_if(pre.owner.begin(), pre.owner.end(), isspace), pre.owner.end());
+            pre.name.erase(remove_if(pre.name.begin(), pre.name.end(), isspace), pre.name.end());
+
+            pre.type.erase(std::remove( pre.type.begin(),  pre.type.end(), '"'),  pre.type.end());
+            pre.owner.erase(std::remove(pre.owner.begin(), pre.owner.end(), '"'), pre.owner.end());
+            pre.name.erase(std::remove(pre.name.begin(), pre.name.end(), '"'), pre.name.end());
+
             return pre;
         }
 
         bool IsType(std::string desired_type)
         {
-            return type.compare(desired_type) == 0;
+            return (type.compare(desired_type) == 0);
         }
 
         std::string type;
@@ -47,10 +55,12 @@ class ScriptFactory
         std::string name;
     };
 
-    void PopulateFactory()
+    void PopulateFactory(std::string search_directory="")
     {
+        if(search_directory.empty())
+            search_directory = _search_directory;
 
-        for (auto &full_file_path : directory_iterator(_search_direcory))
+        for (auto &full_file_path : directory_iterator(search_directory))
         {
             path current_path = full_file_path.path();
 
@@ -64,17 +74,21 @@ class ScriptFactory
                     Preamble preamble = Preamble::FromStream(file_read_stream);
                     if (preamble.IsType(_script_type) && preamble.IsValid())
                     {
+                        //TODO: Log this std::cout << "Adding Script: " << preamble.name << std::endl;
                         AddScript(preamble.owner, preamble.name, Configure(current_path_string, preamble.name));
                     }
                     else
                     {
-                        std::cout << "Bad Preamble" << std::endl;
+                        //TODO: Log this std::cout << "Bad Preamble: " << current_path_string << std::endl;
                     }
                 }
                 else
                 {
-                    std::cout << "Bad ifStream" << std::endl;
+                    //TODO: Log this std::cout << "Bad ifStream" << std::endl;
                 }
+            }
+            else{
+                PopulateFactory(current_path);
             }
         }
     }
@@ -102,6 +116,6 @@ class ScriptFactory
     std::unordered_map<std::string, std::unordered_map<std::string, T *>> _scripts_map;
 
   private:
-    std::string _search_direcory;
+    std::string _search_directory;
     std::string _script_type;
 };

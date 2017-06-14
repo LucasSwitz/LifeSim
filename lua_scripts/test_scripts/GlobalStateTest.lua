@@ -1,3 +1,7 @@
+ScriptType = "State"
+StateOwner = "Character"
+StateName = "GlobalStateTest"
+
 GlobalStateTest = {
     Enter=function(character)
         character:SetInternalValue("EnterGlobalState",1)
