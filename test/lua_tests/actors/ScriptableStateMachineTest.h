@@ -11,17 +11,40 @@ class ScriptableStateMachineTest : public LuaTest
         LuaTest::SetUp();
         scriptable_character = new Character();
 
-        ScriptableState* global_state = new ScriptableState();
-        global_state->LoadScript(L, "/home/lucas/Desktop/LifeSim/lua_scripts/state/character_state/CharacterGlobalState.lua","CharacterGlobalState");
-        StateScriptFactory::Instance()->AddScriptableState("Character", "Global", global_state);
 
-        scriptable_character->GetStateMachine()->SetGlobalState(
-            StateScriptFactory::Instance()->GetScriptableState("Character", "Global"));
+        StateScriptFactory::Instance()->PopulateFactory();
+
+        ScriptableState* global_state = new ScriptableState();
+        ScriptableState* transition_state1 = new ScriptableState();
+        ScriptableState* transition_state2 = new ScriptableState();
     }
 };
 
 
 TEST_F(ScriptableStateMachineTest, TestGlobalState)
 {
+    scriptable_character->GetStateMachine()->SetGlobalState(
+        StateScriptFactory::Instance()->GetScriptableState("Character", "GlobalTest"));
+
     scriptable_character->Tick();
+
+    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteGlobalState"));
+}
+
+TEST_F(ScriptableStateMachineTest, TestStateTransition)
+{
+    scriptable_character->GetStateMachine()->SetCurrentState(
+        StateScriptFactory::Instance()->GetScriptableState("Character", "TransitionState1"));
+
+
+    scriptable_character->Tick();
+
+    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteTransitionState1"));
+    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExitTransitionState1"));
+    EXPECT_EQ(1, scriptable_character->GetInternalValue("EnterTransitionState2"));
+
+    scriptable_character->Tick();
+
+    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteTransitionState2"));
+
 }

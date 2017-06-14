@@ -16,10 +16,19 @@ class LuaTest : public ::testing::Test
   public:
     lua_State *L;
 
-    void SetUp()
+    LuaTest()
     {
         L = luaL_newstate();
         luaL_openlibs(L);
+    }
+
+    lua_State* GetLuaState()
+    {
+        return L;
+    }
+    
+    void SetUp()
+    {
         LuaBindings::Bind(L);
     }
 };

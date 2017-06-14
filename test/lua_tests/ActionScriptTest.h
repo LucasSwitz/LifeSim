@@ -24,7 +24,7 @@ class ActionScriptTest : public ::testing::Test
         LuaBindings::Bind(L);
         
         ActionScriptFactory::Instance()->SetLuaState(L);
-        ActionScriptFactory::Instance()->AddAction("ActionEat", "/home/lucas/Desktop/LifeSim/lua_scripts/actions/ActionEat.lua");
+        ActionScriptFactory::Instance()->AddAction("ActionEat", "/home/pabu/Desktop/LifeSim/lua_scripts/actions/ActionEat.lua");
     }
 };
 
