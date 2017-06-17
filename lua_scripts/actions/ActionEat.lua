@@ -1,6 +1,8 @@
+--PREAMBLE_START
 ScriptType = "Action"
 Owner = "Actor"
 Name = "ActionEat"
+--PREAMBLE_END
 
 ActionEat = {
     SetPerformer=function(performer) 

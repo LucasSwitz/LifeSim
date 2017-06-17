@@ -1,12 +1,14 @@
+--PREAMBLE_START
 ScriptType = "Entity"
-EntityName = "TestEntity"
-PrototypeId = -1
+Name = "TestEntity"
+PrototypeID = 999
+--PREAMBLE_END
 
 TestEntity = 
 {
-    ID = -1,
+    ID = 999,
     Components = 
-    {
+    {   
         Physics = 
         {
             mass = 10,

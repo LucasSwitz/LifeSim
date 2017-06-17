@@ -20,12 +20,12 @@ class Component
             value = new_value;
         }
 
-        T GetValue()
+        T GetValue() const
         {
             return value;
         }
 
-        std::string GetName()
+        std::string GetName() const
         {
             return name;
         }
@@ -44,17 +44,17 @@ class Component
         _float_components.at(name).SetValue(value);
     }
 
-    float GetFloatValue(std::string name)
+    float GetFloatValue(std::string name) const
     {
         return _float_components.at(name).GetValue();
     }
 
-    std::string GetStringValue(std::string name)
+    std::string GetStringValue(std::string name) const
     {
         return _string_components.at(name).GetValue();
     }
 
-    std::string GetName()
+    std::string GetName() const
     {
         return _name;
     }

@@ -9,7 +9,7 @@ ActionScript* ActionScriptFactory::GetAction(std::string action_name, Actor* per
 }
 
 //actions will all have capital names
-void ActionScriptFactory::AddAction(std::string action_name, std::string script_path)
+void ActionScriptFactory::AddScript(Preamble& pre, std::string script_path)
 {
-    _action_map.insert(std::make_pair(action_name, script_path));
+    _action_map.insert(std::make_pair(pre.GetFlag("Name"), script_path));
 }

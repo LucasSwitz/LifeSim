@@ -1,4 +1,7 @@
-#include "test/lua_tests/LuaTest.h"
+#ifndef SCIPTABLESTATEMACHINETEST_H
+#define SCIPTABLESTATEMACHINETEST_H
+
+#include "test/lua_tests/lua_core/LuaTest.h"
 #include "src/game_objects/actor/character/Character.h"
 #include "src/utils/state/StateScriptFactory.h"
 
@@ -44,3 +47,5 @@ TEST_F(ScriptableStateMachineTest, TestStateTransition)
     EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteTransitionState2"));
 
 }
+
+#endif

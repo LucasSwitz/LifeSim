@@ -4,10 +4,10 @@
 #include "src/game_objects/actor/actions/ActionScript.h"
 #include "src/game_objects/actor/Actor.h"
 #include "src/utils/lua/LuaUniversal.h"
-
+#include "src/utils/ScriptFactory.h"
 #include <unordered_map>
 
-class ActionScriptFactory
+class ActionScriptFactory : public ScriptFactory<std::string>
 {
 public:
     ActionScript* GetAction(std::string action_script, Actor* performer);
@@ -17,12 +17,12 @@ public:
         return &instance;
     }
 
-    void AddAction(std::string action_name, std::string script_name); //TODO:Make Protected
+    void AddScript(Preamble& pre, std::string script_name) override; //TODO:Make Protected
 
 protected:
 
 private:
-    ActionScriptFactory(){};
+    ActionScriptFactory() : ScriptFactory<std::string>("/home/lucas/Desktop/LifeSim/lua_scripts/actions", "Action"){};
     std::unordered_map<std::string, std::string> _action_map;
 };
 

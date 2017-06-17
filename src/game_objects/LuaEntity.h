@@ -10,7 +10,8 @@
 using namespace luabridge;
 class LuaEntity : public Entity
 {
-    void LoadFromScript(lua_State* lua_state, std::string script_path,std::string entity_name)
+    public:
+    void LoadScript(lua_State* lua_state, std::string script_path,std::string entity_name)
     {
         using namespace luabridge;
 
@@ -26,7 +27,7 @@ class LuaEntity : public Entity
 
                 if(entity_table["ID"])
                 {
-                    SetID(entity_table["ID"]);
+                    SetID(entity_table["ID"].cast<int>());
                 }
             }
         }
@@ -47,15 +48,6 @@ class LuaEntity : public Entity
            LuaComponent* new_component = new LuaComponent(key);
            new_component->ConfigureFromLua(component_ref);
            AddComponent(new_component);
-        }
-    }
-
-    LuaEntity* clone()
-    {
-        LuaEntity* new_clone = new LuaEntity();
-        for(auto c : _components) //get just value set
-        {
-            new_clone->AddComponent(c.second);
         }
     }
 };

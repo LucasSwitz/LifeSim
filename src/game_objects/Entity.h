@@ -17,6 +17,7 @@ public:
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name);
     void AddAttribute(std::string name, int value);
+    const Component* GetComponent(std::string name);
 
     int ID();
 

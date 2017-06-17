@@ -37,6 +37,11 @@ int Entity::ID()
     return _id;
 }
 
+const Component* Entity::GetComponent(std::string name)
+{
+    return _components.at(name);
+}
+
 void Entity::AddComponent(Component* component)
 {
     _components.insert(std::make_pair(component->GetName(), component));

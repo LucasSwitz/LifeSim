@@ -1,3 +1,6 @@
+#ifndef SCRIPTFACTORY_H
+#define SCRIPTFACTORY_H
+
 #include <string>
 #include <unordered_map>
 #include <fstream>
@@ -12,7 +15,8 @@ template <typename T>
 class ScriptFactory
 {
   public:
-    ScriptFactory(std::string search_directory, std::string script_type) : _search_directory(search_directory), _script_type(script_type) {}
+    ScriptFactory(std::string search_directory, std::string script_type, bool configurable = false) : _search_directory(search_directory), 
+    _script_type(script_type), _configurable(configurable) {}
 
     struct Preamble
     {
@@ -104,18 +108,24 @@ class ScriptFactory
                     if (preamble.IsValid() && preamble.IsType(_script_type))
                     {
 
-                        //TODO: Log this std::cout << "Adding Script: " << preamble.name << std::endl;
-
-                        AddScript(preamble, Configure(current_path_string, preamble.GetFlag("Name")));
+                        //std::cout << "Adding Script: " << preamble.GetFlag("Name") << std::endl;
+                        if(_configurable)
+                        { 
+                            AddScript(preamble, Configure(current_path_string, preamble.GetFlag("Name")));
+                        }
+                        else
+                        {
+                            AddScript(preamble, current_path_string);
+                        }
                     }
                     else
                     {
-                        //TODO: Log this std::cout << "Bad Preamble: " << current_path_string << std::endl;
+                        //std::cout << "Bad Preamble: " << current_path_string << std::endl;
                     }
                 }
                 else
                 {
-                    //TODO: Log this std::cout << "Bad ifStream" << std::endl;
+                    //std::cout << "Bad ifStream" << std::endl;
                 }
             }
             else
@@ -126,11 +136,16 @@ class ScriptFactory
     }
 
   protected:
-    virtual T *Configure(std::string script_path, std::string scriptable_name) = 0;
+    virtual T *Configure(std::string script_path, std::string scriptable_name){};
 
-    virtual void AddScript(Preamble &pre, T *scriptable_object) = 0;
+    virtual void AddScript(Preamble &pre, T *scriptable_object){};
+    virtual void AddScript(Preamble &pre, std::string script_path){};
+
 
   private:
     std::string _search_directory;
     std::string _script_type;
+    bool _configurable;
 };
+
+#endif

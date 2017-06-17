@@ -10,7 +10,7 @@ extern "C" {
 
 using namespace luabridge;
 
-class LuaTest : public ::testing::Test
+class LuaBridgeTest : public ::testing::Test
 {
     public:
         lua_State *L;
@@ -24,7 +24,7 @@ class LuaTest : public ::testing::Test
         }
 };
 
-TEST_F(LuaTest, LuaBridgeTest)
+TEST_F(LuaBridgeTest, LuaBridgeTest)
 {
         LuaRef string_from_script = getGlobal(L, "testString");
         LuaRef num_from_script = getGlobal(L, "number");
@@ -35,7 +35,7 @@ TEST_F(LuaTest, LuaBridgeTest)
 }
 
 
-TEST_F(LuaTest, TableTest)
+TEST_F(LuaBridgeTest, TableTest)
 {
     LuaRef table_ref = getGlobal(L, "window");
     LuaRef title_ref = table_ref["title"];
