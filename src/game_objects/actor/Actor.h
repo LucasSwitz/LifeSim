@@ -4,14 +4,14 @@
 #include <unordered_map>
 #include <queue>
 
-#include "src/game_objects/Entity.h"
+#include "src/game_objects/LuaEntity.h"
 #include "src/game_objects/actor/goal/GoalScript.h"
 
 
 class ActionScript;
 class ActionScriptFactory;
 
-class Actor : public Entity{
+class Actor : public LuaEntity{
 
 public:
     Actor(){};

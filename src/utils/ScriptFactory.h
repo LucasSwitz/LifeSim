@@ -2,8 +2,10 @@
 #include <unordered_map>
 #include <fstream>
 #include <experimental/filesystem>
+#include <algorithm>
 
-#define PREAMBLE_LINES 3
+#define PREAMBLE_START "PREAMBLE_START"
+#define PREAMBLE_END "PREAMBLE_END"
 
 using namespace std::experimental::filesystem;
 template <typename T>
@@ -16,52 +18,74 @@ class ScriptFactory
     {
         bool IsValid()
         {
-            return !type.empty() && !owner.empty() && !name.empty();
+
+            return !preamble_flags.empty() && HasFlag("ScriptType");
+        }
+
+        std::string GetFlag(std::string flag_name)
+        {
+            return preamble_flags.at(flag_name);
+        }
+        
+        bool HasFlag(std::string flag_name)
+        {
+            return preamble_flags.find("Name") != preamble_flags.end();
         }
 
         static Preamble FromStream(std::ifstream &stream)
         {
             Preamble pre;
 
-            //get preabmle lines
-            std::getline(stream, pre.type);
-            std::getline(stream, pre.owner);
-            std::getline(stream, pre.name);
+            //get preamble lines
 
-            //get values
-            if (pre.type.find("=") != std::string::npos)
-                pre.type = pre.type.substr(pre.type.find("=") + 1);
-            if (pre.owner.find("=") != std::string::npos)
-                pre.owner = pre.owner.substr(pre.owner.find("=") + 1);
-            if (pre.name.find("=") != std::string::npos)
-                pre.name = pre.name.substr(pre.name.find("=") + 1);
+            std::string line = "";
+            
+            //this is inefficient. Find a better way so you're no skipping first iteration.
 
-            //remove whitespace
-            pre.type.erase(remove_if(pre.type.begin(), pre.type.end(), isspace), pre.type.end());
-            pre.owner.erase(remove_if(pre.owner.begin(), pre.owner.end(), isspace), pre.owner.end());
-            pre.name.erase(remove_if(pre.name.begin(), pre.name.end(), isspace), pre.name.end());
 
-            //remove quotes
-            pre.type.erase(std::remove( pre.type.begin(),  pre.type.end(), '"'),  pre.type.end());
-            pre.owner.erase(std::remove(pre.owner.begin(), pre.owner.end(), '"'), pre.owner.end());
-            pre.name.erase(std::remove(pre.name.begin(), pre.name.end(), '"'), pre.name.end());
+            std::getline(stream, line);
+
+            //make sure this file has a preamble
+            if(line.find(PREAMBLE_START) == std::string::npos)
+            {
+                return pre;
+            }
+            
+            while (line.find(PREAMBLE_END) == std::string::npos)
+            {
+
+                std::string value = "";
+                std::string key = "";
+
+                if (line.find("=") != std::string::npos)
+                {
+                    value = line.substr(line.find("=") + 1);
+                    key = line.substr(0, line.find("=") - 1);
+
+                    value.erase(remove_if(value.begin(), value.end(), isspace), value.end());
+                    value.erase(std::remove(value.begin(), value.end(), '"'), value.end());
+
+                    pre.preamble_flags.insert(std::make_pair(key,value));
+                }
+
+                std::getline(stream, line);
+            }
+
 
             return pre;
         }
 
         bool IsType(std::string desired_type)
         {
-            return (type.compare(desired_type) == 0);
+            return GetFlag("ScriptType").compare(desired_type) == 0;
         }
 
-        std::string type;
-        std::string owner;
-        std::string name;
+        std::unordered_map<std::string, std::string> preamble_flags;
     };
 
-    void PopulateFactory(std::string search_directory="")
+    void PopulateFactory(std::string search_directory = "")
     {
-        if(search_directory.empty())
+        if (search_directory.empty())
             search_directory = _search_directory;
 
         for (auto &full_file_path : directory_iterator(search_directory))
@@ -70,16 +94,19 @@ class ScriptFactory
 
             if (is_regular_file(current_path))
             {
+
                 std::string current_path_string = current_path.string();
                 std::ifstream file_read_stream(current_path_string);
 
                 if (file_read_stream.good())
                 {
                     Preamble preamble = Preamble::FromStream(file_read_stream);
-                    if (preamble.IsType(_script_type) && preamble.IsValid())
+                    if (preamble.IsValid() && preamble.IsType(_script_type))
                     {
+
                         //TODO: Log this std::cout << "Adding Script: " << preamble.name << std::endl;
-                        AddScript(preamble.owner, preamble.name, Configure(current_path_string, preamble.name));
+
+                        AddScript(preamble, Configure(current_path_string, preamble.GetFlag("Name")));
                     }
                     else
                     {
@@ -91,33 +118,17 @@ class ScriptFactory
                     //TODO: Log this std::cout << "Bad ifStream" << std::endl;
                 }
             }
-            else{
+            else
+            {
                 PopulateFactory(current_path);
             }
         }
     }
 
   protected:
-    virtual T *Configure(std::string script_path, std::string script_name) = 0;
+    virtual T *Configure(std::string script_path, std::string scriptable_name) = 0;
 
-    void AddScript(std::string script_owner, std::string script_name, T *scriptable_object)
-    {
-        auto it = _scripts_map.find(script_owner);
-        if (it == _scripts_map.end())
-        {
-            std::unordered_map<std::string, ScriptableState *> class_states;
-            class_states.insert(std::make_pair(script_name, scriptable_object));
-
-            _scripts_map.insert(std::make_pair(script_owner, class_states));
-        }
-        else
-        {
-            it->second.insert(std::make_pair(script_name, scriptable_object));
-        }
-    }
-
-  protected:
-    std::unordered_map<std::string, std::unordered_map<std::string, T *>> _scripts_map;
+    virtual void AddScript(Preamble &pre, T *scriptable_object) = 0;
 
   private:
     std::string _search_directory;

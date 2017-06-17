@@ -1,6 +1,8 @@
+--PREAMBLE_START
 ScriptType = "State"
 StateOwner = "Character"
-StateName = "GlobalStateTest"
+Name = "GlobalStateTest"
+--PREAMBLE_END
 
 GlobalStateTest = {
     Enter=function(character)

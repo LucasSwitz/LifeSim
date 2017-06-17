@@ -34,6 +34,11 @@ class ScriptableState
         }
     };
 
+    void LoadLuaRef(LuaRef& ref)
+    {
+        
+    }
+
     void LoadScript(luabridge::lua_State *L, const std::string &script_path, const std::string &state_name)
     {
         using namespace luabridge;

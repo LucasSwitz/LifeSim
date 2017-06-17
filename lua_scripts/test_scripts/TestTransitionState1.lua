@@ -1,6 +1,8 @@
+--PREAMBLE_START
 ScriptType = "State"
 StateOwner = "Character"
-StateName = "TransitionState1"
+Name = "TransitionState1"
+--PREAMBLE_END
 
 TransitionState1 = {
     Enter=function(character)

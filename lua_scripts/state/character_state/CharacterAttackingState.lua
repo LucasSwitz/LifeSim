@@ -1,6 +1,7 @@
 ScriptType = "State"
 StateOwner = "Character"
 StateName = "Attacking"
+--PREAMBLE_END--
 
 CharacterAttackingState = {
     Enter = function(character)

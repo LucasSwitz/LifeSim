@@ -36,3 +36,18 @@ int Entity::ID()
 {
     return _id;
 }
+
+void Entity::AddComponent(Component* component)
+{
+    _components.insert(std::make_pair(component->GetName(), component));
+}
+
+void Entity::RemoveComponent(std::string name)
+{
+
+}
+
+bool Entity::HasComponent(std::string name)
+{
+
+}
