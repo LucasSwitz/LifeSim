@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" disabled="0" errors="0" timestamp="2017-06-17T03:29:22" time="0" name="AllTests">
+<testsuites tests="6" failures="0" disabled="0" errors="0" timestamp="2017-06-17T15:54:49" time="0.005" name="AllTests">
   <testsuite name="ActionScriptTest" tests="1" failures="0" disabled="0" errors="0" time="0">
     <testcase name="LuaBridgeTest" status="run" time="0" classname="ActionScriptTest" />
+  </testsuite>
+  <testsuite name="ScriptableStateMachineTest" tests="2" failures="0" disabled="0" errors="0" time="0.002">
+    <testcase name="TestGlobalState" status="run" time="0.001" classname="ScriptableStateMachineTest" />
+    <testcase name="TestStateTransition" status="run" time="0.001" classname="ScriptableStateMachineTest" />
+  </testsuite>
+  <testsuite name="ScriptableEntityTest" tests="3" failures="0" disabled="0" errors="0" time="0.002">
+    <testcase name="ComponentTest" status="run" time="0" classname="ScriptableEntityTest" />
+    <testcase name="ComponentValueTest" status="run" time="0.001" classname="ScriptableEntityTest" />
+    <testcase name="ManualIdSet" status="run" time="0.001" classname="ScriptableEntityTest" />
   </testsuite>
 </testsuites>
