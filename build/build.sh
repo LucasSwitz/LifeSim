@@ -5,6 +5,7 @@ export GTEST_LIB_DIR=/home/lucas/Desktop/LifeSim/lib
 export LUA_LIB_DIR=/usr/local/lib
 export LUA_INCLUDE_DIR=/usr/local/include
 export LUA_BRIDGE_INCLUDE=/home/lucas/Desktop/LifeSim/include/LuaBridge/Source
+export STD_EXPERIMENTAL_LIB=/usr/lib/gcc/x86_64-linux-gnu/5/
 
 for arg in "$@"
 do
