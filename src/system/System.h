@@ -2,12 +2,11 @@
 #define SYSTEM_H
 
 #include <string>
+#include <chrono>
 
 class System
 {
   public:
-    virtual void Update() = 0;
-
     std::string GetName() const
     {
         return _name;
@@ -17,6 +16,8 @@ class System
     {
         return _after;
     }
+
+   virtual void Update(double seconds_since_last_update) = 0;
 
   protected:
     System(std::string name = "") : _name(name){};

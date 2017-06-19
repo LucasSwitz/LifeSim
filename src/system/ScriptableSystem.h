@@ -2,16 +2,18 @@
 #define SCRIPTABLESYSTEM_H
 
 #include <memory>
+#include <iostream>
+#include "src/utils/lua/LuaUniversal.h"
 #include "src/system/System.h"
 
 class ScriptableSystem : public System
 {
     public:
 
-    void Update() override
+    void Update(double seconds_elapsed) override
     {   
         if(_update_function)
-            (*_update_function)();
+            (*_update_function)(seconds_elapsed);
     }
 
    void LoadScript(luabridge::lua_State *L, const std::string &script_path, const std::string &system_name)

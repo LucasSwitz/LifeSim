@@ -28,6 +28,13 @@ class SystemController : public ScriptFactory<ScriptableSystem>
             System *current_system = it->second;
             AddToSystemExecutionSequence(current_system);
         }
+
+        _initialized = true;
+    }
+
+    bool Initialzed()
+    {
+        return _initialized;
     }
 
     void AddToSystemExecutionSequence(System *system)
@@ -106,11 +113,22 @@ class SystemController : public ScriptFactory<ScriptableSystem>
         return _systems_execution_sequence.size();
     }
 
+    void Update(double seconds_since_last_update)
+    {
+        for(auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+        {
+            (*it)->Update(seconds_since_last_update);
+        }
+    }
+
   protected:
     SystemController(std::string system_scripts_path, std::string script_type) : ScriptFactory<ScriptableSystem>(system_scripts_path, script_type, true){};
 
     std::list<System *> _systems_execution_sequence;
     std::unordered_map<std::string, System *> _system_directory;
+
+  private:
+    bool _initialized = false;
 };
 
 #endif

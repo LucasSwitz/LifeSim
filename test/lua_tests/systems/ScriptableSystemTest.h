@@ -1,3 +1,6 @@
+#ifndef SCRIPTABLESYSTEMTEST_H
+#define SCRIPTABLESYSTEMTEST_H
+
 #include <iostream>
 #include "src/system/SystemController.h"
 #include "test/lua_tests/lua_core/LuaTest.h"
@@ -26,3 +29,4 @@ TEST_F(ScriptableSystemTest, TestOrderingMechanics)
     EXPECT_TRUE(second == SystemController::Instance()->GetSystemInExecutionSequenceAt(1));
     EXPECT_TRUE(third == SystemController::Instance()->GetSystemInExecutionSequenceAt(2));
 }
+#endif

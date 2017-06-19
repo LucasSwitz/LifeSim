@@ -5,7 +5,7 @@ Name = "TestSystem1"
 
 TestSystem1 = 
 {
-    Update = function()
-
+    Update = function(time)
+        print(time)
     end
 }
