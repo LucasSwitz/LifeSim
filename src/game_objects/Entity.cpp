@@ -2,7 +2,6 @@
 #include "src/game_objects/EntityManager.h"
 int Entity::_lastId = -1;
 
-
 Entity::Entity()
 {
     _lastId++;
@@ -17,7 +16,7 @@ bool Entity::HasAttribute(std::string name)
 
 int Entity::GetAttribute(std::string name)
 {
-    if(HasAttribute(name))
+    if (HasAttribute(name))
         return _attributes.at(name);
     else
         return 0;
@@ -26,8 +25,8 @@ int Entity::GetAttribute(std::string name)
 void Entity::AddAttribute(std::string name, int value)
 {
     auto it = _attributes.find(name);
-    if(it == _attributes.end())
-        _attributes.insert(std::make_pair(name,value));
+    if (it == _attributes.end())
+        _attributes.insert(std::make_pair(name, value));
     else
         it->second = value;
 }
@@ -37,12 +36,12 @@ int Entity::ID()
     return _id;
 }
 
-const Component* Entity::GetComponent(std::string name)
+const Component *Entity::GetComponent(std::string name)
 {
     return _components.at(name);
 }
 
-void Entity::AddComponent(Component* component)
+void Entity::AddComponent(Component *component)
 {
     _components.insert(std::make_pair(component->GetName(), component));
 }
@@ -52,7 +51,14 @@ void Entity::RemoveComponent(std::string name)
 
 }
 
+void Entity::SetID(int id)
+{
+    if (id < 0)
+        return;
+
+    _id = id;
+}
+
 bool Entity::HasComponent(std::string name)
 {
-
 }

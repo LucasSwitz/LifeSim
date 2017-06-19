@@ -11,7 +11,7 @@ class GameRunnerTimed : public GameRunner
         {
             auto start = std::chrono::high_resolution_clock::now();
             double duration = 0;
-            while(duration < seconds)
+            while(duration <= seconds) //will always skip last second. Should round to a certian magnitude.
             {
                 this->Update();
                 

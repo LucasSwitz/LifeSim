@@ -23,13 +23,7 @@ public:
 
 protected:
     Entity();
-    void SetID(int id)
-    {
-        if(id < 0)
-            return;
-
-        _id = id;
-    };
+    void SetID(int id);
 
     std::unordered_map<std::string, Component*> _components;
 
