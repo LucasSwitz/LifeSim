@@ -17,7 +17,7 @@ class ScriptableEntityTest : public LuaTest
     }
 };
 
-TEST_F(ScriptableEntityTest, ComponentTest)
+TEST_F(ScriptableEntityTest, HasComponentTest)
 {
     EXPECT_TRUE(scriptable_character->HasComponent("Physics"));
     EXPECT_TRUE(scriptable_character->HasComponent("Graphics"));

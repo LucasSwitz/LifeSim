@@ -16,6 +16,7 @@ class ScriptableSystemTest : public LuaTest
 
     void SetUp()
     {
+        
     }
 };
 

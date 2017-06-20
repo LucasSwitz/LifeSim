@@ -9,6 +9,8 @@ class Entity
     friend class EntityManager;
 
 public:
+    ~Entity();
+
     virtual void Tick(){};
     static int _lastId;
     bool HasAttribute(std::string name);
@@ -17,9 +19,9 @@ public:
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name);
     void AddAttribute(std::string name, int value);
-    const Component* GetComponent(std::string name);
+    Component* GetComponent(std::string name);
 
-    int ID();
+    int ID() const;
 
 protected:
     Entity();

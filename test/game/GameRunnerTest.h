@@ -2,25 +2,7 @@
 #define GAMERUNNERTEST_H
 
 #include "test/lua_tests/lua_core/LuaTest.h"
-#include "src/game/GameRunner.h"
-
-class GameRunnerTimed : public GameRunner
-{
-    public:
-        void RunFor(double seconds)
-        {
-            auto start = std::chrono::high_resolution_clock::now();
-            double duration = 0;
-            while(duration <= seconds) //will always skip last second. Should round to a certian magnitude.
-            {
-                this->Update();
-                
-                auto current_time = std::chrono::high_resolution_clock::now();
-                duration = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - start).count();
-            }
-
-        }
-};
+#include "test/game/GameRunnerTimed.h"
 
 class GameRunnerTest : public LuaTest
 {
@@ -34,13 +16,19 @@ public:
 
     void SetUp()
     {
+        
+    }
 
+    void TearDown()
+    {
+        delete Entity_Manager->Instance();
     }
 
 };
 
 TEST_F(GameRunnerTest, TestTiming)
 {
+    Character* c = new Character();
     runner->RunFor(5);
 }
 

@@ -2,8 +2,9 @@
 #define ENTITYMANAGER_H
 
 #include <map>
+#include "src/utils/lua/LuaList.h"
 
-#define GET_ENTITY(int) EntityManager::Instance()->GetEntityByID(int)
+#define Entity_Manager EntityManager::Instance()
 
 class Entity;
 
@@ -22,15 +23,44 @@ class EntityManager
         return _entity_map.at(id);
     }
 
-    void RegisterEntity(Entity& entity)
+    void RegisterEntity(Entity* entity)
     {
-        _entity_map.insert(std::make_pair(entity._id, &entity));
+        _entity_map.insert(std::make_pair(entity->_id, entity));
     }
+
 
     static EntityManager* Instance()
     {
         static EntityManager instance;
         return &instance;
+    }
+
+    std::map<int, Entity*> GetAllEntities()
+    {
+        return _entity_map;
+    }
+
+    int GetNumberOfEntities()
+    {
+        return _entity_map.size();
+    }
+
+    LuaList<Entity>* AsLuaList()
+    {
+        return LuaList<Entity>::FromMapToLuaList<int, Entity>(_entity_map);
+    }
+
+    void Clear()
+    {
+        _entity_map.clear();
+    }
+
+    ~EntityManager()
+    {
+        for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
+        {
+            delete it->second;
+        }
     }
 
   private:

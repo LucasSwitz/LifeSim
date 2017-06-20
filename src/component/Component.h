@@ -34,12 +34,12 @@ class Component
         T value;
     };
 
-    void SetValue(std::string name, std::string value)
+    void SetStringValue(std::string name, std::string value)
     {
         _string_components.at(name).SetValue(value);
     }
 
-    void SetValue(std::string name, float value)
+    void SetFloatValue(std::string name, float value)
     {
         _float_components.at(name).SetValue(value);
     }

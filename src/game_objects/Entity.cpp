@@ -6,7 +6,7 @@ Entity::Entity()
 {
     _lastId++;
     _id = _lastId;
-    EntityManager::Instance()->RegisterEntity(*this);
+    EntityManager::Instance()->RegisterEntity(this);
 }
 
 bool Entity::HasAttribute(std::string name)
@@ -31,12 +31,12 @@ void Entity::AddAttribute(std::string name, int value)
         it->second = value;
 }
 
-int Entity::ID()
+int Entity::ID() const
 {
     return _id;
 }
 
-const Component *Entity::GetComponent(std::string name)
+Component *Entity::GetComponent(std::string name)
 {
     return _components.at(name);
 }
@@ -61,4 +61,13 @@ void Entity::SetID(int id)
 
 bool Entity::HasComponent(std::string name)
 {
+    return _components.find(name) != _components.end();
+}
+
+Entity::~Entity()
+{
+    for(auto it = _components.begin(); it != _components.end(); it++)
+    {
+        delete it->second;
+    }
 }
