@@ -60,19 +60,24 @@ TestEntity =
     },
     Subscriptions 
     {
-        subscriptions = {"sub1","sub2"},
         OnEvent = function(entity, event)
             --do something with the event
-            if(event.type == EventType.Collided) then
+            if(event.type == EventType.COLLIDED_EVENT) then
 
                 -- apply damage
-                damage = event.collider.damage
                 current_hp = entity:GetComponent("Health"):GetNumber("hp")
-                entity:GetComponent("Health"):SetNumber("hp", current_hp - damage)
-
+                damage = event.collider.damage
+                LaunchEvent(EventType.HEALTH_CHANGE_EVENT, entity, current_hp - damage);
                 -- apply knockback
                 -- apply conditions
+
+            else if event.type == EventType.HEALTH_CHANGE_EVENT then
+                entity:GetComponent("Health"):SetNumber("hp", event.get("hp"))
             end
+        end
+        GetSubscriptions = function(entity, event)
+            return {Subscription(EventType:HEALTH_CHANGE_EVENT, targets = {entity.ID}),
+                    Subscription(EventType:COLLIDED_EVENT, targets = {entity.ID})} --something like this
         end
     }
 }

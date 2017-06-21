@@ -21,7 +21,7 @@ ForwardAnimationSystem =
             if !frame_started then
                 animation_component:SetBool("started",true)
                 --Set entity sprite to new frame
-                entity:GetComponent:("Graphics"):SetString("sprite",animation_component:GetString("current_frame_sprite"))
+                entity:GetComponent:("Graphics"):SetString("sprite",animation_component:GetString("current_frame_sprite")) --should this be an event?
             else
             --Decrease time left on frame
             current_frame_time_left = animation_component:GetNumber("current_frame_time_left")
