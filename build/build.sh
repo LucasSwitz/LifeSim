@@ -11,7 +11,7 @@ for arg in "$@"
 do
     case "$arg" in
         -c)
-            cmake ..
+            cmake -DCMAKE_PREFIX_PATH="lib/SFML" ..
         ;;
         -s)
             python MakeStatics.py

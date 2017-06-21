@@ -12,13 +12,21 @@ include_directories($ENV{GTEST_DIR}/include ".")
 include_directories($ENV{LUA_INCLUDE_DIR} ".")
 include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
 
+
 file(GLOB_RECURSE SOURCES
-    main.cpp
     src/*.h
     src/*.cpp
 )
 
 add_executable(${PROJECT_NAME_STR} ${SOURCES})
+
+set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+find_package(SFML 2 REQUIRED network audio graphics window system)
+
+if(SFML_FOUND)
+  include_directories(SFML_INCLUDE_DIR ".")
+  target_link_libraries(${PROJECT_NAME_STR} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+endif()
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
 target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua.a)
@@ -27,5 +35,6 @@ target_link_libraries(${PROJECT_NAME_STR} $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_DL_LIBS})
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_THREAD_LIBS_INIT})
 
-
 set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD 14)
+
+install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
