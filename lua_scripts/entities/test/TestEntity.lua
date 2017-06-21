@@ -57,5 +57,22 @@ TestEntity =
                 }
             }
         }
+    },
+    Subscriptions 
+    {
+        subscriptions = {"sub1","sub2"},
+        OnEvent = function(entity, event)
+            --do something with the event
+            if(event.type == EventType.Collided) then
+
+                -- apply damage
+                damage = event.collider.damage
+                current_hp = entity:GetComponent("Health"):GetNumber("hp")
+                entity:GetComponent("Health"):SetNumber("hp", current_hp - damage)
+
+                -- apply knockback
+                -- apply conditions
+            end
+        end
     }
 }

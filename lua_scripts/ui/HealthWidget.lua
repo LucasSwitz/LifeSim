@@ -14,16 +14,14 @@ HealthWidget =
             sprite_path = "path/to/heart_image"
         }
     },
-
-    Linked_Components
+    Subscriptions
     {
-        Player_1_Health
+        subscriptions = {"Player1Health"}
+        onEvent(widget, event)
         {
-            component_owner = 0,
-            component_name = "Health"
+            --change number of hearts
         }
-    }   
-    Update = function(component_map)
+    }
 
     end
 }
