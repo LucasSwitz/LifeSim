@@ -59,6 +59,11 @@ class Component
         return _name;
     }
 
+    Component* GetSubcomponenet(std::string name)
+    {
+        return _sub_components.at(name);
+    }
+
   protected:
     void AddValue(std::string name, std::string value)
     {
@@ -70,11 +75,17 @@ class Component
         _float_components.insert(std::make_pair(name, ComponentValue<float>(name,value)));
     }
 
+    void AddSubcomponenet(std::string name, Component* sub_component)
+    {
+        _sub_components.insert(std::make_pair(name, sub_componenet));
+    }
+
     Component(std::string name="") : _name(name){};
 
   private:
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
+    std::unordered_map<std::string, Component> _sub_components;
     std::string _name;
 };
 

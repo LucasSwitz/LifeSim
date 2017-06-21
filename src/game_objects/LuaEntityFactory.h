@@ -16,7 +16,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_id_to_name.insert(std::make_pair(prototype_id, prototype_name));
     };
 
-    LuaEntity *GetEntity(int id)
+    LuaEntity* GetEntity(int id)
     {
         LuaEntity *new_entity = new LuaEntity();
         new_entity->LoadScript(LUA_STATE, _entity_scripts.at(id), _entity_id_to_name.at(id));

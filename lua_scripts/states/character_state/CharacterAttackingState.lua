@@ -5,6 +5,7 @@ StateName = "Attacking"
 
 CharacterAttackingState = {
     Enter = function(character)
+    --set animation
     end,
     Execute = function(character)
     end,

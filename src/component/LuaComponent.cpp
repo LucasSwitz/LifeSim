@@ -16,5 +16,11 @@ void LuaComponent::ConfigureFromLua(LuaRef &ref)
         {
             AddValue(name, value.cast<std::string>());
         }
+        else if (value.isTable())
+        {
+            LuaComponent* component = new LuaComponent();
+            component->ConfigureFromLua(value);
+            AddSubcomponent(name, component);
+        }
     }
 }
