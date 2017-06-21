@@ -36,32 +36,12 @@ int Entity::ID() const
     return _id;
 }
 
-Component *Entity::GetComponent(std::string name)
-{
-    return _components.at(name);
-}
-
-void Entity::AddComponent(Component *component)
-{
-    _components.insert(std::make_pair(component->GetName(), component));
-}
-
-void Entity::RemoveComponent(std::string name)
-{
-
-}
-
 void Entity::SetID(int id)
 {
     if (id < 0)
         return;
 
     _id = id;
-}
-
-bool Entity::HasComponent(std::string name)
-{
-    return _components.find(name) != _components.end();
 }
 
 Entity::~Entity()

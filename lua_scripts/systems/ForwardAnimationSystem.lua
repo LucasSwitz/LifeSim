@@ -1,14 +1,14 @@
 --PREAMBLE_START
 ScriptType = "System"
-Name = "EntityAnimationSystem"
+Name = "ForwardAnimationSystem"
 --PREAMBLE_END
 
-EntityAnimationSystem = 
+ForwardAnimationSystem = 
 {   
     after = "HealthSystem",
     Update = function(graphics_system,time)
-        local entities = EntityManager.Instance():AsLuaList()
-        local it = entities:Iterator()
+        local animated = ComponentUserBase.Instance():GetAll("Animation")
+        local it = animated:Iterator()
 
         --Forward All Animations
         while it ~- nil do 
