@@ -1,7 +1,6 @@
 #include "ComponentUserBase.h"
 
-
-void ComponentUserBase::Register(std::string component_name, ComponentUser& component_user)
+void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 {
 
     if(!ComponentExists(component_name))
@@ -10,7 +9,7 @@ void ComponentUserBase::Register(std::string component_name, ComponentUser& comp
     }
 
     std::list<ComponentUser*>* list = _component_users_directory.at(component_name);
-    list->push_back(&component_user);
+    list->push_back(&user);
 
 }
 
@@ -26,8 +25,6 @@ void ComponentUserBase::DeRegister(std::string component_name,ComponentUser& use
         if (*it == &user)
             list->erase(it);
     }
-
-
 }
 
 bool ComponentUserBase::ComponentExists(std::string component_name)

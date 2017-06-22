@@ -5,8 +5,9 @@
 #include <chrono>
 
 #include "src/event/EventSubscriber.h"
+#include "src/decorator/Decorated.h"
 
-class System : public EventSubscriber
+class System : public Decorated
 {
   public:
     std::string GetName() const
@@ -17,13 +18,6 @@ class System : public EventSubscriber
     std::string GetAfter() const
     {
         return _after;
-    }
-
-    virtual void OnEvent(Event& e){};
-    virtual std::list<Subscription> GetSubscriptions()
-    {
-        std::list<Subscription> empty;
-        return empty; //might need to change this eventually
     }
 
    virtual void Update(double seconds_since_last_update) = 0;

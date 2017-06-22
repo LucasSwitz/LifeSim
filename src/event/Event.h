@@ -2,6 +2,7 @@
 #define EVENT_H
 
 #include <set>
+#include "src/event/EventManager.h"
 
 struct Event
 {
