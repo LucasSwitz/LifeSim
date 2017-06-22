@@ -13,7 +13,6 @@ class GameRunnerTimed : public GameRunner
             while(duration <= seconds) //will always skip last second. Should round to a certian magnitude.
             {
                 this->Update();
-                
                 auto current_time = std::chrono::high_resolution_clock::now();
                 duration = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - start).count();
             }

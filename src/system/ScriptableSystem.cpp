@@ -19,6 +19,7 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
             if((*_system_table)["EventHandler"])
             {
                 ConfigureEventHandling((*_system_table)["EventHandler"]);
+                EventManager::Instance()->RegisterSubscriber(this);
             }
             if ((*_system_table)["Update"].isFunction())
             {
@@ -37,9 +38,9 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
     }
 }
 
-void ScriptableSystem::ConfigureEventHandling(LuaRef& event_handler_table)
+void ScriptableSystem::ConfigureEventHandling(const LuaRef& event_handler_table)
 {
-    if (event_handler_table->isTable())
+    if (event_handler_table.isTable())
         {
             if(event_handler_table["OnEvent"])
             {
@@ -47,7 +48,7 @@ void ScriptableSystem::ConfigureEventHandling(LuaRef& event_handler_table)
             }
             if (event_handler_table["GetSubscriptions"].isFunction())
             {
-                _on_event_function = std::make_unique<LuaRef>(event_handler_table["GetSubscriptions"]);
+                _get_subscriptions_function = std::make_unique<LuaRef>(event_handler_table["GetSubscriptions"]);
             }
         }
 }
@@ -57,20 +58,21 @@ void ScriptableSystem::OnEvent(Event& e)
     {
         if(_on_event_function)
         {
-            (*_on_event_function)(this,e);
+            (*_on_event_function)(e);
         }
     }
 }
 
-std::list<Subscritpion> ScriptableSystem::GetSubscriptions()
+std::list<Subscription> ScriptableSystem::GetSubscriptions()
 {
-    std::list<Subscritpion> subscriptions = System::GetSubscriptions();
+    std::list<Subscription> subscriptions = System::GetSubscriptions();
 
     if(_get_subscriptions_function)
     {
-        LuaRef lua_subs = (*get_subscriptions_function)(this);
-        std::list<Subscription> lua_subs_list = LuaUniversal.ListFromTable<Subscritpion>(lua_subs);
-        subscriptions.merge(lua_subs_list);
+        LuaRef lua_subs = (*_get_subscriptions_function)();
+        std::list<Subscription> lua_subs_list;
+        LuaUniversal::ListFromTable<Subscription>(lua_subs, lua_subs_list);
+        subscriptions.splice(std::end(subscriptions),lua_subs_list);
     }
 
     return subscriptions;

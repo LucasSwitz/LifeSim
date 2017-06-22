@@ -2,6 +2,7 @@
 #define LUAUNIVERSAL_H
 
 #include <LuaBridge/LuaBridge.h>
+#include <list>
 #include <unordered_map>
 
 extern "C" {
@@ -61,12 +62,11 @@ class LuaUniversal
     }
 
     template<typename T>
-    static std::list<T> ListFromTable(const LuaRef& table)
+    static void ListFromTable(const LuaRef& table, std::list<T>& list)
     {
-        std::unordered_map<std::string, LuaRef> result;
         if (table.isNil())
         {
-            return result;
+            return;
         }
 
         auto L = table.state();
@@ -77,13 +77,12 @@ class LuaUniversal
         { 
             if (lua_isstring(L, -2))
             {
-                result.push_back(LuaRef::fromStack(L, -1).cast<T>());
+                list.push_back(LuaRef::fromStack(L, -1).cast<T>());
             }
             lua_pop(L, 1);
         }
 
         lua_pop(L, 1); 
-        return result;
     }
 
   private:

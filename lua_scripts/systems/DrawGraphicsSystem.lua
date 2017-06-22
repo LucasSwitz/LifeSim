@@ -1,5 +1,5 @@
 --PREAMBLE_START
-ScriptType = "System"
+ScriptType = "SystemBLCK"
 Name = "DrawGraphicsSystem"
 --PREAMBLE_END
 

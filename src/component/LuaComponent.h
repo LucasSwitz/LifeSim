@@ -7,7 +7,7 @@
 class LuaComponent : public Component
 {
   public:
-    LuaComponent(std::string name) : Component(name) {}
+    LuaComponent(std::string name="") : Component(name) {}
 
     void ConfigureFromLua(LuaRef &ref);
 };

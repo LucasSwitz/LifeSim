@@ -75,18 +75,19 @@ class Component
         _float_components.insert(std::make_pair(name, ComponentValue<float>(name,value)));
     }
 
-    void AddSubcomponenet(std::string name, Component* sub_component)
+    void AddSubcomponent(Component* sub_component)
     {
-        _sub_components.insert(std::make_pair(name, sub_componenet));
+        _sub_components.insert(std::make_pair(sub_component->_name, sub_component));
     }
 
     Component(std::string name="") : _name(name){};
 
+  protected:
+    std::string _name;
   private:
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
-    std::unordered_map<std::string, Component> _sub_components;
-    std::string _name;
+    std::unordered_map<std::string, Component*> _sub_components;
 };
 
 #endif

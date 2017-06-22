@@ -5,7 +5,7 @@ void ComponentUser::RemoveComponent(std::string name)
 {
     if(HasComponent(name))
         _components.erase(_components.find(name));
-        ComponentUserBase::Instance()->DeRegister(component_name, this);
+        ComponentUserBase::Instance()->DeRegister(name, *this);
 }
 
 bool ComponentUser::HasComponent(std::string name)
@@ -19,10 +19,10 @@ void ComponentUser::AddComponent(Component *component)
 
     _components.insert(std::make_pair(component_name, component));
 
-    ComponentUserBase::Instance()->Register(component_name, this);
+    ComponentUserBase::Instance()->Register(component_name, *this);
 }
 
 Component *ComponentUser::GetComponent(std::string name)
 {
-    return _componets.at(name);
+    return _components.at(name);
 }

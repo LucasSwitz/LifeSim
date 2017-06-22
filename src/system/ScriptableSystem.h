@@ -5,6 +5,8 @@
 #include <iostream>
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/system/System.h"
+#include "src/event/Event.h"
+#include "src/event/EventManager.h"
 
 class ScriptableSystem : public System
 {
@@ -15,9 +17,9 @@ class ScriptableSystem : public System
 
     void LoadScript(luabridge::lua_State *L, const std::string &script_path, const std::string &system_name);
 
-    std::list<Subscritpion> GetSubscriptions() override;
+    std::list<Subscription> GetSubscriptions() override;
 
-    void OnEvent(Event& e);
+    void OnEvent(Event& e) override;
 
 private:
         std::unique_ptr<luabridge::LuaRef> _update_function;
@@ -25,6 +27,6 @@ private:
         std::unique_ptr<luabridge::LuaRef> _on_event_function;
         std::unique_ptr<luabridge::LuaRef> _get_subscriptions_function;
 
-        void ConfigureEventHandling(LuaRef& event_handler_table);
+        void ConfigureEventHandling(const LuaRef& event_handler_table);
 };
 #endif

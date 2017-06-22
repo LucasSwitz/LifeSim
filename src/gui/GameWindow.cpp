@@ -1,7 +1,7 @@
 #include "GameWindow.h"
 
 
-GameWindow::GameWindow() : _main_window(sf::VideoMode(200, 200), "SFML works!", sf::Style::Fullscreen)
+/*GameWindow::GameWindow() : _main_window(sf::VideoMode(200, 200), "SFML works!", sf::Style::Fullscreen)
 {
 
 }
@@ -21,4 +21,4 @@ GameWindow::Update()
     }
 
     _main_window->display();
-}
+}*/

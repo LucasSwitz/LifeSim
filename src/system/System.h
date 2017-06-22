@@ -22,7 +22,7 @@ class System : public EventSubscriber
     virtual void OnEvent(Event& e){};
     virtual std::list<Subscription> GetSubscriptions()
     {
-        std::list empty();
+        std::list<Subscription> empty;
         return empty; //might need to change this eventually
     }
 

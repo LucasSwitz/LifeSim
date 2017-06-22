@@ -1,15 +1,18 @@
 #ifndef SUBSCRIPTION
 #define SUBSCRIPTION
 
-struct Subscritpion
+#include <set>
+
+struct Subscription
 {
-    Subscription(int event_id);
+    Subscription(int event_id) : id(event_id){};
     void AddTag(int tag)
     {
-        _tags.insert(tag);
+        tags.insert(tag);
     }
-    int event_id;
-    std::set<int> _tags;
+
+    int id;
+    std::set<int> tags;
 };
 
 #endif

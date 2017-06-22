@@ -27,7 +27,7 @@ private:
     ComponentUserBase(){};
 
 private:
-    std::unordered_map<std::string, std::list<ComponentUsers*>*> _component_users_directory;
+    std::unordered_map<std::string, std::list<ComponentUser*>*> _component_users_directory;
 
 };
 

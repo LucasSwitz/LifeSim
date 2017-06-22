@@ -7,6 +7,9 @@
 #include "src/utils/state/ScriptableStateMachine.h"
 #include "src/game_objects/EntityManager.h"
 #include "src/utils/lua/LuaList.h"
+#include "src/event/Subscription.h"
+#include "src/event/EventType.h"
+#include "src/event/Event.h"
 
 
 
@@ -55,7 +58,16 @@ class LuaBindings
             .beginClass<Subscription>("Subscription")
                 .addConstructor<void (*)(int)>()
                 .addFunction("AddTag", &Subscription::AddTag)
-            .endClass();
+            .endClass()
+            .beginClass<EventType>("EventType")
+                .addStaticData("HEALTH_UPDATE_EVENT", &EventType::HEALTH_UPDATE_EVENT, false)
+                .addStaticData("COLLISION_EVENT", &EventType::COLLISION_EVENT, false)
+            .endClass()
+            .beginClass<Event>("Event")
+                .addData("type", &Event::id)
+                .addData("sender", &Event::sender_id)
+                .addData("target", &Event::target_id)
+            .endClass();;
         } 
  };
 

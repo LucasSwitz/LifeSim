@@ -30,14 +30,13 @@ HealthSystem =
             it = it.next
         end
     end,
-    EventHandler 
+    EventHandler =
     {
         OnEvent = function(event)
             --do something with the event
             sender = event.sender
             target = event.target
-
-            if(event.type == EventType.COLLIDED_EVENT) then
+            --[[if(event.type == EventType.COLLISION_EVENT) then
                 -- apply damage
                 damage = event.sender.damage
 
@@ -48,16 +47,16 @@ HealthSystem =
                 -- apply knockback - NO Do this in Physics System
                 -- apply conditions - NO Do this in Condition system
 
-            else if (event.type == EventType.HEALTH_CHANGE_EVENT) then
+            elseif (event.type == EventType.HEALTH_CHANGE_EVENT) then
                 entity = EntityManager_GetEntity(sender)
                 new_hp = event.ExtraInfoAsInt()
                 entity:GetComponent("Health"):SetNumber("hp", new_hp)
-            end
-        end
+            end]]--
+        end,
 
-        GetSubscriptions = function(entity, event)
-            return {Subscription(EventType:HEALTH_CHANGE_EVENT),
-                    Subscription(EventType:COLLIDED_EVENT)} --something like this
+        GetSubscriptions = function()
+            return {Subscription(EventType.HEALTH_UPDATE_EVENT),
+                    Subscription(EventType.COLLISION_EVENT)}
         end
     }
 }

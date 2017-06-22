@@ -14,6 +14,7 @@ include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
 
 
 file(GLOB_RECURSE SOURCES
+    main.cpp
     src/*.h
     src/*.cpp
 )
@@ -24,7 +25,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED network audio graphics window system)
 
 if(SFML_FOUND)
-  include_directories(SFML_INCLUDE_DIR ".")
+  include_directories(SFML_INCLUDE_DIR)
   target_link_libraries(${PROJECT_NAME_STR} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 endif()
 

@@ -10,7 +10,7 @@ ActionEat = {
         _performer = performer 
     end,
     Start=function()  
-        _performer:SetInternalValue("Hunger",5);
+        --_performer:SetInternalValue("Hunger",5);
     end,
     Perform=function() 
     end,
