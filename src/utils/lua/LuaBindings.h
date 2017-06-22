@@ -51,6 +51,10 @@ class LuaBindings
                 .addFunction("GetString", &Component::GetStringValue)
                 .addFunction("SetNumber", &Component::SetFloatValue)
                 .addFunction("SetString", &Component::SetStringValue)
+            .endClass()
+            .beginClass<Subscription>("Subscription")
+                .addConstructor<void (*)(int)>()
+                .addFunction("AddTag", &Subscription::AddTag)
             .endClass();
         } 
  };

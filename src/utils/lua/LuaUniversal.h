@@ -60,6 +60,32 @@ class LuaUniversal
         return result;
     }
 
+    template<typename T>
+    static std::list<T> ListFromTable(const LuaRef& table)
+    {
+        std::unordered_map<std::string, LuaRef> result;
+        if (table.isNil())
+        {
+            return result;
+        }
+
+        auto L = table.state();
+        push(L, table); 
+
+        lua_pushnil(L); 
+        while (lua_next(L, -2) != 0)
+        { 
+            if (lua_isstring(L, -2))
+            {
+                result.push_back(LuaRef::fromStack(L, -1).cast<T>());
+            }
+            lua_pop(L, 1);
+        }
+
+        lua_pop(L, 1); 
+        return result;
+    }
+
   private:
     lua_State *L;
 };

@@ -3,9 +3,8 @@
 
 class EventSubscriber
 {
-    virtual void OnEvent(Event& e);
-
-    virtual std::list<Subscription> GetSubscriptions();
+    virtual void OnEvent(Event& e){};
+    virtual std::list<Subscription> GetSubscriptions(){};
 
 };
 #endif
