@@ -11,15 +11,15 @@ class LuaComponentsDecorator : public ComponentsDecorator
     static LuaComponentsDecorator *FromLuaRef(const LuaRef &component_table)
     {
         LuaComponentsDecorator* d = new LuaComponentsDecorator();
-        std::list<LuaRef> components;
-        LuaUniversal::ListFromTable<LuaRef>(component_table, components);
+        std::unordered_map<std::string, LuaRef> components = 
+            LuaUniversal::KeyValueMapFromTable(component_table);
 
         for (auto it = components.begin(); it != components.end(); it++)
         {
-            if ((*it).isTable())
+            if (it->second.isTable())
             {
-                LuaComponent *component = new LuaComponent();
-                component->ConfigureFromLua(*it);
+                LuaComponent *component = new LuaComponent(it->first);
+                component->ConfigureFromLua(it->second);
                 d->AddComponent(component);
             }
         }

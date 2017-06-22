@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <list>
+#include "src/utils/lua/LuaList.h"
 
 class ComponentUser;
 
@@ -21,7 +22,9 @@ void Register(std::string component_name,ComponentUser& user);
 void DeRegister(std::string component_name,ComponentUser& user);
 bool ComponentExists(std::string component_name);
 
-std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name); //need luaList implementation
+std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name);
+LuaList<ComponentUser*>* GetAllUsersWithComponentAsLuaList(std::string component_name);
+
 
 private:
     ComponentUserBase(){};

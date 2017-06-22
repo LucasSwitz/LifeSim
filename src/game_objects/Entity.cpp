@@ -24,8 +24,5 @@ void Entity::SetID(int id)
 
 Entity::~Entity()
 {
-    for(auto it = _components.begin(); it != _components.end(); it++)
-    {
-        delete it->second;
-    }
+
 }

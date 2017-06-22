@@ -7,8 +7,15 @@
 class Decorated
 {
   public:
-    void HasEventHandling();
-    void HasComponents();
+    bool HasEventHandling()
+    {
+        return _event_handler != nullptr;
+    };
+
+    bool HasComponents()
+    {
+        return _components != nullptr;
+    }
 
     void AddEventHandling(EventHandlingDecorator *d)
     {
@@ -20,6 +27,20 @@ class Decorated
     {
         _components = d;
     };
+
+    void SetComponentValueFloat(std::string component_name, std::string value_name, float value)
+    {
+        if(HasComponents())
+            _components->GetComponent(component_name)->SetFloatValue(value_name,value);
+    }
+
+    float GetComponentValueFloat(std::string component_name, std::string value_name)
+    {
+        if(HasComponents())
+            return _components->GetComponent(component_name)->GetFloatValue(value_name);
+        
+        return -1; //throw error here
+    }
 
   private:
     EventHandlingDecorator *_event_handler = nullptr;

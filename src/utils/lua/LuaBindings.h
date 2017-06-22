@@ -10,8 +10,8 @@
 #include "src/event/Subscription.h"
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
-
-
+#include "src/decorator/Decorated.h"
+#include "src/component/ComponentUserBase.h"
 
 using namespace luabridge;
 
@@ -21,10 +21,12 @@ class LuaBindings
         static void Bind(lua_State *L)
         { 
             getGlobalNamespace(L)
-            .beginClass<Entity>("Entity")
+            .beginClass<Decorated>("Decorated")
+                .addFunction("GetNumber", &Decorated::GetComponentValueFloat)
+                .addFunction("SetNumber", &Decorated::SetComponentValueFloat)
+            .endClass()
+            .deriveClass<Entity, Decorated>("Entity")
                 .addProperty("id", &Entity::ID)
-                .addFunction("HasComponent", &Entity::HasComponent)
-                .addFunction("GetComponent", &Entity::GetComponent)
             .endClass()
             .deriveClass<Actor, Entity>("Actor")
                 .addConstructor<void(*)(void)>()
@@ -67,7 +69,11 @@ class LuaBindings
                 .addData("type", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)
-            .endClass();;
+            .endClass()
+            .beginClass<ComponentUserBase>("ComponentUsers")
+                .addStaticFunction("Instance",&ComponentUserBase::Instance)
+                .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentAsLuaList)
+            .endClass();
         } 
  };
 

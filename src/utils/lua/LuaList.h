@@ -42,13 +42,26 @@ class LuaList
     }
 
     template <typename key, typename value>
-    static LuaList<value>* FromMapToLuaList(std::map<key, value*> &map)
+    static LuaList<value> *FromMapToLuaList(std::map<key, value *> &map)
     {
         LuaList *list = new LuaList();
 
         for (auto it = map.begin(); it != map.end(); it++)
         {
             list->Add(it->second);
+        }
+
+        return list;
+    }
+
+    template <typename value>
+    static LuaList<value>* FromListToLuaList(std::list<value>& map)
+    {
+        LuaList<value> *list = new LuaList();
+
+        for (auto it = map.begin(); it != map.end(); it++)
+        {
+            list->Add(&*it);
         }
 
         return list;

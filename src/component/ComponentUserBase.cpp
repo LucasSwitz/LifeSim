@@ -39,3 +39,9 @@ std::list<ComponentUser*>* ComponentUserBase::GetAllUsersWithComponent(std::stri
     else
         return _component_users_directory.at(component_name);
 }
+
+LuaList<ComponentUser*>* ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string component_name)
+{
+    std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);  
+    return LuaList<ComponentUser*>::FromListToLuaList<ComponentUser*>(*list);
+}

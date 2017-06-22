@@ -18,14 +18,12 @@ HealthSystem =
         
     end,
     RegenerateAll = function()
-        local entities = EntityManager.Instance():AsLuaList()
+        local entities = ComponentManager.Instance():GetAll("Health")
         local it = entities:Iterator()
         while it ~= nil do
             entity = it.data
-            if entity:HasComponent("Health") then
-                current_hp = entity:GetComponent("Health"):GetNumber("hp")
-                entity:GetComponent("Health"):SetNumber("hp",current_hp + 10)
-            end
+            current_hp = entity:GetNumber("Health", "hp");
+            --LaunchEvent(Event(EventType.HEALTH_CHANGE_EVENT, nil, entity.id, current_hp + 10))
             it = it.next
         end
     end,

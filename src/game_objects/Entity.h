@@ -2,8 +2,9 @@
 #define ENTITY_H
 
 #include <unordered_map>
-#include "src/component/ComponentUser.h"
-class Entity : public ComponentUser
+#include "src/decorator/Decorated.h"
+
+class Entity : public Decorated
 { 
     friend class EntityManager;
 
