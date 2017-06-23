@@ -7,7 +7,7 @@ ForwardAnimationSystem =
 {   
     after = "HealthSystem",
     Update = function(graphics_system,time)
-        local animated = ComponentUserBase.Instance():GetAll("Animation")
+        local animated = ComponentUserBase.Instance():GetAll("Animation","Graphics")
         local it = animated:Iterator()
 
         --Forward All Animations

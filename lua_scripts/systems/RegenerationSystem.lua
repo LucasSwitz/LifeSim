@@ -1,11 +1,11 @@
 --PREAMBLE_START
 ScriptType = "System"
-Name = "HealthSystem"
+Name = "RegenerationSystem"
 --PREAMBLE_END
 
 HEALTH_REGEN_PERIOD = 3 --seconds
 
-HealthSystem = 
+RegenerationSystem = 
 {
     total_time = 0.0,
 
@@ -23,8 +23,7 @@ HealthSystem =
         while it ~= nil do
             entity = it.data
             current_hp = entity:GetNumber("Health", "hp");
-            entity:SetNumber("Health","hp",current_hp+10);
-            --LaunchEvent(Event(EventType.HEALTH_CHANGE_EVENT, nil, entity.id, current_hp + 10))
+            LaunchEvent(Event(EventType.HEALTH_CHANGE_EVENT, nil, entity.id, current_hp + 10))
             it = it.next
         end
     end,

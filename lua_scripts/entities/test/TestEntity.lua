@@ -11,14 +11,20 @@ TestEntity =
     {
         Components = 
         {   
-            Physics = 
+            Position =
             {
-                mass = 10,
-                max_velocity = 20
+                x_pos = 0,
+                y_pos = 0
+            },
+            Velocity = 
+            {
+                x_velcoity = 0,
+                y_velocity = 0,
+                max_velocity = 0
             },
             Graphics = 
             {
-                still_frame = "test/file/path",
+                sprite = "still/sprite",
             },
             Animation =
             {
