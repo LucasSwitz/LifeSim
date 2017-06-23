@@ -15,10 +15,6 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
         _system_table = std::make_shared<LuaRef>(getGlobal(L, system_name.c_str()));
         if (_system_table->isTable())
         {
-            if((*_system_table)["Decorators"])
-            {                
-                LuaDecorated::LoadLuaDecorators(*_system_table,(*_system_table)["Decorators"]);
-            }
             if ((*_system_table)["Update"].isFunction())
             {
                 _update_function = std::make_unique<LuaRef>((*_system_table)["Update"]);
@@ -29,6 +25,8 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
                 _after = (*_system_table)["after"].cast<std::string>();
             }
         }
+
+        LuaDecorated::LoadLuaDecorators(*_system_table);
     }
     else
     {

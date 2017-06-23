@@ -9,15 +9,16 @@ void LuaEntity::LoadScript(lua_State *lua_state, std::string script_path, std::s
         LuaRef entity_table = getGlobal(lua_state, entity_name.c_str());
         if (entity_table.isTable())
         {
-            if (entity_table["Decorators"])
+            if (entity_table["id"])
             {
-                LoadLuaDecorators(entity_table, entity_table["Decorators"]);
+                SetID(entity_table["id"].cast<int>());
+            }
+            else
+            {
+                entity_table["id"] = this->ID();
             }
 
-            if (entity_table["ID"])
-            {
-                SetID(entity_table["ID"].cast<int>());
-            }
+             LuaDecorated::LoadLuaDecorators(entity_table);
         }
     }
     else

@@ -6,7 +6,7 @@ PrototypeID = 999
 
 TestEntity = 
 {
-    ID = 999,
+    id = 999,
     Decorators =
     {
         Components = 

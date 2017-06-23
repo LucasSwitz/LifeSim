@@ -3,26 +3,37 @@
 
 #include "src/decorator/EventHandlingDecorator.h"
 #include "src/decorator/ComponentsDecorator.h"
+#include "src/decorator/UseableDecorator.h"
 #include "src/event/EventManager.h"
 #include <iostream>
 class Decorated
 {
   public:
+
+  /**
+  * EVENT HANDLING ------------------------------------------------------------
+  **/
+
     bool HasEventHandling()
     {
         return _event_handler != nullptr;
     };
 
-    bool HasComponentsDecorator()
-    {
-        return (_components_decorator != nullptr);
-    }
 
-    void AddEventHandling(EventHandlingDecorator *d)
+   void AddEventHandling(EventHandlingDecorator *d)
     {
         _event_handler = d;
         EventManager::Instance()->RegisterSubscriber(_event_handler); //maybe change this to something more dynamic later;
     };
+
+  /**
+  * COMPONENTS ------------------------------------------------------------
+  **/
+    
+    bool HasComponentsDecorator()
+    {
+        return (_components_decorator != nullptr);
+    }
 
     void AddComponents(ComponentsDecorator *d)
     {
@@ -65,9 +76,25 @@ class Decorated
             return _components_decorator->HasComponent(component_name);
     }
 
+
+    /**
+    * USEABLE -------------------------------------------------------------------
+    **/
+
+    bool IsUseable()
+    {
+        return _useable_decorator != nullptr;
+    }
+
+    void AddUseableDecorator(UseableDecorator* d)
+    {
+        _useable_decorator = d;
+    }
+
   private:
     EventHandlingDecorator *_event_handler = nullptr;
     ComponentsDecorator *_components_decorator = nullptr;
+    UseableDecorator *_useable_decorator = nullptr;
 };
 
 #endif
