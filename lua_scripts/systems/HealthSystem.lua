@@ -23,6 +23,7 @@ HealthSystem =
         while it ~= nil do
             entity = it.data
             current_hp = entity:GetNumber("Health", "hp");
+            entity:SetNumber("Health","hp",current_hp+10);
             --LaunchEvent(Event(EventType.HEALTH_CHANGE_EVENT, nil, entity.id, current_hp + 10))
             it = it.next
         end

@@ -13,6 +13,7 @@ class HealthSystemTest : public LuaTest
 
     void SetUp()
     {
+        LuaEntityFactory::Instance()->PopulateFactory();
         runner = new GameRunnerTimed();
     }
 
@@ -25,15 +26,15 @@ class HealthSystemTest : public LuaTest
 TEST_F(HealthSystemTest, TestRegeneration)
 {
     Entity_Manager->Clear();
-    LuaEntity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
+    Entity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
 
-    ASSERT_TRUE(e->HasComponent("Health"));
+    ASSERT_EQ(e->GetComponentValueFloat("Health","hp"),0);
 
-    e->GetComponent("Health")->SetFloatValue("hp",0);
+    e->SetComponentValueFloat("Health", "hp", 0);
 
     runner->RunFor(5);
 
-    ASSERT_EQ(10 ,e->GetComponent("Health")->GetFloatValue("hp"));
+    //ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
 
 }
 #endif

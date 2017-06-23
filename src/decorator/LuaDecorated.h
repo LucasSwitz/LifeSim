@@ -5,7 +5,6 @@
 #include "src/decorator/LuaEventHandlingDecorator.h"
 #include "src/decorator/LuaComponentsDecorator.h"
 
-
 class LuaDecorated : public Decorated
 {
     public:
@@ -13,10 +12,9 @@ class LuaDecorated : public Decorated
         {
             if(decoration_table["Components"])
             {
-                ComponentsDecorator* components = 
+                ComponentsDecorator* components_decorator = 
                     LuaComponentsDecorator::FromLuaRef(decoration_table["Components"]);
-                AddComponents(components);
-                
+                AddComponents(components_decorator);   
             }
 
             if(decoration_table["EventHandler"])

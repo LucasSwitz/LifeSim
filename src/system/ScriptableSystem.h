@@ -7,7 +7,7 @@
 #include "src/system/System.h"
 #include "src/decorator/LuaDecorated.h"
 
-class ScriptableSystem : public System, public LuaDecorated
+class ScriptableSystem : public System
 {
     public:
     ScriptableSystem(){};

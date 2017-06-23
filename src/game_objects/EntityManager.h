@@ -57,10 +57,10 @@ class EntityManager
 
     ~EntityManager()
     {
-        for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
+        /*for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
         {
             delete it->second;
-        }
+        }*/
     }
 
   private:

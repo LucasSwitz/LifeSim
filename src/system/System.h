@@ -5,9 +5,9 @@
 #include <chrono>
 
 #include "src/event/EventSubscriber.h"
-#include "src/decorator/Decorated.h"
+#include "src/decorator/LuaDecorated.h"
 
-class System : public Decorated
+class System : public LuaDecorated
 {
   public:
     std::string GetName() const

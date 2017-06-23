@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 using namespace luabridge;
-class LuaEntity : public Entity, public LuaDecorated
+class LuaEntity : public Entity
 {
     public:
     void LoadScript(lua_State* lua_state, std::string script_path,std::string entity_name);

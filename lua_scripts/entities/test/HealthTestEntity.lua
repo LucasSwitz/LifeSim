@@ -7,11 +7,14 @@ PrototypeID = 1000
 HealthTestEntity = 
 {
     ID = 69,
-    Components = 
-    {   
-        Health = 
-        {
-            hp = 0
+    Decorators = 
+    {
+        Components = 
+        {   
+            Health = 
+            {
+                hp = 0
+            }
         }
     }
 }

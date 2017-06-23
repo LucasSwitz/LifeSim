@@ -4,37 +4,30 @@
 class ScriptableEntityTest : public LuaTest
 {
   public:
-    LuaEntity* scriptable_character;
+    LuaEntity* entity;
 
     ScriptableEntityTest()
     {
         LuaEntityFactory::Instance()->PopulateFactory();
-    }
-
-    void SetUp()
-    {
-       scriptable_character = LuaEntityFactory::Instance()->GetEntity("TestEntity");
+        entity = LuaEntityFactory::Instance()->GetEntity("TestEntity");
     }
 };
 
 TEST_F(ScriptableEntityTest, HasComponentTest)
 {
-    EXPECT_TRUE(scriptable_character->HasComponent("Physics"));
-    EXPECT_TRUE(scriptable_character->HasComponent("Graphics"));
+    EXPECT_TRUE(entity->HasComponent("Physics"));
+    EXPECT_TRUE(entity->HasComponent("Graphics"));
 }
 
 TEST_F(ScriptableEntityTest, ComponentValueTest)
 {
-    const Component* physics_component = scriptable_character->GetComponent("Physics");
-    const Component* graphics_component = scriptable_character->GetComponent("Graphics");
+    EXPECT_EQ(10,entity->GetComponentValueFloat("Physics","mass"));
+    EXPECT_EQ(20,entity->GetComponentValueFloat("Physics","max_velocity"));
 
-    EXPECT_EQ(10,physics_component->GetFloatValue("mass"));
-    EXPECT_EQ(20,physics_component->GetFloatValue("max_velocity"));
-
-    EXPECT_EQ("test/file/path", graphics_component->GetStringValue("sprite_file"));
+    EXPECT_EQ("test/file/path", entity->GetComponentValueString("Graphics","still_frame"));
 }
 
 TEST_F(ScriptableEntityTest, ManualIdSet)
 {
-    EXPECT_EQ(999, scriptable_character->ID());
+    EXPECT_EQ(999, entity->ID());
 }

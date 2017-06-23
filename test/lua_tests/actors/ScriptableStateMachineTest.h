@@ -8,7 +8,7 @@
 class ScriptableStateMachineTest : public LuaTest
 {
     public:
-    Character* scriptable_character;
+    Character* scriptable_entity;
 
     ScriptableStateMachineTest()
     {
@@ -17,34 +17,36 @@ class ScriptableStateMachineTest : public LuaTest
     
     void SetUp()
     {
-        scriptable_character = new Character();
+        scriptable_character = LuaEntityFactory::Instance()->GetEntity("TestEntity");
     }
 };
 
 TEST_F(ScriptableStateMachineTest, TestGlobalState)
 {
-    scriptable_character->GetStateMachine()->SetGlobalState(
+    scriptable_entity->GetStateMachine()->SetGlobalState(
         StateScriptFactory::Instance()->GetScriptableState("Character", "GlobalStateTest"));
 
-    scriptable_character->Tick();
+    scriptable_entity->Tick();
 
-    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteGlobalState"));
+    EXPECT_EQ("ExecuteTestGlobalState", scriptable_entity.GetComponentValueString("Debug","flag"));
 }
 
 TEST_F(ScriptableStateMachineTest, TestStateTransition)
 {
-    scriptable_character->GetStateMachine()->SetCurrentState(
+    scriptable_entity->GetStateMachine()->SetCurrentState(
         StateScriptFactory::Instance()->GetScriptableState("Character", "TransitionState1"));
 
-    scriptable_character->Tick();
+    scriptable_entity->Tick();
 
-    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteTransitionState1"));
-    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExitTransitionState1"));
-    EXPECT_EQ(1, scriptable_character->GetInternalValue("EnterTransitionState2"));
+    EXPECT_EQ("ExecuteTransitionState1", scriptable_entity.GetComponentValueString("Debug","flag"));
 
-    scriptable_character->Tick();
+    EXPECT_EQ("ExitTransitionState1", scriptable_entity.GetComponentValueString("Debug","flag"));
 
-    EXPECT_EQ(1, scriptable_character->GetInternalValue("ExecuteTransitionState2"));
+    EXPECT_EQ("EnterTransitionState2", scriptable_entity.GetComponentValueString("Debug","flag"));
+
+    scriptable_entity->Tick();
+
+    EXPECT_EQ("ExecuteTransitionState2", scriptable_entity.GetComponentValueString("Debug","flag"));
 
 }
 

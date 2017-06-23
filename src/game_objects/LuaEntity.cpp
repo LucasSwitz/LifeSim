@@ -11,7 +11,7 @@ void LuaEntity::LoadScript(lua_State *lua_state, std::string script_path, std::s
         {
             if (entity_table["Decorators"])
             {
-                LuaDecorated::LoadLuaDecorators(entity_table, entity_table["Decorators"]);
+                LoadLuaDecorators(entity_table, entity_table["Decorators"]);
             }
 
             if (entity_table["ID"])

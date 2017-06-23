@@ -2,9 +2,9 @@
 #define ENTITY_H
 
 #include <unordered_map>
-#include "src/decorator/Decorated.h"
+#include "src/decorator/LuaDecorated.h"
 
-class Entity : public Decorated
+class Entity : public LuaDecorated
 { 
     friend class EntityManager;
 

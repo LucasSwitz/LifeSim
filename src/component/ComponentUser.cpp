@@ -1,6 +1,6 @@
 #include "ComponentUser.h"
 #include "src/component/ComponentUserBase.h"
-
+#include <iostream>
 void ComponentUser::RemoveComponent(std::string name)
 {
     if(HasComponent(name))
@@ -16,7 +16,6 @@ bool ComponentUser::HasComponent(std::string name)
 void ComponentUser::AddComponent(Component *component)
 {
     std::string component_name = component->GetName();
-
     _components.insert(std::make_pair(component_name, component));
 
     ComponentUserBase::Instance()->Register(component_name, *this);

@@ -5,6 +5,7 @@
 #include "test/game/GameRunnerTimed.h"
 #include "src/event/EventManager.h"
 #include "src/event/EventType.h"
+#include "src/system/ScriptableSystem.h"
 class EventManagerTest : public LuaTest
 {
     public:
@@ -17,6 +18,8 @@ class EventManagerTest : public LuaTest
 
 TEST_F(EventManagerTest, EventLoadNewEvent)
 {
+    System* s = SystemController::Instance()->GetSystem("HealthSystem");
+    ASSERT_TRUE(s->HasEventHandling());
     ASSERT_TRUE(EventManager::Instance()->EventExists(EventType::HEALTH_UPDATE_EVENT));
     ASSERT_TRUE(EventManager::Instance()->EventExists(EventType::COLLISION_EVENT));
 }
