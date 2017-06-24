@@ -28,6 +28,24 @@ TestEntity =
             {
                 sprite = "still/sprite",
             },
+            Collision = 
+            {
+                hit_box_width = 100,
+                hit_box_height = 100,
+
+                OnCollision = function(self, collider)
+                    LaunchEvent(EventType.DAMAGE_EVENT, collider, self.damage) --good Make DamageSystem
+                    LaunchEvent(EventType.ADD_CONDITION_EVENT, collider, {}) --good Make ConditionSystem
+                    LaunchEvent()
+
+                end
+            },
+            Useable
+            { 
+                Use = function(self, user)
+
+                end,
+            },
             Animation =
             {
                 current_animation = "Idle",
