@@ -3,14 +3,10 @@
 
 SpawningEntitySystem = 
 {
-    Decorators = 
+    EventHandler = 
     {
-        EventHandler = 
-        {
-            OnEvent = function(e)
-                EntityManager:Instance()->Register(e)
-            end
-        }
+        OnEvent = function(e)
+            EntityManager:Instance()->Register(e)
+        end
     }
-
 }

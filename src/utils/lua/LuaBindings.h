@@ -2,16 +2,15 @@
 #define LUABINDINGS_H
 
 #include <LuaBridge/LuaBridge.h>
-#include "src/game_objects/actor/Actor.h"
-#include "src/game_objects/actor/character/Character.h"
 #include "src/utils/state/ScriptableStateMachine.h"
 #include "src/game_objects/EntityManager.h"
 #include "src/utils/lua/LuaList.h"
 #include "src/event/Subscription.h"
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
-#include "src/decorator/Decorated.h"
+#include "src/game_objects/LuaEntity.h"
 #include "src/component/ComponentUserBase.h"
+#include "src/component/ComponentUser.h"
 
 using namespace luabridge;
 
@@ -21,30 +20,25 @@ class LuaBindings
         static void Bind(lua_State *L)
         { 
             getGlobalNamespace(L)
-            .beginClass<Decorated>("Decorated")
-                .addFunction("GetNumber", &Decorated::GetComponentValueFloat)
-                .addFunction("SetNumber", &Decorated::SetComponentValueFloat)
+            .beginClass<ComponentUser>("ComponentUser")
+                .addFunction("GetNumber", &ComponentUser::GetComponentValueFloat)
+                .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)
+                .addFunction("GetString", &ComponentUser::GetComponentValueString)
+                .addFunction("SetString", &ComponentUser::SetComponentValueString)
             .endClass()
-            .deriveClass<Entity, Decorated>("Entity")
+            .deriveClass<Entity, ComponentUser>("Entity")
                 .addProperty("id", &Entity::ID)
             .endClass()
-            .deriveClass<Actor, Entity>("Actor")
-                .addConstructor<void(*)(void)>()
-                .addFunction("SetInternalValue", &Actor::SetInternalValue)
-                .addFunction("GetInternalValue", &Actor::GetInternalValue)
+            .deriveClass<LuaEntity, Entity>("LuaEntity")
+                .addFunction("Add", &LuaEntity::AddComponent)
+                .addFunction("Remove", &LuaEntity::RemoveComponent)
             .endClass()
-            .deriveClass<Character,Actor>("Character")
-            .addFunction("GetStateMachine", &Character::GetStateMachine)
+            .beginClass<LuaListNode<ComponentUser*>>("LuaListIterator")
+                .addData("data",&LuaListNode<ComponentUser*>::data)
+                .addData("next", &LuaListNode<ComponentUser*>::next)
             .endClass()
-            .beginClass<ScriptableStateMachine<Character>>("ScriptableStateMachine")
-                .addFunction("ChangeState",&ScriptableStateMachine<Character>::ChangeState)
-            .endClass()
-            .beginClass<LuaListNode<Entity>>("LuaListIterator")
-                .addData("data",&LuaListNode<Entity>::data)
-                .addData("next", &LuaListNode<Entity>::next)
-            .endClass()
-            .beginClass<LuaList<Entity>>("LuaList")
-                .addFunction("Iterator", &LuaList<Entity>::Iterator)
+            .beginClass<LuaList<ComponentUser*>>("LuaList")
+                .addFunction("Iterator", &LuaList<ComponentUser*>::Iterator)
             .endClass()
             .beginClass<EntityManager>("EntityManager")
                 .addStaticFunction("Instance", &EntityManager::Instance)

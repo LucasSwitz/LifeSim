@@ -15,16 +15,16 @@ class ScriptableEntityTest : public LuaTest
 
 TEST_F(ScriptableEntityTest, HasComponentTest)
 {
-    EXPECT_TRUE(entity->HasComponent("Physics"));
+    EXPECT_TRUE(entity->HasComponent("Position"));
     EXPECT_TRUE(entity->HasComponent("Graphics"));
 }
 
 TEST_F(ScriptableEntityTest, ComponentValueTest)
 {
-    EXPECT_EQ(10,entity->GetComponentValueFloat("Physics","mass"));
-    EXPECT_EQ(20,entity->GetComponentValueFloat("Physics","max_velocity"));
+    EXPECT_EQ(0,entity->GetComponentValueFloat("Position","x_pos"));
+    EXPECT_EQ(0,entity->GetComponentValueFloat("Position","y_pos"));
 
-    EXPECT_EQ("test/file/path", entity->GetComponentValueString("Graphics","still_frame"));
+    EXPECT_EQ("still/sprite", entity->GetComponentValueString("Graphics","sprite"));
 }
 
 TEST_F(ScriptableEntityTest, ManualIdSet)

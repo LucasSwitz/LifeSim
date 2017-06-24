@@ -5,9 +5,8 @@
 #include <chrono>
 
 #include "src/event/EventSubscriber.h"
-#include "src/decorator/LuaDecorated.h"
 
-class System : public LuaDecorated
+class System : public EventSubscriber
 {
   public:
     std::string GetName() const
@@ -21,6 +20,11 @@ class System : public LuaDecorated
     }
 
    virtual void Update(double seconds_since_last_update) = 0;
+   void OnEvent(Event& e) override{};
+    std::list<Subscription> GetSubscriptions() override{
+        std::list<Subscription> empty;
+        return empty;
+    };
 
   protected:
     System(std::string name = "") : _name(name){};

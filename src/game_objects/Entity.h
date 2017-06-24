@@ -2,9 +2,8 @@
 #define ENTITY_H
 
 #include <unordered_map>
-#include "src/decorator/LuaDecorated.h"
-
-class Entity : public LuaDecorated
+#include "src/component/ComponentUser.h"
+class Entity : public ComponentUser
 { 
     friend class EntityManager;
 
@@ -21,8 +20,6 @@ protected:
     void SetID(int id);
 private:
     int _id;
-    std::unordered_map<std::string, int> _attributes;
-
 };
 
 #endif

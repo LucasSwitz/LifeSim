@@ -7,10 +7,12 @@ PrototypeID = 999
 TestEntity = 
 {
     id = 999,
-    Decorators =
-    {
         Components = 
         {   
+            Health = 
+            {
+                hp = 0
+            },
             Position =
             {
                 x_pos = 0,
@@ -65,6 +67,5 @@ TestEntity =
                     }
                 }
             }
-        }
     }
 }

@@ -6,6 +6,28 @@ void ScriptableSystem::Update(double seconds_elapsed)
         (*_update_function)(*_system_table, seconds_elapsed);
 }
 
+
+void ScriptableSystem::OnEvent(Event& e)
+{
+    if(_on_event_function)
+        (*_on_event_function)(*_system_table,e);
+}
+
+std::list<Subscription> ScriptableSystem::GetSubscriptions()
+{
+    std::list<Subscription> subscriptions = System::GetSubscriptions();
+
+    if (_get_subscriptions_function)
+    {
+        LuaRef lua_subs = (*_get_subscriptions_function)();
+        std::list<Subscription> lua_subs_list;
+        LuaUniversal::ListFromTable<Subscription>(lua_subs, lua_subs_list);
+        subscriptions.splice(std::end(subscriptions), lua_subs_list);
+    }
+
+    return subscriptions;
+}
+
 void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &script_path, const std::string &system_name)
 {
     using namespace luabridge;
@@ -24,9 +46,22 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
             {
                 _after = (*_system_table)["after"].cast<std::string>();
             }
-        }
 
-        LuaDecorated::LoadLuaDecorators(*_system_table);
+            if((*_system_table)["EventHandler"])
+            {
+                LuaRef event_table = (*_system_table)["EventHandler"];
+                if(event_table["OnEvent"])
+                {
+                    _on_event_function = std::make_unique<LuaRef>(event_table["OnEvent"]);
+                }
+                if(event_table["GetSubscriptions"])
+                {
+                    _get_subscriptions_function = std::make_unique<LuaRef>(event_table["GetSubscriptions"]);
+                }
+
+                EventManager::Instance()->RegisterSubscriber(this);
+            }
+        }
     }
     else
     {

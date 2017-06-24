@@ -7,9 +7,9 @@
 template <typename T>
 struct LuaListNode
 {
-    LuaListNode(T *new_data) : data(new_data){};
+    LuaListNode(T new_data) : data(new_data){};
 
-    T *data;
+    T data;
     LuaListNode<T> *next = nullptr;
 };
 
@@ -18,7 +18,7 @@ class LuaList
 {
 
   public:
-    void Add(T *data)
+    void Add(T data)
     {
         LuaListNode<T> *new_LuaListNode = new LuaListNode<T>(data);
 
@@ -42,7 +42,7 @@ class LuaList
     }
 
     template <typename key, typename value>
-    static LuaList<value> *FromMapToLuaList(std::map<key, value *> &map)
+    static LuaList<value>* FromMapToLuaList(std::map<key, value> &map)
     {
         LuaList *list = new LuaList();
 
@@ -61,7 +61,7 @@ class LuaList
 
         for (auto it = map.begin(); it != map.end(); it++)
         {
-            list->Add(&*it);
+            list->Add(*it);
         }
 
         return list;

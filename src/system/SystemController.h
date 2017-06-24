@@ -26,9 +26,15 @@ public:
 
   void Update(double seconds_since_last_update);
 
+  void Reset() override
+  {
+    _systems_execution_sequence.clear();
+    _system_directory.clear();
+  }
+  
   static SystemController *Instance()
   {
-    static SystemController instance("/home/pabu/Desktop/LifeSim/lua_scripts/systems", "System");
+    static SystemController instance("/home/lucas/Desktop/LifeSim/lua_scripts/systems", "System");
 
     return &instance;
   }

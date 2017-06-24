@@ -3,8 +3,8 @@
 GameRunner::GameRunner()
 {
     _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
-    
-    if(!SystemController::Instance()->Initialzed())
+
+      if(!SystemController::Instance()->Initialzed())
         SystemController::Instance()->Init();
 }
 

@@ -1,11 +1,11 @@
 #include "ComponentUser.h"
 #include "src/component/ComponentUserBase.h"
-#include <iostream>
+
 void ComponentUser::RemoveComponent(std::string name)
 {
-    if(HasComponent(name))
+    if (HasComponent(name))
         _components.erase(_components.find(name));
-        ComponentUserBase::Instance()->DeRegister(name, *this);
+    ComponentUserBase::Instance()->DeRegister(name, *this);
 }
 
 bool ComponentUser::HasComponent(std::string name)
@@ -19,6 +19,26 @@ void ComponentUser::AddComponent(Component *component)
     _components.insert(std::make_pair(component_name, component));
 
     ComponentUserBase::Instance()->Register(component_name, *this);
+}
+
+std::string ComponentUser::GetComponentValueString(std::string component_name, std::string value_name)
+{
+    return _components.at(component_name)->GetStringValue(value_name);
+}
+
+std::string ComponentUser::SetComponentValueString(std::string component_name, std::string component_name_value, std::string value)
+{
+    _components.at(component_name)->SetStringValue(component_name_value, value);
+}
+
+float ComponentUser::GetComponentValueFloat(std::string component_name, std::string value_name)
+{
+    return _components.at(component_name)->GetFloatValue(value_name);
+}
+
+float ComponentUser::SetComponentValueFloat(std::string component_name, std::string component_name_value, float value)
+{
+    _components.at(component_name)->SetFloatValue(component_name_value, value);
 }
 
 Component *ComponentUser::GetComponent(std::string name)

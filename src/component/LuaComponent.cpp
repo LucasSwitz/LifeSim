@@ -1,6 +1,6 @@
 #include "LuaComponent.h"
 
-void LuaComponent::ConfigureFromLua(LuaRef &ref)
+void LuaComponent::FromLuaRef(const LuaRef &ref)
 {   
     std::unordered_map<std::string, LuaRef> values = LuaUniversal::KeyValueMapFromTable(ref);
     for (auto it : values)
@@ -19,7 +19,7 @@ void LuaComponent::ConfigureFromLua(LuaRef &ref)
         else if (value.isTable())
         {
             LuaComponent* component = new LuaComponent(key);
-            component->ConfigureFromLua(value);
+            component->FromLuaRef(value);
             AddSubcomponent(component);
         }
     }

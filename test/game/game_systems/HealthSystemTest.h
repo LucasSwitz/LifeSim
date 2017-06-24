@@ -11,10 +11,15 @@ class HealthSystemTest : public LuaTest
   public:
   GameRunnerTimed * runner;
 
+    HealthSystemTest()
+    {
+        SystemController::Instance()->PopulateFactory();
+        LuaEntityFactory::Instance()->PopulateFactory();
+    }
+
     void SetUp()
     {
-        LuaEntityFactory::Instance()->PopulateFactory();
-        runner = new GameRunnerTimed();
+        runner = new GameRunnerTimed(); //GameRunner initialized SystemController
     }
 
     void TearDown()
@@ -28,13 +33,13 @@ TEST_F(HealthSystemTest, TestRegeneration)
     Entity_Manager->Clear();
     Entity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
 
-    ASSERT_EQ(e->GetComponentValueFloat("Health","hp"),0);
+    ASSERT_EQ(e->GetComponentValueFloat("Health","hp"),12);
 
     e->SetComponentValueFloat("Health", "hp", 0);
 
     runner->RunFor(5);
 
-    //ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
+    ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
 
 }
 #endif

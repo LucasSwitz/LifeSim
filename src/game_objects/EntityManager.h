@@ -11,57 +11,21 @@ class Entity;
 class EntityManager
 {
   public:
-    Entity *GetEntityByID(int id)
-    {
-        auto it = _entity_map.find(id);
+    Entity *GetEntityByID(int id);
 
-        if (it == _entity_map.end())
-        {
-            //TODO: Throw exception
-        }
+    void RegisterEntity(Entity* entity);
 
-        return _entity_map.at(id);
-    }
+    static EntityManager* Instance();
 
-    void RegisterEntity(Entity* entity)
-    {
-        _entity_map.insert(std::make_pair(entity->_id, entity));
-    }
+    std::map<int, Entity*> GetAllEntities();
 
+    int GetNumberOfEntities();
 
-    static EntityManager* Instance()
-    {
-        static EntityManager instance;
-        return &instance;
-    }
+    LuaList<Entity*>* AsLuaList();
 
-    std::map<int, Entity*> GetAllEntities()
-    {
-        return _entity_map;
-    }
+    void Clear();
 
-    int GetNumberOfEntities()
-    {
-        return _entity_map.size();
-    }
-
-    LuaList<Entity>* AsLuaList()
-    {
-        return LuaList<Entity>::FromMapToLuaList<int, Entity>(_entity_map);
-    }
-
-    void Clear()
-    {
-        _entity_map.clear();
-    }
-
-    ~EntityManager()
-    {
-        /*for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
-        {
-            delete it->second;
-        }*/
-    }
+    ~EntityManager();
 
   private:
     std::map<int, Entity *> _entity_map;

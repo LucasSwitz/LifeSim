@@ -30,7 +30,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
 
     static LuaEntityFactory *Instance()
     {
-        static LuaEntityFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/entities", "Entity");
+        static LuaEntityFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/entities", "Entity");
         return &instance;
     }
 

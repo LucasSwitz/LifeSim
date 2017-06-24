@@ -89,6 +89,9 @@ class ScriptFactory
 
     void PopulateFactory(std::string search_directory = "")
     {
+
+        Reset();
+
         if (search_directory.empty())
             search_directory = _search_directory;
 
@@ -140,6 +143,7 @@ class ScriptFactory
 
     virtual void AddScript(Preamble &pre, T *scriptable_object){};
     virtual void AddScript(Preamble &pre, std::string script_path){};
+    virtual void Reset(){}
 
 
   private:

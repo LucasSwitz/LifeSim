@@ -1,4 +1,5 @@
 #include "ComponentUserBase.h"
+#include "src/component/ComponentUser.h"
 
 void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 {
