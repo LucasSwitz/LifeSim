@@ -54,6 +54,11 @@ class Component
         return _string_components.at(name).GetValue();
     }
 
+    void* GetFunctionValue(std::string name) const
+    {
+        return _functional_components.at(name).GetValue();
+    }
+
     std::string GetName() const
     {
         return _name;
@@ -87,6 +92,7 @@ class Component
   private:
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
+    std::ordered_map<std::string, ComponentValue<void*>> _functional_components;
     std::unordered_map<std::string, Component*> _sub_components;
 };
 

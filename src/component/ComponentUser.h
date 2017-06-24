@@ -18,8 +18,8 @@ class ComponentUser
     std::string SetComponentValueString (std::string component_name, std::string component_name_value, std::string value);
 
     float GetComponentValueFloat (std::string component_name, std::string component_name_value);
-    float SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);
-
+    float SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);\
+    void* GetComponetValueFuntion(std::string component_name, std:;string component_name_value);
   protected:
       std::unordered_map<std::string, Component*> _components;
 };

@@ -19,6 +19,11 @@ struct Event
         return *(T*)(extra_info);
     }
 
+    int ExtraInfoAsInt()
+    {
+        return DereferenceInfoToType<int>();
+    }
+
     Event(int event_id, int sender, int target, void* extra = nullptr) : 
                     id(event_id), sender_id(sender), target_id(target), extra_info(extra){};
 };

@@ -35,9 +35,8 @@ TestEntity =
 
                 OnCollision = function(self, collider)
                     LaunchEvent(EventType.DAMAGE_EVENT, collider, self.damage) --good Make DamageSystem
-                    LaunchEvent(EventType.ADD_CONDITION_EVENT, collider, {}) --good Make ConditionSystem
-                    LaunchEvent()
-
+                    LaunchEvent(EventType.ADD_CONDITION_EVENT, collider, self.damage) --good Make ConditionSystem
+                    LaunchEvent(EventType.DELETE_ENTITY, self.id, self.id, nil) -- Make EntitySystem
                 end
             },
             Useable

@@ -41,6 +41,11 @@ float ComponentUser::SetComponentValueFloat(std::string component_name, std::str
     _components.at(component_name)->SetFloatValue(component_name_value, value);
 }
 
+void* ComponentUser::GetComponetValueFuntion(std::string component_name, std::string component_name_value)
+{
+    return _components.at(componet_name)->GetFunctionValue(component_name_value);
+}
+
 Component *ComponentUser::GetComponent(std::string name)
 {
     return _components.at(name);
