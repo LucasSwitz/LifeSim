@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <list>
 #include "src/utils/lua/LuaList.h"
+#include "src/game_objects/Entity.h"
 
 class ComponentUser;
 
@@ -22,7 +23,13 @@ void Register(std::string component_name,ComponentUser& user);
 void DeRegister(std::string component_name,ComponentUser& user);
 bool ComponentExists(std::string component_name);
 
+void Reset()
+{
+    _component_users_directory.clear();
+}
+
 std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name);
+LuaList<Entity*>* GetAllEntitesWithComponentAsLuaList(std::string component_name);
 LuaList<ComponentUser*>* GetAllUsersWithComponentAsLuaList(std::string component_name);
 
 

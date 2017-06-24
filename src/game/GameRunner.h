@@ -4,7 +4,7 @@
 #include <chrono>
 #include "src/system/SystemController.h"
 
-#define FRAMES_PER_SEC 1
+#define FRAMES_PER_SEC 30
 
 
 class GameRunner

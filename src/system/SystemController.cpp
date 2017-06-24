@@ -78,14 +78,20 @@ void SystemController::AddToSystemExecutionSequence(System *system)
 
 System *SystemController::GetSystem(std::string name)
 {
-    auto it = _system_directory.find(name);
-
-    if (it == _system_directory.end())
+    if (!SystemExists(name))
+    {
+        std::cout << "System does not exists: " << name << std::endl;
         return nullptr;
+    }
 
     return _system_directory.at(name);
 }
 
+
+bool SystemController::SystemExists(std::string name)
+{
+    return _system_directory.find(name) != _system_directory.end();
+}
 const System *SystemController::GetSystemInExecutionSequenceAt(int index)
 {
     std::list<System *>::iterator it = std::next(_systems_execution_sequence.begin(), index);

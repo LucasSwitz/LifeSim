@@ -28,10 +28,12 @@ public:
 
   void Reset() override
   {
+    _initialized = false;
     _systems_execution_sequence.clear();
     _system_directory.clear();
   }
-  
+  bool SystemExists(std::string name);
+
   static SystemController *Instance()
   {
     static SystemController instance("/home/lucas/Desktop/LifeSim/lua_scripts/systems", "System");

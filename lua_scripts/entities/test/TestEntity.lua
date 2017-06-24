@@ -1,7 +1,7 @@
 --PREAMBLE_START
 ScriptType = "Entity"
 Name = "TestEntity"
-PrototypeID = 999
+PrototypeID = 1000
 --PREAMBLE_END
 
 TestEntity = 
@@ -36,14 +36,14 @@ TestEntity =
                 OnCollision = function(self, collider)
                     LaunchEvent(EventType.DAMAGE_EVENT, collider, self.damage) --good Make DamageSystem
                     LaunchEvent(EventType.ADD_CONDITION_EVENT, collider, self.damage) --good Make ConditionSystem
-                    LaunchEvent(EventType.DELETE_ENTITY, self.id, self.id, nil) -- Make EntitySystem
+                    LaunchEvent(EventType.DELETE_ENTITY_EVENT, self.id, self.id, nil) -- Make EntitySystem
                 end
             },
-            Useable
+            Useable =
             { 
                 Use = function(self, user)
 
-                end,
+                end
             },
             Animation =
             {

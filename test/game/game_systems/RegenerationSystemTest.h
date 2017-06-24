@@ -6,12 +6,12 @@
 #include "test/lua_tests/lua_core/LuaTest.h"
 #include "src/game_objects/LuaEntityFactory.h"
 
-class HealthSystemTest : public LuaTest
+class RegenerationSystemTest : public LuaTest
 {
   public:
   GameRunnerTimed * runner;
 
-    HealthSystemTest()
+    RegenerationSystemTest()
     {
         SystemController::Instance()->PopulateFactory();
         LuaEntityFactory::Instance()->PopulateFactory();
@@ -19,7 +19,7 @@ class HealthSystemTest : public LuaTest
 
     void SetUp()
     {
-        runner = new GameRunnerTimed(); //GameRunner initialized SystemController
+
     }
 
     void TearDown()
@@ -28,17 +28,18 @@ class HealthSystemTest : public LuaTest
     }
 };
 
-TEST_F(HealthSystemTest, TestRegeneration)
+TEST_F(RegenerationSystemTest, TestRegeneration)
 {
     Entity_Manager->Clear();
-    Entity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
+
+    LuaEntity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
 
     ASSERT_EQ(e->GetComponentValueFloat("Health","hp"),12);
 
     e->SetComponentValueFloat("Health", "hp", 0);
 
-    runner->RunFor(5);
-
+    System* s = SystemController::Instance()->GetSystem("RegenerationSystem");
+    s->Update(3);
     ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
 
 }

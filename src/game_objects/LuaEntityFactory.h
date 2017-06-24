@@ -18,6 +18,12 @@ class LuaEntityFactory : public ScriptFactory<std::string>
 
     LuaEntity* GetEntity(int id)
     {
+        if(!EntityPrototypeExists(id))
+        {
+            std::cout << "Entity Does Not Exists: " << id << std::endl;
+            return nullptr;
+        }
+
         LuaEntity *new_entity = new LuaEntity();
         new_entity->LoadScript(LUA_STATE, _entity_scripts.at(id), _entity_id_to_name.at(id));
         return new_entity;
@@ -25,6 +31,12 @@ class LuaEntityFactory : public ScriptFactory<std::string>
 
     LuaEntity *GetEntity(std::string name)
     {
+        if(!EntityPrototypeExists(name))
+        {   
+            std::cout << "Entity Does Not Exists: " << name << std::endl;
+            return nullptr;
+        }
+        
         return this->GetEntity(_entity_name_to_id.at(name));
     }
 
@@ -32,6 +44,24 @@ class LuaEntityFactory : public ScriptFactory<std::string>
     {
         static LuaEntityFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/entities", "Entity");
         return &instance;
+    }
+
+    bool EntityPrototypeExists(int id)
+    {
+        return _entity_scripts.find(id) != _entity_scripts.end();
+    }
+
+
+    bool EntityPrototypeExists(std::string name)
+    {
+        return _entity_name_to_id.find(name) != _entity_name_to_id.end();
+    }
+
+    void Reset() override
+    {
+        _entity_scripts.clear();
+        _entity_id_to_name.clear();
+        _entity_id_to_name.clear();
     }
 
   private:

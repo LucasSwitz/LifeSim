@@ -15,7 +15,6 @@ RegenerationSystem =
             self.total_time = 0
             self:RegenerateAll()
         end
-        
     end,
     RegenerateAll = function()
         local entities = ComponentUsers.Instance():GetAll("Health")

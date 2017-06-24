@@ -2,6 +2,7 @@
 #define COMPONENT_H
 
 #include <unordered_map>
+#include <iostream>
 
 class Component
 {
@@ -46,7 +47,17 @@ class Component
 
     float GetFloatValue(std::string name) const
     {
+        if(!HasFloatValue(name))
+        {
+            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            return -1;
+        }
         return _float_components.at(name).GetValue();
+    }
+
+    bool HasFloatValue(std::string name) const
+    {
+        return _float_components.find(name) != _float_components.end();
     }
 
     std::string GetStringValue(std::string name) const
@@ -92,7 +103,7 @@ class Component
   private:
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
-    std::ordered_map<std::string, ComponentValue<void*>> _functional_components;
+    std::unordered_map<std::string, ComponentValue<void*>> _functional_components;
     std::unordered_map<std::string, Component*> _sub_components;
 };
 

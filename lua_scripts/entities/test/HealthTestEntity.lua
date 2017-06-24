@@ -1,7 +1,7 @@
 --PREAMBLE_START
 ScriptType = "Entity"
 Name = "HealthTestEntity"
-PrototypeID = 1000
+PrototypeID = 1001
 --PREAMBLE_END
 
 HealthTestEntity = 

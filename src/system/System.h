@@ -19,6 +19,7 @@ class System : public EventSubscriber
         return _after;
     }
 
+
    virtual void Update(double seconds_since_last_update) = 0;
    void OnEvent(Event& e) override{};
     std::list<Subscription> GetSubscriptions() override{

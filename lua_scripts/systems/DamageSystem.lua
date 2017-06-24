@@ -1,5 +1,5 @@
 --PREAMBLE_START
-ScriptType = "System"
+ScriptType = "Systemf"
 Name = "DamageSystem"
 --PREAMBLE_END
 
@@ -8,7 +8,7 @@ DamageSystem =
 {
     EventHandler = 
     {
-        OnEvent = function(event)
+        OnEvent = function(self,event)
             attacked_entity =  EntityManager.Instance():Get(event.target)
             attacking_entity = EntityManager.Instance():Get(event.source)
 
@@ -18,8 +18,7 @@ DamageSystem =
             end
         end,
         GetSubscriptions = function()
-
-            return {Subscription(EventType.DAMAGE_EVENT)}
+            return {Subscription(EventType.DAMAGE_EVENT, {})}
         end
     }
 }

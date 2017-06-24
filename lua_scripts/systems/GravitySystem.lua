@@ -1,5 +1,5 @@
 --PREAMBLE_START
-ScriptType = "System"
+ScriptType = "Systemf"
 Name = "MovementSystem"
 --PREAMBLE_END
 

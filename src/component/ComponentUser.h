@@ -1,6 +1,7 @@
 #ifndef COMPONENTUSER_H
 #define COMPONENTUSER_H
 
+#include <iostream>
 #include "src/component/Component.h"
 
 class ComponentUserBase;
@@ -19,7 +20,9 @@ class ComponentUser
 
     float GetComponentValueFloat (std::string component_name, std::string component_name_value);
     float SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);\
-    void* GetComponetValueFuntion(std::string component_name, std:;string component_name_value);
+    void* GetComponetValueFuntion(std::string component_name, std::string component_name_value);
+
+    virtual ~ComponentUser(){};
   protected:
       std::unordered_map<std::string, Component*> _components;
 };

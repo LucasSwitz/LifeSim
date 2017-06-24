@@ -12,6 +12,8 @@ struct Event
     std::set<int> tags; //maybe use this in the furture
     void* extra_info;
 
+    explicit Event(int event_id, int sender, int target, void* extra=nullptr) : 
+                    id(event_id), sender_id(sender), target_id(target), extra_info(extra){};
 
     template<typename T> 
     T DereferenceInfoToType()
@@ -24,8 +26,7 @@ struct Event
         return DereferenceInfoToType<int>();
     }
 
-    Event(int event_id, int sender, int target, void* extra = nullptr) : 
-                    id(event_id), sender_id(sender), target_id(target), extra_info(extra){};
+    
 };
 
 #endif
