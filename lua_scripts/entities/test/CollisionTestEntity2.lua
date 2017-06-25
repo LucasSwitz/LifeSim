@@ -16,8 +16,9 @@ CollisionTestEntity2 =
         {
             width = 10,
             height = 10,
-            OnCollision = function(self, collider)
-
+            collider = -1,
+            OnCollision = function(self)
+                print("Collided with: " .. tostring(self.Components.Collision.collider))
             end
         }
     }

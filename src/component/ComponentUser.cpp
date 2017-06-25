@@ -31,7 +31,7 @@ std::string ComponentUser::GetComponentValueString(std::string component_name, s
     return _components.at(component_name)->GetStringValue(value_name);
 }
 
-std::string ComponentUser::SetComponentValueString(std::string component_name, std::string component_name_value, std::string value)
+void ComponentUser::SetComponentValueString(std::string component_name, std::string component_name_value, std::string value)
 {
     _components.at(component_name)->SetStringValue(component_name_value, value);
 }
@@ -46,19 +46,14 @@ float ComponentUser::GetComponentValueFloat(std::string component_name, std::str
     return _components.at(component_name)->GetFloatValue(value_name);
 }
 
-float ComponentUser::SetComponentValueFloat(std::string component_name, std::string component_name_value, float value)
+void ComponentUser::SetComponentValueFloat(std::string component_name, std::string component_name_value, float value)
 {
     _components.at(component_name)->SetFloatValue(component_name_value, value);
 }
 
-void *ComponentUser::GetComponetValueFuntion(std::string component_name, std::string component_name_value)
+void ComponentUser::CallFunction(std::string component_name, std::string function_name)
 {
-    if (!HasComponent(component_name))
-    {
-        std::cout << "has no component: " << component_name << std::endl;
-        return nullptr;
-    }
-    return _components.at(component_name)->GetFunctionValue(component_name_value);
+    _components.at(component_name)->GetFunctionValue(function_name);
 }
 
 Component *ComponentUser::GetComponent(std::string name)

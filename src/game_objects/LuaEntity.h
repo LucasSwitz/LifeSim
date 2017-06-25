@@ -13,6 +13,9 @@ using namespace luabridge;
 class LuaEntity : public Entity
 {
     public:
+
+    LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY){};
+
     void LoadScript(lua_State* lua_state, std::string script_path,std::string entity_name);
 
     void ConfigureAllComponentsFromLua(const LuaRef& ref);
@@ -31,6 +34,28 @@ class LuaEntity : public Entity
         (*_entity_table)["Components"][name] = nullptr; //i guess keep this updated for good measure.
 
         ComponentUser::RemoveComponent(name);
+    }
+
+    static LuaEntity* DownCastFromEntity(Entity* e)
+    {
+        return dynamic_cast<LuaEntity*>(e);
+    }
+
+    void SetNumber(std::string component_name, std::string value_name, float value)
+    {
+         LuaRef comps = ((*_entity_table)["Components"]);
+         LuaRef comp = comps[component_name];
+         comp[value_name] = value;
+
+        ComponentUser::SetComponentValueFloat(component_name, value_name, value);
+    }
+
+    void CallFunction(std::string component_name, std::string function_name)
+    {
+        LuaRef comps = (*_entity_table)["Components"];
+        LuaRef comp = comps[component_name];
+        LuaRef func = comp[function_name];
+        (func)(*_entity_table);
     }
 
     LuaRef& AsTable()

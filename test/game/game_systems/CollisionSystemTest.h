@@ -35,6 +35,8 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
             subs.push_back(Subscription(EventType::COLLISION_EVENT, {e_1->ID(), e_2->ID()}));
             return subs;
         }
+
+
 };
 
 TEST_F(CollisionSystemTest, TestCollisionDetection)

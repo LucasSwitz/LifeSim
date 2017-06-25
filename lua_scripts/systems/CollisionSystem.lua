@@ -11,14 +11,23 @@ CollisionSystem =
         local it = entities:Iterator()
         while it ~= null do
             entity = it.data
-            compare = it.next
-            while compare ~= nil do
-                if self.CheckCollision(entity, compare.data) then
-                    EventManager.Instance():LaunchEvent(Event(EventType.COLLISION_EVENT, entity.id, compare.data.id, nil))
-                    --entity:AsTable()["Components"]["Collision"]["OnCollision"](entity,compare)
-                    --compare:AsTable()["Components"]["Collision"]["OnCollision"](compare,entity)
+            compare_it = it.next
+            while compare_it ~= nil do
+                compare = compare_it.data
+                if self.CheckCollision(entity, compare) then
+                    EventManager.Instance():LaunchEvent(Event(EventType.COLLISION_EVENT, entity.id, compare.id, nil))
+                    if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
+                        lua_entity = LuaEntity.Downcast(entity)
+                        lua_entity:SetNumberL("Collision","collider", compare.id)
+                        lua_entity:Call("Collision","OnCollision")
+                    end 
+                    if compare:IsType(Entity.LUA_DEFINED_ENTITY) then
+                        lua_entity = LuaEntity.Downcast(compare)
+                        lua_entity:SetNumberL("Collision","collider",entity.id)
+                        lua_entity:Call("Collision","OnCollision")
+                    end
                 end
-                compare = compare.next
+                compare_it = compare_it.next
             end
             it = it.next
         end

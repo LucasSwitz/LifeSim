@@ -16,11 +16,12 @@ class ComponentUser
     Component* GetComponent(std::string name);
 
     std::string GetComponentValueString (std::string component_name, std::string component_name_value);
-    std::string SetComponentValueString (std::string component_name, std::string component_name_value, std::string value);
+    void SetComponentValueString (std::string component_name, std::string component_name_value, std::string value);
 
     float GetComponentValueFloat (std::string component_name, std::string component_name_value);
-    float SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);\
-    void* GetComponetValueFuntion(std::string component_name, std::string component_name_value);
+    void SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);
+
+    void CallFunction(std::string component_name, std::string value_name);
 
     virtual ~ComponentUser(){};
   protected:
