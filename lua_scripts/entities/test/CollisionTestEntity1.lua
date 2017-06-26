@@ -19,7 +19,7 @@ CollisionTestEntity1 =
             height = 10,
             collider = -1,
             OnCollision = function(self)
-                print("Collided with: " .. tostring(self.Components.Collision.collider))
+                print("Collided with: " .. tostring(self:GetNumber("Collision","collider")))
             end
         }
     }

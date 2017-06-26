@@ -55,7 +55,7 @@ class LuaEntity : public Entity
         LuaRef comps = (*_entity_table)["Components"];
         LuaRef comp = comps[component_name];
         LuaRef func = comp[function_name];
-        (func)(*_entity_table);
+        (func)(this);
     }
 
     LuaRef& AsTable()

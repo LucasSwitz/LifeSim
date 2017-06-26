@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="7" failures="0" disabled="0" errors="0" timestamp="2017-06-24T23:21:57" time="0.012" name="AllTests">
-  <testsuite name="RegenerationSystemTest" tests="1" failures="0" disabled="0" errors="0" time="0.002">
-    <testcase name="TestRegeneration" status="run" time="0.002" classname="RegenerationSystemTest" />
+<testsuites tests="7" failures="0" disabled="0" errors="0" timestamp="2017-06-25T20:26:02" time="0.006" name="AllTests">
+  <testsuite name="RegenerationSystemTest" tests="1" failures="0" disabled="0" errors="0" time="0.001">
+    <testcase name="TestRegeneration" status="run" time="0.001" classname="RegenerationSystemTest" />
   </testsuite>
-  <testsuite name="EventManagerTest" tests="2" failures="0" disabled="0" errors="0" time="0.004">
-    <testcase name="EventLoadNewEvent" status="run" time="0.002" classname="EventManagerTest" />
-    <testcase name="TestEventLaunch" status="run" time="0.002" classname="EventManagerTest" />
+  <testsuite name="EventManagerTest" tests="2" failures="0" disabled="0" errors="0" time="0.002">
+    <testcase name="EventLoadNewEvent" status="run" time="0.001" classname="EventManagerTest" />
+    <testcase name="TestEventLaunch" status="run" time="0.001" classname="EventManagerTest" />
   </testsuite>
-  <testsuite name="ScriptableEntityTest" tests="3" failures="0" disabled="0" errors="0" time="0.005">
+  <testsuite name="ScriptableEntityTest" tests="3" failures="0" disabled="0" errors="0" time="0.002">
     <testcase name="HasComponentTest" status="run" time="0.001" classname="ScriptableEntityTest" />
-    <testcase name="ComponentValueTest" status="run" time="0.002" classname="ScriptableEntityTest" />
-    <testcase name="ManualIdSet" status="run" time="0.002" classname="ScriptableEntityTest" />
+    <testcase name="ComponentValueTest" status="run" time="0" classname="ScriptableEntityTest" />
+    <testcase name="ManualIdSet" status="run" time="0.001" classname="ScriptableEntityTest" />
   </testsuite>
   <testsuite name="CollisionSystemTest" tests="1" failures="0" disabled="0" errors="0" time="0.001">
     <testcase name="TestCollisionDetection" status="run" time="0.001" classname="CollisionSystemTest" />

@@ -6,6 +6,8 @@ export LUA_LIB_DIR=/usr/local/lib
 export LUA_INCLUDE_DIR=/usr/local/include
 export LUA_BRIDGE_INCLUDE=/home/lucas/Desktop/LifeSim/include/LuaBridge/Source
 export STD_EXPERIMENTAL_LIB=/usr/lib/gcc/x86_64-linux-gnu/5/
+export IMGUI_INCLUDE_DIR=/home/lucas/Desktop/LifeSim/include/imgui
+export IMGUI_SFML_INCLUDE_DIR=/home/lucas/Desktop/LifeSim/include/imgui-sfml
 
 for arg in "$@"
 do
