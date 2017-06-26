@@ -8,6 +8,11 @@
 #include "src/system/System.h"
 #include "src/event/Event.h"
 
+/**
+    Lua defined System. When event or Update is called, the LuaRef of the 
+    instance ScriptableSystem is passed to lua.
+**/
+
 class ScriptableSystem : public System
 {
     public:

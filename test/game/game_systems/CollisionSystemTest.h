@@ -15,7 +15,8 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
         CollisionSystemTest()
         {
             ComponentUserBase::Instance()->Reset();
-            SystemController::Instance()->PopulateFactory();
+
+            SystemFactory::Instance()->PopulateFactory();
             LuaEntityFactory::Instance()->PopulateFactory();
 
             e_1 = LuaEntityFactory::Instance()->GetEntity("CollisionTestEntity1");
@@ -35,14 +36,12 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
             subs.push_back(Subscription(EventType::COLLISION_EVENT, {e_1->ID(), e_2->ID()}));
             return subs;
         }
-
-
 };
 
 TEST_F(CollisionSystemTest, TestCollisionDetection)
 {
-    System* s = SystemController::Instance()->GetSystem("CollisionSystem");
-    s->Update(0);
+    SystemController::Instance()->AddToSystemExecutionSequence("CollisionSystem");
+    SystemController::Instance()->Update(0);
     ASSERT_TRUE(_detected_collision);
 }
 

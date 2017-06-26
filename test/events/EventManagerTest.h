@@ -1,19 +1,16 @@
 #ifndef EVENTMANAGERTEST_H
 #define EVENTMANAGERTEST_H
 
-#include "test/lua_tests/lua_core/LuaTest.h"
-#include "test/game/GameRunnerTimed.h"
 #include "src/event/EventManager.h"
 #include "src/event/EventType.h"
-#include "src/system/ScriptableSystem.h"
-class EventManagerTest : public LuaTest, public EventSubscriber
+#include <gtest/gtest.h>
+
+class EventManagerTest : public EventSubscriber, public ::testing::Test
 {
     public:
         bool event_recieved = false;
         EventManagerTest()
         {
-            SystemController::Instance()->PopulateFactory();
-            SystemController::Instance()->Init();
             EventManager::Instance()->RegisterSubscriber(this);
         }
 

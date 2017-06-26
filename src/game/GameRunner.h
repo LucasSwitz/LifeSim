@@ -6,7 +6,9 @@
 
 #define FRAMES_PER_SEC 30
 
-
+/**
+  GameRunner runs the game at a specified FPS.
+**/
 class GameRunner
 {
   public:

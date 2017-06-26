@@ -1,4 +1,4 @@
-/*#include <stddef.h>
+#include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
 //#include "test/lua_tests/actors/ActionScriptTest.h"
@@ -17,9 +17,9 @@ int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
-}*/
+}
 
-#include "imgui.h"
+/*#include "imgui.h"
 #include "imgui-SFML.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -63,4 +63,4 @@ int main()
     }
 
     ImGui::SFML::Shutdown();
-}
+}*/

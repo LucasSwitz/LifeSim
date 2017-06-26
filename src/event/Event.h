@@ -4,6 +4,11 @@
 #include <set>
 #include "src/event/EventManager.h"
 
+/** 
+    Events can be launched from anywhere in the code. The launched event is then processed
+    by the EventManager and handled by EventSubscribers. Every event as a void* extra_info 
+    field that can be filled with any data then dereferenced to its desired type.
+**/
 struct Event
 {
     int id;

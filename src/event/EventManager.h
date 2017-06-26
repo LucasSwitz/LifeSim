@@ -14,6 +14,11 @@ typedef std::list<EventSubscriber*> tag_sub_list;
 
 class EventSubscriber;
 
+/**
+    EventManager handles all launched events and relays them to the appropriate subscriber. 
+    Subscribers are indexed first by the Event id and then by tags.
+**/
+
 class EventManager
 {
 public:

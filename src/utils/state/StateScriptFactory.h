@@ -19,7 +19,7 @@ public:
 
   static StateScriptFactory *Instance()
   {
-    static StateScriptFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/states", "State");
+    static StateScriptFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/states", "State");
     return &instance;
   };
 

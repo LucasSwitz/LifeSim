@@ -6,6 +6,11 @@
 #include "src/utils/lua/LuaList.h"
 #include "src/game_objects/Entity.h"
 
+/**
+    ComponentUserBase stores all component users and indexes them by the components they own.
+    The Singleton instance of this class can be queried the get all ComponentUsers who have a specific
+    component.
+**/
 class ComponentUser;
 
 class ComponentUserBase

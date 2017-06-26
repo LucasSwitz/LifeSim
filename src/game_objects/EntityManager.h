@@ -6,6 +6,9 @@
 
 #define Entity_Manager EntityManager::Instance()
 
+/**
+  Contains all entities. Entities can be accessed by the assigned ID.
+**/
 class Entity;
 
 class EntityManager

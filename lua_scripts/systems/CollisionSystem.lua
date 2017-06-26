@@ -18,13 +18,13 @@ CollisionSystem =
                     EventManager.Instance():LaunchEvent(Event(EventType.COLLISION_EVENT, entity.id, compare.id, nil))
                     if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
                         lua_entity = LuaEntity.Downcast(entity)
-                        lua_entity:SetNumberL("Collision","collider", compare.id)
-                        lua_entity:Call("Collision","OnCollision")
+                        script = lua_entity:GetString("Collision","collision_script")
+                        loadfile(script)(entity.id, compare.id)
                     end 
                     if compare:IsType(Entity.LUA_DEFINED_ENTITY) then
                         lua_entity = LuaEntity.Downcast(compare)
-                        lua_entity:SetNumberL("Collision","collider",entity.id)
-                        lua_entity:Call("Collision","OnCollision")
+                        script = lua_entity:GetString("Collision","collision_script")
+                        loadfile(script)(compare.id, entity.id)
                     end
                 end
                 compare_it = compare_it.next

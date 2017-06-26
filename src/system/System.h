@@ -6,6 +6,9 @@
 
 #include "src/event/EventSubscriber.h"
 
+/**
+    System are upated every game frame. They can also listen to events.
+**/
 class System : public EventSubscriber
 {
   public:

@@ -13,7 +13,7 @@ class RegenerationSystemTest : public LuaTest
 
     RegenerationSystemTest()
     {
-        SystemController::Instance()->PopulateFactory();
+        SystemFactory::Instance()->PopulateFactory();
         LuaEntityFactory::Instance()->PopulateFactory();
     }
 
@@ -31,6 +31,7 @@ class RegenerationSystemTest : public LuaTest
 TEST_F(RegenerationSystemTest, TestRegeneration)
 {
     Entity_Manager->Clear();
+    SystemController::Instance()->AddToSystemExecutionSequence("RegenerationSystem");
 
     LuaEntity* e = LuaEntityFactory::Instance()->GetEntity("HealthTestEntity");
 
@@ -38,8 +39,8 @@ TEST_F(RegenerationSystemTest, TestRegeneration)
 
     e->SetComponentValueFloat("Health", "hp", 0);
 
-    System* s = SystemController::Instance()->GetSystem("RegenerationSystem");
-    s->Update(3);
+    SystemController::Instance()->Update(3);
+    
     ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
 
 }

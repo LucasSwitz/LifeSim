@@ -4,6 +4,12 @@
 #include <iostream>
 #include "src/component/Component.h"
 
+/**
+  Component User's simply maintain a list of active components, and also register themselves
+  with the ComponentUserBase. ComponentUser offers convients functions that allow for direct
+  access to one of thier component's values.
+**/
+
 class ComponentUserBase;
 
 class ComponentUser

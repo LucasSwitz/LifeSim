@@ -3,6 +3,12 @@
 
 #include <unordered_map>
 #include "src/component/ComponentUser.h"
+
+/**
+    Entities are simply ComponentLists with integer IDs attached to them.
+    They can be accessed by querying the EntityManager with a specified
+    ID.
+**/
 class Entity : public ComponentUser
 { 
     friend class EntityManager;

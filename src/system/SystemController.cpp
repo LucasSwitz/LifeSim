@@ -1,31 +1,9 @@
 #include "SystemController.h"
 
-ScriptableSystem *SystemController::Configure(std::string full_script_path, std::string scriptable_name)
+void SystemController::AddToSystemExecutionSequence(const std::string& system_name)
 {
-    ScriptableSystem *new_system = new ScriptableSystem();
-    new_system->LoadScript(LUA_STATE, full_script_path, scriptable_name);
-    return new_system;
-}
-
-void SystemController::AddScript(Preamble &pre, ScriptableSystem *scriptable_object)
-{
-    _system_directory.insert(std::make_pair(scriptable_object->GetName(), scriptable_object));
-}
-
-void SystemController::Init()
-{
-    for (auto it = _system_directory.begin(); it != _system_directory.end(); it++)
-    {
-        System *current_system = it->second;
-        AddToSystemExecutionSequence(current_system);
-    }
-
-    _initialized = true;
-}
-
-bool SystemController::Initialzed()
-{
-    return _initialized;
+    System* system = SystemFactory::Instance()->GetSystem(system_name);
+    AddToSystemExecutionSequence(system);
 }
 
 void SystemController::AddToSystemExecutionSequence(System *system)
@@ -44,7 +22,7 @@ void SystemController::AddToSystemExecutionSequence(System *system)
         //After is defined
         if (!system_before_name.empty())
         {
-            System *before_system = GetSystem(system_before_name);
+            System *before_system = SystemFactory::Instance()->GetSystem(system_before_name);
 
             //previous system is a real system
             if (before_system)
@@ -76,22 +54,6 @@ void SystemController::AddToSystemExecutionSequence(System *system)
     }
 }
 
-System *SystemController::GetSystem(std::string name)
-{
-    if (!SystemExists(name))
-    {
-        std::cout << "System does not exists: " << name << std::endl;
-        return nullptr;
-    }
-
-    return _system_directory.at(name);
-}
-
-
-bool SystemController::SystemExists(std::string name)
-{
-    return _system_directory.find(name) != _system_directory.end();
-}
 const System *SystemController::GetSystemInExecutionSequenceAt(int index)
 {
     std::list<System *>::iterator it = std::next(_systems_execution_sequence.begin(), index);

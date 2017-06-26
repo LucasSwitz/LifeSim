@@ -10,6 +10,12 @@
 #include <unordered_map>
 
 using namespace luabridge;
+
+/**
+    Entity object that is built from a LuaReference. Overrides many of Entity meathods.
+    Components added to a LuaEntity will be added to the given LuaRef as well. This may change
+    in the future.
+**/
 class LuaEntity : public Entity
 {
     public:

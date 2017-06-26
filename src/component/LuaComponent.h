@@ -4,6 +4,9 @@
 #include "src/component/Component.h"
 #include "src/utils/lua/LuaUniversal.h"
 
+/**
+  LuaComponets are Components loaded from Lua files. They can be configured with a LuaRef. 
+**/
 class LuaComponent : public Component
 {
   public:

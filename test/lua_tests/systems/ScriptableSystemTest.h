@@ -10,8 +10,7 @@ class ScriptableSystemTest : public LuaTest
   public:
     ScriptableSystemTest()
     {
-        SystemController::Instance()->PopulateFactory();
-        SystemController::Instance()->Init();
+        SystemFactory::Instance()->PopulateFactory();
     }
 
     void SetUp()
@@ -22,9 +21,9 @@ class ScriptableSystemTest : public LuaTest
 
 TEST_F(ScriptableSystemTest, TestOrderingMechanics)
 {
-    System *first = SystemController::Instance()->GetSystem("TestSystem1");
-    System *second = SystemController::Instance()->GetSystem("TestSystem2");
-    System *third = SystemController::Instance()->GetSystem("TestSystem3");
+    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem1");
+    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem2");
+    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem3");
 
     EXPECT_TRUE(first == SystemController::Instance()->GetSystemInExecutionSequenceAt(0));
     EXPECT_TRUE(second == SystemController::Instance()->GetSystemInExecutionSequenceAt(1));

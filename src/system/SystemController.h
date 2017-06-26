@@ -2,23 +2,19 @@
 #define SYSTEMCONTROLLER_H
 
 #include <list>
-#include <unordered_map>
-#include "src/system/ScriptableSystem.h"
-#include "src/utils/ScriptFactory.h"
+#include "src/system/SystemFactory.h"
 
-class SystemController : public ScriptFactory<ScriptableSystem>
+
+/**
+  Factory that loads all systems and orders their execution accordingly. 
+  This factory should be seperated from the controller.
+**/
+
+class SystemController
 {
 public:
-  ScriptableSystem *Configure(std::string full_script_path, std::string scriptable_name) override;
-
-  void AddScript(Preamble &pre, ScriptableSystem *scriptable_object) override;
-
-  void Init();
-
-  bool Initialzed();
-
+  void AddToSystemExecutionSequence(const std::string& system_name);
   void AddToSystemExecutionSequence(System *system);
-  System *GetSystem(std::string name);
 
   const System *GetSystemInExecutionSequenceAt(int index);
 
@@ -26,29 +22,23 @@ public:
 
   void Update(double seconds_since_last_update);
 
-  void Reset() override
+  void Reset()
   {
-    _initialized = false;
     _systems_execution_sequence.clear();
-    _system_directory.clear();
   }
-  bool SystemExists(std::string name);
 
   static SystemController *Instance()
   {
-    static SystemController instance("/home/lucas/Desktop/LifeSim/lua_scripts/systems", "System");
+    static SystemController instance;
 
     return &instance;
   }
 
 protected:
-  SystemController(std::string system_scripts_path, std::string script_type) : ScriptFactory<ScriptableSystem>(system_scripts_path, script_type, true){};
+  SystemController(){};
 
   std::list<System *> _systems_execution_sequence;
-  std::unordered_map<std::string, System *> _system_directory;
-
 private:
-  bool _initialized = false;
 };
 
 #endif

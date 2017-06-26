@@ -1,6 +1,11 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+/**
+    Class the Controls all component logic. This class can be extended to support other forms of component
+    loading (from Lua objects for example).
+**/
+
 #include <unordered_map>
 #include <iostream>
 

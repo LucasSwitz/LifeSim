@@ -1,6 +1,9 @@
 #ifndef EVENTTYPE_H
 #define EVENTTYPE_H
 
+/**
+  EventType definitions
+**/
 class EventType
 {
   public:
