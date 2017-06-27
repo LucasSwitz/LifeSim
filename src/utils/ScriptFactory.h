@@ -87,10 +87,10 @@ class ScriptFactory
         std::unordered_map<std::string, std::string> preamble_flags;
     };
 
-    void PopulateFactory(std::string search_directory = "")
+    void PopulateFactory(std::string search_directory = "", bool reset = false)
     {
-
-        Reset();
+        if(reset)
+            Reset();
 
         if (search_directory.empty())
             search_directory = _search_directory;

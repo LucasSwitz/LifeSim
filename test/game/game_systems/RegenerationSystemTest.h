@@ -2,29 +2,19 @@
 #define HEALTHSYSTEMTEST_H
 
 #include <iostream>
-#include "test/game/GameRunnerTimed.h"
+#include "src/system/SystemFactory.h"
+#include "src/system/SystemController.h"
 #include "test/lua_tests/lua_core/LuaTest.h"
 #include "src/game_objects/LuaEntityFactory.h"
 
 class RegenerationSystemTest : public LuaTest
 {
   public:
-  GameRunnerTimed * runner;
-
     RegenerationSystemTest()
     {
-        SystemFactory::Instance()->PopulateFactory();
         LuaEntityFactory::Instance()->PopulateFactory();
-    }
+        SystemFactory::Instance()->PopulateFactory("",true);
 
-    void SetUp()
-    {
-
-    }
-
-    void TearDown()
-    {
-        //delete runner;
     }
 };
 
