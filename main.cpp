@@ -1,4 +1,4 @@
-#include <stddef.h>
+/*#include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
 //#include "test/lua_tests/actors/ActionScriptTest.h"
@@ -17,10 +17,11 @@ int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
-}
+}*/
 
-/*#include "imgui.h"
+#include "imgui.h"
 #include "imgui-SFML.h"
+#include <stdarg.h>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -32,6 +33,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(640, 480), "ImGui + SFML = <3");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
+    ExampleAppLog log;
 
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -51,9 +53,10 @@ int main()
 
         ImGui::Begin("Hello, world!");
         ImGui::Button("Look at this pretty button");
-        ImGui::LogToTTY();
-        ImGui::LogText("Hello World!");
         ImGui::End();
+
+        log.AddLog("Hello World! %d \n",1);
+        log.Draw("Log");
 
 
         window.clear();
@@ -63,4 +66,4 @@ int main()
     }
 
     ImGui::SFML::Shutdown();
-}*/
+}
