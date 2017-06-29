@@ -2,12 +2,14 @@
 #define GAMERUNNERTIME_H
 
 #include "src/game/GameRunner.h"
+#include "src/utils/logging/Logging.h"
+
 class GameRunnerTimed : public GameRunner
 {
     public:
         void RunFor(double seconds)
         {
-            std::cout << "Timed Game Runner Running For: " << seconds << " seconds." << std::endl;
+            LOG->LogInfo(1,"Starting Game Runner for: %d seconds. \n", seconds);
             auto start = std::chrono::high_resolution_clock::now();
             double duration = 0;
             while(duration <= seconds) //will always skip last second. Should round to a certian magnitude.

@@ -1,21 +1,25 @@
 #ifndef GAMEGUI_H
 #define GAMEGUI_H
 
-/*#include <SFML/Graphics.hpp>
-#include <SFML/Color.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <queue>
+#include "src/gui/gui_tools/DevelopmentOverlay.h"
 
 class GameWindow
 {
 
-void Update();
-void Draw(const sf::Drawable drawable);
-void Clear();
+  public:
+    GameWindow();
+    void Update(float time_elapsed);
+    void Draw(const sf::Drawable *drawable);
+    void Init();
+    void Clear();
 
-private:
+  private:
     sf::RenderWindow _main_window;
-    std::queue<sf::Drawable> _drawables_queue;
-};*/
-
+    //std::queue<sf::Drawable> _drawables_queue;
+    void PollEvents();
+};
 
 #endif

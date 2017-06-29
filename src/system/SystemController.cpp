@@ -50,7 +50,13 @@ void SystemController::AddToSystemExecutionSequence(System *system)
                 }
             }
         }
-        _systems_execution_sequence.insert(insert_position, system);
+        
+        if(system)
+        {
+            const char * name = system->GetName().c_str();
+            LOG->LogInfo(1,"Adding System to Execution: %s\n",name);
+            _systems_execution_sequence.insert(insert_position, system);
+        }
     }
 }
 

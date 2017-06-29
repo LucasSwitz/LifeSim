@@ -3,8 +3,7 @@
 
 #include <list>
 #include "src/system/SystemFactory.h"
-
-
+#include "src/utils/logging/Logging.h"
 /**
   Factory that loads all systems and orders their execution accordingly. 
   This factory should be seperated from the controller.

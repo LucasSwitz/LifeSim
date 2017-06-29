@@ -1,4 +1,4 @@
-/*#include <stddef.h>
+#include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
 //#include "test/lua_tests/actors/ActionScriptTest.h"
@@ -6,8 +6,8 @@
 //#include "test/lua_tests/actors/ScriptableStateMachineTest.h"
 //#include "test/lua_tests/systems/ScriptableSystemTest.h"
 //#include "test/lua_tests/systems/ScriptableSystemTest.h"
-//#include "test/game/GameRunnerTest.h"
 
+#include "test/game/GameRunnerTest.h"
 #include "test/game/game_systems/RegenerationSystemTest.h"
 #include "test/events/EventManagerTest.h"
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
@@ -17,9 +17,9 @@ int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
-}*/
+}
 
-#include "imgui.h"
+/*#include "imgui.h"
 #include "imgui-SFML.h"
 #include <stdarg.h>
 
@@ -66,4 +66,4 @@ int main()
     }
 
     ImGui::SFML::Shutdown();
-}
+}*/

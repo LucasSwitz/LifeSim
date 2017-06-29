@@ -1,7 +1,6 @@
 #include "imgui.h"
-#include "imgui-SFML.h"
 #include <stdarg.h>
-
+#include <iostream>
 struct Log
 {
     ImGuiTextBuffer Buf;
@@ -9,6 +8,11 @@ struct Log
     ImVector<int> LineOffsets; // Index to lines offset
     bool ScrollToBottom;
 
+
+    Log()
+    {
+        
+    }
     void Clear()
     {
         Buf.clear();
@@ -19,13 +23,22 @@ struct Log
     {
         int old_size = Buf.size();
         va_list args;
-        va_start(args, fmt);
+        AddLog(fmt,args);
+    }
+
+    void AddLog(const char *fmt, va_list args)
+    {
+        int old_size = Buf.size();
         Buf.appendv(fmt, args);
-        va_end(args);
         for (int new_size = Buf.size(); old_size < new_size; old_size++)
             if (Buf[old_size] == '\n')
                 LineOffsets.push_back(old_size);
         ScrollToBottom = true;
+    }
+
+    int BufSize()
+    {
+        return Buf.size();
     }
 
     void Draw(const char *title, bool *p_opened = NULL)
@@ -47,6 +60,7 @@ struct Log
 
         if (Filter.IsActive())
         {
+            std::cout << Buf.c_str() << std::endl;
             const char *buf_begin = Buf.begin();
             const char *line = buf_begin;
             for (int line_no = 0; line != NULL; line_no++)

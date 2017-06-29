@@ -5,6 +5,12 @@ GameRunner::GameRunner()
     _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
 }
 
+void GameRunner::Start()
+{
+    std::cout << "Game Runner Start!" << std::endl;
+    _game_window.Init();
+}
+
 void GameRunner::Update()
 {
     if(_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
@@ -18,8 +24,21 @@ void GameRunner::Update()
 
     if(seconds_elapsed_since_last_update  > (1.0 /  (FRAMES_PER_SEC)))
     {
-        SystemController::Instance()->Update(seconds_elapsed_since_last_update);
+        UpdateSystems(seconds_elapsed_since_last_update);
+        UpdateGui(seconds_elapsed_since_last_update);
         _last_time = current_time;
     }
+}
 
+int GameRunner::UpdateSystems(float time)
+{
+    SystemController::Instance()->Update(time);
+    return 0;
+
+}
+
+int GameRunner::UpdateGui(float time)
+{
+    _game_window.Update(time);
+    return 0;
 }
