@@ -19,11 +19,23 @@ class GameWindow
     void DrawFromComponents(const ComponentUser* user);
     void Init();
     void Clear();
+    void Shutdown();
+    static GameWindow* instance;
 
     static GameWindow* Instance()
     {
-      static GameWindow instance;
-      return &instance;
+      if(!instance)
+      {
+        return NewInstance();
+      }
+
+      return instance;
+    }
+
+    static GameWindow* NewInstance()
+    {
+        instance = new GameWindow();
+        return instance;
     }
 
   private:

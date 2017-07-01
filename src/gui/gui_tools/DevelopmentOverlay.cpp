@@ -7,6 +7,7 @@ DevelopmentOverlay::DevelopmentOverlay()
 
 void DevelopmentOverlay::Init(sf::RenderWindow& window)
 {
+    _log.Clear();
     ImGui::SFML::Init(window);
 }
 

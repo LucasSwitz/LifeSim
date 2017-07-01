@@ -1,21 +1,21 @@
 --PREAMBLE_START
-ScriptType = "SystemBLCK"
+ScriptType = "System"
 Name = "DrawGraphicsSystem"
 --PREAMBLE_END
 
 DrawGraphicsSystem = 
 {   
-    after = "ForwardAnimationSystem",
+    after = "MovementSystem",
     Update = function(graphics_system,time)
-        local drawables = ComponentUsersBase.Intance():GetAll("Graphics")
-        local it = entities:Iterator()
-        local gui = Gui.Instance()
+        local drawables = ComponentUsers.Instance():GetAll({"Graphics","Position"})
+        local it = drawables:Iterator()
+        local gui = GameWindow.Instance()
         
         --Draw all objects with 'Graphics' component
         while it ~= nil do
             drawable = it.data
             gui:Draw(drawable)
+            it = it.next
         end
-        Gui.Instance():Update()
     end
 }

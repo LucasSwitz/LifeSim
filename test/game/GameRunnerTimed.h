@@ -19,6 +19,7 @@ class GameRunnerTimed : public GameRunner
                 duration = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - start).count();
             }
 
+            this->Shutdown();
         }
 };
 

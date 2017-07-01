@@ -12,6 +12,11 @@
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
 #include "test/game/game_systems/CollisionSystemTest.h"
 #include "test/game/GameRunnerTest.h"
+#include "test/game/game_components/ComponentUserBaseTest.h"
+#include "test/game/game_systems/GraphicsSystemTest.h"
+#include "test/game/game_components/ComponentUserBaseTest.h"
+#include "test/game/game_systems/MoveableGraphicsSystemTest.h"
+
 
 int main(int argc, char **argv)
 {

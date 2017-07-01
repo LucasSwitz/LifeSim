@@ -4,6 +4,7 @@
 #include <LuaBridge/LuaBridge.h>
 #include <list>
 #include <unordered_map>
+#include <iostream>
 
 extern "C" {
 #include "lua.h"
@@ -36,7 +37,7 @@ class LuaUniversal
         return &instance;
     }
 
-     static std::unordered_map<std::string, luabridge::LuaRef> KeyValueMapFromTable(const luabridge::LuaRef &table)
+    static std::unordered_map<std::string, luabridge::LuaRef> KeyValueMapFromTable(const luabridge::LuaRef &table)
     {
         std::unordered_map<std::string, LuaRef> result;
         if (table.isNil())
@@ -61,8 +62,24 @@ class LuaUniversal
         return result;
     }
 
-    template<typename T>
-    static void ListFromTable(const LuaRef& table, std::list<T>& list)
+    static void StringListFromLuaTable(lua_State *L, std::list<std::string>& list)
+    {
+        int length = get_length(L, -1);
+        for (int i = 0; i < length; i++)
+        {
+            lua_pushinteger(L, i + 1);
+            lua_gettable(L, -2);
+            if (lua_isstring(L, -1))
+            {
+                list.push_back(std::string(lua_tostring(L, -1)));
+            }
+
+            lua_pop(L, 1);
+        }
+    }
+
+    template <typename T>
+    static void ListFromTable(const LuaRef &table, std::list<T> &list)
     {
         if (table.isNil())
         {
@@ -70,11 +87,11 @@ class LuaUniversal
         }
 
         auto L = table.state();
-        push(L, table); 
+        push(L, table);
 
-        lua_pushnil(L); 
+        lua_pushnil(L);
         while (lua_next(L, -2) != 0)
-        { 
+        {
             if (lua_isstring(L, -2))
             {
                 list.push_back(LuaRef::fromStack(L, -1).cast<T>());
@@ -82,7 +99,7 @@ class LuaUniversal
             lua_pop(L, 1);
         }
 
-        lua_pop(L, 1); 
+        lua_pop(L, 1);
     }
 
   private:

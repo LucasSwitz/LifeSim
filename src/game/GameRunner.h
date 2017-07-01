@@ -16,6 +16,7 @@ class GameRunner
     GameRunner();
     void Update();
     void Start();
+    void Shutdown();
 
   private:
 

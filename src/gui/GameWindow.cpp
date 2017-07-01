@@ -1,5 +1,6 @@
 #include "GameWindow.h"
 
+GameWindow* GameWindow::instance = nullptr;
 
 GameWindow::GameWindow() : _main_window(sf::VideoMode(600, 600), "SFML works!")
 {
@@ -32,7 +33,7 @@ void GameWindow::DrawFromComponents(const ComponentUser* user)
     {
         sf::Sprite* sprite = new sf::Sprite();
         sprite->setTexture(*texture);
-        sprite->setPosition(user->GetComponentValueFloat("Postion","x"),user->GetComponentValueFloat("Postion","y"));
+        sprite->setPosition(user->GetComponentValueFloat("Position","x"),user->GetComponentValueFloat("Position","y"));
         Draw(sprite);
     }
     else
@@ -58,6 +59,11 @@ void GameWindow::Update(float time_elapsed)
     }
 
     _main_window.display();
+}
+
+void GameWindow::Shutdown()
+{
+    _main_window.close();
 }
 
 void GameWindow::PollEvents()
@@ -96,9 +102,12 @@ bool GameWindow::LoadTexture(std::string file_path)
         _texture_cache.insert(std::make_pair(file_path,texture));
         LOG->LogOverlay("Succesfully Loaded Texture: " + file_path);
         LOG->LogFile("Succesfully Loaded Texture: " + file_path);
+        return true;
     }
     else
     {
         LOG->LogFile("Failed to load texture: " + file_path);
+        delete texture;
+        return false;
     }
 }

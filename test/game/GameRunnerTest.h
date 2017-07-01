@@ -15,8 +15,6 @@ public:
     GameRunnerTimed * runner;
     GameRunnerTest()
     {
-        //ComponentUserBase::Instance()->Reset();
-       // LuaEntityFactory::Instance()->PopulateFactory();
         runner = new GameRunnerTimed();
         runner->Start();
     }
@@ -35,7 +33,7 @@ public:
 
 TEST_F(GameRunnerTest, TestTiming)
 {
-    ASSERT_NO_FATAL_FAILURE(runner->RunFor(.1));
+    ASSERT_NO_FATAL_FAILURE(runner->RunFor(1));
 }
 
 #endif
