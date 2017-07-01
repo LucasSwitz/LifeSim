@@ -3,7 +3,9 @@
 
 #include <unordered_map>
 #include <list>
+#include <initializer_list>
 #include "src/utils/lua/LuaList.h"
+#include "src/utils/lua/LuaUniversal.h"
 #include "src/game_objects/Entity.h"
 
 /**
@@ -34,7 +36,10 @@ void Reset()
 }
 
 std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name);
+std::list<ComponentUser*>* GetAllUsersWithComponents(std::initializer_list<std::string> list);
+LuaList<ComponentUser*> GetAllUsersWithComponentsAsLuaList(luabridge::LuaRef& list);
 LuaList<Entity*>* GetAllEntitesWithComponentAsLuaList(std::string component_name);
+std::list<ComponentUser*>* GetAllUsersWithComponents(std::list<std::string> list);
 LuaList<ComponentUser*>* GetAllUsersWithComponentAsLuaList(std::string component_name);
 
 

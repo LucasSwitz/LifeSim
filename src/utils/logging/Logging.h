@@ -22,6 +22,8 @@ class Logging{
     void LogInfo(int channel,const char * msg, ... )
     {
         va_list args;
+        va_start(args, msg);
+        
         switch(channel)
         {
             case FILE:
@@ -39,17 +41,20 @@ class Logging{
     {
 
     }
-    
-private: 
 
     void LogFile(std::string msg)
     {
 
     }
 
-    void LogOverlay(const char* msg, va_list args)
+    void LogOverlay(const char* msg, va_list& args)
     {
         DevelopmentOverlay::Instance()->GetLog().AddLog(msg, args);
+    }
+
+    void LogOverlay(const std::string& msg)
+    {
+        DevelopmentOverlay::Instance()->GetLog().AddLog(msg.c_str(), nullptr);
     }
 
 };

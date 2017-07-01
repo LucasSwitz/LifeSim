@@ -22,7 +22,7 @@ class GameRunner
     int UpdateSystems(float time);
     int UpdateGui(float time);
     std::chrono::time_point<std::chrono::high_resolution_clock> _last_time;
-    GameWindow _game_window;
+    GameWindow* _game_window;
 };
 
 #endif

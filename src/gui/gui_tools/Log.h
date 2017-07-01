@@ -6,7 +6,7 @@ struct Log
     ImGuiTextBuffer Buf;
     ImGuiTextFilter Filter;
     ImVector<int> LineOffsets; // Index to lines offset
-    bool ScrollToBottom;
+    bool ScrollToBottom = true;
 
 
     Log()
@@ -21,12 +21,11 @@ struct Log
 
     void AddLog(const char *fmt, ...) IM_PRINTFARGS(2)
     {
-        int old_size = Buf.size();
         va_list args;
         AddLog(fmt,args);
     }
 
-    void AddLog(const char *fmt, va_list args)
+    void AddLog(const char *fmt, va_list& args)
     {
         int old_size = Buf.size();
         Buf.appendv(fmt, args);
@@ -34,6 +33,8 @@ struct Log
             if (Buf[old_size] == '\n')
                 LineOffsets.push_back(old_size);
         ScrollToBottom = true;
+
+        va_end(args);
     }
 
     int BufSize()

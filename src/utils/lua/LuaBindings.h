@@ -11,6 +11,7 @@
 #include "src/game_objects/LuaEntity.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
+#include "src/gui/GameWindow.h"
 
 using namespace luabridge;
 
@@ -93,6 +94,10 @@ class LuaBindings
                 .addStaticFunction("Instance",&ComponentUserBase::Instance)
                 .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentAsLuaList)
                 .addFunction("GetAllEntities",&ComponentUserBase::GetAllEntitesWithComponentAsLuaList)
+            .endClass()
+            .beginClass<GameWindow>("GameWindow")
+                .addStaticFunction("Instance", &GameWindow::Instance)
+                .addFunction("Draw",&GameWindow::DrawFromComponents)
             .endClass();
         } 
  };

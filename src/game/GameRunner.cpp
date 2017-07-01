@@ -3,12 +3,12 @@
 GameRunner::GameRunner()
 {
     _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
+    _game_window = GameWindow::Instance();
 }
 
 void GameRunner::Start()
 {
-    std::cout << "Game Runner Start!" << std::endl;
-    _game_window.Init();
+    _game_window->Init();
 }
 
 void GameRunner::Update()
@@ -39,6 +39,6 @@ int GameRunner::UpdateSystems(float time)
 
 int GameRunner::UpdateGui(float time)
 {
-    _game_window.Update(time);
+    _game_window->Update(time);
     return 0;
 }

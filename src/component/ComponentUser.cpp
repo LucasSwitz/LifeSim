@@ -8,7 +8,7 @@ void ComponentUser::RemoveComponent(std::string name)
     ComponentUserBase::Instance()->DeRegister(name, *this);
 }
 
-bool ComponentUser::HasComponent(std::string name)
+bool ComponentUser::HasComponent(std::string name) const
 {
     return _components.find(name) != _components.end();
 }
@@ -21,7 +21,7 @@ void ComponentUser::AddComponent(Component *component)
     ComponentUserBase::Instance()->Register(component_name, *this);
 }
 
-std::string ComponentUser::GetComponentValueString(std::string component_name, std::string value_name)
+std::string ComponentUser::GetComponentValueString(std::string component_name, std::string value_name) const
 {
     if (!HasComponent(component_name))
     {
@@ -36,7 +36,7 @@ void ComponentUser::SetComponentValueString(std::string component_name, std::str
     _components.at(component_name)->SetStringValue(component_name_value, value);
 }
 
-float ComponentUser::GetComponentValueFloat(std::string component_name, std::string value_name)
+float ComponentUser::GetComponentValueFloat(std::string component_name, std::string value_name) const
 {
     if (!HasComponent(component_name))
     {
