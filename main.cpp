@@ -16,7 +16,7 @@
 #include "test/game/game_systems/GraphicsSystemTest.h"
 #include "test/game/game_components/ComponentUserBaseTest.h"
 #include "test/game/game_systems/MoveableGraphicsSystemTest.h"
-
+#include "test/game/game_systems/KeyboardInputSystemTest.h"
 
 int main(int argc, char **argv)
 {

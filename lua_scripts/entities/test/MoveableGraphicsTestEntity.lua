@@ -6,6 +6,7 @@ PrototypeID = 1114
 
 MoveableGraphicsTestEntity =
 {
+    id = 0,
     Components = 
     {
         Position = 
@@ -19,7 +20,19 @@ MoveableGraphicsTestEntity =
         },
         Velocity =
         {
-            x = 30 -- px/second
+            x = 0, -- px/second
+            y = 0
+        },
+        Acceleration = 
+        {
+            force_x = 0,
+            force_y = 0,
+            x = 0,
+            y= 0
+        },
+        Mass = 
+        {
+            mass = 1
         }
     }
 }

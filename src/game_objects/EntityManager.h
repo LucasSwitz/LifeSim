@@ -5,7 +5,6 @@
 #include "src/utils/lua/LuaList.h"
 
 #define Entity_Manager EntityManager::Instance()
-
 /**
   Contains all entities. Entities can be accessed by the assigned ID.
 **/
@@ -20,9 +19,13 @@ class EntityManager
 
     static EntityManager* Instance();
 
-    std::map<int, Entity*> GetAllEntities();
+    std::map<int, Entity*>& GetAllEntities();
+
+    void DeregisterEntity(int id);
 
     int GetNumberOfEntities();
+
+    bool IDAvailable(int id);
 
     LuaList<Entity*>* AsLuaList();
 

@@ -1,10 +1,11 @@
 #include "GameWindow.h"
 
 GameWindow* GameWindow::instance = nullptr;
+int GameWindow::window_count = 0;
 
-GameWindow::GameWindow() : _main_window(sf::VideoMode(600, 600), "SFML works!")
+GameWindow::GameWindow() : _main_window(sf::VideoMode(600, 600), std::to_string(window_count))
 {
-    
+
 }
 
 void GameWindow::Init()
@@ -78,7 +79,10 @@ void GameWindow::PollEvents()
 void GameWindow::HandleEvent(sf::Event& e)
 {
     if (e.type == sf::Event::Closed)
-            _main_window.close();
+    {
+        Event new_event(EventType::CLOSE_GAME_WINDOW_EVENT,-1,-1);
+        EventManager::Instance()->LaunchEvent(new_event);
+    }
     else if(e.type == sf::Event::KeyPressed)
     {
         if(e.key.code == sf::Keyboard::W)

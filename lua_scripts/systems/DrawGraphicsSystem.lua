@@ -5,7 +5,6 @@ Name = "DrawGraphicsSystem"
 
 DrawGraphicsSystem = 
 {   
-    after = "MovementSystem",
     Update = function(graphics_system,time)
         local drawables = ComponentUsers.Instance():GetAll({"Graphics","Position"})
         local it = drawables:Iterator()

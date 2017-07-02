@@ -11,3 +11,4 @@ int EventType::W_DOWN_EVENT = 5;
 int EventType::W_UP_EVENT = 6;
 int EventType::S_DOWN_EVENT = 7;
 int EventType::S_UP_EVENT = 8;
+int EventType::CLOSE_GAME_WINDOW_EVENT = 9;

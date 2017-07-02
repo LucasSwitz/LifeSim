@@ -10,6 +10,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "src/gui/gui_tools/Log.h"
+#include "src/gui/gui_tools/EntityTable.h"
 
 class DevelopmentOverlay
 {
@@ -27,6 +28,7 @@ class DevelopmentOverlay
     private:
         DevelopmentOverlay();
         Log _log;
+        EntityTable _entity_table;
 
 };
 #endif

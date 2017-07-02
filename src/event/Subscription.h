@@ -20,11 +20,10 @@ struct Subscription
         }
     };
 
-    Subscription(int event_id, LuaRef& event_tags) : id(event_id) // should find a way to hide this
+    Subscription(int event_id, lua_State* state) : id(event_id) // should find a way to hide this
     {
         std::list<int> list;
-
-        LuaUniversal::ListFromTable<int>(event_tags,list);
+        LuaUniversal::IntListFromLuaTable(list,state);
 
         for(auto it = list.begin(); it != list.end(); it++)
         {

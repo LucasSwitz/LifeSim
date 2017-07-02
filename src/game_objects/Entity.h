@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include "src/component/ComponentUser.h"
+#define ENTITY_ID_START 4
 
 /**
     Entities are simply ComponentLists with integer IDs attached to them.
@@ -15,21 +16,24 @@ class Entity : public ComponentUser
 
 public:
     virtual ~Entity();
-    Entity(int type);
+    Entity(int type, std::string _prototype_name="");
     virtual void Tick(){};
     static int _lastId;
 
     int ID() const;
-    bool IsType(int type);
+    bool IsType(int type) const;
+    std::string& GetPrototypeName();
 
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
 
 protected:
-
     void SetID(int id);
+    void SetPrototypeName(std::string& name);
+
 private:
     int _id;
     int _type;
+    std::string _prototype_name;
 };
 #endif

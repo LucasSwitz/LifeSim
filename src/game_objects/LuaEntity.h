@@ -22,7 +22,7 @@ class LuaEntity : public Entity
 
     LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY){};
 
-    void LoadScript(lua_State* lua_state, std::string script_path,std::string entity_name);
+    void LoadScript(lua_State* lua_state, std::string script_path,std::string& entity_name);
 
     void ConfigureAllComponentsFromLua(const LuaRef& ref);
 

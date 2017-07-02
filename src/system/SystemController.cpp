@@ -8,6 +8,7 @@ void SystemController::AddPassiveSystem(const std::string& system_name)
 
 void SystemController::AddPassiveSystem(System* system)
 {
+    LOG->LogInfo(1,"Adding Passive System: %s \n",system->GetName().c_str());
     _passive_systems.push_back(system);
 }
 

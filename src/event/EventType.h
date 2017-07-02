@@ -18,5 +18,6 @@ class EventType
     static int W_UP_EVENT;
     static int S_DOWN_EVENT;
     static int S_UP_EVENT;
+    static int CLOSE_GAME_WINDOW_EVENT;
 };
 #endif

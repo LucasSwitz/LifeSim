@@ -23,6 +23,7 @@ class GameWindow
     void Clear();
     void Shutdown();
     static GameWindow* instance;
+    static int window_count;
 
     static GameWindow* Instance()
     {
@@ -36,6 +37,7 @@ class GameWindow
 
     static GameWindow* NewInstance()
     {
+        window_count++;
         instance = new GameWindow();
         return instance;
     }

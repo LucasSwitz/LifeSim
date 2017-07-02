@@ -25,7 +25,9 @@ public:
 
   void Reset()
   {
+    LOG->LogInfo(1,"Systems Reset.");
     _systems_execution_sequence.clear();
+    _passive_systems.clear();
   }
 
   static SystemController *Instance()

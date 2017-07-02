@@ -3,8 +3,10 @@
 
 #include "src/game/GameRunner.h"
 #include "src/utils/logging/Logging.h"
+#include "src/event/EventSubscriber.h"
+#include "src/event/EventManager.h"
 
-class GameRunnerTimed : public GameRunner
+class GameRunnerTimed : public GameRunner, EventSubscriber
 {
     public:
         void RunFor(double seconds)
@@ -21,6 +23,33 @@ class GameRunnerTimed : public GameRunner
 
             this->Shutdown();
         }
+
+        void RunTillClose()
+        {
+            EventManager::Instance()->RegisterSubscriber(this);
+
+            while(!_window_closed)
+            {
+                this->Update();
+            }
+        }
+
+        void OnEvent(Event& e)
+        {
+            if(e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
+            {
+                _window_closed = true;
+            }
+        }
+
+        std::list<Subscription> GetSubscriptions()
+        {
+            std::list<Subscription> list = {Subscription(EventType::CLOSE_GAME_WINDOW_EVENT)};
+            return list;
+        }
+
+    private:
+    bool _window_closed = false;
 };
 
 #endif

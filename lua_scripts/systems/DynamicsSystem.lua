@@ -7,10 +7,10 @@ Name = "DynamicsSystem"
 DynamicsSystem = 
 {
     Update = function(dynamics_system, seconds_elapsed)
-        local physicals = ComponentUsers.Instance():GetAll({"Position","Velocity","Accleration","Mass"})
-        local it = physicals:Iterator();
+        local physicals = ComponentUsers.Instance():GetAll({"Position","Velocity","Acceleration","Mass"})
+        local it = physicals:Iterator()
+        while it ~= nil do
 
-        while it ~- nil do
             local current = it.data
             local mass =  current:GetNumber("Mass","mass")
             local force_x = current:GetNumber("Acceleration","force_x")
@@ -39,7 +39,5 @@ DynamicsSystem =
 
             it = it.next
         end
-
-
     end
 }

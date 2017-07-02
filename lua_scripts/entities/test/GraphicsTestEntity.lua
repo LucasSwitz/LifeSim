@@ -6,6 +6,7 @@ PrototypeID = 1112
 
 GraphicsTestEntity =
 {
+    id = 0,
     Components = 
     {
         Position = 

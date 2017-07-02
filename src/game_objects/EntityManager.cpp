@@ -13,6 +13,10 @@ Entity *EntityManager::GetEntityByID(int id)
     return _entity_map.at(id);
 }
 
+void EntityManager::DeregisterEntity(int id)
+{
+    _entity_map.erase(_entity_map.find(id));
+}
 void EntityManager::RegisterEntity(Entity *entity)
 {
     _entity_map.insert(std::make_pair(entity->_id, entity));
@@ -24,7 +28,7 @@ EntityManager* EntityManager::Instance()
     return &instance;
 }
 
-std::map<int, Entity *> EntityManager::GetAllEntities()
+std::map<int, Entity *>& EntityManager::GetAllEntities()
 {
     return _entity_map;
 }
@@ -37,6 +41,11 @@ int EntityManager::GetNumberOfEntities()
 LuaList<Entity*>* EntityManager::AsLuaList()
 {
     return LuaList<Entity*>::FromMapToLuaList<int, Entity*>(_entity_map);
+}
+
+bool EntityManager::IDAvailable(int id)
+{
+    return _entity_map.find(id) == _entity_map.end();
 }
 
 void EntityManager::Clear()

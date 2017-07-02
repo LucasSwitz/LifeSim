@@ -7,8 +7,8 @@ DevelopmentOverlay::DevelopmentOverlay()
 
 void DevelopmentOverlay::Init(sf::RenderWindow& window)
 {
-    _log.Clear();
     ImGui::SFML::Init(window);
+    _log.Clear();
 }
 
 Log& DevelopmentOverlay::GetLog()
@@ -29,6 +29,7 @@ void DevelopmentOverlay::Draw(sf::RenderWindow& window, sf::Time& deltaTime)
     ImGui::Button("Look at this pretty button");
 
     _log.Draw("Log");
+    _entity_table.Draw("Entities");
     ImGui::End();
 
 // #### RENDER GUI HERE
