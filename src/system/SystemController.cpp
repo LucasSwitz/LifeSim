@@ -1,5 +1,16 @@
 #include "SystemController.h"
 
+void SystemController::AddPassiveSystem(const std::string& system_name)
+{
+    System* system = SystemFactory::Instance()->GetSystem(system_name);
+    AddPassiveSystem(system);
+}
+
+void SystemController::AddPassiveSystem(System* system)
+{
+    _passive_systems.push_back(system);
+}
+
 void SystemController::AddToSystemExecutionSequence(const std::string& system_name)
 {
     System* system = SystemFactory::Instance()->GetSystem(system_name);

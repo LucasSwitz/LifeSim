@@ -71,9 +71,41 @@ void GameWindow::PollEvents()
         sf::Event event;
         while (_main_window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                _main_window.close();
+            HandleEvent(event);
         }
+}
+
+void GameWindow::HandleEvent(sf::Event& e)
+{
+    if (e.type == sf::Event::Closed)
+            _main_window.close();
+    else if(e.type == sf::Event::KeyPressed)
+    {
+        if(e.key.code == sf::Keyboard::W)
+        {
+            Event new_event(EventType::W_DOWN_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+        else if(e.key.code == sf::Keyboard::S)
+        {
+            Event new_event(EventType::S_DOWN_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+
+    }
+    else if(e.type == sf::Event::KeyReleased)
+    {
+        if(e.key.code == sf::Keyboard::W)
+        {
+            Event new_event(EventType::W_UP_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+        else if(e.key.code == sf::Keyboard::S)
+        {
+            Event new_event(EventType::S_UP_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+    }
 }
 
 sf::Texture* GameWindow::GetTexture(std::string name)

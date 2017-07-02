@@ -8,6 +8,8 @@
 #include "src/gui/gui_tools/DevelopmentOverlay.h"
 #include "src/component/ComponentUser.h"
 #include "src/utils/logging/Logging.h"
+#include "src/event/EventManager.h"
+#include "src/event/EventType.h"
 
 class GameWindow
 {
@@ -43,11 +45,12 @@ class GameWindow
     sf::Texture* GetTexture(std::string name);
     bool TextureCached(std::string name);
     bool LoadTexture(std::string name);
+    void PollEvents();
+    void HandleEvent(sf::Event& event);
+
     sf::RenderWindow _main_window;
     std::queue<sf::Drawable*> _drawables_queue;
     std::unordered_map<std::string, sf::Texture*> _texture_cache;
-    void PollEvents();
-
 };
 
 #endif

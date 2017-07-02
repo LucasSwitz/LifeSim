@@ -13,6 +13,8 @@ class SystemController
 {
 public:
   void AddToSystemExecutionSequence(const std::string& system_name);
+  void AddPassiveSystem(const std::string& system_name);
+  void AddPassiveSystem(System * system);
   void AddToSystemExecutionSequence(System *system);
 
   const System *GetSystemInExecutionSequenceAt(int index);
@@ -37,6 +39,7 @@ protected:
   SystemController(){};
 
   std::list<System *> _systems_execution_sequence;
+  std::list<System *> _passive_systems;
 private:
 };
 
