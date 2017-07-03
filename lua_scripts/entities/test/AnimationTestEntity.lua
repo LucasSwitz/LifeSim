@@ -1,40 +1,20 @@
 --PREAMBLE_START
 ScriptType = "Entity"
-Name = "TestEntity"
-PrototypeID = 1000
+Name = "AnimationTestEntity"
+PrototypeID = 1800
 --PREAMBLE_END
 
-TestEntity = 
+AnimationTestEntity = 
 {
         Components = 
         {   
-            Health = 
-            {
-                hp = 0
-            },
-            Position =
-            {
-                x_pos = 0,
-                y_pos = 0
-            },
-            Velocity = 
-            {
-                x_velcoity = 0,
-                y_velocity = 0,
-                max_velocity = 0
-            },
             Graphics = 
             {
                 sprite = "sprite",
             },
-            Collision = 
-            {
-                hit_box_width = 100,
-                hit_box_height = 100,
-            },
             Animation =
             {
-                curent_frame_sprite = "path/to/sprite/file"
+                curent_frame_sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                 current_animation = "Idle",
                 current_frame = "Still",
                 current_frame_time_left = 0.0,
@@ -50,13 +30,13 @@ TestEntity =
                             Frame1 = 
                             {
                                 duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png"
+                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                                 next_frame_name = "Frame2"
                             },
                             Frame2 = 
                             {
                                 duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/mario_jump.png"
+                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/mario_jump.png",
                                 next_frame_name = "Frame1"
                             }
                         }
@@ -68,7 +48,7 @@ TestEntity =
                             Still =
                             {
                                 duration = 0,
-                                sprite_file = "path/to/sprite/file"
+                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                                 next_frame = "Still"
                             }
                         }
