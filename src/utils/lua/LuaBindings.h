@@ -12,6 +12,7 @@
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
 #include "src/gui/GameWindow.h"
+#include "src/controllers/Keyboard.h"
 
 using namespace luabridge;
 
@@ -103,6 +104,10 @@ class LuaBindings
             .beginClass<GameWindow>("GameWindow")
                 .addStaticFunction("Instance", &GameWindow::Instance)
                 .addFunction("Draw",&GameWindow::DrawFromComponents)
+            .endClass()
+            .beginClass<KeyboardController>("Keyboard")
+                .addStaticFunction("Instance", &KeyboardController::Instance)
+                .addFunction("Get",&KeyboardController::Get)
             .endClass();
         } 
  };

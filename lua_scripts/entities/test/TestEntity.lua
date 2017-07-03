@@ -32,6 +32,11 @@ TestEntity =
                 hit_box_width = 100,
                 hit_box_height = 100,
             },
+            State = 
+            {
+                state = "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua",
+                stage = 0
+            }
             Animation =
             {
                 curent_frame_sprite = "path/to/sprite/file"
