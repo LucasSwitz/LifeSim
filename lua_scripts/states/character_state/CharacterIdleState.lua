@@ -1,15 +1,22 @@
-ScriptType = "State"
-StateOwner = "Character"
-StateName = "Idle"
+--PREAMBLE_START
+ScriptType = "System"
+Name = "CharacterIdleState"
+--PREAMBLE_END
 
-CharacterIdleState = 
+Stages = 
 {
-    Enter = function(character)
-    
+    Start = function(character)
+        character:SetString("Animation","animation","Idle")
     end,
     Execute = function(character)
+
     end,
-    Exit = function(character)
-    
+    End = function(character)
+        --Check Keyboard input here and do stuff
     end
 }
+
+character = ...
+
+stage = character:GetNumber("State","stage")
+Stages[stage](character)
