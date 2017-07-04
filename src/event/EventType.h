@@ -16,8 +16,12 @@ class EventType
     static int DELETE_ENTITY_EVENT;
     static int W_DOWN_EVENT;
     static int W_UP_EVENT;
+    static int A_DOWN_EVENT;
+    static int A_UP_EVENT;
     static int S_DOWN_EVENT;
     static int S_UP_EVENT;
+    static int D_DOWN_EVENT;
+    static int D_UP_EVENT;
     static int CLOSE_GAME_WINDOW_EVENT;
 };
 #endif
