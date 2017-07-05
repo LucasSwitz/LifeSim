@@ -67,7 +67,17 @@ class Component
 
     std::string GetStringValue(std::string name) const
     {
+        if(!HasStringValue(name))
+        {
+            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            return "";
+        }
         return _string_components.at(name).GetValue();
+    }
+
+    bool HasStringValue(std::string name) const
+    {
+        return _string_components.find(name) != _string_components.end();
     }
 
     void* GetFunctionValue(std::string name) const
@@ -80,9 +90,32 @@ class Component
         return _name;
     }
 
-    Component* GetSubcomponenet(std::string name)
+    Component* GetSubcomponent(std::string name)
     {
         return _sub_components.at(name);
+    }
+
+    bool GetBoolValue(std::string name)
+    {
+        if(!HasBoolValue(name))
+        {
+            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            return false;
+        }
+        return _bool_components.at(name).GetValue();
+    }
+
+    void SetBoolValue(std::string name, bool value)
+    {
+        if(HasBoolValue(name))
+        {
+            _bool_components.at(name).SetValue(value);
+        }
+    }
+
+    bool HasBoolValue(std::string name)
+    {
+        return _bool_components.find(name) != _bool_components.end();
     }
 
   protected:
@@ -94,6 +127,11 @@ class Component
     void AddValue(std::string name, float value)
     {
         _float_components.insert(std::make_pair(name, ComponentValue<float>(name,value)));
+    }
+
+    void AddValue(std::string name, bool value)
+    {
+        _bool_components.insert(std::make_pair(name, ComponentValue<bool>(name,value)));
     }
 
     void AddSubcomponent(Component* sub_component)
@@ -109,6 +147,7 @@ class Component
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
     std::unordered_map<std::string, ComponentValue<void*>> _functional_components;
+    std::unordered_map<std::string, ComponentValue<bool>> _bool_components;
     std::unordered_map<std::string, Component*> _sub_components;
 };
 

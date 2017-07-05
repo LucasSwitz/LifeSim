@@ -51,6 +51,26 @@ void ComponentUser::SetComponentValueFloat(std::string component_name, std::stri
     _components.at(component_name)->SetFloatValue(component_name_value, value);
 }
 
+bool ComponentUser::GetComponentBoolValue(std::string component_name, std::string component_name_value)
+{
+    if(!HasComponent(component_name))
+    {
+        std::cout << "has no component: " << component_name << std::endl;
+        return false;
+    }
+    return _components.at(component_name)->GetBoolValue(component_name_value);
+}
+
+void ComponentUser::SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value)
+{
+    if(!HasComponent(component_name))
+    {
+        std::cout << "has no component: " << component_name << std::endl;
+    }
+    _components.at(component_name)->SetBoolValue(component_name_value,value);    
+}   
+
+
 void ComponentUser::CallFunction(std::string component_name, std::string function_name)
 {
     _components.at(component_name)->GetFunctionValue(function_name);

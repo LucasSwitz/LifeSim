@@ -16,6 +16,10 @@ void LuaComponent::FromLuaRef(const LuaRef &ref)
         {
             AddValue(key, value.cast<std::string>());
         }
+        else if (value.isBoolean())
+        {
+            AddValue(key, value.cast<bool>());
+        }
         else if (value.isTable())
         {
             LuaComponent* component = new LuaComponent(key);

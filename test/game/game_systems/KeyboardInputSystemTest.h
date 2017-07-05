@@ -24,7 +24,7 @@ class KeyboardInputSystemTest : public LuaTest
             SystemFactory::Instance()->PopulateFactory();
             LuaEntityFactory::Instance()->PopulateFactory();
 
-            e_1 = LuaEntityFactory::Instance()->GetEntity("MoveableGraphicsTestEntity");
+            e_1 = LuaEntityFactory::Instance()->GetEntity("TestEntity");
         }
 
         void StartUp()
@@ -36,9 +36,10 @@ class KeyboardInputSystemTest : public LuaTest
 TEST_F(KeyboardInputSystemTest, MoveSpriteWithKeyboard)
 {
     runner.Start();
-    SystemController::Instance()->AddPassiveSystem("KeyboardInputSystem");
+    SystemController::Instance()->AddToSystemExecutionSequence("StateSystem");
     SystemController::Instance()->AddToSystemExecutionSequence("DynamicsSystem");
     SystemController::Instance()->AddToSystemExecutionSequence("DrawGraphicsSystem");
+    SystemController::Instance()->AddToSystemExecutionSequence("AnimationSystem");
     ASSERT_NO_FATAL_FAILURE(runner.RunTillClose());
 }
 

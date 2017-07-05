@@ -27,6 +27,9 @@ class ComponentUser
     float GetComponentValueFloat (std::string component_name, std::string component_name_value) const; 
     void SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);
 
+
+    bool GetComponentBoolValue(std::string component_name, std::string component_name_value);
+    void SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value); 
     void CallFunction(std::string component_name, std::string value_name);
 
     virtual ~ComponentUser(){};

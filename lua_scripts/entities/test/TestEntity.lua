@@ -7,25 +7,32 @@ PrototypeID = 1000
 TestEntity = 
 {
         Components = 
-        {   
-            Health = 
+        {
+
+            Position = 
             {
-                hp = 0
-            },
-            Position =
-            {
-                x_pos = 0,
-                y_pos = 0
-            },
-            Velocity = 
-            {
-                x_velcoity = 0,
-                y_velocity = 0,
-                max_velocity = 0
+                x = 90,
+                y = 90
             },
             Graphics = 
             {
-                sprite = "sprite",
+                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png"
+            },
+            Velocity =
+            {
+                x = 0, -- px/second
+                y = 0
+            },
+            Acceleration = 
+            {
+                force_x = 0,
+                force_y = 0,
+                x = 0,
+                y= 0
+            },
+            Mass = 
+            {
+                mass = 1
             },
             Collision = 
             {
@@ -35,12 +42,11 @@ TestEntity =
             State = 
             {
                 state = "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua",
-                stage = 0
-            }
+                stage = "Start"
+            },
             Animation =
             {
-                curent_frame_sprite = "path/to/sprite/file"
-                current_animation = "Idle",
+                animation = "Idle",
                 current_frame = "Still",
                 current_frame_time_left = 0.0,
                 next_frame = "Still",
@@ -50,31 +56,45 @@ TestEntity =
                 {
                     Walking = 
                     {
+                        start_frame = "Frame1",
                         Frames  =
                         {
                             Frame1 = 
                             {
-                                duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png"
-                                next_frame_name = "Frame2"
+                                duration = 0.1,
+                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                next = "Frame2"
                             },
                             Frame2 = 
                             {
-                                duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/mario_jump.png"
-                                next_frame_name = "Frame1"
+                                duration = 0.1,
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_2.png",
+                                next = "Frame3"
+                            },
+                            Frame3 = 
+                            {
+                                duration = 0.1,
+                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_3.png",
+                                next = "Frame4"
+                            },
+                            Frame4 = 
+                            {
+                                duration = 0.1,
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_4.png",
+                                next = "Frame1"
                             }
                         }
                     },
                     Idle = 
                     {
+                        start_frame = "Still",
                         Frames = 
                         {
                             Still =
                             {
                                 duration = 0,
-                                sprite_file = "path/to/sprite/file"
-                                next_frame = "Still"
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                next = "Still"
                             }
                         }
                     }

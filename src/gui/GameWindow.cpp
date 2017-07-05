@@ -90,9 +90,19 @@ void GameWindow::HandleEvent(sf::Event& e)
             Event new_event(EventType::W_DOWN_EVENT,-1,-1);
             EventManager::Instance()->LaunchEvent(new_event);
         }
+        else if(e.key.code == sf::Keyboard::A)
+        {
+            Event new_event(EventType::A_DOWN_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
         else if(e.key.code == sf::Keyboard::S)
         {
             Event new_event(EventType::S_DOWN_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+        else if(e.key.code == sf::Keyboard::D)
+        {
+            Event new_event(EventType::D_DOWN_EVENT,-1,-1);
             EventManager::Instance()->LaunchEvent(new_event);
         }
 
@@ -104,11 +114,22 @@ void GameWindow::HandleEvent(sf::Event& e)
             Event new_event(EventType::W_UP_EVENT,-1,-1);
             EventManager::Instance()->LaunchEvent(new_event);
         }
+        else if(e.key.code == sf::Keyboard::A)
+        {
+            Event new_event(EventType::A_UP_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
         else if(e.key.code == sf::Keyboard::S)
         {
             Event new_event(EventType::S_UP_EVENT,-1,-1);
             EventManager::Instance()->LaunchEvent(new_event);
         }
+        else if(e.key.code == sf::Keyboard::D)
+        {
+            Event new_event(EventType::D_UP_EVENT,-1,-1);
+            EventManager::Instance()->LaunchEvent(new_event);
+        }
+
     }
 }
 

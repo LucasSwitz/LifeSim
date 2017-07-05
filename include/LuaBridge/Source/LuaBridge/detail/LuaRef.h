@@ -851,6 +851,7 @@ public:
   inline bool isUserdata () const { return type () == LUA_TUSERDATA; }
   inline bool isThread () const { return type () == LUA_TTHREAD; }
   inline bool isLightUserdata () const { return type () == LUA_TLIGHTUSERDATA; }
+  inline bool isBoolean () const { return type () == LUA_TBOOLEAN; }
   /** @} */
 
   //----------------------------------------------------------------------------
