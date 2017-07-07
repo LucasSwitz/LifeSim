@@ -1,52 +1,54 @@
 #ifndef STAGE_H
 #define STAGE_H
 
-#include "event/EventSubscriber.h"
+#include <unordered_map>
 
-/*Manages a specific game level, Can load and unload systems from the SystemController*/
-
-class Stage : public EventSubscriber
+class Stage : public EventListener
 {
 
-    virtual void Load()
+    void ChangeCurrentInstance(Instance* instance)
+    {
+        _current_instance->Close();
+        _current_instance = instance;
+
+        if(!_current_instance->IsLoaded())
+            _current_instance->Load();
+
+        _current_instance->Open();
+    }
+
+    void Update(double seconds_elapsed)
+    {
+        _current_instance->Update();
+    }
+
+    void Enter()
+    {
+        //load first instance;
+    }
+
+    void Exit()
+    {
+        //Unload all loaded instances
+    }
+
+    void OnEvent(Event& e)
+    {
+        if(e->EventType::CHANGE_INSTANCE_EVENT)
+        {
+            int instance_id = e->DereferenceToType<int>();
+            ChangeInstance(_instances.at(instance_id));
+        }
+    }
+
+    std::list<Subscription> GetSubscriptions() //should really change this to pass lists by reference
     {
 
     }
 
-    virtual void Start()
-    {
+private:
+    std::unordered_map<int, Instance*> _instances;
 
-    }
-
-    virtual void Update()
-    {
-
-    }
-
-    virtual void End()
-    {
-        //Launch StageEnd event with information about what to do next
-    }
-
-    virtual void OnEvent(Event& e)
-    {
-        //Listen for stage end condition -owner of stage needs to listen for stage end requests
-    }
-
-    std::list<Subscription> GetSubscriptions()
-    {
-
-    }
-
-    void SetTileMap(std::string file_name)
-    {
-        _tile_map.LoadFromFile(file_name);
-    }
-
-    private:
-        TileMap _tile_map;
-        std::string name;
 };
-
 
 #endif
