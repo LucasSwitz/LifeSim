@@ -2,13 +2,21 @@
 #define STAGE_H
 
 #include <unordered_map>
+#include "src/world/stage/Instance.h"
+#include "src/event/EventSubscriber.h"
+#include "src/event/EventType.h"
 
-class Stage : public EventListener
+
+//requires a loading screen to tranistion
+
+class Stage : public EventSubscriber
 {
 public:
-    void ChangeCurrentInstance(Instance* instance)
+    void ChangeInstance(Instance* instance)
     {
-        _current_instance->Close();
+        if(_current_instance)
+            _current_instance->Close();
+
         _current_instance = instance;
 
         if(!_current_instance->IsLoaded())
@@ -25,23 +33,22 @@ public:
     //load first instance;
     virtual void Enter()
     {
-        _root_instance->Load();
-        _root_instance->Open();
+        if(_root_instance)
+        {
+            _root_instance->Load();
+            _root_instance->Open();
+        }
+        else
+        {
+            //error, no root instance specified
+        }
+            
     }
 
-    virtual void AddInstance(int id, Instance * instance)
-    {
-        _instances.insert(std::make_pair{id,instance});
-    }
-
-    void SetRootInstance(Instance* instance)
-    {
-        _root_instance = instance;
-    }
 
     bool HasInstance(int id)
     {
-        return _instances.find(id) != instances.end();
+        return _instances.find(id) != _instances.end();
     }
 
     //Unload all loaded instances
@@ -49,7 +56,7 @@ public:
     {
         for(auto it = _instances.begin(); it != _instances.end(); it++)
         {
-            Instance* inst = it->seconds;
+            Instance* inst = it->second;
 
             if(inst->IsOpen())
                 inst->Close();
@@ -65,16 +72,28 @@ public:
 
     virtual void OnEvent(Event& e)
     {
-        if(e->EventType::CHANGE_INSTANCE_EVENT)
+        if(e.id == EventType::CHANGE_INSTANCE_EVENT)
         {
-            int instance_id = e->DereferenceToType<int>();
+            int instance_id = e.DereferenceInfoToType<int>();
             ChangeInstance(_instances.at(instance_id));
         }
     }
 
     virtual std::list<Subscription> GetSubscriptions() //should really change this to pass lists by reference
     {
+        std::list<Subscription> subs = {Subscription(EventType::CHANGE_INSTANCE_EVENT)};
+        return subs;
+    }
 
+protected:
+    void AddInstance(Instance* instance)
+    {
+        _instances.insert(std::make_pair(instance->GetID(),instance));
+    }
+
+    void SetRootInstance(Instance* instance)
+    {
+        _root_instance = instance;
     }
 
 private:

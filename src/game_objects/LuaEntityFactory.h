@@ -65,7 +65,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
     {
         _entity_scripts.clear();
         _entity_id_to_name.clear();
-        _entity_id_to_name.clear();
+        _entity_name_to_id.clear();
     }
 
   private:

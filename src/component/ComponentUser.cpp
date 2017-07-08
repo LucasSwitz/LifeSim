@@ -14,6 +14,22 @@ void ComponentUser::EnableComponent(std::string name)
         ComponentUserBase::Instance()->Register(name,*this);
 }
 
+void ComponentUser::EnableAll()
+{
+    for(auto it = _components.begin(); it != _components.end(); it++)
+    {
+        ComponentUserBase::Instance()->Register(it->first,*this);
+    }
+}   
+
+void ComponentUser::DisableAll()
+{
+    for(auto it = _components.begin(); it != _components.end(); it++)
+    {
+        ComponentUserBase::Instance()->DeRegister(it->first,*this);
+    }
+}
+
 void ComponentUser::DisableComponent(std::string name)
 {
     if(HasComponent(name))
@@ -25,12 +41,13 @@ bool ComponentUser::HasComponent(std::string name) const
     return _components.find(name) != _components.end();
 }
 
-void ComponentUser::AddComponent(Component *component)
+void ComponentUser::AddComponent(Component *component, bool add_to_user_base)
 {
     std::string component_name = component->GetName();
     _components.insert(std::make_pair(component_name, component));
 
-    ComponentUserBase::Instance()->Register(component_name, *this);
+    if(add_to_user_base)
+        EnableComponent(component_name);
 }
 
 std::string ComponentUser::GetComponentValueString(std::string component_name, std::string value_name) const

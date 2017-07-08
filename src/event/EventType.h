@@ -23,5 +23,7 @@ class EventType
     static int D_DOWN_EVENT;
     static int D_UP_EVENT;
     static int CLOSE_GAME_WINDOW_EVENT;
+    static int CHANGE_INSTANCE_EVENT;
+    static int EXIT_STAGE_EVENT;
 };
 #endif

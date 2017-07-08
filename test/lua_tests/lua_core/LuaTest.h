@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 #include "src/utils/lua/LuaBindings.h"
 #include "src/utils/lua/LuaUniversal.h"
+#include "src/utils/debug/DebugFlags.h"
 
 extern "C" {
 #include "lua.h"
@@ -22,6 +23,7 @@ class LuaTest : public ::testing::Test
     LuaTest()
     {
         LuaUniversal::Instance()->Init();
+        DebugFlags::Instance()->Clear();
         LuaBindings::Bind(LUA_STATE);
     }   
 

@@ -6,7 +6,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventManager.h"
 
-class GameRunnerTimed : public GameRunner, EventSubscriber
+class GameRunnerTimed : public GameRunner
 {
     public:
         void RunFor(double seconds)
@@ -34,12 +34,14 @@ class GameRunnerTimed : public GameRunner, EventSubscriber
             }
         }
 
-        void OnEvent(Event& e)
+        void OnEvent(Event& e) override
         {
             if(e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
             {
                 _window_closed = true;
             }
+
+            GameRunner::OnEvent(e);
         }
 
         std::list<Subscription> GetSubscriptions()

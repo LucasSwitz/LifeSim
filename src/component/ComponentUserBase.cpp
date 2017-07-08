@@ -13,7 +13,7 @@ void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 
 }
 
-void ComponentUserBase::DeRegister(std::string component_name,ComponentUser& user)
+void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& user)
 {
     if(!ComponentExists(component_name))
         return;

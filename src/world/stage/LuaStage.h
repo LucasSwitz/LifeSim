@@ -1,7 +1,10 @@
 #ifndef LUASTAGE_H
 #define LUASTAGE_H
 
-#include "src/world/Stage.h"
+#include <memory>
+#include "src/world/stage/Stage.h"
+#include "src/utils/lua/LuaUniversal.h"
+#include "src/world/stage/LuaInstanceFactory.h"
 
 class LuaStage : public Stage
 {
@@ -36,52 +39,116 @@ class LuaStage : public Stage
 
     std::list<Subscription> GetSubscriptions() override
     {
+        std::list<Subscription> subs = Stage::GetSubscriptions();
+
         if(_get_subscriptions_function)
-            (*_get_subscriptions_function)(this);
-        
-        Stage::GetSubscriptions();
+        {
+            LuaRef lua_subs = (*_get_subscriptions_function)(this);
+            std::list<Subscription> lua_subs_list;
+            LuaUniversal::ListFromTable<Subscription>(lua_subs, lua_subs_list);
+            subs.splice(std::end(subs), lua_subs_list);
+        }
+
+        return subs;
     }
 
-    void LoadFromFile(const LuaRef& stage_table, const std::string& stage_name)
+    void LoadFromFile(lua_State* lua_state, const std::string script_path, const std::string& stage_name)
     {
          if (luaL_dofile(lua_state, script_path.c_str()) == 0)
         {
-            _stage_table = std::make_shared<LuaRef>(getGlobal(lua_state, entity_name.c_str()));
-            if ((*_stage_table).isTable())
+            LuaRef stage_table = getGlobal(lua_state, stage_name.c_str());
+            if ((stage_table).isTable())
             {
-                if ((*_stage_table)["Enter"])
+                if((stage_table)["Root"])
                 {
-                    _enter_function = (*_stage_table)["Enter"];
+                    LoadInstancesFromRef((stage_table)["Instances"]);
+                }
+                if((stage_table)["Instances"])
+                {
+                    LoadInstancesFromRef((stage_table)["Instances"]);
                 }
 
-                if ((*_stage_table)["Update"])
+                if ((stage_table)["Enter"])
                 {
-                    _open_function = (*_stage_table)["Open"];
+                    _enter_function = std::make_unique<LuaRef>((stage_table)["Enter"]);
                 }
 
-                if ((*_stage_table)["Exit"])
+                if ((stage_table)["Update"])
                 {
-                    _load_function = (*_stage_table)["Unload"];
-                }
-                if ((*_stage_table)["OnEvent"])
-                {
-                    _on_event_function = (*_stage_table)["OnEvent"];
-                }
-                if ((*_stage_table)["GetSubscription"])
-                {
-                    _get_subscriptions_function = (*_stage_table)["GetSubscriptions"];
+                    _update_function = std::make_unique<LuaRef>((stage_table)["Update"]);
                 }
 
-
+                if ((stage_table)["Exit"])
+                {
+                    _exit_function = std::make_unique<LuaRef>((stage_table)["Exit"]);
+                }
+                if ((stage_table)["OnEvent"])
+                {
+                    _on_event_function = std::make_unique<LuaRef>((stage_table)["OnEvent"]);
+                }
+                if ((stage_table)["GetSubscription"])
+                {
+                    _get_subscriptions_function = std::make_unique<LuaRef>((stage_table)["GetSubscriptions"]);
+                }
             }
         }
         else
         {
             std::cout << "Error, can't open script: " << script_path << std::endl;
-        }        
+        }
     }
 
     private:
+
+        void LoadInstancesFromRef(const LuaRef& instance_table)
+        {
+            Instance* new_instance = nullptr;
+            std::unordered_map<std::string, LuaRef> vals = LuaUniversal::KeyValueMapFromTable(instance_table);
+
+            for(auto it = vals.begin(); it != vals.end(); it++)
+            {
+                if((it->second).isNumber())
+                {
+                    int id = it->second.cast<int>();
+                    new_instance = LuaInstanceFactory::Inst()->GetInstance(id);
+                } 
+                else if((it->second).isString())
+                {
+                    std::string name = it->second.cast<std::string>();
+                    new_instance = LuaInstanceFactory::Inst()->GetInstance(name);
+                }
+                else
+                {
+                    //not valid Instance identifier
+                }
+            }
+
+            if(new_instance)
+                AddInstance(new_instance);
+        }
+
+        void LoadRootInstanceFromRef(const LuaRef& root)
+        {
+            Instance* root_instance = nullptr;
+            if(root.isString())
+            {
+                int id = root.cast<int>();
+                root_instance = LuaInstanceFactory::Inst()->GetInstance(id);
+            }
+            else if(root.isNumber())
+            {   
+                std::string name = root.cast<std::string>();
+                root_instance = LuaInstanceFactory::Inst()->GetInstance(name);
+            }
+            else
+            {
+                //invalid instance identifiyer
+            }
+
+            if(root_instance)
+                SetRootInstance(root_instance);
+        }   
+
         std::unique_ptr<LuaRef> _enter_function;
         std::unique_ptr<LuaRef> _update_function;
         std::unique_ptr<LuaRef> _exit_function;

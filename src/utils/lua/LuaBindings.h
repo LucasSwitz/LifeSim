@@ -13,6 +13,10 @@
 #include "src/component/ComponentUser.h"
 #include "src/gui/GameWindow.h"
 #include "src/controllers/Keyboard.h"
+#include "src/world/tile/Tile.h"
+#include "src/world/stage/Stage.h"
+#include "src/world/stage/Instance.h"
+#include "src/utils/debug/DebugFlags.h"
 
 using namespace luabridge;
 
@@ -115,6 +119,16 @@ class LuaBindings
             .beginClass<KeyboardController>("Keyboard")
                 .addStaticFunction("Instance", &KeyboardController::Instance)
                 .addFunction("Get",&KeyboardController::Get)
+            .endClass()
+            .beginClass<Instance>("Instance")
+            .endClass()
+            .beginClass<Stage>("Stage")
+            .endClass()
+            .beginClass<Tile>("Tile")
+            .endClass()
+            .beginClass<DebugFlags>("DebugFlags")
+                .addStaticFunction("Instance", &DebugFlags::Instance)
+                .addFunction("Set", &DebugFlags::Set)
             .endClass();
         } 
  };

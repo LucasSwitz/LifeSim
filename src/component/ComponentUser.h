@@ -15,11 +15,13 @@ class ComponentUserBase;
 class ComponentUser
 {
   public:
-    void AddComponent(Component *component);
+    void AddComponent(Component *component, bool add_to_component_users = false);
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name) const;
     void DisableComponent(std::string name);
     void EnableComponent(std::string name);
+    void DisableAll();
+    void EnableAll();
 
     Component* GetComponent(std::string name);
 

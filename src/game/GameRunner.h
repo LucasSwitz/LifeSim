@@ -4,7 +4,8 @@
 #include <chrono>
 #include "src/system/SystemController.h"
 #include "src/gui/GameWindow.h"
-#include "world/stage/Stage.h"
+#include "src/world/stage/Stage.h"
+#include "src/world/stage/LuaStageFactory.h"
 
 #define FRAMES_PER_SEC 30
 
@@ -19,6 +20,8 @@ class GameRunner : public EventSubscriber
     void Start();
     void Shutdown();
     void OnEvent(Event& e);
+    void ChangeStage(Stage* stage);
+    int UpdateStage(float seconds);
     std::list<Subscription> GetSubscriptions();
 
   private:

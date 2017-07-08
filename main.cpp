@@ -17,6 +17,9 @@
 #include "test/game/game_components/ComponentUserBaseTest.h"
 //#include "test/game/game_systems/MoveableGraphicsSystemTest.h"
 #include "test/game/game_systems/KeyboardInputSystemTest.h"
+#include "test/world/InstanceTest.h"
+#include "test/world/StageTest.h"
+#include "test/world/TileMapTest.h"
 
 int main(int argc, char **argv)
 {

@@ -16,3 +16,5 @@
  int EventType::D_DOWN_EVENT = 11;
  int EventType::D_UP_EVENT = 12;
  int EventType::CLOSE_GAME_WINDOW_EVENT = 13;
+ int EventType::CHANGE_INSTANCE_EVENT = 14;
+ int EventType::EXIT_STAGE_EVENT = 15;

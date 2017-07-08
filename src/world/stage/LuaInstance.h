@@ -1,8 +1,15 @@
 #ifndef LUASTAGE_H
 #define LUASTAGE_H
 
+#include "src/world/stage/Instance.h"
+#include "src/utils/lua/LuaUniversal.h"
+
 class LuaInstance : public Instance
 {
+public:
+
+    LuaInstance(int id) : Instance(id){};
+
     void Load() override 
     {
         if(_load_function)
@@ -28,7 +35,7 @@ class LuaInstance : public Instance
     {
         if(_close_function)
             (*_close_function)(this);
-        Instance::End();
+        Instance::Close();
         //Launch Instance Ended event with information about what to do next
     }
 
@@ -57,51 +64,51 @@ class LuaInstance : public Instance
 
     }
 
-    void LoadFromFile(const LuaRef& stage_table, std::string stage_name)
+    void LoadFromFile(lua_State* lua_state, std::string script_path, std::string instance_name)
     {   
         if (luaL_dofile(lua_state, script_path.c_str()) == 0)
         {
-            _instance_table = std::make_shared<LuaRef>(getGlobal(lua_state, entity_name.c_str()));
-            if ((*_instance_table).isTable())
+            LuaRef _instance_table = getGlobal(lua_state, instance_name.c_str());
+            if ((_instance_table).isTable())
             {
-                if ((*_instance_table)["tilemap"])
+                if ((_instance_table)["tilemap"])
                 {
-                    std::string tile_map_name = (*_instance_table)["tilemap"].cast<std::string>();
+                    _tile_map_name = (_instance_table)["tilemap"].cast<std::string>();
                 }
 
-                if ((*_instance_table)["Open"])
+                if ((_instance_table)["Open"])
                 {
-                    _open_function = (*_instance_table)["Open"];
+                    _open_function = std::make_unique<LuaRef>((_instance_table)["Open"]);
                 }
 
-                if ((*_instance_table)["Unload"])
+                if ((_instance_table)["Unload"])
                 {
-                    _load_function = (*_instance_table)["Unload"];
+                    _load_function = std::make_unique<LuaRef>((_instance_table)["Unload"]);
                 }
 
-                if ((*_instance_table)["Load"])
+                if ((_instance_table)["Load"])
                 {
-                    _unload_function = (*_instance_table)["Load"];
+                    _unload_function = std::make_unique<LuaRef>((_instance_table)["Load"]);
                 }
 
-                if ((*_instance_table)["Update"])
+                if ((_instance_table)["Update"])
                 {
-                    _update_function = (*_instance_table)["Update"];
+                    _update_function = std::make_unique<LuaRef>((_instance_table)["Update"]);
                 }
 
-                if ((*_instance_table)["Close"])
+                if ((_instance_table)["Close"])
                 {
-                    _close_function = (*_instance_table)["Close"];
+                    _close_function = std::make_unique<LuaRef>((_instance_table)["Close"]);
                 }
 
-                if ((*_instance_table)["OnEvent"])
+                if ((_instance_table)["OnEvent"])
                 {
-                    _on_event_function = (*_instance_table)["OnEvent"];
+                    _on_event_function = std::make_unique<LuaRef>((_instance_table)["OnEvent"]);
                 }
 
-                if ((*_instance_table)["GetSubscriptions"])
+                if ((_instance_table)["GetSubscriptions"])
                 {
-                    _get_subscriptions_function = (*_instance_table)["GetSubscriptions"];
+                    _get_subscriptions_function = std::make_unique<LuaRef>((_instance_table)["GetSubscriptions"]);
                 }
 
             }

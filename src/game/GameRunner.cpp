@@ -30,9 +30,9 @@ void GameRunner::Update()
 
     if(seconds_elapsed_since_last_update  > (1.0 /  (FRAMES_PER_SEC)))
     {
-        UpdateStage(seconds_elaspsed_since_last_update);
-        UpdateSystems(seconds_elapsed_since_last_update);
-        UpdateGui(seconds_elapsed_since_last_update);
+        UpdateSystems(seconds_elapsed_since_last_update); //<---- move these to a higher-level class
+        UpdateStage(seconds_elapsed_since_last_update);
+        UpdateGui(seconds_elapsed_since_last_update);    // <-----
         _last_time = current_time;
     }
 }
@@ -44,9 +44,17 @@ int GameRunner::UpdateStage(float time)
 
 void GameRunner::ChangeStage(Stage* stage)
 {
-    _current_stage->Exit();
+    if(_current_stage)
+        _current_stage->Exit();
+
     _current_stage = stage;
-    _current_stage->Enter();
+
+    //load the current stages resources (loading screen?)
+
+    if(_current_stage)
+        _current_stage->Enter();
+    else
+        return;//bad stage
 }
 
 int GameRunner::UpdateSystems(float time)
@@ -65,14 +73,14 @@ void GameRunner::OnEvent(Event& e)
 {
     if(e.id == EventType::EXIT_STAGE_EVENT)
     {
-        int stage_id = e.DereferenceToType<int>();
-        ChangeStage(StageFactor::Instance()->GetStage(stage_id));
+        int stage_id = e.DereferenceInfoToType<int>();
+        ChangeStage(LuaStageFactory::Instance()->GetStage(stage_id));
     }
 }
 
-std::list<Subscription> GetSubscriptions()
+std::list<Subscription> GameRunner::GetSubscriptions()
 {
-    std::list<Subscriptions> = {Subscription(EventType::EXIT_STAGE_EVENT)};
+    std::list<Subscription> subs = {Subscription(EventType::EXIT_STAGE_EVENT)};
 
-    return list;
+    return subs;
 }
