@@ -5,14 +5,15 @@
 #include "src/world/stage/Stage.h"
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/world/stage/LuaInstanceFactory.h"
-
 class LuaStage : public Stage
 {
     public:
+
     void Enter() override
     {
         if(_enter_function)
             (*_enter_function)(this);
+
         Stage::Enter();
     }
 
@@ -20,6 +21,7 @@ class LuaStage : public Stage
     {   
         if(_update_function)
             (*_update_function)(this);
+
         Stage::Update(seconds_elapsed);
     }
 
@@ -59,9 +61,10 @@ class LuaStage : public Stage
             LuaRef stage_table = getGlobal(lua_state, stage_name.c_str());
             if ((stage_table).isTable())
             {
-                if((stage_table)["Root"])
+                if((stage_table)["root"])
                 {
-                    LoadInstancesFromRef((stage_table)["Instances"]);
+                    std::string root_instance_name = (stage_table)["root"].cast<std::string>(); 
+                    _root_instance = LuaInstanceFactory::Inst()->GetInstance(root_instance_name);   
                 }
                 if((stage_table)["Instances"])
                 {
@@ -82,10 +85,12 @@ class LuaStage : public Stage
                 {
                     _exit_function = std::make_unique<LuaRef>((stage_table)["Exit"]);
                 }
+
                 if ((stage_table)["OnEvent"])
                 {
                     _on_event_function = std::make_unique<LuaRef>((stage_table)["OnEvent"]);
                 }
+
                 if ((stage_table)["GetSubscription"])
                 {
                     _get_subscriptions_function = std::make_unique<LuaRef>((stage_table)["GetSubscriptions"]);

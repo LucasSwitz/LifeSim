@@ -2,7 +2,7 @@
 
 void LuaStageFactory::AddScript(Preamble &pre, std::string script_path)
 {
-    int prototype_id = std::stoi(pre.GetFlag("PrototypeID"));
+    int prototype_id = std::stoi(pre.GetFlag("ID"));
     std::string prototype_name = pre.GetFlag("Name");
 
     _stage_directory.insert(std::make_pair(prototype_id, script_path));

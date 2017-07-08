@@ -21,13 +21,13 @@ TEST_F(ScriptableEntityTest, HasComponentTest)
 
 TEST_F(ScriptableEntityTest, ComponentValueTest)
 {
-    EXPECT_EQ(0,entity->GetComponentValueFloat("Position","x_pos"));
-    EXPECT_EQ(0,entity->GetComponentValueFloat("Position","y_pos"));
+    EXPECT_EQ(90,entity->GetComponentValueFloat("Position","x"));
+    EXPECT_EQ(90,entity->GetComponentValueFloat("Position","y"));
 
-    EXPECT_EQ("still/sprite", entity->GetComponentValueString("Graphics","sprite"));
+    EXPECT_EQ("/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png", entity->GetComponentValueString("Graphics","sprite"));
 }
 
 TEST_F(ScriptableEntityTest, ManualIdSet)
 {
-    EXPECT_EQ(999, entity->ID());
+    EXPECT_EQ(0, entity->ID());
 }

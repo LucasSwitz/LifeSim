@@ -1,16 +1,17 @@
 --PREAMBLE_START
 ScriptType = "Instance"
 Name = "TestInstance"
+ID = 0
 --PREAMBLE_END
 
 TestInstance = 
 {
     tilemap = "",
-    Load = function(test_instance, seconds_elapsed)
+    Load = function(test_instance)
         -- called once when the instance is first opened
         DebugFlags.Instance():Set("TestInstanceLoad","yes")
     end,
-    Open = function(test_stage, seconds_elapsed)
+    Open = function(test_stage)
         -- called every time the instances comes into "scope"
         DebugFlags.Instance():Set("TestInstanceOpen","yes")
     end,
@@ -18,11 +19,11 @@ TestInstance =
         -- called every frame the instance is in "scope"
         DebugFlags.Instance():Set("TestInstanceUpdate","yes")
     end,
-    Close = function(test_stage, seconds_elapsed)
+    Close = function(test_stage)
         -- called every time the instance leaves "scope"
         DebugFlags.Instance():Set("TestInstanceClose","yes")
     end,
-    Unload = function(test_stage, seconds_elapsed)
+    Unload = function(test_stage)
         -- called when the intstance will never be opened again
         DebugFlags.Instance():Set("TestInstanceUnload","yes")
 

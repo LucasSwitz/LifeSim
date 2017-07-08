@@ -1,8 +1,9 @@
-#ifndef GAMERUNNERTEST_H
-#define GAMERUNNERTEST_H
+#ifndef STAGETEST_H
+#define STAGETEST_H
 
 #include "test/lua_tests/lua_core/LuaTest.h"
-
+#include "src/world/stage/Stage.h"
+#include "src/world/stage/LuaStageFactory.h"
 
 class StageTest : public LuaTest
 {
@@ -12,7 +13,8 @@ public:
 
     StageTest()
     {
-        stage = LuaStageFactory::Instance()->GetInstance("TestStage");   
+        LuaStageFactory::Instance()->PopulateFactory();
+        stage = LuaStageFactory::Instance()->GetStage("TestStage");   
     }
 
     void SetUp()

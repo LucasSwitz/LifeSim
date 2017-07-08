@@ -82,7 +82,7 @@ int SystemController::GetSequenceSize()
     return _systems_execution_sequence.size();
 }
 
-void SystemController::Update(double seconds_since_last_update)
+void SystemController::Update(float seconds_since_last_update)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {

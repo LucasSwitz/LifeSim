@@ -1,6 +1,6 @@
 #include "ScriptableSystem.h"
 
-void ScriptableSystem::Update(double seconds_elapsed)
+void ScriptableSystem::Update(float seconds_elapsed)
 {
     if (_update_function)
         (*_update_function)(*_system_table, seconds_elapsed);

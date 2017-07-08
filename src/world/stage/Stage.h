@@ -64,10 +64,14 @@ public:
                 inst->Unload();
         }
 
-        if(_root_instance->IsOpen())
-            _root_instance->Close();
+        if(_root_instance)
+        {
+            if(_root_instance->IsOpen())
+                _root_instance->Close();
 
-        _root_instance->Unload();
+            
+            _root_instance->Unload();
+        }
     }
 
     virtual void OnEvent(Event& e)
@@ -96,10 +100,11 @@ protected:
         _root_instance = instance;
     }
 
+protected:
+    Instance* _current_instance = nullptr;
+    Instance* _root_instance = nullptr;
 private:
     std::unordered_map<int, Instance*> _instances;
-    Instance* _current_instance;
-    Instance* _root_instance;
 };
 
 #endif

@@ -17,7 +17,7 @@ class LuaInstanceFactory : public ScriptFactory<std::string>
 
    static LuaInstanceFactory* Inst() //can't name this Instance
   {
-    static LuaInstanceFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/instances", "Instance");
+    static LuaInstanceFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/world/instances", "Instance");
 
     return &instance;
   }

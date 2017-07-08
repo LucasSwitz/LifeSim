@@ -29,7 +29,7 @@ TEST_F(RegenerationSystemTest, TestRegeneration)
 
     e->SetComponentValueFloat("Health", "hp", 0);
 
-    SystemController::Instance()->Update(3);
+    SystemController::Instance()->Update(4);
     
     ASSERT_EQ(10 ,e->GetComponentValueFloat("Health","hp"));
 

@@ -6,6 +6,7 @@ PrototypeID = 1000
 
 TestEntity = 
 {
+        id = 0,
         Components = 
         {
 

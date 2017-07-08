@@ -1,5 +1,5 @@
-#ifndef LUASTAGE_H
-#define LUASTAGE_H
+#ifndef LUAINSTANCE_H
+#define LUAINSTANCE_H
 
 #include "src/world/stage/Instance.h"
 #include "src/utils/lua/LuaUniversal.h"
@@ -83,12 +83,12 @@ public:
 
                 if ((_instance_table)["Unload"])
                 {
-                    _load_function = std::make_unique<LuaRef>((_instance_table)["Unload"]);
+                    _unload_function = std::make_unique<LuaRef>((_instance_table)["Unload"]);
                 }
 
                 if ((_instance_table)["Load"])
                 {
-                    _unload_function = std::make_unique<LuaRef>((_instance_table)["Load"]);
+                    _load_function = std::make_unique<LuaRef>((_instance_table)["Load"]);
                 }
 
                 if ((_instance_table)["Update"])

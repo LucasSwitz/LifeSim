@@ -39,7 +39,8 @@ void GameRunner::Update()
 
 int GameRunner::UpdateStage(float time)
 {
-    _current_stage->Update(time);
+    if(_current_stage)
+        _current_stage->Update(time);
 }
 
 void GameRunner::ChangeStage(Stage* stage)

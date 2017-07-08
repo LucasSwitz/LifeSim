@@ -21,7 +21,7 @@ public:
 
   int GetSequenceSize();
 
-  void Update(double seconds_since_last_update);
+  void Update(float seconds_since_last_update);
 
   void Reset()
   {

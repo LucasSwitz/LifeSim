@@ -1,21 +1,22 @@
 --PREAMBLE_START
 ScriptType = "Stage"
 Name = "TestStage"
+ID = 0
 --PREAMBLE_END
 
 TestStage = 
 {
     root = "TestInstance",
-    Start = function(test_stage, seconds_elapsed)
+    Enter = function(test_stage, seconds_elapsed)
         -- load stage-specific systems
-        DebugFlags.Instance():Set("TestStageStart","yes")
+        DebugFlags.Instance():Set("TestStageEnter","yes")
     end,
     Update = function(test_stage, seconds_elapsed)
         DebugFlags.Instance():Set("TestStageUpdate","yes")     
     end,
-    End = function(test_stage, seconds_elapsed)
+    Exit = function(test_stage, seconds_elapsed)
       -- remove systems      
-        DebugFlags.Instance():Set("TestStageEnd","yes")     
+        DebugFlags.Instance():Set("TestStageExit","yes")     
     end,
     OnEvent = function(test_stage, event)
     

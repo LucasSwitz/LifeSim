@@ -1,10 +1,9 @@
-#ifndef GAMERUNNERTEST_H
-#define GAMERUNNERTEST_H
+#ifndef TIMEMAPTEST_H
+#define TIMEMAPTEST_H
 
 #include "test/lua_tests/lua_core/LuaTest.h"
-#include 
-#include "test/game/GameRunnerTimed.h"
-
+#include "src/system/SystemController.h"
+#include "src/world/tile/TileMap.h"
 /**
     Depends on GraphicsSystem and SystemController
 **/
@@ -32,7 +31,7 @@ public:
 
 };
 
-TEST_F(TilemapTest, TestShowHideTileMap)
+TEST_F(TileMapTest, TestShowHideTileMap)
 {
     tile_map.Show();
     SystemController::Instance()->AddToExecutionSequence("GraphicsSystem");

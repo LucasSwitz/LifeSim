@@ -11,15 +11,14 @@
 #include "test/events/EventManagerTest.h"
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
 #include "test/game/game_systems/CollisionSystemTest.h"
-#include "test/game/GameRunnerTest.h"
 #include "test/game/game_components/ComponentUserBaseTest.h"
-#include "test/game/game_systems/GraphicsSystemTest.h"
-#include "test/game/game_components/ComponentUserBaseTest.h"
+//#include "test/game/GameRunnerTest.h"
+//#include "test/game/game_systems/GraphicsSystemTest.h"
 //#include "test/game/game_systems/MoveableGraphicsSystemTest.h"
-#include "test/game/game_systems/KeyboardInputSystemTest.h"
+//#include "test/game/game_systems/KeyboardInputSystemTest.h"
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
-#include "test/world/TileMapTest.h"
+// /#include "test/world/TileMapTest.h"
 
 int main(int argc, char **argv)
 {

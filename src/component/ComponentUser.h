@@ -15,7 +15,7 @@ class ComponentUserBase;
 class ComponentUser
 {
   public:
-    void AddComponent(Component *component, bool add_to_component_users = false);
+    void AddComponent(Component *component, bool add_to_component_users = true);
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name) const;
     void DisableComponent(std::string name);

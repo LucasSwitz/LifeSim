@@ -19,7 +19,7 @@ class LuaStageFactory : public ScriptFactory<std::string>
 
    static LuaStageFactory* Instance()
   {
-    static LuaStageFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/stages", "Stage");
+    static LuaStageFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/world/stages", "Stage");
 
     return &instance;
   }

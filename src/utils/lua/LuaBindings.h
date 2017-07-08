@@ -17,9 +17,10 @@
 #include "src/world/stage/Stage.h"
 #include "src/world/stage/Instance.h"
 #include "src/utils/debug/DebugFlags.h"
+#include "src/world/stage/LuaInstance.h"
+#include "src/world/stage/LuaStage.h"
 
 using namespace luabridge;
-
 class LuaBindings
     {
     public:
@@ -122,7 +123,11 @@ class LuaBindings
             .endClass()
             .beginClass<Instance>("Instance")
             .endClass()
+            .deriveClass<LuaInstance,Instance>("LuaInstance")
+            .endClass()
             .beginClass<Stage>("Stage")
+            .endClass()
+            .deriveClass<LuaStage, Stage>("LuaStage")
             .endClass()
             .beginClass<Tile>("Tile")
             .endClass()
