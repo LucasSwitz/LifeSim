@@ -8,6 +8,18 @@ void ComponentUser::RemoveComponent(std::string name)
     ComponentUserBase::Instance()->DeRegister(name, *this);
 }
 
+void ComponentUser::EnableComponent(std::string name)
+{
+    if(HasComponent(name))
+        ComponentUserBase::Instance()->Register(name,*this);
+}
+
+void ComponentUser::DisableComponent(std::string name)
+{
+    if(HasComponent(name))
+        ComponentUserBase::Instance()->DeRegister(name,*this);
+}
+
 bool ComponentUser::HasComponent(std::string name) const
 {
     return _components.find(name) != _components.end();

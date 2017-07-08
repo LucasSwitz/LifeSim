@@ -5,21 +5,22 @@ Name = "TestStage"
 
 TestStage = 
 {
+    root = "TestInstance",
     Start = function(test_stage, seconds_elapsed)
-        -- spawn characters
-        -- maybe cutscene
-        -- load nessesary systems
-
+        -- load stage-specific systems
+    
     end,
     Update = function(test_stage, seconds_elapsed)
-        -- timed events?
-
+     
     end,
     End = function(test_stage, seconds_elapsed)
-      -- Remove systems maybe?
+      -- remove systems
 
     end,
     OnEvent = function(test_stage, event)
+    
+    end,
+    GetSubscriptions = function(test_stage)
     
     end
 }

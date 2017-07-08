@@ -7,14 +7,15 @@
 
 class Instance : public EventSubscriber
 {
-
     virtual void Load()
     {
+        _tile_map.Load();
         //load all local entites, do a cutscene, whatevs
     }
 
     virtual void Unload()
     {
+        _tile_map.Unload();
         //delete all local entities
     }
 

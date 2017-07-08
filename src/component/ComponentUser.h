@@ -18,6 +18,8 @@ class ComponentUser
     void AddComponent(Component *component);
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name) const;
+    void DisableComponent(std::string name);
+    void EnableComponent(std::string name);
 
     Component* GetComponent(std::string name);
 

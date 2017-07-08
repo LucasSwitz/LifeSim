@@ -5,7 +5,7 @@
 
 class Stage : public EventListener
 {
-
+public:
     void ChangeCurrentInstance(Instance* instance)
     {
         _current_instance->Close();
@@ -17,22 +17,53 @@ class Stage : public EventListener
         _current_instance->Open();
     }
 
-    void Update(double seconds_elapsed)
+    virtual void Update(float seconds_elapsed)
     {
-        _current_instance->Update();
+        _current_instance->Update(seconds_elapsed);
     }
 
-    void Enter()
+    //load first instance;
+    virtual void Enter()
     {
-        //load first instance;
+        _root_instance->Load();
+        _root_instance->Open();
     }
 
-    void Exit()
+    virtual void AddInstance(int id, Instance * instance)
     {
-        //Unload all loaded instances
+        _instances.insert(std::make_pair{id,instance});
     }
 
-    void OnEvent(Event& e)
+    void SetRootInstance(Instance* instance)
+    {
+        _root_instance = instance;
+    }
+
+    bool HasInstance(int id)
+    {
+        return _instances.find(id) != instances.end();
+    }
+
+    //Unload all loaded instances
+    virtual void Exit()
+    {
+        for(auto it = _instances.begin(); it != _instances.end(); it++)
+        {
+            Instance* inst = it->seconds;
+
+            if(inst->IsOpen())
+                inst->Close();
+            if(inst->IsLoaded())
+                inst->Unload();
+        }
+
+        if(_root_instance->IsOpen())
+            _root_instance->Close();
+
+        _root_instance->Unload();
+    }
+
+    virtual void OnEvent(Event& e)
     {
         if(e->EventType::CHANGE_INSTANCE_EVENT)
         {
@@ -41,14 +72,15 @@ class Stage : public EventListener
         }
     }
 
-    std::list<Subscription> GetSubscriptions() //should really change this to pass lists by reference
+    virtual std::list<Subscription> GetSubscriptions() //should really change this to pass lists by reference
     {
 
     }
 
 private:
     std::unordered_map<int, Instance*> _instances;
-
+    Instance* _current_instance;
+    Instance* _root_instance;
 };
 
 #endif
