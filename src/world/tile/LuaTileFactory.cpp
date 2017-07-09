@@ -2,9 +2,8 @@
 
 void LuaTileFactory::AddScript(Preamble &pre, std::string script_path)
 {
-    int prototype_id = std::stoi(pre.GetFlag("PrototypeID"));
+    int prototype_id = std::stoi(pre.GetFlag("ID"));
     std::string prototype_name = pre.GetFlag("Name");
-
     _tile_directory.insert(std::make_pair(prototype_id, script_path));
     _tile_id_to_name_directory.insert(std::make_pair(prototype_id, prototype_name));
     _tile_name_to_id_directory.insert(std::make_pair(prototype_name, prototype_id));

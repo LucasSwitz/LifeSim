@@ -23,7 +23,7 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& us
     for(auto it = list.begin(); it != list.end(); it++)
     {
         if (*it == &user)
-            list.erase(it);
+            it = list.erase(it);
     }
 }
 

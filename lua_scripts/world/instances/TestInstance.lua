@@ -6,7 +6,6 @@ ID = 0
 
 TestInstance = 
 {
-    tilemap = "",
     Load = function(test_instance)
         -- called once when the instance is first opened
         DebugFlags.Instance():Set("TestInstanceLoad","yes")

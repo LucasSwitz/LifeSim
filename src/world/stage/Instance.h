@@ -17,8 +17,15 @@ class Instance : public EventSubscriber
     virtual void Load()
     {
         //load all local entites, do a cutscene, whatevs
-        _tile_map.LoadFromFile(_tile_map_name);
-        _loaded = true;
+        if(!_tile_map_name.empty())
+        {
+            _tile_map.LoadFromFile(_tile_map_name);
+            _loaded = true;
+        }
+        else
+        {
+            std::cout << "TileMap not loaded!" << std::endl;
+        }
     }
 
     virtual void Unload()
@@ -89,7 +96,7 @@ class Instance : public EventSubscriber
 
     protected:
         std::string name;
-        std::string _tile_map_name;
+        std::string _tile_map_name = "";
         int _id;
     private:
         TileMap _tile_map;

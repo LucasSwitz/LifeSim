@@ -3,8 +3,8 @@
 
 #include "src/component/ComponentUser.h"
 
-#define TILE_WIDTH 100
-#define TILE_HEIGHT 100
+#define TILE_WIDTH 256
+#define TILE_HEIGHT 256
 class Tile : public ComponentUser
 {
     public:
