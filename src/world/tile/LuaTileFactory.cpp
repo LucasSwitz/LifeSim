@@ -49,3 +49,13 @@ void LuaTileFactory::Reset()
     _tile_name_to_id_directory.clear();
     _tile_id_to_name_directory.clear();
 }
+
+const std::unordered_map<int,std::string>& LuaTileFactory::GetAllTileIndentifiers()
+{
+    return _tile_id_to_name_directory;
+}
+
+const std::unordered_map<int,std::string>& LuaTileFactory::GetAllTiles()
+{
+    return _tile_directory;
+}

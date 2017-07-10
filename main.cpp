@@ -20,57 +20,45 @@
 #include "test/world/StageTest.h"
 #include "test/world/TileMapTest.h"
 
+
+#include "test/game/GameRunnerTimed.h"
+
+int RunGUI();
+int RunTests(int argc, char** argv);
+
 int main(int argc, char **argv)
 {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  if(argc > 1)
+  {
+    if(*argv[1] == 't')
+    {
+        return RunTests(argc,argv);
+    }
+    else if(*argv[1] == 'g')
+    {
+        return RunGUI();
+    }
+    else
+    {
+
+    }
+  }
+  else
+  {
+      return RunGUI();
+  }
 }
 
-/*#include "imgui.h"
-#include "imgui-SFML.h"
-#include <stdarg.h>
-
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-
-int main()
+int RunGUI()
 {
-    sf::RenderWindow window(sf::VideoMode(640, 480), "ImGui + SFML = <3");
-    window.setFramerateLimit(60);
-    ImGui::SFML::Init(window);
-    ExampleAppLog log;
+    GameRunnerTimed runner;
+    runner.Init();
+    runner.RunTillClose();
+    return 0;
+}
 
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
-    sf::Clock deltaClock;
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            ImGui::SFML::ProcessEvent(event);
-
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
-
-        ImGui::SFML::Update(window, deltaClock.restart());
-
-        ImGui::Begin("Hello, world!");
-        ImGui::Button("Look at this pretty button");
-        ImGui::End();
-
-        log.AddLog("Hello World! %d \n",1);
-        log.Draw("Log");
-
-
-        window.clear();
-        window.draw(shape);
-        ImGui::SFML::Render(window);
-        window.display();
-    }
-
-    ImGui::SFML::Shutdown();
-}*/
+int RunTests(int argc, char** argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

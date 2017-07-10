@@ -10,7 +10,7 @@ GameWindow::GameWindow() : _main_window(sf::VideoMode(600, 600), std::to_string(
 
 void GameWindow::Init()
 {
-     DevelopmentOverlay::Instance()->Init(_main_window);
+     DevelopmentOverlay::Instance()->Init(_main_window, _texture_cache);
 }
 
 void GameWindow::Draw(sf::Drawable* drawable)
@@ -30,7 +30,7 @@ void GameWindow::DrawFromComponents(const ComponentUser* user)
     std::string sprite_path = user->GetComponentValueString("Graphics","sprite");
 
     sf::Texture * texture = nullptr;
-    if(texture = GetTexture(sprite_path))
+    if(texture = _texture_cache.GetTexture(sprite_path))
     {
         sf::Sprite* sprite = new sf::Sprite();
         sprite->setTexture(*texture);
@@ -130,41 +130,5 @@ void GameWindow::HandleEvent(sf::Event& e)
             EventManager::Instance()->LaunchEvent(new_event);
         }
 
-    }
-}
-
-sf::Texture* GameWindow::GetTexture(std::string name)
-{
-    if(TextureCached(name) || LoadTexture(name))
-    {
-        return _texture_cache.at(name);
-    }
-    else
-    {
-        LOG->LogFile("Failed to Get texture: " + name);
-        return nullptr;
-    }
-}
-
-bool GameWindow::TextureCached(std::string name)
-{
-    return _texture_cache.find(name) != _texture_cache.end();
-}
-
-bool GameWindow::LoadTexture(std::string file_path)
-{
-    sf::Texture* texture = new sf::Texture();
-    if(texture->loadFromFile(file_path))
-    {
-        _texture_cache.insert(std::make_pair(file_path,texture));
-        LOG->LogOverlay("Succesfully Loaded Texture: " + file_path);
-        LOG->LogFile("Succesfully Loaded Texture: " + file_path);
-        return true;
-    }
-    else
-    {
-        LOG->LogFile("Failed to load texture: " + file_path);
-        delete texture;
-        return false;
     }
 }

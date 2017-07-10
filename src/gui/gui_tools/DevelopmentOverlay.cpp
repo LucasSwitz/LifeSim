@@ -5,10 +5,12 @@ DevelopmentOverlay::DevelopmentOverlay()
 
 }
 
-void DevelopmentOverlay::Init(sf::RenderWindow& window)
+void DevelopmentOverlay::Init(sf::RenderWindow& window, TextureCache& texture_cache)
 {
     ImGui::SFML::Init(window);
     _log.Clear();
+    _tile_map_editor.SetTileList(LuaTileFactory::Instance()->GetAllTileIndentifiers());
+    _texture_cache = &texture_cache;
 }
 
 Log& DevelopmentOverlay::GetLog()
@@ -27,6 +29,7 @@ void DevelopmentOverlay::Draw(sf::RenderWindow& window, sf::Time& deltaTime)
 
     _log.Draw("Log");
     _entity_table.Draw("Entities");
+    _tile_map_editor.Draw("Tile Map Editor", *_texture_cache);
     ImGui::End();
 
 // #### RENDER GUI HERE

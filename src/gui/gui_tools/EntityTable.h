@@ -1,3 +1,6 @@
+#ifndef ENTITYTABLE_H
+#define ENTITYTABLE_H
+
 #include "imgui.h"
 #include "src/game_objects/EntityManager.h"
 #include "src/game_objects/Entity.h"
@@ -19,3 +22,5 @@ struct EntityTable
         ImGui::End();
     }
 };
+
+#endif

@@ -1,12 +1,13 @@
-#ifndef LOGGING
-#define LOGGING
+#ifndef LOGGING_H
+#define LOGGING_H
 
 #define LOG Logging::Instance()
 
 #include <string>
-#include "src/gui/gui_tools/DevelopmentOverlay.h"
 #include <iostream>
 #include <stdarg.h>
+
+#include "src/gui/gui_tools/DevelopmentOverlay.h"
 
 class Logging{
     public:

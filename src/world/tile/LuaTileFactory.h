@@ -13,6 +13,8 @@ class LuaTileFactory : public ScriptFactory<std::string>
   bool TilePrototypeExists(int id);
   Tile* GetTile(std::string name);
   Tile* GetTile(int id);
+  const std::unordered_map<int,std::string>& GetAllTiles();
+  const std::unordered_map<int,std::string>& GetAllTileIndentifiers();
   void AddScript(Preamble &pre, std::string script_path) override;
 
   void Reset() override;

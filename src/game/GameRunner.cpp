@@ -6,10 +6,22 @@ GameRunner::GameRunner()
     _game_window = GameWindow::NewInstance();
 }
 
-void GameRunner::Start()
+void GameRunner::Init()
 {
+
+    LuaUniversal::Instance()->Init();
+
     SystemController::Instance()->Reset();
+    //SystemFactory::Instance()->PopulateFactory();
+    LuaTileFactory::Instance()->PopulateFactory();
+
     _game_window->Init();
+    _initialized = true;
+}
+
+bool GameRunner::Initialized()
+{
+    return _initialized;
 }
 
 void GameRunner::Shutdown()

@@ -28,6 +28,12 @@ class GameRunnerTimed : public GameRunner
         {
             EventManager::Instance()->RegisterSubscriber(this);
 
+            if(!Initialized())
+            {
+                std::cout << "GameRunner Not Initialized!" << std::endl;
+                return;
+            }
+
             while(!_window_closed)
             {
                 this->Update();

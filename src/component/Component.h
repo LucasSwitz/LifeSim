@@ -26,12 +26,12 @@ class Component
             value = new_value;
         }
 
-        T GetValue() const
+        T GetValue() 
         {
             return value;
         }
 
-        std::string GetName() const
+        std::string GetName() 
         {
             return name;
         }
@@ -50,7 +50,7 @@ class Component
         _float_components.at(name).SetValue(value);
     }
 
-    float GetFloatValue(std::string name) const
+    float GetFloatValue(std::string name) 
     {
         if(!HasFloatValue(name))
         {
@@ -65,7 +65,7 @@ class Component
         return _float_components.find(name) != _float_components.end();
     }
 
-    std::string GetStringValue(std::string name) const
+    std::string GetStringValue(std::string name)
     {
         if(!HasStringValue(name))
         {
@@ -80,7 +80,7 @@ class Component
         return _string_components.find(name) != _string_components.end();
     }
 
-    void* GetFunctionValue(std::string name) const
+    void* GetFunctionValue(std::string name)
     {
         return _functional_components.at(name).GetValue();
     }

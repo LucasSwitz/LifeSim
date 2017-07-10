@@ -1,3 +1,6 @@
+#ifndef IMGUILOG_H
+#define IMGUILOG_H
+
 #include "imgui.h"
 #include <stdarg.h>
 #include <iostream>
@@ -85,3 +88,5 @@ struct Log
         ImGui::End();
     }
 };
+
+#endif

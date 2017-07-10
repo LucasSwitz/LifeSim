@@ -1,7 +1,6 @@
 #ifndef DEVELOPMENTOVERLAY_H
 #define DEVELOPMENTOVERLAY_H
 
-
 #include "imgui.h"
 #include "imgui-SFML.h"
 
@@ -11,12 +10,15 @@
 
 #include "src/gui/gui_tools/Log.h"
 #include "src/gui/gui_tools/EntityTable.h"
+#include "src/gui/gui_tools/TileMapEditor.h"
+#include "src/world/tile/LuaTileFactory.h"
+#include "src/gui/TextureCache.h"
 
 class DevelopmentOverlay
 {
     public:
         void Draw(sf::RenderWindow& render_window,  sf::Time &deltaTime);
-        void Init(sf::RenderWindow& render_window);
+        void Init(sf::RenderWindow& render_window, TextureCache& texture_cache);
         void Shutdown();
         Log& GetLog();
 
@@ -29,6 +31,8 @@ class DevelopmentOverlay
         DevelopmentOverlay();
         Log _log;
         EntityTable _entity_table;
+        TileMapEditor _tile_map_editor;
+        TextureCache* _texture_cache;
 
 };
 #endif
