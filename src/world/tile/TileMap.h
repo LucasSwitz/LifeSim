@@ -123,6 +123,17 @@ class TileMap
         //then delete all tiles    
     }
 
+    Tile* TileAt(int x, int y)
+    {
+        if(_tiles.empty())
+            return nullptr;
+        
+        int row = y / TILE_HEIGHT;
+        int column = x / TILE_WIDTH;
+
+        return _tiles[row][column];
+    }
+
     void Erase()
     {
 

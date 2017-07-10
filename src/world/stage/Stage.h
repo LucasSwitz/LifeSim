@@ -74,6 +74,11 @@ public:
         }
     }
 
+    Instance* GetCurrentInstance()
+    {
+        return _current_instance;
+    }
+
     virtual void OnEvent(Event& e)
     {
         if(e.id == EventType::CHANGE_INSTANCE_EVENT)

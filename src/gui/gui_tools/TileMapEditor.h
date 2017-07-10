@@ -16,6 +16,7 @@ struct TileMapEditor
     std::vector<std::string> tile_scripts;
     int selected_tile = -1;
     Tile* selected_tile_prototype;
+    std::vector<sf::Shape> _borders;
 
     template<typename IterableContainer>
     void SetTileList(const IterableContainer& scripts)
@@ -38,7 +39,7 @@ struct TileMapEditor
         }
     }
 
-    void Draw(const char *title, TextureCache& texture_cache, bool *p_opened = NULL)
+    void Draw(const char *title, TextureCache& texture_cache, sf::RenderWindow& render_window, bool *p_opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, p_opened);
@@ -52,11 +53,31 @@ struct TileMapEditor
             ImGui::LabelText("Path: ",texture_path.c_str());
 
             ImGui::Image(*texture_cache.GetTexture(texture_path));
-            //load image from texture cache
             //find some way to edit other components
         }
-
         ImGui::End();
+    }
+
+    void OnClickEvent(int x, int y)
+    {
+        if(selected_tile != -1)
+        {
+            Tile* tile = GameRunner::Instance()->GetCurrentStage()->GetCurrentInstance()->GetTileMap()->TileAt(x,y);
+            std::string selected_texture = selected_tile_prototype->GetComponentValueString("Graphics","sprite");
+            tile.SetComponentValueString("Graphics","sprite",selected_texture.c_str());
+        }
+    }
+
+    void DrawBorders(sf::RenderWindow& render_window)
+    {
+        for(sf::Shape& border : borders)
+        {
+            render_window.Draw(border);
+        }
+    }
+    void SaveTileMap(TileMap* map, std::string map_path)
+    {
+        
     }
 };
 

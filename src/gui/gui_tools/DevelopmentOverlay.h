@@ -33,6 +33,5 @@ class DevelopmentOverlay
         EntityTable _entity_table;
         TileMapEditor _tile_map_editor;
         TextureCache* _texture_cache;
-
 };
 #endif

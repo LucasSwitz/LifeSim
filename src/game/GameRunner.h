@@ -25,6 +25,7 @@ class GameRunner : public EventSubscriber
     void ChangeStage(Stage* stage);
     int UpdateStage(float seconds);
     bool Initialized();
+    Stage* GetCurrentStage();
     std::list<Subscription> GetSubscriptions();
 
   private:

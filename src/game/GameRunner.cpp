@@ -91,6 +91,11 @@ void GameRunner::OnEvent(Event& e)
     }
 }
 
+Stage* GetCurrentStage()
+{
+    return _current_stage;
+}
+
 std::list<Subscription> GameRunner::GetSubscriptions()
 {
     std::list<Subscription> subs = {Subscription(EventType::EXIT_STAGE_EVENT)};
