@@ -2,20 +2,16 @@
 
 GameRunner::GameRunner()
 {
-    _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
-    _game_window = GameWindow::NewInstance();
+    
 }
 
 void GameRunner::Init()
 {
-
     LuaUniversal::Instance()->Init();
-
     SystemController::Instance()->Reset();
-    //SystemFactory::Instance()->PopulateFactory();
+    SystemFactory::Instance()->PopulateFactory();
     LuaTileFactory::Instance()->PopulateFactory();
 
-    _game_window->Init();
     _initialized = true;
 }
 
@@ -26,27 +22,13 @@ bool GameRunner::Initialized()
 
 void GameRunner::Shutdown()
 {
-    _game_window->Shutdown();
+    
 }
 
-void GameRunner::Update()
+void GameRunner::Update(float seconds_elapsed)
 {
-    if(_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
-        _last_time = std::chrono::high_resolution_clock::now();
-        
-    auto current_time = std::chrono::high_resolution_clock::now();
-
-    std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time); 
-
-    double seconds_elapsed_since_last_update = std::abs(diff.count());
-
-    if(seconds_elapsed_since_last_update  > (1.0 /  (FRAMES_PER_SEC)))
-    {
-        UpdateSystems(seconds_elapsed_since_last_update); //<---- move these to a higher-level class
-        UpdateStage(seconds_elapsed_since_last_update);
-        UpdateGui(seconds_elapsed_since_last_update);    // <-----
-        _last_time = current_time;
-    }
+    UpdateSystems(seconds_elapsed); //<---- move these to a higher-level class
+    UpdateStage(seconds_elapsed);
 }
 
 int GameRunner::UpdateStage(float time)
@@ -76,12 +58,6 @@ int GameRunner::UpdateSystems(float time)
     return 0;
 }
 
-int GameRunner::UpdateGui(float time)
-{
-    _game_window->Update(time);
-    return 0;
-}
-
 void GameRunner::OnEvent(Event& e)
 {
     if(e.id == EventType::EXIT_STAGE_EVENT)
@@ -91,7 +67,7 @@ void GameRunner::OnEvent(Event& e)
     }
 }
 
-Stage* GetCurrentStage()
+Stage* GameRunner::GetCurrentStage()
 {
     return _current_stage;
 }

@@ -5,12 +5,12 @@ DevelopmentOverlay::DevelopmentOverlay()
 
 }
 
-void DevelopmentOverlay::Init(sf::RenderWindow& window, TextureCache& texture_cache)
+void DevelopmentOverlay::Init(sf::RenderWindow& window)
 {
     ImGui::SFML::Init(window);
+    
     _log.Clear();
     _tile_map_editor.SetTileList(LuaTileFactory::Instance()->GetAllTileIndentifiers());
-    _texture_cache = &texture_cache;
 }
 
 Log& DevelopmentOverlay::GetLog()
@@ -18,9 +18,9 @@ Log& DevelopmentOverlay::GetLog()
     return _log;
 }
 
-void DevelopmentOverlay::Draw(sf::RenderWindow& window, sf::Time& deltaTime)
+void DevelopmentOverlay::Render(sf::RenderWindow& window, TextureCache& _texture_cache, float seconds_elapsed)
 {
-    sf::Event event;
+    sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window, deltaTime);
 
 // #### DESIGN GUI HERE
@@ -29,11 +29,16 @@ void DevelopmentOverlay::Draw(sf::RenderWindow& window, sf::Time& deltaTime)
 
     _log.Draw("Log");
     _entity_table.Draw("Entities");
-    _tile_map_editor.Draw("Tile Map Editor", *_texture_cache);
+    _tile_map_editor.Draw("Tile Map Editor", _texture_cache);
     ImGui::End();
 
 // #### RENDER GUI HERE
     ImGui::SFML::Render(window);
+}
+
+void DevelopmentOverlay::SetTileMapEditorListener(TileMapEditorListener* listener)
+{
+    _tile_map_editor.SetListener(listener);
 }
 
 void DevelopmentOverlay::Shutdown()

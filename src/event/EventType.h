@@ -25,5 +25,7 @@ class EventType
     static int CLOSE_GAME_WINDOW_EVENT;
     static int CHANGE_INSTANCE_EVENT;
     static int EXIT_STAGE_EVENT;
+    static int DRAW_REQUEST_EVENT;
+
 };
 #endif

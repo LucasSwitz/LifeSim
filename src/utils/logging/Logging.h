@@ -7,8 +7,6 @@
 #include <iostream>
 #include <stdarg.h>
 
-#include "src/gui/gui_tools/DevelopmentOverlay.h"
-
 class Logging{
     public:
         static const int FILE = 0;
@@ -50,12 +48,12 @@ class Logging{
 
     void LogOverlay(const char* msg, va_list& args)
     {
-        DevelopmentOverlay::Instance()->GetLog().AddLog(msg, args);
+
     }
 
     void LogOverlay(const std::string& msg)
     {
-        DevelopmentOverlay::Instance()->GetLog().AddLog(msg.c_str(), nullptr);
+        
     }
 
 };

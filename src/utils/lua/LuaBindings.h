@@ -11,7 +11,6 @@
 #include "src/game_objects/LuaEntity.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
-#include "src/gui/GameWindow.h"
 #include "src/controllers/Keyboard.h"
 #include "src/world/tile/Tile.h"
 #include "src/world/stage/Stage.h"
@@ -19,6 +18,7 @@
 #include "src/utils/debug/DebugFlags.h"
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
+#include "src/game/gui/PMIDGWindow.h"
 
 using namespace luabridge;
 class LuaBindings
@@ -94,9 +94,10 @@ class LuaBindings
                 .addStaticData("W_UP_EVENT", &EventType::W_UP_EVENT, false)
                 .addStaticData("S_DOWN_EVENT", &EventType::S_DOWN_EVENT, false)
                 .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
+                .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
-                .addConstructor<void (*) (int,int,int, void*)>()
+                .addConstructor<void (*) (int,int,int, ComponentUser*)>()
                 .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)
@@ -112,10 +113,6 @@ class LuaBindings
                 .addFunction("GetAllEntities",&ComponentUserBase::GetAllEntitesWithComponentAsLuaList)
             .endClass()
             .beginClass<LuaRef>("LuaRef")
-            .endClass()
-            .beginClass<GameWindow>("GameWindow")
-                .addStaticFunction("Instance", &GameWindow::Instance)
-                .addFunction("Draw",&GameWindow::DrawFromComponents)
             .endClass()
             .beginClass<KeyboardController>("Keyboard")
                 .addStaticFunction("Instance", &KeyboardController::Instance)

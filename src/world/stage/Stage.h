@@ -5,13 +5,25 @@
 #include "src/world/stage/Instance.h"
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
-
+#include "src/game/FPSRunnable.h"
 
 //requires a loading screen to tranistion
 
-class Stage : public EventSubscriber
+class Stage : public EventSubscriber, public FPSRunnable
 {
 public:
+
+
+    void Load() override
+    {
+
+    }
+
+    void Unload() override
+    {
+
+    }
+
     void ChangeInstance(Instance* instance)
     {
         if(_current_instance)
@@ -25,7 +37,7 @@ public:
         _current_instance->Open();
     }
 
-    virtual void Update(float seconds_elapsed)
+    virtual void Update(float seconds_elapsed) override
     {
         _current_instance->Update(seconds_elapsed);
     }

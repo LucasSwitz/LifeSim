@@ -5,6 +5,9 @@
 #include <fstream>
 #include "src/world/tile/Tile.h"
 #include "src/world/tile/LuaTileFactory.h"
+
+#define BLANK_TILE_SCRIPT "BlankTile"
+
 /* Manges all tiles currently in memory*/
 class TileMap
 {
@@ -132,6 +135,20 @@ class TileMap
         int column = x / TILE_WIDTH;
 
         return _tiles[row][column];
+    }
+
+    void Blank(int width, int height)
+    {
+        for(int i =0; i < width; i++)
+        {
+            std::vector<Tile*> row;
+            for(int k =0; k < height; k++)
+            {
+                Tile* tile = LuaTileFactory::Instance()->GetTile(BLANK_TILE_SCRIPT);
+                row.push_back(tile);
+            }
+            _tiles.push_back(row);
+        }
     }
 
     void Erase()

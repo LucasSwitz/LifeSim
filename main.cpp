@@ -1,13 +1,14 @@
 #include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
+
 //#include "test/lua_tests/actors/ActionScriptTest.h"
 //#include "test/lua_tests/actors/ScriptableStateMachineTest.h"
 //#include "test/lua_tests/actors/ScriptableStateMachineTest.h"
 //#include "test/lua_tests/systems/ScriptableSystemTest.h"
 //#include "test/lua_tests/systems/ScriptableSystemTest.h"
 
-#include "test/game/game_systems/RegenerationSystemTest.h"
+/*#include "test/game/game_systems/RegenerationSystemTest.h"
 #include "test/events/EventManagerTest.h"
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
 #include "test/game/game_systems/CollisionSystemTest.h"
@@ -18,10 +19,11 @@
 //#include "test/game/game_systems/KeyboardInputSystemTest.h"
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
-#include "test/world/TileMapTest.h"
+#include "test/world/TileMapTest.h"*/
 
 
-#include "test/game/GameRunnerTimed.h"
+#include "src/game/PMIDGRunner.h"
+#include "src/game/mode/ProgramModeEditor.h"
 
 int RunGUI();
 int RunTests(int argc, char** argv);
@@ -51,9 +53,10 @@ int main(int argc, char **argv)
 
 int RunGUI()
 {
-    GameRunnerTimed runner;
+    PMIDGRunner runner;
     runner.Init();
-    runner.RunTillClose();
+    runner.SetMode(new ProgramModeEditor());
+    runner.Run();
     return 0;
 }
 
