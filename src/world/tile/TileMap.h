@@ -127,12 +127,12 @@ class TileMap
     }
 
     Tile* TileAt(int x, int y)
-    {
-        if(_tiles.empty())
-            return nullptr;
-        
+    { 
         int row = y / TILE_HEIGHT;
         int column = x / TILE_WIDTH;
+        
+        if(_tiles.empty() || row >= _tiles.size() || column >= _tiles[0].size())
+            return nullptr;
 
         return _tiles[row][column];
     }
@@ -145,6 +145,8 @@ class TileMap
             for(int k =0; k < height; k++)
             {
                 Tile* tile = LuaTileFactory::Instance()->GetTile(BLANK_TILE_SCRIPT);
+                tile->SetComponentValueFloat("Position","x",k*TILE_WIDTH);
+                tile->SetComponentValueFloat("Position","y",i*TILE_HEIGHT);
                 row.push_back(tile);
             }
             _tiles.push_back(row);

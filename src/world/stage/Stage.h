@@ -95,7 +95,7 @@ public:
     {
         if(e.id == EventType::CHANGE_INSTANCE_EVENT)
         {
-            int instance_id = e.DereferenceInfoToType<int>();
+            int instance_id = *(e.InfoToType<int*>());
             ChangeInstance(_instances.at(instance_id));
         }
     }

@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <unordered_map>
+#include <list>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -11,6 +12,7 @@
 #include "src/event/EventManager.h"
 #include "src/event/EventType.h"
 #include "src/game/gui/TextureCache.h"
+#include "src/game/gui/SFMLWindowListener.h"
 #include "src/component/ComponentUser.h"
 
 #include "src/utils/logging/Logging.h"
@@ -18,10 +20,11 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 
+
 class PMIDGWindow : public EventSubscriber
 {
   public:
-    PMIDGWindow() : _window(sf::VideoMode(600, 600), "HELLO!")
+    PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "HELLO!")
     {
         EventManager::Instance()->RegisterSubscriber(this);
     }
@@ -76,11 +79,13 @@ class PMIDGWindow : public EventSubscriber
         }
 
         std::string sprite_path = user->GetComponentValueString("Graphics", "sprite");
-
         sf::Texture *texture = nullptr;
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
             sf::Sprite *sprite = new sf::Sprite();
+            double scale_x = (float)TILE_WIDTH / texture->getSize().x;
+            double scale_y = (float)TILE_HEIGHT / texture->getSize().y;
+            sprite->setScale(scale_x,scale_y);
             sprite->setTexture(*texture);
             sprite->setPosition(user->GetComponentValueFloat("Position", "x"), user->GetComponentValueFloat("Position", "y"));
             Draw(sprite);
@@ -105,8 +110,7 @@ class PMIDGWindow : public EventSubscriber
     {
         if(e.id == EventType::DRAW_REQUEST_EVENT)
         {
-            std::cout << "Draw Request!" << std::endl;
-            ComponentUser* user = e.DereferenceInfoToType<ComponentUser*>();
+            ComponentUser* user = e.InfoToType<ComponentUser*>();
             DrawComponentUser(user);
         }
     }
@@ -165,12 +169,25 @@ class PMIDGWindow : public EventSubscriber
                 EventManager::Instance()->LaunchEvent(new_event);
             }
         }
+        else{
+            for(SFMLWindowListener* listener : _window_listeners)
+            {
+                if(listener->OnWindowEvent(e))
+                    break;
+            }
+        }
+    }
+    
+    void AddWindowListener(SFMLWindowListener* listener)
+    {
+        _window_listeners.push_back(listener);
     }
 
   private:
     sf::RenderWindow _window;
     TextureCache _texture_cache;
     std::queue<sf::Drawable*> _drawables_queue;
+    std::list<SFMLWindowListener*> _window_listeners;
 
 };
 

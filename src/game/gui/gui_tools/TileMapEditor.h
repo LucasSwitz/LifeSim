@@ -11,6 +11,7 @@
 #include "src/world/tile/Tile.h"
 #include "src/game/gui/TextureCache.h"
 #include "src/world/tile/TileMap.h"
+#include "src/game/gui/SFMLWindowListener.h"
 
 class TileMapEditorListener
 {
@@ -19,14 +20,10 @@ class TileMapEditorListener
     virtual void OnCreateBlankStage() = 0;
 };
 
-struct TileMapEditor
+class TileMapEditor : public SFMLWindowListener
 {
-    std::vector<std::string> tile_scripts;
-    int selected_tile = -1;
-    Tile *selected_tile_prototype;
-    std::vector<sf::Shape> _borders;
-    TileMapEditorListener *_listener = nullptr;
 
+  public:
     template <typename IterableContainer>
     void SetTileList(const IterableContainer &scripts)
     {
@@ -52,6 +49,7 @@ struct TileMapEditor
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, p_opened);
+
         ImGui::ListBoxVector("Tiles", &selected_tile, tile_scripts);
 
         if (selected_tile != -1)
@@ -80,6 +78,25 @@ struct TileMapEditor
     {
         _listener = listener;
     }
+
+    std::string GetSelectedTexturePath()
+    {
+        if(selected_tile_prototype)
+            return selected_tile_prototype->GetComponentValueString("Graphics","sprite");
+        else
+            return "";
+    }
+
+    bool OnWindowEvent(sf::Event &e) override
+    {
+        return false;
+    }
+
+  private:
+    std::vector<std::string> tile_scripts;
+    int selected_tile = -1;
+    Tile* selected_tile_prototype;
+    TileMapEditorListener *_listener = nullptr;
 };
 
 #endif

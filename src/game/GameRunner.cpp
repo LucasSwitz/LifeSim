@@ -62,7 +62,7 @@ void GameRunner::OnEvent(Event& e)
 {
     if(e.id == EventType::EXIT_STAGE_EVENT)
     {
-        int stage_id = e.DereferenceInfoToType<int>();
+        int stage_id = *(e.InfoToType<int*>());
         ChangeStage(LuaStageFactory::Instance()->GetStage(stage_id));
     }
 }
