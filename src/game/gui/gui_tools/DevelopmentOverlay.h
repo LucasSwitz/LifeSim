@@ -24,5 +24,8 @@ class DevelopmentOverlay
         Log log;
         EntityTable entity_table;
         TileMapEditor tile_map_editor;
+
+    private:
+        void DrawMenuBar();
 };
 #endif

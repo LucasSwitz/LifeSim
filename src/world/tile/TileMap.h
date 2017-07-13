@@ -3,6 +3,7 @@
 
 #include <streambuf>
 #include <fstream>
+#include <algorithm>
 #include "src/world/tile/Tile.h"
 #include "src/world/tile/LuaTileFactory.h"
 
@@ -128,13 +129,45 @@ class TileMap
 
     Tile* TileAt(int x, int y)
     { 
-        int row = y / TILE_HEIGHT;
-        int column = x / TILE_WIDTH;
+        int row = CoordToRow(x);
+        int column = CoordToColumn(y);
         
         if(_tiles.empty() || row >= _tiles.size() || column >= _tiles[0].size())
             return nullptr;
 
         return _tiles[row][column];
+    }
+
+    void TilesInRange(int first_x, int first_y, int last_x, int last_y, std::list<Tile*>& tiles)
+    {
+        int first_row = CoordToRow(first_y);
+        int last_row = CoordToRow(last_y);
+        int first_column = CoordToColumn(first_x);
+        int last_column = CoordToColumn(last_x);
+
+        if(first_row > last_row)
+            std::swap(first_row, last_row);
+        
+        if(first_column > last_column)
+            std::swap(first_column, last_column);
+
+        for(int i = first_row; i <= last_row; i++)
+        {
+            for(int k = first_column; k <= last_column; k++)
+            {
+                tiles.push_back(_tiles[i][k]);
+            }
+        }
+    }
+
+    static int CoordToColumn(int x)
+    {
+        return x / TILE_WIDTH;
+    }
+
+    static int CoordToRow(int y)
+    {
+        return y / TILE_HEIGHT;
     }
 
     void Blank(int width, int height)

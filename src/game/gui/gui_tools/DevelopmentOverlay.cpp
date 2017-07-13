@@ -23,18 +23,53 @@ void DevelopmentOverlay::Render(PMIDGWindow&  window, TextureCache& texture_cach
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window.SFWindow(), deltaTime);
-
+    bool opened;
 // #### DESIGN GUI HERE
-    ImGui::Begin("Hello, world!");
-    ImGui::Button("Look at this pretty button");
-
+    DrawMenuBar();
     log.Draw("Log");
     entity_table.Draw("Entities");
-    tile_map_editor.Draw("Tile Map Editor", texture_cache);
-    ImGui::End();
+    //ImVec2 size(500,600);
+    tile_map_editor.Draw(texture_cache);
 
 // #### RENDER GUI HERE
     ImGui::SFML::Render(window.SFWindow());
+}
+
+void DevelopmentOverlay::DrawMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Instance"))
+        {
+            if (ImGui::MenuItem("New Instance", "CTRL+I")) {}
+            if (ImGui::MenuItem("Load Instance", "CTRL+SHIFT+I")) {}  // Disabled item
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Stage"))
+        {
+            if (ImGui::MenuItem("New Stage", "CTRL+S")) {}
+            if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S")) {}  // Disabled item
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("World"))
+        {
+            if (ImGui::MenuItem("New World", "CTRL+W")) {}
+            if (ImGui::MenuItem("Load World", "CTRL+SHIFT+W")) {}  // Disabled item
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Entity"))
+        {
+            if (ImGui::MenuItem("New Entity", "CTRL+E")) {}
+            if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E")) {}  // Disabled item
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
 }
 
 void DevelopmentOverlay::SetTileMapEditorListener(TileMapEditorListener* listener)

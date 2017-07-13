@@ -45,30 +45,36 @@ class TileMapEditor : public SFMLWindowListener
         }
     }
 
-    void Draw(const char *title, TextureCache &texture_cache, bool *p_opened = NULL)
+    void Draw(TextureCache &texture_cache, bool *p_opened = NULL)
     {
-        ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
-        ImGui::Begin(title, p_opened);
+        ImGui::Begin("Instance Editor");
 
-        ImGui::ListBoxVector("Tiles", &selected_tile, tile_scripts);
-
-        if (selected_tile != -1)
+        if (ImGui::TreeNode("Tile Map"))
         {
-            selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
-            std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
+            ImGui::ListBoxVector("", &selected_tile, tile_scripts);
 
-            ImGui::LabelText("Path: ", texture_path.c_str());
+            if (selected_tile != -1)
+            {
+                selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
+                std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
 
-            ImGui::Image(*texture_cache.GetTexture(texture_path));
-            //find some way to edit other components
+                ImGui::LabelText("Path: ", texture_path.c_str());
+
+                ImGui::Image(*texture_cache.GetTexture(texture_path));
+                //find some way to edit other components
+            }
+
+            ImGui::TreePop();
         }
 
-        if (ImGui::Button("New Instance"))
+        if (ImGui::TreeNode("Entites"))
         {
-            if (_listener)
-            {
-                _listener->OnCreateBlankInstance(10, 10);
-            }
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("Events"))
+        {
+            ImGui::TreePop();
         }
 
         ImGui::End();
@@ -81,8 +87,8 @@ class TileMapEditor : public SFMLWindowListener
 
     std::string GetSelectedTexturePath()
     {
-        if(selected_tile_prototype)
-            return selected_tile_prototype->GetComponentValueString("Graphics","sprite");
+        if (selected_tile_prototype)
+            return selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
         else
             return "";
     }
@@ -95,7 +101,7 @@ class TileMapEditor : public SFMLWindowListener
   private:
     std::vector<std::string> tile_scripts;
     int selected_tile = -1;
-    Tile* selected_tile_prototype;
+    Tile *selected_tile_prototype;
     TileMapEditorListener *_listener = nullptr;
 };
 
