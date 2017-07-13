@@ -13,13 +13,6 @@
 #include "src/world/tile/TileMap.h"
 #include "src/game/gui/SFMLWindowListener.h"
 
-class TileMapEditorListener
-{
-  public:
-    virtual void OnCreateBlankInstance(int width, int height) = 0;
-    virtual void OnCreateBlankStage() = 0;
-};
-
 class TileMapEditor : public SFMLWindowListener
 {
 
@@ -79,12 +72,7 @@ class TileMapEditor : public SFMLWindowListener
 
         ImGui::End();
     }
-
-    void SetListener(TileMapEditorListener *listener)
-    {
-        _listener = listener;
-    }
-
+    
     std::string GetSelectedTexturePath()
     {
         if (selected_tile_prototype)
@@ -102,7 +90,6 @@ class TileMapEditor : public SFMLWindowListener
     std::vector<std::string> tile_scripts;
     int selected_tile = -1;
     Tile *selected_tile_prototype;
-    TileMapEditorListener *_listener = nullptr;
 };
 
 #endif

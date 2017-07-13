@@ -7,7 +7,7 @@
 #include "src/game/FPSRunner.h"
 #include "src/game/gui/SFMLWindowListener.h"
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public TileMapEditorListener
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public TileMapEditorListener
 {
   public:
     struct PaintStruct
@@ -36,7 +36,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         LuaTileFactory::Instance()->PopulateFactory();
 
         _dev_tools.Init(window);
-        _dev_tools.SetTileMapEditorListener(this);
+        _dev_tools.SetListener(this);
         //_dev_tools.SetNewCreateableListener(this);
         window.AddWindowListener(this);
     }
@@ -99,6 +99,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
         _active_instance->Open();
     }
+
     enum ClickState
     {
         NO_CLICK,
@@ -107,7 +108,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         BLOCK_PAINTnullptr
     };
 
-    void OnCreateBlankStage() override
+    void OnCreateBlankStage()
     {
 
     }

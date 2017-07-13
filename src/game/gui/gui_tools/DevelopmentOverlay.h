@@ -10,6 +10,7 @@
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/game/gui/TextureCache.h"
 #include "src/game/gui/PMIDGWindow.h"
+#include "src/game/gui/gui_tools/DevelopmentOverlayListener.h"
 
 class DevelopmentOverlay
 {
@@ -18,8 +19,8 @@ class DevelopmentOverlay
         void Render(PMIDGWindow& render_window, TextureCache& texture_cache, float seconds_elapsed);
         void Init(PMIDGWindow& render_window);
         void Shutdown();
-        void SetTileMapEditorListener(TileMapEditorListener* listener);
         Log& GetLog();
+        void SetListener(DevelopmentOverlay* listener);
 
         Log log;
         EntityTable entity_table;
@@ -27,5 +28,6 @@ class DevelopmentOverlay
 
     private:
         void DrawMenuBar();
+        DevelopmentOverlayListener* _listener = nullptr;
 };
 #endif

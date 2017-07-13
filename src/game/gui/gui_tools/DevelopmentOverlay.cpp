@@ -45,7 +45,14 @@ void DevelopmentOverlay::DrawMenuBar()
         }
         if (ImGui::BeginMenu("Instance"))
         {
-            if (ImGui::MenuItem("New Instance", "CTRL+I")) {}
+            if (ImGui::MenuItem("New Instance", "CTRL+I")) 
+            {
+                if(_listener)
+                {
+                    _listener.
+                }
+            }
+
             if (ImGui::MenuItem("Load Instance", "CTRL+SHIFT+I")) {}  // Disabled item
             ImGui::EndMenu();
         }
@@ -72,12 +79,13 @@ void DevelopmentOverlay::DrawMenuBar()
     }
 }
 
-void DevelopmentOverlay::SetTileMapEditorListener(TileMapEditorListener* listener)
-{
-    tile_map_editor.SetListener(listener);
-}
-
 void DevelopmentOverlay::Shutdown()
 {
     ImGui::SFML::Shutdown();
+}
+
+
+void DevelopmentOverlay::SetListener(DevelopmentOverlayListener* listener)
+{
+    _listener = listener;
 }
