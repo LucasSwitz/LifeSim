@@ -22,6 +22,15 @@ class PMIDGEditorWindow : public PMIDGWindow
         _window.setView(view);
     }
 
+    void MoveView(int delta_x, int delta_y)
+    {
+        sf::View view = _window.getView();
+        sf::Vector2f center = view.getCenter();
+        sf::Vector2f move_center(center.x + delta_x, center.y + delta_y);
+        view.setCenter(move_center);
+        _window.setView(view);
+    }
+
 private:
     sf::View orig_view;
 };
