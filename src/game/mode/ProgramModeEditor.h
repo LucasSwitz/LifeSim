@@ -94,15 +94,14 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     void PanView()
     {
         sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(_window->SFWindow());
-        sf::Vector2f world_mouse_position = _window->SFWindow().mapPixelToCoords(screen_mouse_position);
 
-        int current_mouse_position_x = world_mouse_position.x;
-        int current_mouse_position_y = world_mouse_position.y;
+        int delta_x = screen_mouse_position.x - _paint_struct.x1;
+        int delta_y = screen_mouse_position.y - _paint_struct.y1;
 
-        int delta_x = current_mouse_position_x - _paint_struct.x1;
-        int delta_y = current_mouse_position_y - _paint_struct.y1;
-
-         static_cast<PMIDGEditorWindow*>(_window)->MoveView(delta_x, delta_y);
+        _paint_struct.x1 = screen_mouse_position.x;
+        _paint_struct.y1 = screen_mouse_position.y;
+        std::cout << delta_x << " , " <<  delta_y << std::endl;
+        static_cast<PMIDGEditorWindow*>(_window)->MoveView(-delta_x, -delta_y);
     }
     
     void OnSFEvent(sf::Event &event)
@@ -170,10 +169,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 {
                     sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
 
-                    sf::Vector2f worldPos = _window->SFWindow().mapPixelToCoords(pixelPos);
-
-                    _paint_struct.x1 = worldPos.x;
-                    _paint_struct.y1 = worldPos.y;
+                    _paint_struct.x1 = pixelPos.x;
+                    _paint_struct.y1 = pixelPos.y;
 
                     _painting_state = PANNING;
                 }
