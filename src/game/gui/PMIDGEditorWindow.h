@@ -16,7 +16,7 @@ class PMIDGEditorWindow : public PMIDGWindow
     {
         if(percent > 1 || percent < 0)
             return;
-            
+        
         sf::View view = orig_view;
         view.zoom(percent);
         _window.setView(view);
