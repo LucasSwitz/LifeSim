@@ -7,7 +7,7 @@
 #include "src/system/SystemFactory.h"
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
-#include "src/game/mode/ProgramMode.h"
+#include "src/game/mode/ProgramModeEditor.h"
 #include "src/game/gui/PMIDGWindow.h"
 
 #define FRAMES_PER_SEC 30
@@ -15,6 +15,11 @@
 class PMIDGRunner : public EventSubscriber
 {
   public:
+    enum Type
+    {
+        GAME,
+        EDITOR
+    };
 
     PMIDGRunner()
     {
@@ -22,11 +27,21 @@ class PMIDGRunner : public EventSubscriber
         LuaBindings::Bind(LUA_STATE);
     }
 
-    void Init()
+    void Init(Type type)
     {
         _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
         SystemFactory::Instance()->PopulateFactory();
         EventManager::Instance()->RegisterSubscriber(this);
+
+        switch (type)
+        {
+        case EDITOR:
+            _window = new PMIDGEditorWindow();
+            _mode = new ProgramModeEditor(static_cast<PMIDGEditorWindow *>(_window));
+            break;
+        case GAME:
+            break;
+        }
     }
 
     void Run()
@@ -46,21 +61,15 @@ class PMIDGRunner : public EventSubscriber
             {
                 if (_mode)
                 {
-                    _window.Clear();
-                    _window.PollEvents();
+                    _window->Clear();
+                    _window->PollEvents();
                     _mode->Update(seconds_elapsed_since_last_update);
-                    _mode->Render(_window, seconds_elapsed_since_last_update);
-                    _window.Render();
-                    _window.Display();
+                    _window->Render();
+                    _mode->Render(seconds_elapsed_since_last_update);
+                    _window->Display();
                 }
             }
         }
-    }
-
-    void SetMode(ProgramMode *mode)
-    {
-        _mode = mode;
-        _mode->Init(_window);
     }
 
     void OnEvent(Event &e) override
@@ -78,7 +87,7 @@ class PMIDGRunner : public EventSubscriber
     }
 
   private:
-    PMIDGWindow _window;
+    PMIDGWindow *_window;
     ProgramMode *_mode;
     std::chrono::time_point<std::chrono::high_resolution_clock> _last_time;
     bool _window_closed = false;

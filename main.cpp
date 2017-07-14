@@ -54,8 +54,7 @@ int main(int argc, char **argv)
 int RunGUI()
 {
     PMIDGRunner runner;
-    runner.Init();
-    runner.SetMode(new ProgramModeEditor());
+    runner.Init(PMIDGRunner::EDITOR);
     runner.Run();
     return 0;
 }

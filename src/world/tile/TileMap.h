@@ -186,6 +186,16 @@ class TileMap
         }
     }
 
+    int HeightPx()
+    {
+        return _tiles.size()*TILE_HEIGHT;
+    }
+
+    int WidthPx()
+    {
+        return _tiles[0].size()*TILE_WIDTH;
+    }
+
     void Erase()
     {
 

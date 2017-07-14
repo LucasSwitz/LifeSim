@@ -6,7 +6,7 @@
 
 #include "src/game/gui/gui_tools/Log.h"
 #include "src/game/gui/gui_tools/EntityTable.h"
-#include "src/game/gui/gui_tools/TileMapEditor.h"
+#include "src/game/gui/gui_tools/InstanceEditor.h"
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/game/gui/TextureCache.h"
 #include "src/game/gui/PMIDGWindow.h"
@@ -16,15 +16,15 @@ class DevelopmentOverlay
 {
     public:
         DevelopmentOverlay();
-        void Render(PMIDGWindow& render_window, TextureCache& texture_cache, float seconds_elapsed);
-        void Init(PMIDGWindow& render_window);
+        void Render(PMIDGWindow* render_window, TextureCache& texture_cache, float seconds_elapsed);
+        void Init(PMIDGWindow* render_window);
         void Shutdown();
         Log& GetLog();
-        void SetListener(DevelopmentOverlay* listener);
+        void SetListener(DevelopmentOverlayListener* listener);
 
         Log log;
         EntityTable entity_table;
-        TileMapEditor tile_map_editor;
+        InstanceEditor tile_map_editor;
 
     private:
         void DrawMenuBar();

@@ -70,6 +70,11 @@ class PMIDGWindow : public EventSubscriber
         _drawables_queue.push(drawable);
     }
 
+    void DrawNow(sf::Drawable& drawable)
+    {
+        _window.draw(drawable);
+    }
+
     void DrawComponentUser(ComponentUser *user)
     {
         if (!user->HasComponent("Position") || !user->HasComponent("Graphics"))
@@ -183,8 +188,9 @@ class PMIDGWindow : public EventSubscriber
         _window_listeners.push_back(listener);
     }
 
-  private:
+  protected:
     sf::RenderWindow _window;
+  private:
     TextureCache _texture_cache;
     std::queue<sf::Drawable*> _drawables_queue;
     std::list<SFMLWindowListener*> _window_listeners;
