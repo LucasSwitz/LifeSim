@@ -50,6 +50,19 @@ void Entity::SetID(int id)
     }
 }
 
+Entity* Entity::Clone(bool is_prototype)
+{
+    Entity* e = new Entity(0,_prototype_name,is_prototype);
+    std::unordered_map<std::string, Component*> components = GetAllComponents();
+    for(auto it = components.begin(); it != components.end(); it++)
+    {
+        Component* c = new Component(*it->second);
+        e->AddComponent(c);
+    }
+
+    return e;
+}
+
 Entity::~Entity()
 {
     // /EntityManager::Instance()->DeregisterEntity(_id);

@@ -17,7 +17,8 @@ Tile* LuaTileFactory::GetTile(int id)
         return nullptr;
     }
 
-    LuaTile *new_tile = new LuaTile(id);
+    LuaTile *new_tile = new LuaTile(id,_tile_id_to_name_directory.at(id));
+
     new_tile->LoadFromFile(LUA_STATE, _tile_directory.at(id), _tile_id_to_name_directory.at(id));
     return new_tile;
 }

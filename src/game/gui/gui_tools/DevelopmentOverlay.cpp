@@ -18,7 +18,7 @@ Log& DevelopmentOverlay::GetLog()
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cache, float seconds_elapsed)
+void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cache, float seconds_elapsed, int& brush_state)
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
@@ -26,7 +26,7 @@ void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cach
     DrawMenuBar();
     log.Draw("Log");
     entity_table.Draw("Entities");
-    instance_editor.Draw(texture_cache);
+    instance_editor.Draw(texture_cache, brush_state);
 // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());

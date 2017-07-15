@@ -70,7 +70,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             }
         }
 
-        _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed);
+        _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed, _brush_state);
     }
 
     void RenderSelectBox()
@@ -134,23 +134,32 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                                                                         _active_instance->GetTileMap().HeightPx());
     }
 
-    enum ClickState
-    {
-        NO_CLICK,
-        SINGLE_PAINT,
-        FREE_PAINT,
-        BLOCK_PAINTnullptr
-    };
-
     void OnCreateBlankStage()
     {
+
     }
 
     bool OnWindowEvent(sf::Event &e)
     {
         ImGui::SFML::ProcessEvent(e);
 
-        if (!_dev_tools.IsFocused() && ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+        if (!_dev_tools.IsFocused())
+        {
+            switch (_brush_state)
+            {
+            case BRUSH_STATE_TILE:
+                    return EventInTileState(e);
+            case BRUSH_STATE_ENTITY:
+                return EventInEntityState(e);
+            default:
+                break;
+            }
+        }
+    }
+
+    bool EventInTileState(sf::Event &e)
+    {
+        if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
         {
             if (e.type == sf::Event::MouseButtonPressed)
             {
@@ -219,6 +228,27 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         }
     }
 
+    bool EventInEntityState(sf::Event &e)
+    {
+        if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+        {
+            if (e.type == sf::Event::MouseButtonPressed)
+            {
+                if (e.mouseButton.button == sf::Mouse::Left)
+                {
+                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
+
+                    sf::Vector2f worldPos = _window->SFWindow().mapPixelToCoords(pixelPos);
+                    Entity *e = _dev_tools.instance_editor.entity_editor.GetSelectedPrototype()->Clone();
+                    e->SetComponentValueFloat("Position", "x", worldPos.x);
+                    e->SetComponentValueFloat("Position", "y", worldPos.y);
+                    std::cout << e->GetComponentValueString("Graphics", "sprite") << std::endl;
+                }
+                return true;
+            }
+        }
+    }
+
     bool ClickOnActiveTileMap(int x, int y)
     {
         sf::Vector2f world_cords = _window->SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
@@ -233,6 +263,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     PaintingEditState _painting_state = DORMANT;
     int _abs_scroll_ticks = 50;
     MouseHistory _mouse_history;
+    int _brush_state = -1;
 };
 
 #endif

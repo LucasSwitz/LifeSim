@@ -5,6 +5,8 @@
 #include "src/game_objects/Entity.h"
 #include "src/game_objects/LuaEntityFactory.h"
 
+#define BRUSH_STATE_ENTITY 1
+
 class EntityEditor
 {
   public:
@@ -29,10 +31,9 @@ class EntityEditor
         }
     }
 
-    void Draw(TextureCache &texture_cache)
+    void Draw(TextureCache &texture_cache, int& brush_state)
     {
         ImGui::ListBoxVector("", &selected_entity, entity_scripts);
-
         if (selected_entity != -1)
         {
             if(!selected_entity_prototype || selected_entity_prototype->GetPrototypeName() != entity_scripts.at(selected_entity))
@@ -50,7 +51,13 @@ class EntityEditor
                 ImGui::SameLine();
             }
             _component_editor.Draw(texture_cache, *selected_entity_prototype);
+            brush_state = BRUSH_STATE_ENTITY;
         }
+    }
+
+    Entity* GetSelectedPrototype()
+    {
+        return selected_entity_prototype;
     }
 
   private:

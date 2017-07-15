@@ -16,7 +16,7 @@ class DevelopmentOverlay
 {
     public:
         DevelopmentOverlay();
-        void Render(PMIDGWindow* render_window, TextureCache& texture_cache, float seconds_elapsed);
+        void Render(PMIDGWindow* render_window, TextureCache& texture_cache, float seconds_elapsed, int& brush_state);
         void Init(PMIDGWindow* render_window);
         void Shutdown();
         Log& GetLog();

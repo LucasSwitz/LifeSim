@@ -10,7 +10,7 @@ class LuaTile : public Tile
 {   
 
     public:
-    LuaTile(int id) : Tile(id){}
+    LuaTile(int id, std::string name) : Tile(id, name){}
 
     void LoadFromFile(lua_State* lua_state, const std::string& script_path, const std::string& tile_name)
     {

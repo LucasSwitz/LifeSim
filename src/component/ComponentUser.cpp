@@ -57,6 +57,10 @@ std::string ComponentUser::GetComponentValueString(std::string component_name, s
         std::cout << "has no component: " << component_name << std::endl;
         return "";
     }
+    else if(!_components.at(component_name)->HasStringValue(value_name))
+    {
+        std::cout << "has no value: " << value_name << std::endl;
+    }
     return _components.at(component_name)->GetStringValue(value_name);
 }
 

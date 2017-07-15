@@ -8,9 +8,18 @@
 class Tile : public ComponentUser
 {
     public:
-        Tile(int id){}
+        Tile(int id, std::string name): _id(id), _name(name){}
+        int GetID()
+        {
+            return _id;
+        }
+        std::string GetName()
+        {
+            return _name;
+        }
     private:
         int _id;
+        std::string _name;
 };
 
 #endif

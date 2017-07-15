@@ -49,7 +49,7 @@ struct Log
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, p_opened);
-        _focused = ImGui::IsRootWindowOrAnyChildFocused() || ImGui::IsRootWindowOrAnyChildHovered();
+        _focused =  ImGui::IsRootWindowOrAnyChildHovered();
         if (ImGui::Button("Clear"))
             Clear();
         ImGui::SameLine();

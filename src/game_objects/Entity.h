@@ -23,6 +23,7 @@ public:
     int ID() const;
     bool IsType(int type) const;
     std::string& GetPrototypeName();
+    Entity* Clone(bool is_prototype=false);
 
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
