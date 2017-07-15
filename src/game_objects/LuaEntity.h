@@ -20,7 +20,10 @@ class LuaEntity : public Entity
 {
     public:
 
-    LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY){};
+    LuaEntity(bool is_protoype = false) : Entity(Entity::LUA_DEFINED_ENTITY,"",is_protoype)
+    {
+        
+    };
 
     void LoadScript(lua_State* lua_state, std::string script_path,std::string& entity_name);
 

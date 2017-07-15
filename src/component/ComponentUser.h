@@ -36,8 +36,11 @@ class ComponentUser
     void SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value); 
     void CallFunction(std::string component_name, std::string value_name);
 
+    std::unordered_map<std::string, Component*>& GetAllComponents();
+
     virtual ~ComponentUser(){};
   protected:
       std::unordered_map<std::string, Component*> _components;
+      bool _is_hidden;
 };
 #endif

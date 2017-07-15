@@ -2,6 +2,7 @@
 #define LUAENTITYFACTORY_H
 
 #include "src/utils/ScriptFactory.h"
+#include "src/game_objects/LuaEntity.h"
 
 /**
     Factory for creating entity instances from their Lua prototypes.
@@ -20,7 +21,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_id_to_name.insert(std::make_pair(prototype_id, prototype_name));
     };
 
-    LuaEntity* GetEntity(int id)
+    Entity* GetEntity(int id, bool is_protoype = false)
     {
         if(!EntityPrototypeExists(id))
         {
@@ -28,12 +29,12 @@ class LuaEntityFactory : public ScriptFactory<std::string>
             return nullptr;
         }
 
-        LuaEntity *new_entity = new LuaEntity();
+        LuaEntity *new_entity = new LuaEntity(is_protoype);
         new_entity->LoadScript(LUA_STATE, _entity_scripts.at(id), _entity_id_to_name.at(id));
         return new_entity;
     }
 
-    LuaEntity *GetEntity(std::string name)
+    Entity *GetEntity(std::string name, bool is_protoype = false)
     {
         if(!EntityPrototypeExists(name))
         {   
@@ -41,7 +42,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
             return nullptr;
         }
         
-        return this->GetEntity(_entity_name_to_id.at(name));
+        return this->GetEntity(_entity_name_to_id.at(name), is_protoype);
     }
 
     static LuaEntityFactory *Instance()
@@ -66,6 +67,11 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_scripts.clear();
         _entity_id_to_name.clear();
         _entity_name_to_id.clear();
+    }
+
+    std::unordered_map<int, std::string>& GetAllEntityIdentifiers()
+    {
+        return _entity_id_to_name;
     }
 
   private:

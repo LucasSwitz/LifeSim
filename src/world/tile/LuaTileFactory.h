@@ -34,7 +34,6 @@ private:
     std::unordered_map<int, std::string> _tile_directory;
     std::unordered_map<std::string, int> _tile_name_to_id_directory;
     std::unordered_map<int, std::string> _tile_id_to_name_directory;
-
 };
 
 #endif

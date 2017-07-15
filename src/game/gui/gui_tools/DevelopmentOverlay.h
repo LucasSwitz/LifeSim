@@ -21,13 +21,15 @@ class DevelopmentOverlay
         void Shutdown();
         Log& GetLog();
         void SetListener(DevelopmentOverlayListener* listener);
+        bool IsFocused();
 
         Log log;
         EntityTable entity_table;
-        InstanceEditor tile_map_editor;
+        InstanceEditor instance_editor;
 
     private:
         void DrawMenuBar();
         DevelopmentOverlayListener* _listener = nullptr;
+        bool _focused = false;
 };
 #endif

@@ -118,6 +118,21 @@ class Component
         return _bool_components.find(name) != _bool_components.end();
     }
 
+    std::unordered_map<std::string, ComponentValue<std::string>>& GetAllStringValues()
+    {
+        return _string_components;
+    }
+
+    std::unordered_map<std::string, ComponentValue<float>>& GetAllFloatValues()
+    {
+        return _float_components;
+    }
+
+    std::unordered_map<std::string, ComponentValue<bool>>& GetAllBoolValues()
+    {
+        return _bool_components;
+    }
+
   protected:
     void AddValue(std::string name, std::string value)
     {

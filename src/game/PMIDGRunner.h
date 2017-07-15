@@ -25,13 +25,15 @@ class PMIDGRunner : public EventSubscriber
     {
         LuaUniversal::Instance()->Init();
         LuaBindings::Bind(LUA_STATE);
+        LuaEntityFactory::Instance()->PopulateFactory();
+        SystemFactory::Instance()->PopulateFactory();
+        EventManager::Instance()->RegisterSubscriber(this);
     }
 
     void Init(Type type)
     {
         _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
-        SystemFactory::Instance()->PopulateFactory();
-        EventManager::Instance()->RegisterSubscriber(this);
+
 
         switch (type)
         {

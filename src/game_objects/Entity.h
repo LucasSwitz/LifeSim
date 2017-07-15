@@ -16,7 +16,7 @@ class Entity : public ComponentUser
 
 public:
     virtual ~Entity();
-    Entity(int type, std::string _prototype_name="");
+    Entity(int type, std::string _prototype_name="",bool is_protoype = false);
     virtual void Tick(){};
     static int _lastId;
 
@@ -30,6 +30,7 @@ public:
 protected:
     void SetID(int id);
     void SetPrototypeName(std::string& name);
+    bool is_prototype;
 
 private:
     int _id;

@@ -109,3 +109,8 @@ Component *ComponentUser::GetComponent(std::string name)
 {
     return _components.at(name);
 }
+
+std::unordered_map<std::string, Component*>& ComponentUser::GetAllComponents()
+{
+    return _components;
+}

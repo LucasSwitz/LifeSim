@@ -8,10 +8,9 @@ DevelopmentOverlay::DevelopmentOverlay()
 void DevelopmentOverlay::Init(PMIDGWindow* window)
 {
     ImGui::SFML::Init(window->SFWindow());
-    window->AddWindowListener(&tile_map_editor);
-
+    window->AddWindowListener(&instance_editor);
+    instance_editor.Init();
     log.Clear();
-    tile_map_editor.SetTileList(LuaTileFactory::Instance()->GetAllTileIndentifiers());
 }
 
 Log& DevelopmentOverlay::GetLog()
@@ -27,8 +26,7 @@ void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cach
     DrawMenuBar();
     log.Draw("Log");
     entity_table.Draw("Entities");
-    tile_map_editor.Draw(texture_cache);
-
+    instance_editor.Draw(texture_cache);
 // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());
@@ -69,7 +67,7 @@ void DevelopmentOverlay::DrawMenuBar()
         }
         if (ImGui::BeginMenu("Entity"))
         {
-            if (ImGui::MenuItem("New Entity", "CTRL+E")) {}
+            if (ImGui::MenuItem("New Entity", "ImGui::EndCTRL+E")) {}
             if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E")) {} 
             ImGui::EndMenu();
         }       
@@ -77,11 +75,14 @@ void DevelopmentOverlay::DrawMenuBar()
     }
 }
 
+bool DevelopmentOverlay::IsFocused()
+{
+    return log.IsFocused() || entity_table.IsFocused() || instance_editor.IsFocused();
+}
 void DevelopmentOverlay::Shutdown()
 {
     ImGui::SFML::Shutdown();
 }
-
 
 void DevelopmentOverlay::SetListener(DevelopmentOverlayListener* listener)
 {
