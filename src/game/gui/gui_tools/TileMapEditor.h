@@ -4,6 +4,8 @@
 #include "src/game/gui/TextureCache.h"
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/world/tile/Tile.h"
+#include "src/game/gui/brush/PaintTileBrushState.h"
+#include "src/game/gui/brush/Brush.h"
 
 #define BRUSH_STATE_TILE 0
 
@@ -36,7 +38,7 @@ class TileMapEditor
         }
     }
 
-    void Draw(TextureCache &texture_cache, int& brush_state)
+    void Draw(TextureCache &texture_cache, Brush& brush)
     {
         ImGui::ListBoxVector("", &selected_tile, tile_scripts);
         if (selected_tile != -1)
@@ -45,6 +47,8 @@ class TileMapEditor
             {
                 delete selected_tile_prototype;
                 selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
+                std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
+                brush.SetState(new PaintTileBrushState(texture_path));
             }
 
             std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
@@ -54,8 +58,6 @@ class TileMapEditor
 
             ImGui::SameLine();
             _component_editor.Draw(texture_cache, *selected_tile_prototype);
-
-            brush_state = BRUSH_STATE_TILE;
         }
     }
 

@@ -4,6 +4,7 @@
 #include "src/game/gui/TextureCache.h"
 #include "src/game_objects/Entity.h"
 #include "src/game_objects/LuaEntityFactory.h"
+#include "src/game/gui/brush/PaintEntityBrushState.h"
 
 #define BRUSH_STATE_ENTITY 1
 
@@ -31,7 +32,7 @@ class EntityEditor
         }
     }
 
-    void Draw(TextureCache &texture_cache, int& brush_state)
+    void Draw(TextureCache &texture_cache, Brush& brush)
     {
         ImGui::ListBoxVector("", &selected_entity, entity_scripts);
         if (selected_entity != -1)
@@ -40,6 +41,7 @@ class EntityEditor
             {
                 delete selected_entity_prototype;
                 selected_entity_prototype = LuaEntityFactory::Instance()->GetEntity(entity_scripts.at(selected_entity),true);
+                brush.SetState(new PaintEntityBrushState(selected_entity_prototype));
             }
 
             if (selected_entity_prototype && selected_entity_prototype->HasComponent("Graphics"))
@@ -49,9 +51,9 @@ class EntityEditor
                 ImGui::Image(*texture);
 
                 ImGui::SameLine();
+                
             }
             _component_editor.Draw(texture_cache, *selected_entity_prototype);
-            brush_state = BRUSH_STATE_ENTITY;
         }
     }
 

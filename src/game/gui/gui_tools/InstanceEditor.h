@@ -28,20 +28,20 @@ class InstanceEditor : public SFMLWindowListener
         tile_map_editor.SetTileList(LuaTileFactory::Instance()->GetAllTileIndentifiers());
         entity_editor.SetEntityList(LuaEntityFactory::Instance()->GetAllEntityIdentifiers());
     }
-    void Draw(TextureCache &texture_cache, int& brush_state, bool *p_opened = NULL)
+    void Draw(TextureCache &texture_cache, Brush& brush, bool *p_opened = NULL)
     {
         if (ImGui::Begin("Instance Editor"))
         {
             _focused = ImGui::IsRootWindowOrAnyChildHovered();
             if (ImGui::TreeNode("Tile Map"))
             {
-                tile_map_editor.Draw(texture_cache,brush_state);
+                tile_map_editor.Draw(texture_cache,brush);
                 ImGui::TreePop();
             }
 
             if (ImGui::TreeNode("Entites"))
             {
-                entity_editor.Draw(texture_cache,brush_state);
+                entity_editor.Draw(texture_cache,brush);
                 ImGui::TreePop();
             }
 

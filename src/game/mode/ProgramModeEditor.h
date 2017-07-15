@@ -7,33 +7,19 @@
 #include "src/game/FPSRunner.h"
 #include "src/game/gui/SFMLWindowListener.h"
 #include "src/game/gui/PMIDGEditorWindow.h"
+#include "src/game/gui/brush/Brush.h"
+#include "src/utils/window/WindowUtils.h"
 
 #define MAX_SCROLL_TICKS 50
 
 class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener
 {
+
   public:
-    struct PaintStruct
-    {
-        int x1;
-        int x2;
-        int y1;
-        int y2;
-    };
-
-    struct MouseHistory
-    {
-        int x1;
-        int x2;
-        int y1;
-        int y2;
-    };
-
-    enum PaintingEditState
+    enum WindowTransformState
     {
         DORMANT,
-        PAINTING,
-        PANNING,
+        PANNING
     };
 
     ProgramModeEditor(PMIDGEditorWindow *window) : ProgramMode(window)
@@ -57,53 +43,27 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     void Render(float seconds_elapsed) override
     {
         //chance to draw Dev Tools
-
         if (!_dev_tools.IsFocused())
         {
-            if (_painting_state == PAINTING)
-            {
-                RenderSelectBox();
-            }
-            else if (_painting_state == PANNING)
+            if (_window_transform_state == PANNING)
             {
                 PanView();
             }
+            _brush.PaintWindow(*_window);
         }
 
-        _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed, _brush_state);
-    }
-
-    void RenderSelectBox()
-    {
-        sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(_window->SFWindow());
-        sf::Vector2f world_mouse_position = _window->SFWindow().mapPixelToCoords(screen_mouse_position);
-
-        int current_mouse_position_x = world_mouse_position.x;
-        int current_mouse_position_y = world_mouse_position.y;
-
-        int delta_x = current_mouse_position_x - _paint_struct.x1;
-        int delta_y = current_mouse_position_y - _paint_struct.y1;
-
-        int width = std::abs(delta_x);
-        int height = std::abs(delta_y);
-
-        int pos_x = (delta_x < 0 ? current_mouse_position_x : _paint_struct.x1);
-        int pos_y = (delta_y < 0 ? current_mouse_position_y : _paint_struct.y1);
-
-        sf::RectangleShape rect(sf::Vector2f(width, height));
-        rect.setPosition(pos_x, pos_y);
-        _window->DrawNow(rect);
+        _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed, _brush);
     }
 
     void PanView()
     {
         sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(_window->SFWindow());
 
-        int delta_x = screen_mouse_position.x - _paint_struct.x1;
-        int delta_y = screen_mouse_position.y - _paint_struct.y1;
+        int delta_x = screen_mouse_position.x - _mouse_history.x1;
+        int delta_y = screen_mouse_position.y - _mouse_history.y1;
 
-        _paint_struct.x1 = screen_mouse_position.x;
-        _paint_struct.y1 = screen_mouse_position.y;
+        _mouse_history.x1 = screen_mouse_position.x;
+        _mouse_history.y1 = screen_mouse_position.y;
         static_cast<PMIDGEditorWindow *>(_window)->MoveView(-delta_x, -delta_y);
     }
 
@@ -136,7 +96,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnCreateBlankStage()
     {
-
     }
 
     bool OnWindowEvent(sf::Event &e)
@@ -145,73 +104,28 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
         if (!_dev_tools.IsFocused())
         {
-            switch (_brush_state)
+            if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
             {
-            case BRUSH_STATE_TILE:
-                    return EventInTileState(e);
-            case BRUSH_STATE_ENTITY:
-                return EventInEntityState(e);
-            default:
-                break;
-            }
-        }
-    }
-
-    bool EventInTileState(sf::Event &e)
-    {
-        if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
-        {
-            if (e.type == sf::Event::MouseButtonPressed)
-            {
-                if (e.mouseButton.button == sf::Mouse::Left)
+                if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle)
                 {
                     sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
 
-                    sf::Vector2f worldPos = _window->SFWindow().mapPixelToCoords(pixelPos);
+                    _mouse_history.x1 = pixelPos.x;
+                    _mouse_history.y1 = pixelPos.y;
 
-                    _paint_struct.x1 = worldPos.x;
-                    _paint_struct.y1 = worldPos.y;
-                    _painting_state = PAINTING;
+                    _window_transform_state = PANNING;
                 }
-                else if (e.mouseButton.button == sf::Mouse::Right)
+                else if(e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Middle)
                 {
-                    _painting_state = DORMANT;
+                    _window_transform_state = DORMANT;
                 }
-                else if (e.mouseButton.button = sf::Mouse::Middle)
+                else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
                 {
-                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
+                    sf::Vector2i pixel_pos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
+                    sf::Vector2f world_pos = _window->SFWindow().mapPixelToCoords(pixel_pos);
 
-                    _paint_struct.x1 = pixelPos.x;
-                    _paint_struct.y1 = pixelPos.y;
-
-                    _painting_state = PANNING;
+                    return _brush.OnInstanceMouseEvent(e, world_pos, _active_instance);
                 }
-            }
-            else if (e.type == sf::Event::MouseButtonReleased)
-            {
-                if (_painting_state == PAINTING && e.mouseButton.button == sf::Mouse::Left)
-                {
-
-                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
-                    sf::Vector2f worldPos = _window->SFWindow().mapPixelToCoords(pixelPos);
-
-                    _paint_struct.x2 = worldPos.x;
-                    _paint_struct.y2 = worldPos.y;
-
-                    std::list<Tile *> boxed_tiles;
-                    _active_instance->GetTileMap().TilesInRange(_paint_struct.x1, _paint_struct.y1,
-                                                                _paint_struct.x2, _paint_struct.y2,
-                                                                boxed_tiles);
-
-                    std::string new_texture_path = _dev_tools.instance_editor.tile_map_editor.GetSelectedTexturePath();
-
-                    if (!new_texture_path.empty())
-                    {
-                        for (Tile *boxed_tile : boxed_tiles)
-                            boxed_tile->SetComponentValueString("Graphics", "sprite", new_texture_path);
-                    }
-                }
-                _painting_state = DORMANT;
             }
             else if (e.type == sf::Event::MouseWheelMoved)
             {
@@ -219,32 +133,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
 
                 static_cast<PMIDGEditorWindow *>(_window)->Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    bool EventInEntityState(sf::Event &e)
-    {
-        if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
-        {
-            if (e.type == sf::Event::MouseButtonPressed)
-            {
-                if (e.mouseButton.button == sf::Mouse::Left)
-                {
-                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
-
-                    sf::Vector2f worldPos = _window->SFWindow().mapPixelToCoords(pixelPos);
-                    Entity *e = _dev_tools.instance_editor.entity_editor.GetSelectedPrototype()->Clone();
-                    e->SetComponentValueFloat("Position", "x", worldPos.x);
-                    e->SetComponentValueFloat("Position", "y", worldPos.y);
-                    std::cout << e->GetComponentValueString("Graphics", "sprite") << std::endl;
-                }
-                return true;
             }
         }
     }
@@ -257,13 +145,12 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
   private:
     FPSRunner _fps_runner;
+    MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     Instance *_active_instance = nullptr;
-    PaintStruct _paint_struct;
-    PaintingEditState _painting_state = DORMANT;
     int _abs_scroll_ticks = 50;
-    MouseHistory _mouse_history;
-    int _brush_state = -1;
+    Brush _brush;
+    WindowTransformState _window_transform_state = DORMANT;
 };
 
 #endif
