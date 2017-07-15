@@ -15,22 +15,32 @@ class ComponentUserBase;
 class ComponentUser
 {
   public:
-    void AddComponent(Component *component);
+    void AddComponent(Component *component, bool add_to_component_users = true);
     void RemoveComponent(std::string name);
-    bool HasComponent(std::string name);
+    bool HasComponent(std::string name) const;
+    void DisableComponent(std::string name);
+    void EnableComponent(std::string name);
+    void DisableAll();
+    void EnableAll();
 
     Component* GetComponent(std::string name);
 
-    std::string GetComponentValueString (std::string component_name, std::string component_name_value);
+    std::string GetComponentValueString (std::string component_name, std::string component_name_value) const;
     void SetComponentValueString (std::string component_name, std::string component_name_value, std::string value);
 
-    float GetComponentValueFloat (std::string component_name, std::string component_name_value);
+    float GetComponentValueFloat (std::string component_name, std::string component_name_value) const; 
     void SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);
 
+
+    bool GetComponentBoolValue(std::string component_name, std::string component_name_value);
+    void SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value); 
     void CallFunction(std::string component_name, std::string value_name);
+
+    std::unordered_map<std::string, Component*>& GetAllComponents();
 
     virtual ~ComponentUser(){};
   protected:
       std::unordered_map<std::string, Component*> _components;
+      bool _is_hidden;
 };
 #endif

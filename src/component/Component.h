@@ -26,12 +26,12 @@ class Component
             value = new_value;
         }
 
-        T GetValue() const
+        T GetValue() 
         {
             return value;
         }
 
-        std::string GetName() const
+        std::string GetName() 
         {
             return name;
         }
@@ -50,7 +50,7 @@ class Component
         _float_components.at(name).SetValue(value);
     }
 
-    float GetFloatValue(std::string name) const
+    float GetFloatValue(std::string name) 
     {
         if(!HasFloatValue(name))
         {
@@ -65,12 +65,22 @@ class Component
         return _float_components.find(name) != _float_components.end();
     }
 
-    std::string GetStringValue(std::string name) const
+    std::string GetStringValue(std::string name)
     {
+        if(!HasStringValue(name))
+        {
+            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            return "";
+        }
         return _string_components.at(name).GetValue();
     }
 
-    void* GetFunctionValue(std::string name) const
+    bool HasStringValue(std::string name) const
+    {
+        return _string_components.find(name) != _string_components.end();
+    }
+
+    void* GetFunctionValue(std::string name)
     {
         return _functional_components.at(name).GetValue();
     }
@@ -80,9 +90,47 @@ class Component
         return _name;
     }
 
-    Component* GetSubcomponenet(std::string name)
+    Component* GetSubcomponent(std::string name)
     {
         return _sub_components.at(name);
+    }
+
+    bool GetBoolValue(std::string name)
+    {
+        if(!HasBoolValue(name))
+        {
+            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            return false;
+        }
+        return _bool_components.at(name).GetValue();
+    }
+
+    void SetBoolValue(std::string name, bool value)
+    {
+        if(HasBoolValue(name))
+        {
+            _bool_components.at(name).SetValue(value);
+        }
+    }
+
+    bool HasBoolValue(std::string name)
+    {
+        return _bool_components.find(name) != _bool_components.end();
+    }
+
+    std::unordered_map<std::string, ComponentValue<std::string>>& GetAllStringValues()
+    {
+        return _string_components;
+    }
+
+    std::unordered_map<std::string, ComponentValue<float>>& GetAllFloatValues()
+    {
+        return _float_components;
+    }
+
+    std::unordered_map<std::string, ComponentValue<bool>>& GetAllBoolValues()
+    {
+        return _bool_components;
     }
 
   protected:
@@ -94,6 +142,11 @@ class Component
     void AddValue(std::string name, float value)
     {
         _float_components.insert(std::make_pair(name, ComponentValue<float>(name,value)));
+    }
+
+    void AddValue(std::string name, bool value)
+    {
+        _bool_components.insert(std::make_pair(name, ComponentValue<bool>(name,value)));
     }
 
     void AddSubcomponent(Component* sub_component)
@@ -109,6 +162,7 @@ class Component
     std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
     std::unordered_map<std::string, ComponentValue<float>> _float_components;
     std::unordered_map<std::string, ComponentValue<void*>> _functional_components;
+    std::unordered_map<std::string, ComponentValue<bool>> _bool_components;
     std::unordered_map<std::string, Component*> _sub_components;
 };
 

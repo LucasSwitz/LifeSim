@@ -6,79 +6,96 @@ PrototypeID = 1000
 
 TestEntity = 
 {
-    id = 999,
+        id = 0,
         Components = 
-        {   
-            Health = 
+        {
+
+            Position = 
             {
-                hp = 0
-            },
-            Position =
-            {
-                x_pos = 0,
-                y_pos = 0
-            },
-            Velocity = 
-            {
-                x_velcoity = 0,
-                y_velocity = 0,
-                max_velocity = 0
+                x = 90,
+                y = 90
             },
             Graphics = 
             {
-                sprite = "still/sprite",
+                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png"
+            },
+            Velocity =
+            {
+                x = 0, -- px/second
+                y = 0
+            },
+            Acceleration = 
+            {
+                force_x = 0,
+                force_y = 0,
+                x = 0,
+                y= 0
+            },
+            Mass = 
+            {
+                mass = 1
             },
             Collision = 
             {
                 hit_box_width = 100,
                 hit_box_height = 100,
-
-                OnCollision = function(self, collider)
-                    LaunchEvent(EventType.DAMAGE_EVENT, collider, self.damage) --good Make DamageSystem
-                    LaunchEvent(EventType.ADD_CONDITION_EVENT, collider, self.damage) --good Make ConditionSystem
-                    LaunchEvent(EventType.DELETE_ENTITY_EVENT, self.id, self.id, nil) -- Make EntitySystem
-                end
             },
-            Useable =
-            { 
-                Use = function(self, user)
-
-                end
+            State = 
+            {
+                state = "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua",
+                stage = "Start"
             },
             Animation =
             {
-                current_animation = "Idle",
+                animation = "Idle",
                 current_frame = "Still",
                 current_frame_time_left = 0.0,
-                next_frame = "None",
+                next_frame = "Still",
                 started = false,
                 is_finished = false,
                 Animations = 
                 {
                     Walking = 
                     {
+                        start_frame = "Frame1",
                         Frames  =
                         {
                             Frame1 = 
                             {
-                                duration = 2,
-                                sprite_file = "path/to/sprite/file"
+                                duration = 0.1,
+                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                next = "Frame2"
                             },
                             Frame2 = 
                             {
-                                duration = 2,
-                                sprite_file = "path/to/sprite/file"
+                                duration = 0.1,
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_2.png",
+                                next = "Frame3"
+                            },
+                            Frame3 = 
+                            {
+                                duration = 0.1,
+                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_3.png",
+                                next = "Frame4"
+                            },
+                            Frame4 = 
+                            {
+                                duration = 0.1,
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_4.png",
+                                next = "Frame1"
                             }
                         }
                     },
                     Idle = 
                     {
+                        start_frame = "Still",
                         Frames = 
                         {
                             Still =
                             {
-                                duration = -1,
-                                sprite_file = "path/to/sprite/file"
+                                duration = 0,
+                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                next = "Still"
                             }
                         }
                     }

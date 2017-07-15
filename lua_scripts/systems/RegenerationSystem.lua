@@ -17,7 +17,7 @@ RegenerationSystem =
         end
     end,
     RegenerateAll = function()
-        local entities = ComponentUsers.Instance():GetAll("Health")
+        local entities = ComponentUsers.Instance():GetAll({"Health"})
         local it = entities:Iterator()
         while it ~= nil do
             entity = it.data

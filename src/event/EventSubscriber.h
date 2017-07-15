@@ -11,6 +11,5 @@ class EventSubscriber
     public:
     virtual void OnEvent(Event& e){};
     virtual std::list<Subscription> GetSubscriptions(){};
-
 };
 #endif

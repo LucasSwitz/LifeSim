@@ -4,6 +4,7 @@
 #include "test/lua_tests/lua_core/LuaTest.h"
 #include "src/event/EventSubscriber.h"
 #include "src/component/ComponentUserBase.h"
+#include "src/system/SystemController.h"
 
 class CollisionSystemTest : public LuaTest, public EventSubscriber
 {

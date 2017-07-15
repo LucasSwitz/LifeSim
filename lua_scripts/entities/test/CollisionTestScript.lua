@@ -1,2 +1,2 @@
 collider_1_id, collider_2_id = ...
-print("Collision between: " .. tostring(collider_1_id) .. " and " .. tostring(collider_2_id)) 
+--print("Collision between: " .. tostring(collider_1_id) .. " and " .. tostring(collider_2_id)) 

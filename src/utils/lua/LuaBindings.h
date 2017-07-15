@@ -11,9 +11,16 @@
 #include "src/game_objects/LuaEntity.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
+#include "src/controllers/Keyboard.h"
+#include "src/world/tile/Tile.h"
+#include "src/world/stage/Stage.h"
+#include "src/world/stage/Instance.h"
+#include "src/utils/debug/DebugFlags.h"
+#include "src/world/stage/LuaInstance.h"
+#include "src/world/stage/LuaStage.h"
+#include "src/game/gui/PMIDGWindow.h"
 
 using namespace luabridge;
-
 class LuaBindings
     {
     public:
@@ -25,6 +32,9 @@ class LuaBindings
                 .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)
                 .addFunction("GetString", &ComponentUser::GetComponentValueString)
                 .addFunction("SetString", &ComponentUser::SetComponentValueString)
+                .addFunction("SetBool", &ComponentUser::SetComponentBoolValue)
+                .addFunction("GetBool", &ComponentUser::GetComponentBoolValue)
+                .addFunction("GetComponent", &ComponentUser::GetComponent)
             .endClass()
             .deriveClass<Entity, ComponentUser>("Entity")
                 .addProperty("id", &Entity::ID)
@@ -66,10 +76,13 @@ class LuaBindings
                 .addFunction("GetString", &Component::GetStringValue)
                 .addFunction("SetNumber", &Component::SetFloatValue)
                 .addFunction("SetString", &Component::SetStringValue)
+                .addFunction("GetBool",&Component::GetBoolValue)
+                .addFunction("SetBool",&Component::SetBoolValue)
+                .addFunction("GetSubcomponent", &Component::GetSubcomponent)
+
             .endClass()
             .beginClass<Subscription>("Subscription")
                 .addConstructor<void (*)(int)>()
-                .addConstructor<void (*)(int, LuaRef&)>()
             .endClass()
             .beginClass<EventType>("EventType")
                 .addStaticData("HEALTH_UPDATE_EVENT", &EventType::HEALTH_UPDATE_EVENT, false)
@@ -77,13 +90,17 @@ class LuaBindings
                 .addStaticData("DAMAGE_EVENT", &EventType::DAMAGE_EVENT, false)
                 .addStaticData("DELETE_ENTITY_EVETN", &EventType::DELETE_ENTITY_EVENT, false)
                 .addStaticData("CONDITION_ADD_EVENT", &EventType::CONDITION_ADD_EVENT, false)
+                .addStaticData("W_DOWN_EVENT", &EventType::W_DOWN_EVENT, false)
+                .addStaticData("W_UP_EVENT", &EventType::W_UP_EVENT, false)
+                .addStaticData("S_DOWN_EVENT", &EventType::S_DOWN_EVENT, false)
+                .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
+                .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
-                .addConstructor<void (*) (int,int,int, void*)>()
-                .addData("type", &Event::id)
+                .addStaticFunction("ComponentUserEvent",&Event::Create<ComponentUser>)
+                .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)
-                .addFunction("ExtraInfoAsInit", &Event::ExtraInfoAsInt)
             .endClass()
             .beginClass<EventManager>("EventManager")
                 .addStaticFunction("Instance", &EventManager::Instance)
@@ -91,8 +108,28 @@ class LuaBindings
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
                 .addStaticFunction("Instance",&ComponentUserBase::Instance)
-                .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentAsLuaList)
+                .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentsAsLuaList)
                 .addFunction("GetAllEntities",&ComponentUserBase::GetAllEntitesWithComponentAsLuaList)
+            .endClass()
+            .beginClass<LuaRef>("LuaRef")
+            .endClass()
+            .beginClass<KeyboardController>("Keyboard")
+                .addStaticFunction("Instance", &KeyboardController::Instance)
+                .addFunction("Get",&KeyboardController::Get)
+            .endClass()
+            .beginClass<Instance>("Instance")
+            .endClass()
+            .deriveClass<LuaInstance,Instance>("LuaInstance")
+            .endClass()
+            .beginClass<Stage>("Stage")
+            .endClass()
+            .deriveClass<LuaStage, Stage>("LuaStage")
+            .endClass()
+            .beginClass<Tile>("Tile")
+            .endClass()
+            .beginClass<DebugFlags>("DebugFlags")
+                .addStaticFunction("Instance", &DebugFlags::Instance)
+                .addFunction("Set", &DebugFlags::Set)
             .endClass();
         } 
  };

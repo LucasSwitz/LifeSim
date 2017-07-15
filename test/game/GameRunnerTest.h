@@ -3,6 +3,10 @@
 
 #include "test/lua_tests/lua_core/LuaTest.h"
 #include "test/game/GameRunnerTimed.h"
+#include "src/system/SystemController.h"
+#include "src/system/SystemFactory.h"
+#include "src/component/ComponentUserBase.h"
+#include "src/game_objects/LuaEntityFactory.h"
 
 class GameRunnerTest : public LuaTest
 {
@@ -12,6 +16,7 @@ public:
     GameRunnerTest()
     {
         runner = new GameRunnerTimed();
+        runner->Start();
     }
 
     void SetUp()
@@ -21,15 +26,14 @@ public:
 
     void TearDown()
     {
-        delete Entity_Manager->Instance();
+        
     }
 
 };
 
 TEST_F(GameRunnerTest, TestTiming)
 {
-    Character* c = new Character();
-    runner->RunFor(5);
+    ASSERT_NO_FATAL_FAILURE(runner->RunFor(1));
 }
 
 #endif

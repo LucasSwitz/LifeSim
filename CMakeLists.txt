@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 #[[set(CMAKE_CXX_FLAGS "-llua -ldl -lglut -lGL")]]
-set(CMAKE_CXX_FLAGS "-llua -ldl")
 set(PROJECT_NAME_STR LifeSim-Test)
 project(${PROJECT_NAME_STR} CXX)
 find_package(Threads REQUIRED)
@@ -11,29 +10,23 @@ add_subdirectory($ENV{GTEST_DIR})
 include_directories($ENV{GTEST_DIR}/include ".")
 include_directories($ENV{LUA_INCLUDE_DIR} ".")
 include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
-#[[include_directories($ENV{IMGUI_INCLUDE_DIR} ".")
+include_directories($ENV{IMGUI_INCLUDE_DIR} ".")
 include_directories($ENV{IMGUI_SFML_INCLUDE_DIR} ".")
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )]]
+include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS})
 
 
-#[[file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE SOURCES
     imgui.cpp
     imgui_draw.cpp
     imgui-SFML.cpp
-    main.cpp
-    src/*.h
-    src/*.cpp
-)]]#
-
-file(GLOB_RECURSE SOURCES
     main.cpp
     src/*.h
     src/*.cpp)
 
 add_executable(${PROJECT_NAME_STR} ${SOURCES})
 
-#[[find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)]]
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
 
 
 set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
@@ -45,9 +38,9 @@ if(SFML_FOUND)
 endif()
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
-target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua.a)
+target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua5.2.a)
 target_link_libraries(${PROJECT_NAME_STR} $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
-#[[target_link_libraries(${PROJECT_NAME_STR} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})]]
+target_link_libraries(${PROJECT_NAME_STR} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 
 target_link_libraries(${PROJECT_NAME_STR} ${CMAKE_DL_LIBS})

@@ -14,14 +14,18 @@ class EventType
     static int DAMAGE_EVENT;
     static int CONDITION_ADD_EVENT;
     static int DELETE_ENTITY_EVENT;
+    static int W_DOWN_EVENT;
+    static int W_UP_EVENT;
+    static int A_DOWN_EVENT;
+    static int A_UP_EVENT;
+    static int S_DOWN_EVENT;
+    static int S_UP_EVENT;
+    static int D_DOWN_EVENT;
+    static int D_UP_EVENT;
+    static int CLOSE_GAME_WINDOW_EVENT;
+    static int CHANGE_INSTANCE_EVENT;
+    static int EXIT_STAGE_EVENT;
+    static int DRAW_REQUEST_EVENT;
+
 };
-
-int EventType::MAKE_THIS_EVENT_DURING_TEST = -2;
-int EventType::NEVER_MAKE_THIS_EVENT = -1;
-int EventType::HEALTH_UPDATE_EVENT = 0;
-int EventType::COLLISION_EVENT = 1;
-int EventType::DAMAGE_EVENT = 2;
-int EventType::CONDITION_ADD_EVENT = 3;
-int EventType::DELETE_ENTITY_EVENT = 4;
-
 #endif

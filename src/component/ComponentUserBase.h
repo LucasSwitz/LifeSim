@@ -3,8 +3,11 @@
 
 #include <unordered_map>
 #include <list>
+#include <initializer_list>
 #include "src/utils/lua/LuaList.h"
+#include "src/utils/lua/LuaUniversal.h"
 #include "src/game_objects/Entity.h"
+#include <iostream>
 
 /**
     ComponentUserBase stores all component users and indexes them by the components they own.
@@ -33,10 +36,12 @@ void Reset()
     _component_users_directory.clear();
 }
 
-std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name);
-LuaList<Entity*>* GetAllEntitesWithComponentAsLuaList(std::string component_name);
-LuaList<ComponentUser*>* GetAllUsersWithComponentAsLuaList(std::string component_name);
-
+std::list<ComponentUser*> GetAllUsersWithComponent(std::string component_name);
+std::list<ComponentUser*> GetAllUsersWithComponents(std::initializer_list<std::string> list);
+LuaList<ComponentUser*> GetAllUsersWithComponentsAsLuaList(lua_State* list);
+LuaList<Entity*> GetAllEntitesWithComponentAsLuaList(std::string component_name);
+std::list<ComponentUser*> GetAllUsersWithComponents(std::list<std::string> list);
+LuaList<ComponentUser*> GetAllUsersWithComponentAsLuaList(std::string component_name);
 
 private:
     ComponentUserBase(){};

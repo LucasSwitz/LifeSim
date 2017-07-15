@@ -1,8 +1,10 @@
 #include "LuaEntity.h"
 
-void LuaEntity::LoadScript(lua_State *lua_state, std::string script_path, std::string entity_name)
+void LuaEntity::LoadScript(lua_State *lua_state, std::string script_path, std::string& entity_name)
 {
     using namespace luabridge;
+    SetPrototypeName(entity_name);
+
     if (luaL_dofile(lua_state, script_path.c_str()) == 0)
     {
         _entity_table = std::make_shared<LuaRef>(getGlobal(lua_state, entity_name.c_str()));
@@ -40,6 +42,6 @@ void LuaEntity::ConfigureAllComponentsFromLua(const LuaRef &ref)
 
         LuaComponent* new_component = new LuaComponent(key);
         new_component->FromLuaRef(component_ref);
-        ComponentUser::AddComponent(new_component);
+        ComponentUser::AddComponent(new_component, !is_prototype);
     }
 }

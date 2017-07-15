@@ -1,5 +1,17 @@
 #include "SystemController.h"
 
+void SystemController::AddPassiveSystem(const std::string& system_name)
+{
+    System* system = SystemFactory::Instance()->GetSystem(system_name);
+    AddPassiveSystem(system);
+}
+
+void SystemController::AddPassiveSystem(System* system)
+{
+    LOG->LogInfo(1,"Adding Passive System: %s \n",system->GetName().c_str());
+    _passive_systems.push_back(system);
+}
+
 void SystemController::AddToSystemExecutionSequence(const std::string& system_name)
 {
     System* system = SystemFactory::Instance()->GetSystem(system_name);
@@ -50,7 +62,12 @@ void SystemController::AddToSystemExecutionSequence(System *system)
                 }
             }
         }
-        _systems_execution_sequence.insert(insert_position, system);
+        
+        if(system)
+        {
+            LOG->LogInfo(1,"Adding System to Execution: %s \n",system->GetName().c_str());
+            _systems_execution_sequence.insert(insert_position, system);
+        }
     }
 }
 
@@ -65,7 +82,7 @@ int SystemController::GetSequenceSize()
     return _systems_execution_sequence.size();
 }
 
-void SystemController::Update(double seconds_since_last_update)
+void SystemController::Update(float seconds_since_last_update)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
