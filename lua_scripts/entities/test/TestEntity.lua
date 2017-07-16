@@ -37,8 +37,9 @@ TestEntity =
             },
             Collision = 
             {
-                hit_box_width = 100,
-                hit_box_height = 100,
+                width = 100,
+                height = 100,
+                collision_script = ""
             },
             State = 
             {

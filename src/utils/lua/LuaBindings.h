@@ -97,6 +97,7 @@ class LuaBindings
                 .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
+                .addConstructor<void (*)(int,int,int)>()
                 .addStaticFunction("ComponentUserEvent",&Event::Create<ComponentUser>)
                 .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)

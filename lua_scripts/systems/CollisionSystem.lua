@@ -15,17 +15,20 @@ CollisionSystem =
             while compare_it ~= nil do
                 compare = compare_it.data
                 if self.CheckCollision(entity, compare) then
-                    EventManager.Instance():LaunchEvent(Event(EventType.COLLISION_EVENT, entity.id, compare.id, nil))
-                    if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
-                        lua_entity = LuaEntity.Downcast(entity)
-                        script = lua_entity:GetString("Collision","collision_script")
-                        loadfile(script)(entity.id, compare.id)
-                    end 
-                    if compare:IsType(Entity.LUA_DEFINED_ENTITY) then
-                        lua_entity = LuaEntity.Downcast(compare)
-                        script = lua_entity:GetString("Collision","collision_script")
-                        loadfile(script)(compare.id, entity.id)
-                    end
+                    e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
+                    EventManager.Instance():LaunchEvent(e)
+                    --if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
+                        --lua_entity = LuaEntity.Downcast(entity)
+                        script = entity:GetString("Collision","collision_script")
+                        script_2 = compare:GetString("Collision", "collision_script")
+                        if string.len(script) > 0 then
+                            print("script_1")
+                            loadfile(script)(entity, compare)
+                        end
+                        if string.len(script_2) > 0 then
+                            loadfile(script_2)(compare, entity)
+                        end
+                    --end 
                 end
                 compare_it = compare_it.next
             end

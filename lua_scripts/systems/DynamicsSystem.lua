@@ -29,10 +29,6 @@ DynamicsSystem =
             position_x = position_x + velocity_x*seconds_elapsed
             position_y = position_y + velocity_y*seconds_elapsed
 
-            print(position_x)
-            print(position_y)
-            print()
-
             current:SetNumber("Velocity","x",velocity_x)
             current:SetNumber("Velocity","y",velocity_y)
             current:SetNumber("Position","x",position_x)
