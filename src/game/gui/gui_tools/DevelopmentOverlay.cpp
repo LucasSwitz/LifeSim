@@ -27,6 +27,7 @@ void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cach
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
+    system_monitor.Draw("System Monitor");
 // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());
@@ -77,7 +78,7 @@ void DevelopmentOverlay::DrawMenuBar()
 
 bool DevelopmentOverlay::IsFocused()
 {
-    return log.IsFocused() || entity_table.IsFocused() || instance_editor.IsFocused();
+    return log.IsFocused() || entity_table.IsFocused() || instance_editor.IsFocused() || system_monitor.IsFocused();
 }
 void DevelopmentOverlay::Shutdown()
 {

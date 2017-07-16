@@ -150,6 +150,11 @@ class PMIDGWindow : public EventSubscriber
                 Event new_event(EventType::S_DOWN_EVENT, -1, -1);
                 EventManager::Instance()->LaunchEvent(new_event);
             }
+            else if (e.key.code == sf::Keyboard::D)
+            {
+                Event new_event(EventType::D_DOWN_EVENT, -1, -1);
+                EventManager::Instance()->LaunchEvent(new_event);
+            }
         }
         else if (e.type == sf::Event::KeyReleased)
         {

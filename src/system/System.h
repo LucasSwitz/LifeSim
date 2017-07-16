@@ -22,6 +22,15 @@ class System : public EventSubscriber
         return _after;
     }
 
+    double GetLastRuntime()
+    {
+        return _last_runtime;
+    }
+
+    double SetLastRuntime(float time)
+    {
+        _last_runtime = time;
+    }
 
    virtual void Update(float seconds_since_last_update) = 0;
    void OnEvent(Event& e) override{};
@@ -34,6 +43,7 @@ class System : public EventSubscriber
     System(std::string name = "") : _name(name){};
     std::string _name = "";
     std::string _after = "";
+    double _last_runtime = 0.0; //milliseconds
 };
 
 #endif

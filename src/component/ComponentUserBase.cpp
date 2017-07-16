@@ -64,18 +64,19 @@ std::list<ComponentUser*> ComponentUserBase::GetAllUsersWithComponents(std::list
 
     matches.merge(GetAllUsersWithComponent(*comp_name));
     comp_name = std::next(comp_name);
-    while(comp_name != list.end())
+    while(matches.size() != 0 && comp_name != list.end())
     {
-        for(auto user_it = matches.begin(); user_it != matches.end(); user_it++)
+        for(auto user_it = matches.begin(); user_it != matches.end();)
         {
-            if(!(*user_it)->HasComponent(*comp_name))
+            if(!((*user_it)->HasComponent(*comp_name)))
             {
                 user_it = matches.erase(user_it);
             }
+            else
+                user_it++;
         }
          comp_name = std::next(comp_name);
     }
-
     return matches;
 }
 
@@ -95,7 +96,6 @@ LuaList<ComponentUser*> ComponentUserBase::GetAllUsersWithComponentsAsLuaList(lu
 {
     std::list<std::string> comp_list; 
     LuaUniversal::StringListFromLuaTable(L, comp_list);
-
     std::list<ComponentUser*> matches = GetAllUsersWithComponents(comp_list);
     LuaList<ComponentUser*> lua_list;
     LuaList<ComponentUser*>::FromListToLuaList(matches, lua_list);

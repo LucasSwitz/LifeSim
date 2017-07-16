@@ -16,6 +16,7 @@ Stages =
            Keyboard.Instance():Get("A") or
            Keyboard.Instance():Get("S") or
            Keyboard.Instance():Get("D") then
+            print("Walking")
             return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterWalkingState.lua"
         end
     end,

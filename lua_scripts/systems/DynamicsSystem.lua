@@ -10,15 +10,15 @@ DynamicsSystem =
         local physicals = ComponentUsers.Instance():GetAll({"Position","Velocity","Acceleration","Mass"})
         local it = physicals:Iterator()
         while it ~= nil do
-
             local current = it.data
+            local position_x = current:GetNumber("Position","x")
+            local position_y = current:GetNumber("Position","y")
             local mass =  current:GetNumber("Mass","mass")
             local force_x = current:GetNumber("Acceleration","force_x")
             local force_y = current:GetNumber("Acceleration","force_y")
             local velocity_x = current:GetNumber("Velocity","x")
             local velocity_y = current:GetNumber("Velocity","y")
-            local position_x = current:GetNumber("Position","x")
-            local position_y = current:GetNumber("Position","y")
+
             
             local accleration_x = force_x / mass
             local accleration_y = force_y / mass
@@ -28,6 +28,10 @@ DynamicsSystem =
 
             position_x = position_x + velocity_x*seconds_elapsed
             position_y = position_y + velocity_y*seconds_elapsed
+
+            print(position_x)
+            print(position_y)
+            print()
 
             current:SetNumber("Velocity","x",velocity_x)
             current:SetNumber("Velocity","y",velocity_y)

@@ -1,20 +1,20 @@
 #include "SystemController.h"
 
-void SystemController::AddPassiveSystem(const std::string& system_name)
+void SystemController::AddPassiveSystem(const std::string &system_name)
 {
-    System* system = SystemFactory::Instance()->GetSystem(system_name);
+    System *system = SystemFactory::Instance()->GetSystem(system_name);
     AddPassiveSystem(system);
 }
 
-void SystemController::AddPassiveSystem(System* system)
+void SystemController::AddPassiveSystem(System *system)
 {
-    LOG->LogInfo(1,"Adding Passive System: %s \n",system->GetName().c_str());
+    LOG->LogInfo(1, "Adding Passive System: %s \n", system->GetName().c_str());
     _passive_systems.push_back(system);
 }
 
-void SystemController::AddToSystemExecutionSequence(const std::string& system_name)
+void SystemController::AddToSystemExecutionSequence(const std::string &system_name)
 {
-    System* system = SystemFactory::Instance()->GetSystem(system_name);
+    System *system = SystemFactory::Instance()->GetSystem(system_name);
     AddToSystemExecutionSequence(system);
 }
 
@@ -62,10 +62,10 @@ void SystemController::AddToSystemExecutionSequence(System *system)
                 }
             }
         }
-        
-        if(system)
+
+        if (system)
         {
-            LOG->LogInfo(1,"Adding System to Execution: %s \n",system->GetName().c_str());
+            LOG->LogInfo(1, "Adding System to Execution: %s \n", system->GetName().c_str());
             _systems_execution_sequence.insert(insert_position, system);
         }
     }
@@ -86,6 +86,76 @@ void SystemController::Update(float seconds_since_last_update)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
         (*it)->Update(seconds_since_last_update);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+        (*it)->SetLastRuntime(elapsed.count() * 1000);
+    }
+}
+
+std::list<System *> &SystemController::GetSystemInExecutionSequence()
+{
+    return _systems_execution_sequence;
+}
+
+std::list<System *> &SystemController::GetPassiveSystems()
+{
+    return _passive_systems;
+}
+
+void SystemController::MoveUp(std::string system_name)
+{
+    if (SystemFactory::Instance()->SystemExists(system_name))
+    {
+        System *system = SystemFactory::Instance()->GetSystem(system_name);
+        MoveUp(system);
+    }
+    else
+    {
+        std::cout << "System does not exists" << std::endl;
+    }
+}
+
+void SystemController::MoveUp(System *system)
+{
+    for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+    {
+        auto next = std::next(it);
+        if (next != _systems_execution_sequence.end())
+        {
+            if (*next == system)
+            {
+                std::swap(*it, *(next));
+                return;
+            };
+        }
+    }
+}
+
+void SystemController::MoveDown(std::string system_name)
+{
+    if (SystemFactory::Instance()->SystemExists(system_name))
+    {
+        System *system = SystemFactory::Instance()->GetSystem(system_name);
+        MoveDown(system);
+    }
+}
+
+void SystemController::MoveDown(System *system)
+{
+    for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+    {
+        auto next = std::next(it);
+        if (next != _systems_execution_sequence.end())
+        {
+            if (*it == system)
+            {
+                std::swap(*it, *(next));
+                return;
+            };
+        }
     }
 }

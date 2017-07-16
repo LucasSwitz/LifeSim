@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include "src/component/ComponentUser.h"
-#define ENTITY_ID_START 4
+#define ENTITY_ID_START 0
 
 /**
     Entities are simply ComponentLists with integer IDs attached to them.

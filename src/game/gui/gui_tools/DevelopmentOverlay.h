@@ -11,6 +11,7 @@
 #include "src/game/gui/TextureCache.h"
 #include "src/game/gui/PMIDGWindow.h"
 #include "src/game/gui/gui_tools/DevelopmentOverlayListener.h"
+#include "src/game/gui/gui_tools/SystemMonitor.h"
 
 class DevelopmentOverlay
 {
@@ -26,6 +27,7 @@ class DevelopmentOverlay
         Log log;
         EntityTable entity_table;
         InstanceEditor instance_editor;
+        SystemMonitor system_monitor;
 
     private:
         void DrawMenuBar();

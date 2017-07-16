@@ -45,7 +45,6 @@ void ComponentUser::AddComponent(Component *component, bool add_to_user_base)
 {
     std::string component_name = component->GetName();
     _components.insert(std::make_pair(component_name, component));
-
     if(add_to_user_base)
         EnableComponent(component_name);
 }
