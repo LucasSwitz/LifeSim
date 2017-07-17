@@ -61,6 +61,7 @@ class LuaBindings
                 .addData("next", &LuaListNode<Entity*>::next)
             .endClass()
             .beginClass<LuaList<ComponentUser*>>("LuaListComponentUser")
+                .addConstructor<void (*)(void)>()
                 .addFunction("Iterator", &LuaList<ComponentUser*>::Iterator)
             .endClass()
             .beginClass<LuaList<Entity*>>("LuaListEntity")
@@ -80,7 +81,6 @@ class LuaBindings
                 .addFunction("GetBool",&Component::GetBoolValue)
                 .addFunction("SetBool",&Component::SetBoolValue)
                 .addFunction("GetSubcomponent", &Component::GetSubcomponent)
-
             .endClass()
             .beginClass<Subscription>("Subscription")
                 .addConstructor<void (*)(int)>()

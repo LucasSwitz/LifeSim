@@ -79,7 +79,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnCreateBlankInstance(int rows, int columns) override
     {
-
         _active_instance = new Instance();
         TileMap map;
 

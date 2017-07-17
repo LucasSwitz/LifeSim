@@ -12,7 +12,7 @@
 
 class ComponentUserBase;
 
-class ComponentUser
+class ComponentUser : RefCountedObject
 {
   public:
     void AddComponent(Component *component, bool add_to_component_users = true);

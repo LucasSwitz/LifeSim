@@ -19,8 +19,8 @@ struct EditModeControls
 
         if(_show_collision_boxes)
         {
-            std::list<ComponentUser*> users =  ComponentUserBase::Instance()->GetAllUsersWithComponent("Collision");
-            for(ComponentUser* user : users)
+            std::list<ComponentUser*>* users =  ComponentUserBase::Instance()->GetAllUsersWithComponent("Collision");
+            for(ComponentUser* user : *users)
             {
                 int width = user->GetComponentValueFloat("Collision","width");
                 int height = user->GetComponentValueFloat("Collision","height");

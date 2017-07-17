@@ -9,7 +9,7 @@ struct LuaListNode
 {
     LuaListNode(T new_data) : data(new_data){};
 
-    T data;
+    RefCountedObjectPtr <T> data;
     LuaListNode<T> *next = nullptr;
 };
 
@@ -20,6 +20,7 @@ class LuaList
   public:
     void Add(T data)
     {
+        _size++;
         LuaListNode<T> *new_LuaListNode = new LuaListNode<T>(data);
 
         if (!_tail)
@@ -39,6 +40,11 @@ class LuaList
     LuaListNode<T> *Iterator()
     {
         return _head;
+    }
+
+    int Size()
+    {
+        return _size;
     }
 
     template <typename key, typename value>
@@ -66,6 +72,7 @@ class LuaList
   private:
     LuaListNode<T> *_head = nullptr;
     LuaListNode<T> *_tail = nullptr;
+    int _size = 0;
 };
 
 #endif
