@@ -26,12 +26,10 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     {
         int current_mouse_position_x = sf::Mouse::getPosition(window->SFWindow()).x;
 
-        SystemController::Instance()->AddToSystemExecutionSequence("DrawGraphicsSystem");
         LuaTileFactory::Instance()->PopulateFactory();
 
         _dev_tools.Init(window);
         _dev_tools.SetListener(this);
-        //_dev_tools.SetNewCreateableListener(this);
         _window->AddWindowListener(this);
     }
 

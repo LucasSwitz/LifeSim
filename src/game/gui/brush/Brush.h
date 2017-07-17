@@ -30,7 +30,7 @@ class Brush
     }
 
 private:    
-    BrushState* _state;
+    BrushState* _state = nullptr;
 };
 
 #endif

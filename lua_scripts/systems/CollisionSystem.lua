@@ -8,7 +8,7 @@ CollisionSystem =
     --shitty O(n^2) collision detection 
     Update = function(self,time)
         local entities = LuaListComponentUser()
-        ComponentUsers.Instance():GetAllEntities(entities,{"Collision"})
+        ComponentUsers.Instance():GetAll(entities,{"Collision"})
         local it = entities:Iterator()
         while it ~= null do
             entity = it.data
