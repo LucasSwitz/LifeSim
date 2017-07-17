@@ -7,7 +7,8 @@ Name = "DynamicsSystem"
 DynamicsSystem = 
 {
     Update = function(dynamics_system, seconds_elapsed)
-        local physicals = ComponentUsers.Instance():GetAll({"Position","Velocity","Acceleration","Mass"})
+        local physicals = LuaListComponentUser()
+        LuaListComponentUsers.Instance():GetAll(physicals,{"Position","Velocity","Acceleration","Mass"})
         local it = physicals:Iterator()
         while it ~= nil do
             local current = it.data

@@ -9,7 +9,7 @@ struct LuaListNode
 {
     LuaListNode(T new_data) : data(new_data){};
 
-    RefCountedObjectPtr <T> data;
+    T data;
     LuaListNode<T> *next = nullptr;
 };
 

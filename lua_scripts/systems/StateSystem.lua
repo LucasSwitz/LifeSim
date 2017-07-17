@@ -11,7 +11,8 @@ StateSystem =
 {
     Update = function(state_system, time)
     
-        local entities = ComponentUsers.Instance():GetAll{"State"}
+        local entities = LuaListComponentUser()
+        ComponentUsers.Instance():GetAll(entities,{"State"})
         local it = entities:Iterator()
         while it ~= nil do
             local current = it.data

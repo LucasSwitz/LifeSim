@@ -72,7 +72,10 @@ void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string>& list, 
 
     std::list<ComponentUser*>* first_matches = GetAllUsersWithComponent(*comp_name);
 
-    matches.merge(*first_matches);
+    for(ComponentUser* user : *first_matches)
+    {
+        matches.push_back(user);
+    }
 
     comp_name = std::next(comp_name);
 
@@ -99,15 +102,14 @@ std::list<ComponentUser*>* ComponentUserBase::GetAllUsersWithComponent(std::stri
     }
 }
 
-void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser*>& lua_list, lua_State* L)
+void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser*>* lua_list, lua_State* L)
 {
     std::list<std::string> comp_list; 
     LuaUniversal::StringListFromLuaTable(L, comp_list);
 
     std::list<ComponentUser*> matches;
     GetAllUsersWithComponents(comp_list, matches);
-    LuaList<ComponentUser*>::FromListToLuaList(matches, lua_list);
-    std::cout << lua_list.Size() << std::endl;
+    LuaList<ComponentUser*>::FromListToLuaList(matches, *lua_list);
 }
 
 

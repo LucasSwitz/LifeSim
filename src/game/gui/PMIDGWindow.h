@@ -116,8 +116,8 @@ class PMIDGWindow : public EventSubscriber
     {
         if(e.id == EventType::DRAW_REQUEST_EVENT)
         {
-            ComponentUser* user = e.InfoToType<ComponentUser*>();
-            DrawComponentUser(user);
+            //ComponentUser* user = e.InfoToType<ComponentUser*>();
+            //DrawComponentUser(user);
         }
     }
 
