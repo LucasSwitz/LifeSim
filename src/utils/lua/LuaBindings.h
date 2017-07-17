@@ -35,6 +35,7 @@ class LuaBindings
                 .addFunction("SetBool", &ComponentUser::SetComponentBoolValue)
                 .addFunction("GetBool", &ComponentUser::GetComponentBoolValue)
                 .addFunction("GetComponent", &ComponentUser::GetComponent)
+                .addFunction("HasComponent",&ComponentUser::HasComponent)
             .endClass()
             .deriveClass<Entity, ComponentUser>("Entity")
                 .addProperty("id", &Entity::ID)

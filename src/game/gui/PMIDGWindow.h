@@ -92,7 +92,8 @@ class PMIDGWindow : public EventSubscriber
             double scale_y = (float)TILE_HEIGHT / texture->getSize().y;
             sprite->setScale(scale_x,scale_y);
             sprite->setTexture(*texture);
-            sprite->setPosition(user->GetComponentValueFloat("Position", "x"), user->GetComponentValueFloat("Position", "y"));
+            sprite->setPosition(user->GetComponentValueFloat("Position", "x") - sprite->getGlobalBounds().width /2.0, 
+                                user->GetComponentValueFloat("Position", "y") - sprite->getGlobalBounds().height /2.0);
             Draw(sprite);
         }
         else

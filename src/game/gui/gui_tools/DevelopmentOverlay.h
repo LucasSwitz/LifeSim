@@ -12,6 +12,7 @@
 #include "src/game/gui/PMIDGWindow.h"
 #include "src/game/gui/gui_tools/DevelopmentOverlayListener.h"
 #include "src/game/gui/gui_tools/SystemMonitor.h"
+#include "src/game/gui/gui_tools/EditModeControls.h"
 
 class DevelopmentOverlay
 {
@@ -28,6 +29,7 @@ class DevelopmentOverlay
         EntityTable entity_table;
         InstanceEditor instance_editor;
         SystemMonitor system_monitor;
+        EditModeControls edit_mode_controls;
 
     private:
         void DrawMenuBar();

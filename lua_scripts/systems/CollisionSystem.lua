@@ -19,14 +19,15 @@ CollisionSystem =
                     EventManager.Instance():LaunchEvent(e)
                     --if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
                         --lua_entity = LuaEntity.Downcast(entity)
-                        script = entity:GetString("Collision","collision_script")
+                        script_1 = entity:GetString("Collision","collision_script")
                         script_2 = compare:GetString("Collision", "collision_script")
-                        if string.len(script) > 0 then
-                            print("script_1")
-                            loadfile(script)(entity, compare)
+
+                        if string.len(script_1) > 0 then
+                            loadfile(script_1)(entity, compare, time)
                         end
+
                         if string.len(script_2) > 0 then
-                            loadfile(script_2)(compare, entity)
+                            loadfile(script_2)(compare, entity, time)
                         end
                     --end 
                 end

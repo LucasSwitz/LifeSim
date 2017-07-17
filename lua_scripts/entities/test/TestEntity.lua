@@ -22,7 +22,9 @@ TestEntity =
             Velocity =
             {
                 x = 0, -- px/second
-                y = 0
+                y = 0,
+                max = 100,
+                heading = 0
             },
             Acceleration = 
             {

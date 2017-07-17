@@ -30,8 +30,8 @@ class InstanceEditor : public SFMLWindowListener
     }
     void Draw(TextureCache &texture_cache, Brush& brush, bool *p_opened = NULL)
     {
-        if (ImGui::Begin("Instance Editor"))
-        {
+        ImGui::Begin("Instance Editor");
+        
             _focused = ImGui::IsRootWindowOrAnyChildHovered();
             if (ImGui::TreeNode("Tile Map"))
             {
@@ -56,8 +56,8 @@ class InstanceEditor : public SFMLWindowListener
             {
                 //this thing needs a reference of the instance
             }
-            ImGui::End();
-        }
+        
+        ImGui::End();
     }
 
     bool OnWindowEvent(sf::Event &e) override

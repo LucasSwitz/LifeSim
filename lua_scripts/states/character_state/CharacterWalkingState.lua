@@ -18,8 +18,10 @@ Stages =
         y = true 
         x = true
         if Keyboard.Instance():Get("W") then
+            character:SetNumber("Velocity","heading",90)
             character:SetNumber("Velocity","y", -100)
         elseif Keyboard.Instance():Get("S") then
+            character:SetNumber("Velocity","heading",270)
             character:SetNumber("Velocity","y", 100)
         else
             y = false
@@ -27,8 +29,10 @@ Stages =
         end
 
         if Keyboard.Instance():Get("A") then
+            character:SetNumber("Velocity","heading",180)
             character:SetNumber("Velocity","x", -100)   
         elseif Keyboard.Instance():Get("D") then
+            character:SetNumber("Velocity","heading",0)
             character:SetNumber("Velocity","x", 100)
         else
             x= false
