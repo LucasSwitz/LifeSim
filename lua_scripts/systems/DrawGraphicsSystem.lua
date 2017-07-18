@@ -12,8 +12,8 @@ DrawGraphicsSystem =
         --Draw all objects with 'Graphics' component
         while it ~= nil do
             local drawable = it.data
-            --e = Event.ComponentUserEvent(EventType.DRAW_REQUEST_EVENT,0,0,drawable)
-            --EventManager.Instance():LaunchEvent(e)
+            e = Event.ComponentUserEvent(EventType.DRAW_REQUEST_EVENT,0,0,drawable)
+            EventManager.Instance():LaunchEvent(e)
             it = it.next
         end
     end

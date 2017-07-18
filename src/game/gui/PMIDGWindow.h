@@ -54,9 +54,10 @@ class PMIDGWindow : public EventSubscriber
 
         while (!_drawables_queue.empty())
         {
-            sf::Drawable *to_draw = _drawables_queue.front();
+            sf::Drawable* to_draw = _drawables_queue.front();
             _window.draw(*to_draw);
             _drawables_queue.pop();
+            delete to_draw;
         }
     }
 
@@ -87,14 +88,14 @@ class PMIDGWindow : public EventSubscriber
         sf::Texture *texture = nullptr;
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
-            /*sf::Sprite *sprite = new sf::Sprite();
+            sf::Sprite *sprite = new sf::Sprite();
             double scale_x = (float)TILE_WIDTH / texture->getSize().x;
             double scale_y = (float)TILE_HEIGHT / texture->getSize().y;
             sprite->setScale(scale_x,scale_y);
             sprite->setTexture(*texture);
             sprite->setPosition(user->GetComponentValueFloat("Position", "x") - sprite->getGlobalBounds().width /2.0, 
                                 user->GetComponentValueFloat("Position", "y") - sprite->getGlobalBounds().height /2.0);
-            Draw(sprite);*/
+            Draw(sprite);
         }
         else
         {
