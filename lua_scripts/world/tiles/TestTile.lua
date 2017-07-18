@@ -13,6 +13,12 @@ TestTile =
             x = 0,
             y = 0
         },
+        Collision = 
+        {
+            width = 32,
+            height = 32,
+            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/GenericWallCollision.lua"
+        },
         Graphics  = 
         {
             sprite = "/home/pabu/Desktop/LifeSim/res/textures/pumpkin.jpg"

@@ -39,8 +39,8 @@ TestEntity =
             },
             Collision = 
             {
-                width = 100,
-                height = 100,
+                width = 32,
+                height = 32,
                 collision_script = ""
             },
             State = 
