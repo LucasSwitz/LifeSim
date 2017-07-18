@@ -15,7 +15,9 @@ Rock =
         },
         Graphics = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/sprites/rock.png"
+            sprite = "/home/pabu/Desktop/LifeSim/res/sprites/rock.png",
+            width = 100,
+            height = 100
         },
         Collision = 
         {

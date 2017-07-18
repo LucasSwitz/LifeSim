@@ -32,10 +32,13 @@ bool ComponentUserBase::ComponentExists(std::string component_name)
     return _component_users_directory.find(component_name) != _component_users_directory.end();
 }
 
-void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity*>& lua_list)
+void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity*>* lua_list)
 {
     std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
     std::list<Entity*> entities;
+
+    if(!list)
+        return;
 
     for(auto it = list->begin(); it != list->end(); it++)
     {
@@ -45,7 +48,7 @@ void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string componen
             entities.push_back(e);
     }
 
-    LuaList<Entity*>::FromListToLuaList<Entity*>(entities, lua_list);
+    LuaList<Entity*>::FromListToLuaList<Entity*>(entities, *lua_list);
 }
 
 void ComponentUserBase::GetAllUsersWithComponents(std::initializer_list<std::string> list,
@@ -100,6 +103,8 @@ std::list<ComponentUser*>* ComponentUserBase::GetAllUsersWithComponent(std::stri
     {   
         return _component_users_directory.at(component_name);
     }
+    else
+        return nullptr;
 }
 
 void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser*>* lua_list, lua_State* L)

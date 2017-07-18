@@ -7,8 +7,8 @@ CollisionSystem =
 {
     --shitty O(n^2) collision detection 
     Update = function(self,time)
-        local entities = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(entities,{"Collision"})
+        local entities = LuaListEntity()
+        ComponentUsers.Instance():GetAllEntities("Collision",entities)
         local it = entities:Iterator()
         while it ~= null do
             entity = it.data
@@ -18,8 +18,6 @@ CollisionSystem =
                 if self.CheckCollision(entity, compare) then
                     e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
                     EventManager.Instance():LaunchEvent(e)
-                    --if entity:IsType(Entity.LUA_DEFINED_ENTITY) then
-                        --lua_entity = LuaEntity.Downcast(entity)
                         script_1 = entity:GetString("Collision","collision_script")
                         script_2 = compare:GetString("Collision", "collision_script")
 
@@ -30,7 +28,6 @@ CollisionSystem =
                         if string.len(script_2) > 0 then
                             loadfile(script_2)(compare, entity, time)
                         end
-                    --end 
                 end
                 compare_it = compare_it.next
             end
