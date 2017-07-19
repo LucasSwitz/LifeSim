@@ -20,19 +20,23 @@ struct EditModeControls
         if(_show_collision_boxes)
         {
             std::list<ComponentUser*>* users =  ComponentUserBase::Instance()->GetAllUsersWithComponent("Collision");
-            for(ComponentUser* user : *users)
-            {
-                int width = user->GetComponentValueFloat("Collision","width");
-                int height = user->GetComponentValueFloat("Collision","height");
-                int x = user->GetComponentValueFloat("Position","x");
-                int y = user->GetComponentValueFloat("Position","y");
 
-                sf::RectangleShape rect(sf::Vector2f(width, height));
-                rect.setOutlineColor(sf::Color::Red);
-                rect.setOutlineThickness(2);
-                rect.setFillColor(sf::Color::Transparent);
-                rect.setPosition(x-width/2.0,y-height/2.0);
-                window.DrawNow(rect);
+            if(users)
+            {
+                for(ComponentUser* user : *users)
+                {
+                    int width = user->GetComponentValueFloat("Collision","width");
+                    int height = user->GetComponentValueFloat("Collision","height");
+                    int x = user->GetComponentValueFloat("Position","x");
+                    int y = user->GetComponentValueFloat("Position","y");
+
+                    sf::RectangleShape rect(sf::Vector2f(width, height));
+                    rect.setOutlineColor(sf::Color::Red);
+                    rect.setOutlineThickness(2);
+                    rect.setFillColor(sf::Color::Transparent);
+                    rect.setPosition(x-width/2.0,y-height/2.0);
+                    window.DrawNow(rect);
+                }
             }
         }
 

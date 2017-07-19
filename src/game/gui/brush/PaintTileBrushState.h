@@ -14,7 +14,7 @@ class PaintTileBrushState : public BrushState
         PAINTING,
     };
 
-    PaintTileBrushState(std::string tile_texture) : _tile_texture(tile_texture){};
+    PaintTileBrushState(Tile* selected) : _selected_tile(selected){};
 
     void PaintWindow(PMIDGWindow &window) override
     {
@@ -53,14 +53,18 @@ class PaintTileBrushState : public BrushState
                 instance->GetTileMap().TilesInRange(_mouse_history.x1, _mouse_history.y1,
                                                             _mouse_history.x2, _mouse_history.y2,
                                                             boxed_tiles);
-                if (!_tile_texture.empty())
+                if (_selected_tile)
                 {
                     for (Tile *boxed_tile : boxed_tiles)
                     {
-                        boxed_tile->SetComponentValueString("Graphics", "sprite", _tile_texture);
+                        float x = boxed_tile->GetComponentValueFloat("Position","x");
+                        float y = boxed_tile->GetComponentValueFloat("Position","y");
+                        delete boxed_tile;
+                        boxed_tile = _selected_tile->Clone();
+                        boxed_tile->SetComponentValueFloat("Position", "x", x);
+                        boxed_tile->SetComponentValueFloat("Position", "y", y);
                     }
                 }
-
                 _painting_state = DORMANT;
                 return true;
             }
@@ -92,6 +96,6 @@ class PaintTileBrushState : public BrushState
 
     MouseHistory _mouse_history;
     PaintingState _painting_state = DORMANT;
-    std::string _tile_texture;
+    Tile* _selected_tile;
 };
 #endif

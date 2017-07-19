@@ -33,7 +33,6 @@ class LuaTile : public Tile
         {
             auto key = it.first;
             LuaRef component_ref = it.second;
-
             LuaComponent* new_component = new LuaComponent(key);
             new_component->FromLuaRef(component_ref);
             ComponentUser::AddComponent(new_component, false); // Tile will not immediately be added to CUB.

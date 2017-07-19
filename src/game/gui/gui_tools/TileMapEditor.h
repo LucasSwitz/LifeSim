@@ -47,8 +47,7 @@ class TileMapEditor
             {
                 delete selected_tile_prototype;
                 selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
-                std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
-                brush.SetState(new PaintTileBrushState(texture_path));
+                brush.SetState(new PaintTileBrushState(selected_tile_prototype));
             }
 
             std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");

@@ -5,7 +5,6 @@ correct_threshold = .1
 impulse_threshold = .1
 
 DoImpulse = function(collision_data)
-    print("Impulse")
     collider_1 = collision_data.collider_1
     collider_2 = collision_data.collider_2
 

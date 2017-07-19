@@ -8,8 +8,8 @@ CollisionSystem =
     --shitty O(n^2) collision detection 
     after = "GravitySystem",
     Update = function(self,time)
-        local entities = LuaListEntity()
-        ComponentUsers.Instance():GetAllEntities("Collision",entities)
+        local entities = LuaListComponentUser()
+        ComponentUsers.Instance():GetAll(entities, {"Collision"})
         local it = entities:Iterator()
         while it ~= null do
             entity = it.data
@@ -18,8 +18,8 @@ CollisionSystem =
                 compare = compare_it.data
                 collision_data = self.GetCollision(entity, compare)
                 if collision_data ~= nil then
-                    e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
-                    EventManager.Instance():LaunchEvent(e)
+                    --e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
+                    --EventManager.Instance():LaunchEvent(e)
                     script_1 = entity:GetString("Collision","collision_script")
                     script_2 = compare:GetString("Collision", "collision_script")
 

@@ -38,7 +38,7 @@ if(SFML_FOUND)
 endif()
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
-target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua5.2.a)
+target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua.a)
 target_link_libraries(${PROJECT_NAME_STR} $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
 target_link_libraries(${PROJECT_NAME_STR} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
