@@ -19,6 +19,10 @@ Rock =
             width = 100,
             height = 100
         },
+        Mass = 
+        {
+            mass = 10000
+        },
         Collision = 
         {
             width = 100,
