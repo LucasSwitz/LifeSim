@@ -7,30 +7,38 @@
 
 class Brush
 {
-    public:
-    void PaintWindow(PMIDGWindow& window)
+  public:
+    void PaintWindow(PMIDGWindow &window)
     {
-        if(_state)
+        if (_state)
             _state->PaintWindow(window);
     }
 
-    bool OnInstanceMouseEvent(sf::Event e, sf::Vector2f& event_world_position, Instance* instance)
+    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance)
     {
-        if(_state)
+        if (_state)
             return _state->OnInstanceMouseEvent(e, event_world_position, instance);
         return false;
     }
 
-    void SetState(BrushState* state)
+    bool OnKeyboardEvent(sf::Event &e, Instance *instance)
     {
-        if(_state)
+        if (_state)
+            return _state->OnKeyboardEvent(e, instance);
+        return false;
+    }
+
+    void SetState(BrushState *state)
+    {
+        std::cout << "Switching Brush State" << std::endl;
+        if (_state)
             delete _state;
-        
+
         _state = state;
     }
 
-private:    
-    BrushState* _state = nullptr;
+  private:
+    BrushState *_state = nullptr;
 };
 
 #endif

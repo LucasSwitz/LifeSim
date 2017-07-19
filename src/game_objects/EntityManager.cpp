@@ -15,8 +15,10 @@ Entity *EntityManager::GetEntityByID(int id)
 
 void EntityManager::DeregisterEntity(int id)
 {
-    _entity_map.erase(_entity_map.find(id));
+    if(!IDAvailable(id))
+        _entity_map.erase(_entity_map.find(id));
 }
+
 void EntityManager::RegisterEntity(Entity *entity)
 {
     _entity_map.insert(std::make_pair(entity->_id, entity));

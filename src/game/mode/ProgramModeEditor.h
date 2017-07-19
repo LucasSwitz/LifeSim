@@ -139,6 +139,10 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
                 static_cast<PMIDGEditorWindow *>(_window)->Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
             }
+            else if (e.type == sf::Event::KeyPressed)
+            {
+                _brush.OnKeyboardEvent(e,_active_instance);
+            }
         }
     }
 

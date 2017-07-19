@@ -48,14 +48,9 @@ class PaintTileBrushState : public BrushState
                 _mouse_history.x2 = event_world_position.x;
                 _mouse_history.y2 = event_world_position.y;
 
-                std::list<Tile *> boxed_tiles;
-                
-                instance->GetTileMap().TilesInRange(_mouse_history.x1, _mouse_history.y1,
-                                                            _mouse_history.x2, _mouse_history.y2,
-                                                            boxed_tiles);
                 if (_selected_tile)
                 {
-                    for (Tile *boxed_tile : boxed_tiles)
+                    for (Tile *boxed_tile : _boxed_tiles)
                     {
                         float x = boxed_tile->GetComponentValueFloat("Position","x");
                         float y = boxed_tile->GetComponentValueFloat("Position","y");
@@ -92,10 +87,26 @@ class PaintTileBrushState : public BrushState
         sf::RectangleShape rect(sf::Vector2f(width, height));
         rect.setPosition(pos_x, pos_y);
         window.DrawNow(rect);
+
+        
+    }
+
+    void HighLightBoxedTile(int x1, int y1, int x2, int y2)
+    {
+        instance->GetTileMap().TilesInRange(_mouse_history.x1, _mouse_history.y1,
+                                            _mouse_history.x2, _mouse_history.y2,
+                                            _boxed_tiles);
+        
+        for(Tile* tile : _boxed_tiles)
+        {
+            tile->SetComponentValueFloat("Graphics","opacity",.5);
+        }
     }
 
     MouseHistory _mouse_history;
     PaintingState _painting_state = DORMANT;
     Tile* _selected_tile;
+    Instance* _instance;
+    std::list<Tile *> _boxed_tiles;
 };
 #endif

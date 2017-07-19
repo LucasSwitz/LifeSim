@@ -20,6 +20,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 
+#include "src/gui/rendering/GraphicsPreprocessor.h"
 
 class PMIDGWindow : public EventSubscriber
 {
@@ -29,7 +30,7 @@ class PMIDGWindow : public EventSubscriber
         EventManager::Instance()->RegisterSubscriber(this);
     }
 
-    sf::RenderWindow& SFWindow()
+    sf::RenderWindow &SFWindow()
     {
         return _window;
     }
@@ -43,7 +44,6 @@ class PMIDGWindow : public EventSubscriber
         }
     }
 
-
     void Clear()
     {
         _window.clear(sf::Color::White);
@@ -51,10 +51,9 @@ class PMIDGWindow : public EventSubscriber
 
     void Render()
     {
-
         while (!_drawables_queue.empty())
         {
-            sf::Drawable* to_draw = _drawables_queue.front();
+            sf::Drawable *to_draw = _drawables_queue.front();
             _window.draw(*to_draw);
             _drawables_queue.pop();
             delete to_draw;
@@ -71,7 +70,7 @@ class PMIDGWindow : public EventSubscriber
         _drawables_queue.push(drawable);
     }
 
-    void DrawNow(sf::Drawable& drawable)
+    void DrawNow(sf::Drawable &drawable)
     {
         _window.draw(drawable);
     }
@@ -86,15 +85,11 @@ class PMIDGWindow : public EventSubscriber
 
         std::string sprite_path = user->GetComponentValueString("Graphics", "sprite");
         sf::Texture *texture = nullptr;
+
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
             sf::Sprite *sprite = new sf::Sprite();
-            double scale_x = (float)TILE_WIDTH / texture->getSize().x;
-            double scale_y = (float)TILE_HEIGHT / texture->getSize().y;
-            sprite->setScale(scale_x,scale_y);
-            sprite->setTexture(*texture);
-            sprite->setPosition(user->GetComponentValueFloat("Position", "x") - sprite->getGlobalBounds().width /2.0, 
-                                user->GetComponentValueFloat("Position", "y") - sprite->getGlobalBounds().height /2.0);
+            _preprocesser.Process(user,texture,sprite);
             Draw(sprite);
         }
         else
@@ -103,7 +98,7 @@ class PMIDGWindow : public EventSubscriber
         }
     }
 
-    TextureCache& GetTextureCache()
+    TextureCache &GetTextureCache()
     {
         return _texture_cache;
     }
@@ -113,11 +108,11 @@ class PMIDGWindow : public EventSubscriber
         _window.close();
     }
 
-    void OnEvent(Event& e)
+    void OnEvent(Event &e)
     {
-        if(e.id == EventType::DRAW_REQUEST_EVENT)
+        if (e.id == EventType::DRAW_REQUEST_EVENT)
         {
-            ComponentUser* user = e.InfoToType<ComponentUser*>();
+            ComponentUser *user = e.InfoToType<ComponentUser *>();
             DrawComponentUser(user);
         }
     }
@@ -181,27 +176,26 @@ class PMIDGWindow : public EventSubscriber
                 EventManager::Instance()->LaunchEvent(new_event);
             }
         }
-        else{
-            for(SFMLWindowListener* listener : _window_listeners)
-            {
-                if(listener->OnWindowEvent(e))
-                    break;
-            }
+        for (SFMLWindowListener *listener : _window_listeners)
+        {
+            if (listener->OnWindowEvent(e))
+                break;
         }
     }
-    
-    void AddWindowListener(SFMLWindowListener* listener)
+
+    void AddWindowListener(SFMLWindowListener *listener)
     {
         _window_listeners.push_back(listener);
     }
 
   protected:
     sf::RenderWindow _window;
+
   private:
     TextureCache _texture_cache;
-    std::queue<sf::Drawable*> _drawables_queue;
-    std::list<SFMLWindowListener*> _window_listeners;
-
+    std::queue<sf::Drawable *> _drawables_queue;
+    std::list<SFMLWindowListener *> _window_listeners;
+    GraphicsPreprocessor _preprocesser;
 };
 
 #endif

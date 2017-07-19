@@ -32,7 +32,6 @@ class SelectEntityBrushState : public BrushState
 
     void PaintWindow(PMIDGWindow &window) override
     {
-
         switch (_selection_state)
         {
         case SELECTED:
@@ -40,21 +39,36 @@ class SelectEntityBrushState : public BrushState
 
         case MOVING:
             MoveEntity(window);
-        break;
+            break;
         }
     }
 
     bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance) override
     {
-        if (e.type == sf::Event::MouseButtonPressed)
+        if (_selected)
         {
-            _selection_state = MOVING;
-            return true;
+            if (e.type == sf::Event::MouseButtonPressed)
+            {
+                _selection_state = MOVING;
+                return true;
+            }
+            else if (e.type == sf::Event::MouseButtonReleased)
+            {
+                _selection_state = SELECTED;
+                return true;
+            }
         }
-        else if(e.type == sf::Event::MouseButtonReleased)
+    }
+
+    bool OnKeyboardEvent(sf::Event &e, Instance *instance) override
+    {
+        if (_selected)
         {
-            _selection_state = SELECTED;
-            return true;
+            if (e.key.code == sf::Keyboard::Delete)
+            {
+                delete _selected;
+                _selected = nullptr;
+            }
         }
     }
 

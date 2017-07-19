@@ -7,8 +7,6 @@
 #include "src/game/gui/brush/PaintTileBrushState.h"
 #include "src/game/gui/brush/Brush.h"
 
-#define BRUSH_STATE_TILE 0
-
 class TileMapEditor
 {
   public:

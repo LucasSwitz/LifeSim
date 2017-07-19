@@ -65,5 +65,5 @@ Entity* Entity::Clone(bool is_prototype)
 
 Entity::~Entity()
 {
-    // /EntityManager::Instance()->DeregisterEntity(_id);
+    EntityManager::Instance()->DeregisterEntity(_id);
 }
