@@ -11,7 +11,7 @@ class LuaTile : public Tile
 
     public:
     LuaTile(int id, std::string name) : Tile(id, name){}
-
+    virtual ~LuaTile(){};
     void LoadFromFile(lua_State* lua_state, const std::string& script_path, const std::string& tile_name)
     {
         if (luaL_dofile(lua_state, script_path.c_str()) == 0)

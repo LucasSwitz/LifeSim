@@ -14,6 +14,10 @@ class Instance : public EventSubscriber, public FPSRunnable
 
  public:
     Instance(int id = -1) : _id(id){}
+    ~Instance()
+    {
+        _tile_map.Erase();
+    }
 
     virtual void Load() override
     {
@@ -84,8 +88,9 @@ class Instance : public EventSubscriber, public FPSRunnable
         return _tile_map;
     }
 
-    void SetTileMap(const TileMap map)
+    void SetTileMap(TileMap map)
     {   
+        _tile_map.Erase();
         _tile_map = map;
     }   
 

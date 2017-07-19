@@ -117,3 +117,12 @@ std::unordered_map<std::string, Component*>& ComponentUser::GetAllComponents()
 {
     return _components;
 }
+
+ComponentUser::~ComponentUser()
+{
+    for(auto it = _components.begin(); it != _components.end(); it++)
+    {
+        ComponentUserBase::Instance()->DeRegister(it->first, *this);
+        delete it->second;
+    }
+}

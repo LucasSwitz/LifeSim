@@ -1,8 +1,8 @@
 collision_data = ...
 
-correct_percent = 100
-correct_threshold = 4
-impulse_threshold = 4
+correct_percent = .2
+correct_threshold = .1
+impulse_threshold = .1
 
 DoImpulse = function(collision_data)
     print("Impulse")
@@ -43,12 +43,11 @@ DoImpulse = function(collision_data)
         return
     end
 
-    restitution = .5
+    restitution = .2
 
     impulse_scale = -(1 + restitution) * vel_along_norm
 
     impulse_scale = impulse_scale / (1.0 / collider_1_mass + 1.0/collider_2_mass)
-
     impulse = {x = norm.x*impulse_scale, y = norm.y*impulse_scale}
 
     collider_1_vel.x = collider_1_vel.x + (1/collider_1_mass) * impulse.x 
@@ -77,7 +76,6 @@ DoCorrection = function(collision_data)
     collider_1_mass = collider_1:GetNumber("Mass","mass")
     collider_2_mass = collider_1:GetNumber("Mass","mass")
 
-    print(collision_data.overlap)
     correction  = { x = correct_percent*math.max(collision_data.overlap - correct_threshold, 0.0) / ((collider_1_mass + collider_2_mass) 
                         * collision_data.distance.x),
                     y = collision_data.distance.y*correct_percent*math.max(collision_data.overlap - correct_threshold, 0.0) / ((collider_1_mass + collider_2_mass))
@@ -93,10 +91,8 @@ DoCorrection = function(collision_data)
     collider_1_pos.x = collider_1_pos.x - (1 / collider_1_mass) * correction.x
     collider_1_pos.y = collider_1_pos.y - (1 / collider_1_mass) * correction.y
 
-    print(collider_2_pos.y)
     collider_2_pos.x = collider_2_pos.x + (1 / collider_2_mass) * correction.x
     collider_2_pos.y = collider_2_pos.y + (1 / collider_2_mass) * correction.y
-    print(collider_2_pos.y)
 
     collider_1:SetNumber("Position","x",collider_1_pos.x)
     collider_1:SetNumber("Position","y",collider_1_pos.y)
@@ -113,7 +109,8 @@ end
 if collision_data ~= nil then
     if collision_data.overlap > impulse_threshold then
         DoImpulse(collision_data)
-    elseif collision_data.overlap > correct_threshold then
         --DoCorrection(collision_data)
+    elseif collision_data.overlap > correct_threshold then
+        return
     end
 end

@@ -6,6 +6,7 @@ Name = "DynamicsSystem"
 
 DynamicsSystem = 
 {
+    after = "CollisionSystem",
     Update = function(dynamics_system, seconds_elapsed)
         local physicals = LuaListComponentUser()
         ComponentUsers.Instance():GetAll(physicals,{"Position","Velocity","Acceleration","Mass"})
@@ -29,17 +30,17 @@ DynamicsSystem =
             velocity_x = velocity_x + accleration_x*seconds_elapsed
             velocity_y = velocity_y + accleration_y*seconds_elapsed
             
-            if math.abs(velocity_x) > max_velocity and velocity_x < 0 then
+            --[[if math.abs(velocity_x) > max_velocity and velocity_x < 0 then
                 velocity_x = -max_velocity
-            elseif math.abs(velocity_x) > max_velocity and velocity_x > 0 then
+           -- elseif math.abs(velocity_x) > max_velocity and velocity_x > 0 then
                 velocity_x = max_velocity
-            end
+            --end-]]
 
-            if math.abs(velocity_y) > max_velocity and velocity_y < 0 then
+            --[[if math.abs(velocity_y) > max_velocity and velocity_y < 0 then
                 velocity_y = -max_velocity
-            elseif math.abs(velocity_y) > max_velocity and velocity_y > 0 then
+            --elseif math.abs(velocity_y) > max_velocity and velocity_y > 0 then
                 velocity_y = max_velocity
-            end
+            --end--]]
 
             position_x = position_x + velocity_x*seconds_elapsed
             position_y = position_y + velocity_y*seconds_elapsed

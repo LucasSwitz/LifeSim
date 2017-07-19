@@ -17,6 +17,8 @@ class Tile : public ComponentUser
         {
             return _name;
         }
+        virtual ~Tile(){};
+
     private:
         int _id;
         std::string _name;

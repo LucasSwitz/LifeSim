@@ -6,6 +6,7 @@ Name = "GravitySystem"
 
 GravitySystem = 
 {
+    after = "StateSystem",
     Update = function(movement_system, time)
         local physicals = LuaListComponentUser()
         ComponentUsers.Instance():GetAll(physicals,{"Position","Velocity","Acceleration"})

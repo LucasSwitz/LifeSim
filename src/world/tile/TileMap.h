@@ -198,7 +198,13 @@ class TileMap
 
     void Erase()
     {
-
+        for(auto it = _tiles.begin(); it != _tiles.end(); it++)
+        {
+            for(auto tile_it = (*it).begin(); tile_it != (*it).end(); tile_it++)
+            {
+                delete *tile_it;
+            }
+        }
     }
 
  private:

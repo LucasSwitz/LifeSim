@@ -6,6 +6,7 @@ Name = "CollisionSystem"
 CollisionSystem = 
 {
     --shitty O(n^2) collision detection 
+    after = "GravitySystem",
     Update = function(self,time)
         local entities = LuaListEntity()
         ComponentUsers.Instance():GetAllEntities("Collision",entities)
