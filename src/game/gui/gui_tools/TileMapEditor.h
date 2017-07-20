@@ -7,8 +7,6 @@
 #include "src/game/gui/brush/PaintTileBrushState.h"
 #include "src/game/gui/brush/Brush.h"
 
-#define BRUSH_STATE_TILE 0
-
 class TileMapEditor
 {
   public:
@@ -47,8 +45,7 @@ class TileMapEditor
             {
                 delete selected_tile_prototype;
                 selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
-                std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
-                brush.SetState(new PaintTileBrushState(texture_path));
+                brush.SetState(new PaintTileBrushState(selected_tile_prototype));
             }
 
             std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
@@ -72,7 +69,7 @@ class TileMapEditor
   private:
     ComponentUserEditor _component_editor;
     std::vector<std::string> tile_scripts;
-    Tile *selected_tile_prototype;
+    Tile *selected_tile_prototype = nullptr;
     int selected_tile = -1;
 };
 #endif

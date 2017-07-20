@@ -1,6 +1,6 @@
 #include "Entity.h"
 #include "src/game_objects/EntityManager.h"
-int Entity::_lastId = ENTITY_ID_START - 1;
+int Entity::_lastId = ENTITY_ID_START -1;
 int Entity::CPP_DEFINED_ENTITY = 0;
 int Entity::LUA_DEFINED_ENTITY = 1;
 
@@ -56,7 +56,7 @@ Entity* Entity::Clone(bool is_prototype)
     std::unordered_map<std::string, Component*> components = GetAllComponents();
     for(auto it = components.begin(); it != components.end(); it++)
     {
-        Component* c = new Component(*it->second);
+        Component* c = new Component(*(it->second));
         e->AddComponent(c);
     }
 
@@ -65,5 +65,5 @@ Entity* Entity::Clone(bool is_prototype)
 
 Entity::~Entity()
 {
-    // /EntityManager::Instance()->DeregisterEntity(_id);
+    EntityManager::Instance()->DeregisterEntity(_id);
 }

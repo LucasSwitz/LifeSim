@@ -44,8 +44,8 @@ bool ComponentUser::HasComponent(std::string name) const
 void ComponentUser::AddComponent(Component *component, bool add_to_user_base)
 {
     std::string component_name = component->GetName();
+    
     _components.insert(std::make_pair(component_name, component));
-
     if(add_to_user_base)
         EnableComponent(component_name);
 }
@@ -81,7 +81,14 @@ float ComponentUser::GetComponentValueFloat(std::string component_name, std::str
 
 void ComponentUser::SetComponentValueFloat(std::string component_name, std::string component_name_value, float value)
 {
-    _components.at(component_name)->SetFloatValue(component_name_value, value);
+    if(HasComponent(component_name))
+    {
+        _components.at(component_name)->SetFloatValue(component_name_value, value);
+    }
+    else
+    {
+        std::cout << "has no component: " << component_name << std::endl;
+    }
 }
 
 bool ComponentUser::GetComponentBoolValue(std::string component_name, std::string component_name_value)
@@ -117,4 +124,13 @@ Component *ComponentUser::GetComponent(std::string name)
 std::unordered_map<std::string, Component*>& ComponentUser::GetAllComponents()
 {
     return _components;
+}
+
+ComponentUser::~ComponentUser()
+{
+    for(auto it = _components.begin(); it != _components.end(); it++)
+    {
+        ComponentUserBase::Instance()->DeRegister(it->first, *this);
+        delete it->second;
+    }
 }

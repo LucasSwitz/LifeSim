@@ -7,19 +7,35 @@
 #define TILE_HEIGHT 32
 class Tile : public ComponentUser
 {
-    public:
-        Tile(int id, std::string name): _id(id), _name(name){}
-        int GetID()
+  public:
+    Tile(int id, std::string name) : _id(id), _name(name) {}
+    int GetID()
+    {
+        return _id;
+    }
+    std::string GetName()
+    {
+        return _name;
+    }
+    virtual ~Tile(){};
+
+    Tile *Clone()
+    {
+    int _id;
+        Tile *t = new Tile(_id, _name);
+        std::unordered_map<std::string, Component *> components = GetAllComponents();
+        for (auto it = components.begin(); it != components.end(); it++)
         {
-            return _id;
+            Component *c = new Component(*(it->second));
+            t->AddComponent(c);
         }
-        std::string GetName()
-        {
-            return _name;
-        }
-    private:
-        int _id;
-        std::string _name;
+
+        return t;
+    }
+
+  private:
+    int _id;
+    std::string _name;
 };
 
 #endif

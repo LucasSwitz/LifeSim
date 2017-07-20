@@ -3,6 +3,7 @@
 
 #include <list>
 #include <map>
+#include <iostream>
 
 template <typename T>
 struct LuaListNode
@@ -11,6 +12,11 @@ struct LuaListNode
 
     T data;
     LuaListNode<T> *next = nullptr;
+
+    ~LuaListNode()
+    {
+
+    }
 };
 
 template <typename T>
@@ -20,6 +26,7 @@ class LuaList
   public:
     void Add(T data)
     {
+        _size++;
         LuaListNode<T> *new_LuaListNode = new LuaListNode<T>(data);
 
         if (!_tail)
@@ -36,9 +43,26 @@ class LuaList
             _head = _tail;
     }
 
-    LuaListNode<T> *Iterator()
+    LuaListNode<T>* Iterator()
     {
         return _head;
+    }
+
+    ~LuaList()
+    {
+         LuaListNode<T> * it = Iterator();
+         
+         while(it != nullptr)
+         {
+             LuaListNode<T>* next = it->next;
+             delete it;
+             it = next;
+         }
+    }
+
+    int Size()
+    {
+        return _size;
     }
 
     template <typename key, typename value>
@@ -66,6 +90,7 @@ class LuaList
   private:
     LuaListNode<T> *_head = nullptr;
     LuaListNode<T> *_tail = nullptr;
+    int _size = 0;
 };
 
 #endif

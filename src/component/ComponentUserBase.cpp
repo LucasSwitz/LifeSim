@@ -18,12 +18,12 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& us
     if(!ComponentExists(component_name))
         return;
 
-    std::list<ComponentUser*> list = GetAllUsersWithComponent(component_name);
+    std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
 
-    for(auto it = list.begin(); it != list.end(); it++)
+    for(auto it = list->begin(); it != list->end(); it++)
     {
         if (*it == &user)
-            it = list.erase(it);
+            it = list->erase(it);
     }
 }
 
@@ -32,12 +32,15 @@ bool ComponentUserBase::ComponentExists(std::string component_name)
     return _component_users_directory.find(component_name) != _component_users_directory.end();
 }
 
-LuaList<Entity*> ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string component_name)
+void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity*>* lua_list)
 {
-    std::list<ComponentUser*> list = GetAllUsersWithComponent(component_name);
+    std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
     std::list<Entity*> entities;
 
-    for(auto it = list.begin(); it != list.end(); it++)
+    if(!list)
+        return;
+
+    for(auto it = list->begin(); it != list->end(); it++)
     {
         ComponentUser* user = *it;
         Entity* e = dynamic_cast<Entity*>(user);
@@ -45,76 +48,78 @@ LuaList<Entity*> ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::str
             entities.push_back(e);
     }
 
-    LuaList<Entity*> lua_list;
-    LuaList<Entity*>::FromListToLuaList<Entity*>(entities, lua_list);
-
-    return lua_list;
+    LuaList<Entity*>::FromListToLuaList<Entity*>(entities, *lua_list);
 }
 
-std::list<ComponentUser*> ComponentUserBase::GetAllUsersWithComponents(std::list<std::string> list)
+void ComponentUserBase::GetAllUsersWithComponents(std::initializer_list<std::string> list,
+                                    std::list<ComponentUser*>& user_list)
 {
-    std::list<ComponentUser*> matches;
+    std::list<std::string> comp_list;
+    for(auto it = list.begin(); it != list.end(); it++)
+    {
+        comp_list.push_back(*it);
+    }
+
+    GetAllUsersWithComponents(comp_list, user_list);
+}
+
+
+void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string>& list, std::list<ComponentUser*>& matches)
+{
     std::list<std::string>::iterator comp_name = list.begin();
     
     if(!ComponentExists(*comp_name) || list.empty())
     {
-        //invalid component name 
-        return matches;
+        return;
     }
 
-    matches.merge(GetAllUsersWithComponent(*comp_name));
-    comp_name = std::next(comp_name);
-    while(comp_name != list.end())
+    std::list<ComponentUser*>* first_matches = GetAllUsersWithComponent(*comp_name);
+
+    for(ComponentUser* user : *first_matches)
     {
-        for(auto user_it = matches.begin(); user_it != matches.end(); user_it++)
+        matches.push_back(user);
+    }
+
+    comp_name = std::next(comp_name);
+
+    while(matches.size() != 0 && comp_name != list.end())
+    {
+        for(auto user_it = matches.begin(); user_it != matches.end();)
         {
-            if(!(*user_it)->HasComponent(*comp_name))
+            if(!((*user_it)->HasComponent(*comp_name)))
             {
                 user_it = matches.erase(user_it);
             }
+            else
+                user_it++;
         }
-         comp_name = std::next(comp_name);
+        comp_name = std::next(comp_name);
     }
-
-    return matches;
 }
 
-std::list<ComponentUser*> ComponentUserBase::GetAllUsersWithComponents(std::initializer_list<std::string> list)
+std::list<ComponentUser*>* ComponentUserBase::GetAllUsersWithComponent(std::string component_name)
 {
-    std::list<std::string> linked_list;
-
-    for(auto it = list.begin(); it != list.end(); it++)
-    {
-        linked_list.push_back(*it);
+    if(ComponentExists(component_name))
+    {   
+        return _component_users_directory.at(component_name);
     }
-
-    return GetAllUsersWithComponents(linked_list);
+    else
+        return nullptr;
 }
 
-LuaList<ComponentUser*> ComponentUserBase::GetAllUsersWithComponentsAsLuaList(lua_State* L)
+void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser*>* lua_list, lua_State* L)
 {
     std::list<std::string> comp_list; 
     LuaUniversal::StringListFromLuaTable(L, comp_list);
 
-    std::list<ComponentUser*> matches = GetAllUsersWithComponents(comp_list);
-    LuaList<ComponentUser*> lua_list;
-    LuaList<ComponentUser*>::FromListToLuaList(matches, lua_list);
-
-    return lua_list;
-}
-
-std::list<ComponentUser*> ComponentUserBase::GetAllUsersWithComponent(std::string component_name)
-{
     std::list<ComponentUser*> matches;
-    if(ComponentExists(component_name))
-        matches = *_component_users_directory.at(component_name);
-    return matches;
+    GetAllUsersWithComponents(comp_list, matches);
+    LuaList<ComponentUser*>::FromListToLuaList(matches, *lua_list);
 }
 
-LuaList<ComponentUser*> ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string component_name)
+
+void ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string& component_name, LuaList<ComponentUser*>& lua_list)
 {
-    std::list<ComponentUser*> list = GetAllUsersWithComponent(component_name);
-    LuaList<ComponentUser*> lua_list;
-    LuaList<ComponentUser*>::FromListToLuaList<ComponentUser*>(list, lua_list);
-    return lua_list;
+    std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
+    LuaList<ComponentUser*>::FromListToLuaList<ComponentUser*>(*list, lua_list);
 }

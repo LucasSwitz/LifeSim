@@ -12,7 +12,7 @@ public:
   System *GetSystem(std::string name);
   void AddScript(Preamble &pre, ScriptableSystem *scriptable_object) override;
   ScriptableSystem *Configure(std::string full_script_path, std::string scriptable_name) override;
-
+  
     void Reset() override
     {
         _system_directory.clear();
@@ -24,6 +24,8 @@ public:
 
     return &instance;
   }
+
+  std::unordered_map<std::string, System *>& GetAllSystems();
 
 protected:
   SystemFactory(std::string system_scripts_path, std::string script_type) : ScriptFactory<ScriptableSystem>(system_scripts_path, script_type, true){};

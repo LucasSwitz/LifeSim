@@ -41,6 +41,7 @@ class EntityEditor
             {
                 delete selected_entity_prototype;
                 selected_entity_prototype = LuaEntityFactory::Instance()->GetEntity(entity_scripts.at(selected_entity),true);
+
                 brush.SetState(new PaintEntityBrushState(selected_entity_prototype));
             }
 
@@ -57,15 +58,10 @@ class EntityEditor
         }
     }
 
-    Entity* GetSelectedPrototype()
-    {
-        return selected_entity_prototype;
-    }
-
   private:
     ComponentUserEditor _component_editor;
     std::vector<std::string> entity_scripts;
-    Entity *selected_entity_prototype;
+    Entity *selected_entity_prototype = nullptr;
     int selected_entity = -1;
 };
 #endif

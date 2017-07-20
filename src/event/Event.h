@@ -27,13 +27,13 @@ struct Event
     };
 
     template<typename T>
-    static Event* Create(int event_id, int sender, int target, T* data)
+    static Event Create(int event_id, int sender, int target, T* data)
     {
-        Event* e = new Event();
-        e->id = event_id;
-        e->sender_id = sender;
-        e->target_id = target;
-        e->extra_info = static_cast<void*>(data);
+        Event e;
+        e.id = event_id;
+        e.sender_id = sender;
+        e.target_id = target;
+        e.extra_info = static_cast<void*>(data);
 
         return e;
     }

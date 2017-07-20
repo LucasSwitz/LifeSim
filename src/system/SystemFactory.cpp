@@ -27,3 +27,8 @@ void SystemFactory::AddScript(Preamble &pre, ScriptableSystem *scriptable_object
 {
     _system_directory.insert(std::make_pair(scriptable_object->GetName(), scriptable_object));
 }
+ 
+std::unordered_map<std::string, System *>& SystemFactory::GetAllSystems()
+{
+    return _system_directory;
+}

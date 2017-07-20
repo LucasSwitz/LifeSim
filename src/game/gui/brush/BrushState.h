@@ -10,7 +10,8 @@
 class BrushState
 {
   public:
-    virtual bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance) = 0;
-    virtual void PaintWindow(PMIDGWindow& window) {}
+    virtual bool OnKeyboardEvent(sf::Event& e,Instance* instance){};
+    virtual bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance){};
+    virtual void PaintWindow(PMIDGWindow& window) {};
 };
 #endif

@@ -13,25 +13,21 @@ class Entity;
 class EntityManager
 {
   public:
-    Entity *GetEntityByID(int id);
+    static EntityManager* Instance();
+    ~EntityManager();
 
     void RegisterEntity(Entity* entity);
-
-    static EntityManager* Instance();
-
-    std::map<int, Entity*>& GetAllEntities();
-
+    Entity *GetEntityByID(int id);
     void DeregisterEntity(int id);
-
+    
+    std::map<int, Entity*>& GetAllEntities();
     int GetNumberOfEntities();
 
+    void Clear();
     bool IDAvailable(int id);
 
     LuaList<Entity*>* AsLuaList();
 
-    void Clear();
-
-    ~EntityManager();
 
   private:
     std::map<int, Entity *> _entity_map;

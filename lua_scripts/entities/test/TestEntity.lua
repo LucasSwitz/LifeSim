@@ -22,7 +22,9 @@ TestEntity =
             Velocity =
             {
                 x = 0, -- px/second
-                y = 0
+                y = 0,
+                max = 100,
+                heading = 0
             },
             Acceleration = 
             {
@@ -37,8 +39,9 @@ TestEntity =
             },
             Collision = 
             {
-                hit_box_width = 100,
-                hit_box_height = 100,
+                width = 32,
+                height = 32,
+                collision_script = ""
             },
             State = 
             {

@@ -2,6 +2,8 @@
 #define SYSTEMCONTROLLER_H
 
 #include <list>
+#include <chrono>
+
 #include "src/system/SystemFactory.h"
 #include "src/utils/logging/Logging.h"
 /**
@@ -16,6 +18,9 @@ public:
   void AddPassiveSystem(const std::string& system_name);
   void AddPassiveSystem(System * system);
   void AddToSystemExecutionSequence(System *system);
+  void MoveUp(std::string system_name);
+  void MoveDown(std::string system_down);
+
 
   const System *GetSystemInExecutionSequenceAt(int index);
 
@@ -37,12 +42,19 @@ public:
     return &instance;
   }
 
+  std::list<System*>& GetSystemInExecutionSequence();
+  std::list<System*>& GetPassiveSystems();
+
+
 protected:
   SystemController(){};
 
   std::list<System *> _systems_execution_sequence;
   std::list<System *> _passive_systems;
 private:
+  void MoveUp(System* system_name);
+  void MoveDown(System* system_down);
+
 };
 
 #endif

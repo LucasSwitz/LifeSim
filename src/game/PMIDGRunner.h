@@ -70,6 +70,8 @@ class PMIDGRunner : public EventSubscriber
                     _mode->Render(seconds_elapsed_since_last_update);
                     _window->Display();
                 }
+
+                _last_time = current_time;
             }
         }
     }
