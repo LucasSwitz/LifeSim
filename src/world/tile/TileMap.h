@@ -4,6 +4,7 @@
 #include <streambuf>
 #include <fstream>
 #include <algorithm>
+#include <math.h>
 #include "src/world/tile/Tile.h"
 #include "src/world/tile/LuaTileFactory.h"
 
@@ -178,8 +179,8 @@ class TileMap
             for(int k =0; k < height; k++)
             {
                 Tile* tile = LuaTileFactory::Instance()->GetTile(BLANK_TILE_SCRIPT);
-                tile->SetComponentValueFloat("Position","x",k*TILE_WIDTH);
-                tile->SetComponentValueFloat("Position","y",i*TILE_HEIGHT);
+                tile->SetComponentValueFloat("Position","x",k*TILE_WIDTH+(TILE_WIDTH/2));
+                tile->SetComponentValueFloat("Position","y",i*TILE_HEIGHT+ (TILE_HEIGHT/2));
                 row.push_back(tile);
             }
             _tiles.push_back(row);

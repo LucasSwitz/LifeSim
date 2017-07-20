@@ -4,7 +4,6 @@
 #include "src/game/gui/brush/BrushState.h"
 #include "src/utils/window/WindowUtils.h"
 
-
 class PaintTileBrushState : public BrushState
 {
   public:
@@ -14,7 +13,7 @@ class PaintTileBrushState : public BrushState
         PAINTING,
     };
 
-    PaintTileBrushState(Tile* selected) : _selected_tile(selected){};
+    PaintTileBrushState(Tile *selected) : _selected_tile(selected){};
 
     void PaintWindow(PMIDGWindow &window) override
     {
@@ -24,12 +23,13 @@ class PaintTileBrushState : public BrushState
         }
     }
 
-    bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance) override
-    {        
+    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance) override
+    {
         if (e.type == sf::Event::MouseButtonPressed)
         {
             if (e.mouseButton.button == sf::Mouse::Left)
             {
+                _instance = instance;
                 _mouse_history.x1 = event_world_position.x;
                 _mouse_history.y1 = event_world_position.y;
                 _painting_state = PAINTING;
@@ -50,14 +50,19 @@ class PaintTileBrushState : public BrushState
 
                 if (_selected_tile)
                 {
-                    for (Tile *boxed_tile : _boxed_tiles)
+                    for (auto it = _boxed_tiles.begin(); it != _boxed_tiles.end();)
                     {
-                        float x = boxed_tile->GetComponentValueFloat("Position","x");
-                        float y = boxed_tile->GetComponentValueFloat("Position","y");
-                        delete boxed_tile;
-                        boxed_tile = _selected_tile->Clone();
-                        boxed_tile->SetComponentValueFloat("Position", "x", x);
-                        boxed_tile->SetComponentValueFloat("Position", "y", y);
+                        Tile* replaced =  *it;
+
+                        float x = replaced->GetComponentValueFloat("Position", "x");
+                        float y = replaced->GetComponentValueFloat("Position", "y");
+
+                        it = _boxed_tiles.erase(it);
+                        delete replaced;
+    
+                        replaced = _selected_tile->Clone();
+                        replaced->SetComponentValueFloat("Position", "x", x);
+                        replaced->SetComponentValueFloat("Position", "y", y);
                     }
                 }
                 _painting_state = DORMANT;
@@ -85,28 +90,39 @@ class PaintTileBrushState : public BrushState
         int pos_y = (delta_y < 0 ? current_mouse_position_y : _mouse_history.y1);
 
         sf::RectangleShape rect(sf::Vector2f(width, height));
+        rect.setFillColor(sf::Color::Transparent);
+        rect.setOutlineColor(sf::Color(255, 255, 255, 100));
+        rect.setOutlineThickness(1);
         rect.setPosition(pos_x, pos_y);
         window.DrawNow(rect);
 
-        
+        HighLightBoxedTile(_mouse_history.x1, _mouse_history.y1, current_mouse_position_x, current_mouse_position_y);
     }
 
     void HighLightBoxedTile(int x1, int y1, int x2, int y2)
     {
-        instance->GetTileMap().TilesInRange(_mouse_history.x1, _mouse_history.y1,
-                                            _mouse_history.x2, _mouse_history.y2,
-                                            _boxed_tiles);
-        
-        for(Tile* tile : _boxed_tiles)
+        if (_instance)
         {
-            tile->SetComponentValueFloat("Graphics","opacity",.5);
+            for (Tile *tile : _boxed_tiles)
+            {
+                tile->SetComponentValueFloat("Graphics", "opacity", 1.0);
+            }
+
+            _boxed_tiles.clear();
+
+            _instance->GetTileMap().TilesInRange(x1, y1, x2, y2, _boxed_tiles);
+
+            for (Tile *tile : _boxed_tiles)
+            {
+                tile->SetComponentValueFloat("Graphics", "opacity", .9);
+            }
         }
     }
 
     MouseHistory _mouse_history;
     PaintingState _painting_state = DORMANT;
-    Tile* _selected_tile;
-    Instance* _instance;
+    Tile *_selected_tile = nullptr;
+    Instance *_instance = nullptr;
     std::list<Tile *> _boxed_tiles;
 };
 #endif

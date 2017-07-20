@@ -69,7 +69,7 @@ class TileMapEditor
   private:
     ComponentUserEditor _component_editor;
     std::vector<std::string> tile_scripts;
-    Tile *selected_tile_prototype;
+    Tile *selected_tile_prototype = nullptr;
     int selected_tile = -1;
 };
 #endif

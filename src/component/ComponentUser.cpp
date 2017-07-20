@@ -81,7 +81,14 @@ float ComponentUser::GetComponentValueFloat(std::string component_name, std::str
 
 void ComponentUser::SetComponentValueFloat(std::string component_name, std::string component_name_value, float value)
 {
-    _components.at(component_name)->SetFloatValue(component_name_value, value);
+    if(HasComponent(component_name))
+    {
+        _components.at(component_name)->SetFloatValue(component_name_value, value);
+    }
+    else
+    {
+        std::cout << "has no component: " << component_name << std::endl;
+    }
 }
 
 bool ComponentUser::GetComponentBoolValue(std::string component_name, std::string component_name_value)

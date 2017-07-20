@@ -20,7 +20,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 
-#include "src/gui/rendering/GraphicsPreprocessor.h"
+#include "src/game/gui/rendering/GraphicsPreprocessor.h"
 
 class PMIDGWindow : public EventSubscriber
 {
@@ -89,7 +89,7 @@ class PMIDGWindow : public EventSubscriber
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
             sf::Sprite *sprite = new sf::Sprite();
-            _preprocesser.Process(user,texture,sprite);
+            _preprocesser.ProcessComponentUser(user,texture,sprite);
             Draw(sprite);
         }
         else

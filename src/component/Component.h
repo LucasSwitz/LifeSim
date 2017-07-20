@@ -51,7 +51,7 @@ class Component
         if (HasStringValue(name))
             _string_components.at(name).SetValue(value);
         else
-            AddValue(string, value);
+            AddValue(name, value);
     }
 
     std::string GetStringValue(std::string name)
@@ -122,7 +122,7 @@ class Component
         }
         else
         {
-            AddComponent(name, value);
+            AddValue(name, value);
         }
     }
 

@@ -30,7 +30,6 @@ class Brush
 
     void SetState(BrushState *state)
     {
-        std::cout << "Switching Brush State" << std::endl;
         if (_state)
             delete _state;
 
