@@ -32,13 +32,11 @@ class PMIDGRunner : public EventSubscriber
 
     void Init(Type type)
     {
-        _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
-
-
         switch (type)
         {
         case EDITOR:
             _window = new PMIDGEditorWindow();
+            
             _mode = new ProgramModeEditor(static_cast<PMIDGEditorWindow *>(_window));
             break;
         case GAME:
@@ -48,22 +46,12 @@ class PMIDGRunner : public EventSubscriber
 
     void Run()
     {
-        if (_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
-            _last_time = std::chrono::high_resolution_clock::now();
-
         while (!_window_closed)
         {
-            auto current_time = std::chrono::high_resolution_clock::now();
-
-                if (_mode)
-                {
-                    _window->Clear();
-                    _window->PollEvents();
-                    _mode->Update(seconds_elapsed_since_last_update);
-                    _window->Render();
-                    _mode->Render(seconds_elapsed_since_last_update);
-                    _window->Display();
-                }
+            if (_mode)
+            {
+                std::chrono::time_point<std::chrono::high_resolution_clock> current_time = std::chrono::high_resolution_clock::now();
+                _mode->Update(current_time);
             }
         }
     }
@@ -83,9 +71,8 @@ class PMIDGRunner : public EventSubscriber
     }
 
   private:
-    PMIDGWindow *_window;
-    ProgramMode *_mode;
-    std::chrono::time_point<std::chrono::high_resolution_clock> _last_time;
+    PMIDGWindow *_window = nullptr;
+    ProgramMode *_mode = nullptr;
     bool _window_closed = false;
 };
 

@@ -2,7 +2,7 @@
 #define EDITORRUNNER_H
 
 #include "src/game/FPSRunner.h"
-#include "src/game/SystemController.h"
+#include "src/system/SystemController.h"
 
 class EditorRunner : public FPSRunner
 {

@@ -1,7 +1,7 @@
 #include "ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
 
-ComponenUserBase* ComponentUserBase::_instance = nullptr;
+ComponentUserBase* ComponentUserBase::_instance = nullptr;
 
 void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 {

@@ -17,12 +17,12 @@ class LuaStage : public Stage
         Stage::Enter();
     }
 
-    void Update(float seconds_elapsed) override
+    void Tick(float seconds_elapsed) override
     {   
         if(_update_function)
             (*_update_function)(this);
 
-        Stage::Update(seconds_elapsed);
+        Stage::Tick(seconds_elapsed);
     }
 
     void Exit() override

@@ -39,7 +39,7 @@ public:
 
     virtual void Tick(float seconds_elapsed) override
     {
-        _current_instance->Update(seconds_elapsed);
+        _current_instance->Tick(seconds_elapsed);
     }
 
     //load first instance;

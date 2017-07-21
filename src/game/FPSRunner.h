@@ -14,7 +14,7 @@ class FPSRunner
 
     }
 
-    void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time)
+    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time)
     {
         if (_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
             _last_time = std::chrono::high_resolution_clock::now();
@@ -26,7 +26,7 @@ class FPSRunner
         if (seconds_elapsed_since_last_update > (1.0 / (_fps)))
         {
             Tick(seconds_elapsed_since_last_update);
-            TickRunnable();
+            TickRunnable(seconds_elapsed_since_last_update);
             _last_time = current_time;
         }
     }

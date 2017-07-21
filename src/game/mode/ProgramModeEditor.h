@@ -14,6 +14,8 @@
 #include <SFML/Graphics/CircleShape.hpp>
 
 #define MAX_SCROLL_TICKS 50
+#define EDITOR_MODE_FPS 60
+#define EDITOR_RUNNER_FPS 30
 
 class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner
 {
@@ -25,7 +27,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         PANNING
     };
 
-    ProgramModeEditor(PMIDGEditorWindow *window) : ProgramMode(window)
+    ProgramModeEditor(PMIDGEditorWindow *window) : ProgramMode(window), FPSRunner(EDITOR_MODE_FPS), 
+                                                                 _editor_runner(EDITOR_RUNNER_FPS)
     {
         LuaTileFactory::Instance()->PopulateFactory();
 
@@ -40,12 +43,23 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         FPSRunner::Update(current_time);
     }
 
+
+    void Load()
+    {
+
+    }
+
+    void Unload()
+    {
+
+    }
+    
     void Tick(float seconds_elapsed)
     {
         _window->Clear();
         _window->PollEvents();
         _window->Render();
-        Render(seconds_elapsed_since_last_update);
+        Render(seconds_elapsed);
         _window->Display();
     }
 
@@ -78,7 +92,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnSFEvent(sf::Event &event)
     {
-        _fps_runner.OnSFEvent(event);
+        
     }
 
     void Exit() override
@@ -96,7 +110,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         map.Blank(rows, columns);
         _active_instance->SetTileMap(map);
 
-        _fps_runner.SetRunnable(_active_instance);
+        _editor_runner.SetRunnable(_active_instance);
 
         _active_instance->Open();
 
