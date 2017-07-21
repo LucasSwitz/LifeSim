@@ -1,7 +1,7 @@
 #ifndef PMIDGEDITORWINDOW_H
 #define PMIDGEDITORWINDOW_H
 
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 
 class PMIDGEditorWindow : public PMIDGWindow
 {

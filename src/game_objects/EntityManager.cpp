@@ -1,6 +1,10 @@
 #include "EntityManager.h"
 #include "src/game_objects/Entity.h"
 
+
+EntityManager* EntityManager::_instance = nullptr;
+
+
 Entity *EntityManager::GetEntityByID(int id)
 {
     auto it = _entity_map.find(id);
@@ -24,10 +28,11 @@ void EntityManager::RegisterEntity(Entity *entity)
     _entity_map.insert(std::make_pair(entity->_id, entity));
 }
 
+
+
 EntityManager* EntityManager::Instance()
 {
-    static EntityManager instance;
-    return &instance;
+    return _instance;
 }
 
 std::map<int, Entity *>& EntityManager::GetAllEntities()

@@ -1,7 +1,7 @@
 #ifndef PAINTENTITYBRUSHSTATE_H
 #define PAINTENTITYBRUSHSTATE_H
 
-#include "src/game/gui/brush/BrushState.h"
+#include "src/graphics/gui/brush/BrushState.h"
 #include "src/game_objects/Entity.h"
 
 class PaintEntityBrushState : public BrushState

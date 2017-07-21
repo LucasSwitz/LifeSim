@@ -2,7 +2,7 @@
 #define SELECTENITITYBRUSHSTATE_H
 
 #include "src/game_objects/Entity.h"
-#include "src/game/gui/brush/BrushState.h"
+#include "src/graphics/gui/brush/BrushState.h"
 
 class SelectEntityBrushState : public BrushState
 {

@@ -12,25 +12,32 @@ class Entity;
 
 class EntityManager
 {
-  public:
-    static EntityManager* Instance();
-    ~EntityManager();
+  friend class GameState;
 
-    void RegisterEntity(Entity* entity);
-    Entity *GetEntityByID(int id);
-    void DeregisterEntity(int id);
-    
-    std::map<int, Entity*>& GetAllEntities();
-    int GetNumberOfEntities();
+public:
+  static EntityManager *Instance();
+  ~EntityManager();
 
-    void Clear();
-    bool IDAvailable(int id);
+  void RegisterEntity(Entity *entity);
+  Entity *GetEntityByID(int id);
+  void DeregisterEntity(int id);
 
-    LuaList<Entity*>* AsLuaList();
+  std::map<int, Entity *> &GetAllEntities();
+  int GetNumberOfEntities();
 
+  void Clear();
+  bool IDAvailable(int id);
 
-  private:
-    std::map<int, Entity *> _entity_map;
+  LuaList<Entity *> *AsLuaList();
+
+  static void GiveOwnership(EntityManager *instance)
+  {
+    _instance = instance;
+  }
+
+private:
+  std::map<int, Entity *> _entity_map;
+  static EntityManager *_instance;
 };
 
 #endif

@@ -1,5 +1,7 @@
 #include "SystemController.h"
 
+SystemController* SystemController::_instance = nullptr;
+
 void SystemController::AddPassiveSystem(const std::string &system_name)
 {
     System *system = SystemFactory::Instance()->GetSystem(system_name);

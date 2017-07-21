@@ -1,8 +1,8 @@
 #ifndef BRUSH_H
 #define BRUSH_H
 
-#include "src/game/gui/brush/BrushState.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/brush/BrushState.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 #include "src/world/stage/Instance.h"
 
 class Brush

@@ -7,9 +7,9 @@
 #include <vector>
 #include <unordered_map>
 #include "src/world/tile/LuaTileFactory.h"
-#include "src/game/gui/imgui_extension/ImGuiExtension.h"
-#include "src/game/gui/TextureCache.h"
-#include "src/game/gui/SFMLWindowListener.h"
+#include "src/graphics/gui/imgui_extension/ImGuiExtension.h"
+#include "src/graphics/gui/TextureCache.h"
+#include "src/graphics/gui/SFMLWindowListener.h"
 #include "src/component/ComponentUser.h"
 
 class ComponentUserEditor : public SFMLWindowListener

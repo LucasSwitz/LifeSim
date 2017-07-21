@@ -51,7 +51,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _open = true;   
     }
 
-    virtual void Update(float seconds_elapsed) override
+    virtual void Tick(float seconds_elapsed) override
     {
         
     }

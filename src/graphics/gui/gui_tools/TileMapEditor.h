@@ -1,11 +1,11 @@
 #ifndef TILEMAPEDITOR_H
 #define TILEMAPEDITOR_H
 
-#include "src/game/gui/TextureCache.h"
+#include "src/graphics/gui/TextureCache.h"
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/world/tile/Tile.h"
-#include "src/game/gui/brush/PaintTileBrushState.h"
-#include "src/game/gui/brush/Brush.h"
+#include "src/graphics/gui/brush/PaintTileBrushState.h"
+#include "src/graphics/gui/brush/Brush.h"
 
 class TileMapEditor
 {

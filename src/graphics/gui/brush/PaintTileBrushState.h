@@ -1,7 +1,7 @@
 #ifndef PAINTTILEBRUSHSTATE_H
 #define PAINTTILEBRUSHSTATE_H
 
-#include "src/game/gui/brush/BrushState.h"
+#include "src/graphics/gui/brush/BrushState.h"
 #include "src/utils/window/WindowUtils.h"
 
 class PaintTileBrushState : public BrushState

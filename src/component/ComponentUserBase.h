@@ -19,37 +19,40 @@ class ComponentUser;
 class ComponentUserBase
 {
 
-public:
+  public:
+    static ComponentUserBase *Instance()
+    {
+        return _instance;
+    }
 
-static ComponentUserBase* Instance()
-{
-    static ComponentUserBase instance;
-    return &instance;
-}
+    static void GiveOwnership(ComponentUserBase *instance)
+    {
+        _instance = instance;
+    }
 
-void Register(std::string component_name,ComponentUser& user);
-void DeRegister(std::string component_name,ComponentUser& user);
-bool ComponentExists(std::string component_name);
+    void Register(std::string component_name, ComponentUser &user);
+    void DeRegister(std::string component_name, ComponentUser &user);
+    bool ComponentExists(std::string component_name);
 
-void Reset()
-{
-    _component_users_directory.clear();
-}
+    void Reset()
+    {
+        _component_users_directory.clear();
+    }
 
-std::list<ComponentUser*>* GetAllUsersWithComponent(std::string component_name);
-void GetAllUsersWithComponents(std::initializer_list<std::string> list,
-                                    std::list<ComponentUser*>& user_list);
-void GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser*>* lua_list, lua_State* L);
-void GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity*>* lua_list);
-void GetAllUsersWithComponents(std::list<std::string>& list, std::list<ComponentUser*>& matches);
-void GetAllUsersWithComponentAsLuaList(std::string& component_name, LuaList<ComponentUser*>& lua_list);
+    std::list<ComponentUser *> *GetAllUsersWithComponent(std::string component_name);
+    void GetAllUsersWithComponents(std::initializer_list<std::string> list,
+                                   std::list<ComponentUser *> &user_list);
+    void GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser *> *lua_list, lua_State *L);
+    void GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity *> *lua_list);
+    void GetAllUsersWithComponents(std::list<std::string> &list, std::list<ComponentUser *> &matches);
+    void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);
 
-private:
+  private:
     ComponentUserBase(){};
 
-private:
-    std::unordered_map<std::string, std::list<ComponentUser*>*> _component_users_directory;
-
+  private:
+    std::unordered_map<std::string, std::list<ComponentUser *> *> _component_users_directory;
+    static ComponentUserBase *_instance;
 };
 
 #endif

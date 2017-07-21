@@ -4,7 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 
 
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 #include "src/world/stage/Instance.h"
 
 class BrushState

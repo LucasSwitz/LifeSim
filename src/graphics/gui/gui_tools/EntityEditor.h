@@ -1,10 +1,10 @@
 #ifndef ENTITYEDITOR_H
 #define ENTITYEDITOR_H
 
-#include "src/game/gui/TextureCache.h"
+#include "src/graphics/gui/TextureCache.h"
 #include "src/game_objects/Entity.h"
 #include "src/game_objects/LuaEntityFactory.h"
-#include "src/game/gui/brush/PaintEntityBrushState.h"
+#include "src/graphics/gui/brush/PaintEntityBrushState.h"
 
 #define BRUSH_STATE_ENTITY 1
 

@@ -8,7 +8,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 #include "src/game/mode/ProgramModeEditor.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 
 #define FRAMES_PER_SEC 30
 
@@ -55,12 +55,6 @@ class PMIDGRunner : public EventSubscriber
         {
             auto current_time = std::chrono::high_resolution_clock::now();
 
-            std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time);
-
-            double seconds_elapsed_since_last_update = std::abs(diff.count());
-
-            if (seconds_elapsed_since_last_update > (1.0 / (FRAMES_PER_SEC)))
-            {
                 if (_mode)
                 {
                     _window->Clear();
@@ -70,8 +64,6 @@ class PMIDGRunner : public EventSubscriber
                     _mode->Render(seconds_elapsed_since_last_update);
                     _window->Display();
                 }
-
-                _last_time = current_time;
             }
         }
     }

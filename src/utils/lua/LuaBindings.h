@@ -18,7 +18,7 @@
 #include "src/utils/debug/DebugFlags.h"
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 
 using namespace luabridge;
 class LuaBindings

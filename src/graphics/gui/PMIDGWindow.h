@@ -11,8 +11,8 @@
 
 #include "src/event/EventManager.h"
 #include "src/event/EventType.h"
-#include "src/game/gui/TextureCache.h"
-#include "src/game/gui/SFMLWindowListener.h"
+#include "src/graphics/gui/TextureCache.h"
+#include "src/graphics/gui/SFMLWindowListener.h"
 #include "src/component/ComponentUser.h"
 
 #include "src/utils/logging/Logging.h"
@@ -20,7 +20,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 
-#include "src/game/gui/rendering/GraphicsPreprocessor.h"
+#include "src/graphics/gui/rendering/GraphicsPreprocessor.h"
 
 class PMIDGWindow : public EventSubscriber
 {

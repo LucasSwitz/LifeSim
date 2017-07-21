@@ -37,7 +37,7 @@ public:
         _current_instance->Open();
     }
 
-    virtual void Update(float seconds_elapsed) override
+    virtual void Tick(float seconds_elapsed) override
     {
         _current_instance->Update(seconds_elapsed);
     }

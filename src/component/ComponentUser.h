@@ -14,6 +14,7 @@ class ComponentUserBase;
 
 class ComponentUser
 {
+  friend class GameState;
   public:
     void AddComponent(Component *component, bool add_to_component_users = true);
     void RemoveComponent(std::string name);

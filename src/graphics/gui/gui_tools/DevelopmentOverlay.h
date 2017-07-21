@@ -4,15 +4,15 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
-#include "src/game/gui/gui_tools/Log.h"
-#include "src/game/gui/gui_tools/EntityTable.h"
-#include "src/game/gui/gui_tools/InstanceEditor.h"
+#include "src/graphics/gui/gui_tools/Log.h"
+#include "src/graphics/gui/gui_tools/EntityTable.h"
+#include "src/graphics/gui/gui_tools/InstanceEditor.h"
 #include "src/world/tile/LuaTileFactory.h"
-#include "src/game/gui/TextureCache.h"
-#include "src/game/gui/PMIDGWindow.h"
-#include "src/game/gui/gui_tools/DevelopmentOverlayListener.h"
-#include "src/game/gui/gui_tools/SystemMonitor.h"
-#include "src/game/gui/gui_tools/EditModeControls.h"
+#include "src/graphics/gui/TextureCache.h"
+#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/gui_tools/DevelopmentOverlayListener.h"
+#include "src/graphics/gui/gui_tools/SystemMonitor.h"
+#include "src/graphics/gui/gui_tools/EditModeControls.h"
 
 class DevelopmentOverlay
 {

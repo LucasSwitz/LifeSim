@@ -2,6 +2,8 @@
 #include "src/event/EventSubscriber.h"
 #include <iostream>
 
+EventManager* EventManager::_instance = nullptr;
+
 void EventManager::RegisterSubscriber(EventSubscriber* subscriber)
 {
     std::list<Subscription> subscriptions = subscriber->GetSubscriptions();

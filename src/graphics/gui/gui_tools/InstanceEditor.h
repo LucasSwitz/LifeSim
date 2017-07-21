@@ -6,13 +6,13 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include "src/game/gui/imgui_extension/ImGuiExtension.h"
-#include "src/game/gui/TextureCache.h"
+#include "src/graphics/gui/imgui_extension/ImGuiExtension.h"
+#include "src/graphics/gui/TextureCache.h"
 #include "src/world/tile/TileMap.h"
-#include "src/game/gui/SFMLWindowListener.h"
-#include "src/game/gui/gui_tools/ComponentUserEditor.h"
-#include "src/game/gui/gui_tools/TileMapEditor.h"
-#include "src/game/gui/gui_tools/EntityEditor.h"
+#include "src/graphics/gui/SFMLWindowListener.h"
+#include "src/graphics/gui/gui_tools/ComponentUserEditor.h"
+#include "src/graphics/gui/gui_tools/TileMapEditor.h"
+#include "src/graphics/gui/gui_tools/EntityEditor.h"
 
 #define DEFAULT_NEW_INSTANCE_SIZE 30
 

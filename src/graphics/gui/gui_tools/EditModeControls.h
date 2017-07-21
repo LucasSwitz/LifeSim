@@ -3,7 +3,7 @@
 
 #include "imgui.h"
 #include "src/component/ComponentUserBase.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 
 struct EditModeControls
 {

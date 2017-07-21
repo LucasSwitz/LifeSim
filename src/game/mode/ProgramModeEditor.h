@@ -2,20 +2,20 @@
 #define PROGRAMMODEEDITOR_H
 
 #include "src/game/mode/ProgramMode.h"
-#include "src/game/gui/gui_tools/DevelopmentOverlay.h"
+#include "src/graphics/gui/gui_tools/DevelopmentOverlay.h"
 #include "src/system/SystemController.h"
-#include "src/game/FPSRunner.h"
-#include "src/game/gui/SFMLWindowListener.h"
-#include "src/game/gui/PMIDGEditorWindow.h"
-#include "src/game/gui/brush/Brush.h"
-#include "src/game/gui/brush/SelectEntityBrushState.h"
+#include "src/game/EditorRunner.h"
+#include "src/graphics/gui/SFMLWindowListener.h"
+#include "src/graphics/gui/PMIDGEditorWindow.h"
+#include "src/graphics/gui/brush/Brush.h"
+#include "src/graphics/gui/brush/SelectEntityBrushState.h"
 #include "src/utils/window/WindowUtils.h"
 #include "src/utils/sfml/SFMLUtils.h"
 #include <SFML/Graphics/CircleShape.hpp>
 
 #define MAX_SCROLL_TICKS 50
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner
 {
 
   public:
@@ -34,9 +34,19 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _window->AddWindowListener(this);
     }
 
-    void Update(float seconds_elapsed) override
+    void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time) override
     {
-        _fps_runner.Update(seconds_elapsed);
+        _editor_runner.Update(current_time);
+        FPSRunner::Update(current_time);
+    }
+
+    void Tick(float seconds_elapsed)
+    {
+        _window->Clear();
+        _window->PollEvents();
+        _window->Render();
+        Render(seconds_elapsed_since_last_update);
+        _window->Display();
     }
 
     void Render(float seconds_elapsed) override
@@ -79,7 +89,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     void OnCreateBlankInstance(int rows, int columns) override
     {
         delete _active_instance;
-        
+
         _active_instance = new Instance();
         TileMap map;
 
@@ -123,10 +133,10 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                     _window_transform_state = DORMANT;
                 }
                 else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
-                {   
-                    if(e.type == sf::Event::MouseButtonPressed)
+                {
+                    if (e.type == sf::Event::MouseButtonPressed)
                     {
-                        if(Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                        if (Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
                             _brush.SetState(new SelectEntityBrushState(entity));
                     }
                     _brush.OnInstanceMouseEvent(e, world_pos, _active_instance);
@@ -141,7 +151,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             }
             else if (e.type == sf::Event::KeyPressed)
             {
-                _brush.OnKeyboardEvent(e,_active_instance);
+                _brush.OnKeyboardEvent(e, _active_instance);
             }
         }
     }
@@ -152,7 +162,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         return _active_instance && _active_instance->GetTileMap().TileAt(world_cords.x, world_cords.y);
     }
 
-    Entity* ClickOnEntity(int x, int y)
+    Entity *ClickOnEntity(int x, int y)
     {
         sf::Vector2f world_pos = _window->SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
@@ -187,21 +197,19 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             sf::Vector2f corner_top_right(pos_x + width / 2.0, pos_y - height / 2.0);
             sf::Vector2f corner_bot_right(pos_x + width / 2.0, pos_y + height / 2.0);
 
-
-            sf::Vector2f top_edge = corner_top_right - corner_top_left; //AB
+            sf::Vector2f top_edge = corner_top_right - corner_top_left;    //AB
             sf::Vector2f right_edge = corner_bot_right - corner_top_right; //BC
 
-            sf::Vector2f top_left_to_click = world_pos - corner_top_left; //AM
+            sf::Vector2f top_left_to_click = world_pos - corner_top_left;   //AM
             sf::Vector2f top_right_to_click = world_pos - corner_top_right; //BM
 
+            float dot_top_click = sf::Dot(top_edge, top_left_to_click);
+            float dot_top_top = sf::Dot(top_edge, top_edge);
+            float dot_right_click = sf::Dot(right_edge, top_right_to_click);
+            float dot_right_right = sf::Dot(right_edge, right_edge);
 
-            float dot_top_click = sf::Dot(top_edge,top_left_to_click);     
-            float dot_top_top = sf::Dot(top_edge,top_edge);
-            float dot_right_click = sf::Dot(right_edge,top_right_to_click);     
-            float dot_right_right = sf::Dot(right_edge,right_edge);     
-     
-            if(0 <= dot_top_click && dot_top_click <= dot_top_top && 
-               0 <= dot_right_click && dot_right_click <= dot_right_right)
+            if (0 <= dot_top_click && dot_top_click <= dot_top_top &&
+                0 <= dot_right_click && dot_right_click <= dot_right_right)
             {
                 return e;
             }
@@ -210,7 +218,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     }
 
   private:
-    FPSRunner _fps_runner;
+    EditorRunner _editor_runner;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     Instance *_active_instance = nullptr;
