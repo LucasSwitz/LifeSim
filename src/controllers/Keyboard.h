@@ -3,7 +3,7 @@
 
 #include  <unordered_map>
 #include "src/event/EventSubscriber.h"
-#include "src/event/EventManager.h"
+#include "src/event/EngineEventManager.h"
 class KeyboardController : public EventSubscriber
 {
     public:
@@ -60,7 +60,7 @@ class KeyboardController : public EventSubscriber
 
     KeyboardController()
     {
-        EventManager::Instance()->RegisterSubscriber(this);
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
 };                                                                      

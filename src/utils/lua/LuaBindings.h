@@ -19,6 +19,9 @@
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
 #include "src/graphics/gui/PMIDGWindow.h"
+#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EngineEventManager.h"
+
 
 using namespace luabridge;
 class LuaBindings
@@ -107,8 +110,13 @@ class LuaBindings
                 .addData("target", &Event::target_id)
             .endClass()
             .beginClass<EventManager>("EventManager")
-                .addStaticFunction("Instance", &EventManager::Instance)
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
+            .endClass()
+            .deriveClass<MessageDispatch,EventManager>("MessageDispatch")
+                .addStaticFunction("Instance",&MessageDispatch::Instance)
+            .endClass()
+            .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
+                .addStaticFunction("Instance",&EngineEventManager::Instance)
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
                 .addStaticFunction("Instance",&ComponentUserBase::Instance)

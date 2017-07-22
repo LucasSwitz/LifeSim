@@ -4,7 +4,7 @@
 #include "src/game/GameRunner.h"
 #include "src/utils/logging/Logging.h"
 #include "src/event/EventSubscriber.h"
-#include "src/event/EventManager.h"
+#include "src/event/EngineEventManager.h"
 
 class GameRunnerTimed : public GameRunner
 {
@@ -26,7 +26,7 @@ class GameRunnerTimed : public GameRunner
 
         void RunTillClose()
         {
-            EventManager::Instance()->RegisterSubscriber(this);
+            EngineEventManager::Instance()->RegisterSubscriber(this);
 
             if(!Initialized())
             {

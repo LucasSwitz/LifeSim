@@ -9,7 +9,7 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "src/event/EventManager.h"
+#include "src/event/EngineEventManager.h"
 #include "src/event/EventType.h"
 #include "src/graphics/gui/TextureCache.h"
 #include "src/graphics/gui/SFMLWindowListener.h"
@@ -27,7 +27,7 @@ class PMIDGWindow : public EventSubscriber
   public:
     PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "HELLO!")
     {
-        EventManager::Instance()->RegisterSubscriber(this);
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
     sf::RenderWindow &SFWindow()
@@ -128,29 +128,29 @@ class PMIDGWindow : public EventSubscriber
         if (e.type == sf::Event::Closed)
         {
             Event new_event(EventType::CLOSE_GAME_WINDOW_EVENT, -1, -1);
-            EventManager::Instance()->LaunchEvent(new_event);
+            EngineEventManager::Instance()->LaunchEvent(new_event);
         }
         else if (e.type == sf::Event::KeyPressed)
         {
             if (e.key.code == sf::Keyboard::W)
             {
                 Event new_event(EventType::W_DOWN_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::A)
             {
                 Event new_event(EventType::A_DOWN_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::S)
             {
                 Event new_event(EventType::S_DOWN_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::D)
             {
                 Event new_event(EventType::D_DOWN_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
         }
         else if (e.type == sf::Event::KeyReleased)
@@ -158,22 +158,22 @@ class PMIDGWindow : public EventSubscriber
             if (e.key.code == sf::Keyboard::W)
             {
                 Event new_event(EventType::W_UP_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::A)
             {
                 Event new_event(EventType::A_UP_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::S)
             {
                 Event new_event(EventType::S_UP_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::D)
             {
                 Event new_event(EventType::D_UP_EVENT, -1, -1);
-                EventManager::Instance()->LaunchEvent(new_event);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
             }
         }
         for (SFMLWindowListener *listener : _window_listeners)

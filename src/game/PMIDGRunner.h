@@ -27,7 +27,8 @@ class PMIDGRunner : public EventSubscriber
         LuaBindings::Bind(LUA_STATE);
         LuaEntityFactory::Instance()->PopulateFactory();
         SystemFactory::Instance()->PopulateFactory();
-        EventManager::Instance()->RegisterSubscriber(this);
+        EngineEventManager::GiveOwnership(&_event_manager);
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
     void Init(Type type)
@@ -36,7 +37,6 @@ class PMIDGRunner : public EventSubscriber
         {
         case EDITOR:
             _window = new PMIDGEditorWindow();
-            
             _mode = new ProgramModeEditor(static_cast<PMIDGEditorWindow *>(_window));
             break;
         case GAME:
@@ -73,6 +73,7 @@ class PMIDGRunner : public EventSubscriber
   private:
     PMIDGWindow *_window = nullptr;
     ProgramMode *_mode = nullptr;
+    EngineEventManager _event_manager;
     bool _window_closed = false;
 };
 

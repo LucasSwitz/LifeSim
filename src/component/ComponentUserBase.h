@@ -18,7 +18,7 @@ class ComponentUser;
 
 class ComponentUserBase
 {
-
+  friend class GameState;
   public:
     static ComponentUserBase *Instance()
     {

@@ -15,7 +15,7 @@ class EntityManager
   friend class GameState;
 
 public:
-  static EntityManager *Instance();
+  static EntityManager* Instance();
   ~EntityManager();
 
   void RegisterEntity(Entity *entity);
@@ -32,7 +32,7 @@ public:
 
   static void GiveOwnership(EntityManager *instance)
   {
-    _instance = instance;
+      _instance = instance;
   }
 
 private:

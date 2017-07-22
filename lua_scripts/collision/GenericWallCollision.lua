@@ -13,8 +13,6 @@ DoImpulse = function(collision_data)
     collider_2_vel = {x = 0, y = 0}
 
     if collider_1:HasComponent("Velocity") then
-            print("c1")
-
         collider_1_vel = {
                             x = collider_1:GetNumber("Velocity","x"),
                             y = collider_1:GetNumber("Velocity","y")
@@ -67,8 +65,6 @@ DoImpulse = function(collision_data)
 end
 
 DoCorrection = function(collision_data)
-
-    print("Correction")
     collider_1 = collision_data.collider_1
     collider_2 = collision_data.collider_2
 

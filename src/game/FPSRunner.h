@@ -22,16 +22,12 @@ class FPSRunner
         std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time);
 
         double seconds_elapsed_since_last_update = std::abs(diff.count());
-
         if (seconds_elapsed_since_last_update > (1.0 / (_fps)))
         {
-            Tick(seconds_elapsed_since_last_update);
             TickRunnable(seconds_elapsed_since_last_update);
             _last_time = current_time;
         }
     }
-
-    virtual void Tick(float seconds_elapsed) = 0;
 
     void TickRunnable(float seconds_elapsed)
     {
@@ -46,7 +42,7 @@ class FPSRunner
 
   protected:
     FPSRunnable *_runnable = nullptr;
-    std::chrono::time_point<std::chrono::high_resolution_clock> _last_time;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
     int _fps;
 };
 

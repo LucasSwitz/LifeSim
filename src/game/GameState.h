@@ -3,32 +3,38 @@
 
 #include "src/component/ComponentUserBase.h"
 #include "src/game_objects/EntityManager.h"
-#include "src/event/EventManager.h"
+#include "src/event/messaging/MessageDispatch.h"
 #include "src/system/SystemController.h"
 
 #include "src/game/FPSRunnable.h"
+#include "src/world/stage/Instance.h"
 
 class GameState : public FPSRunnable
 {
-    void Load() override
+    public:
+
+    void Load()
     {
         Setup();
     }
 
     void Setup()
     {
-        EntityManager::Instance()->GiveOwnership(&_entity_manager);
-        ComponentUserBase::Instance()->GiveOwnership(&_component_users);
-        SystemController::Instane()->GiveOwnership(&_system_controller);
-        EventManager::Instnace()->GiveOwnership(&_event_manager);
+        EntityManager::GiveOwnership(&_entity_manager);
+        ComponentUserBase::GiveOwnership(&_component_users);
+        SystemController::GiveOwnership(&_system_controller);
+        MessageDispatch::GiveOwnership(&_message_dispatch);
     }
 
-    void Tick(float seconds_elapsed) override
+    void Tick(float seconds_elapsed) 
     {
-        
+        _system_controller.Update(seconds_elapsed);
+
+        if(_current_instance)
+            _current_instance->Tick(seconds_elapsed);
     }
 
-    void Unload() override
+    void Unload()
     {
 
     }
@@ -38,15 +44,16 @@ class GameState : public FPSRunnable
 
     }
 
-    static GameState* GetGameState()
+    void SetCurrentInstance(Instance * instance)
     {
-
+        _current_instance = instance;
     }
     
     private:
         EntityManager _entity_manager;
         ComponentUserBase _component_users;
         SystemController _system_controller;
-        EventManager _event_manager;
+        MessageDispatch _message_dispatch;
+        Instance* _current_instance;
 };
 #endif

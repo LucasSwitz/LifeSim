@@ -31,23 +31,10 @@ public:
     bool EventExists(int event_id);
     bool TagExists(int event_id, int tag_id);
 
-
-    static EventManager* Instance()
-    {
-        return _instance;
-    }
-
-    static void GiveOwnership(EventManager* instance)
-    {
-        _instance = instance;
-    }
-
 protected:
     void AddNewEvent(int event_id);
     void AddNewTag(int event_id, int tag);
     void AddSubscriberToSubscription(EventSubscriber* sub, int event_id, int event_tag);
-    static EventManager* _instance;
-
 
 private:
     std::unordered_map<int, event_tag_map*> _subscription_registry;

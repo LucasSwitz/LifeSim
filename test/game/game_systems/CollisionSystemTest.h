@@ -5,6 +5,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/system/SystemController.h"
+#include "src/event/messaging/MessageDispatch.h"
 
 class CollisionSystemTest : public LuaTest, public EventSubscriber
 {
@@ -23,7 +24,7 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
             e_1 = LuaEntityFactory::Instance()->GetEntity("CollisionTestEntity1");
             e_2 = LuaEntityFactory::Instance()->GetEntity("CollisionTestEntity2");
 
-            EventManager::Instance()->RegisterSubscriber(this);
+            MessageDispatch::Instance()->RegisterSubscriber(this);
         }
 
         void OnEvent(Event& e)
