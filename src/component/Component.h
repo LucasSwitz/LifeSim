@@ -147,6 +147,8 @@ class Component
         return _sub_components.at(name);
     }
 
+    Component(std::string name = "") : _name(name){};
+
   protected:
     void AddValue(std::string name, std::string value)
     {
@@ -167,8 +169,6 @@ class Component
     {
         _sub_components.insert(std::make_pair(sub_component->_name, sub_component));
     }
-
-    Component(std::string name = "") : _name(name){};
 
   protected:
     std::string _name;

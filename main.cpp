@@ -24,6 +24,7 @@
 
 #include "src/game/PMIDGRunner.h"
 #include "src/game/mode/ProgramModeEditor.h"
+#include "test/protobuf/GameStateProtoBufTest.h"
 
 int RunGUI();
 int RunTests(int argc, char** argv);

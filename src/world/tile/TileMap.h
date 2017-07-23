@@ -42,6 +42,9 @@ class TileMap
     //use load from vector
     void LoadFromFile(std::string file_path)
     {
+
+        _file_name = file_path;
+        
         std::ifstream map_stream(file_path);
         std::string map_string;
 
@@ -68,6 +71,12 @@ class TileMap
         }
         LoadFromVector(map);
     }
+
+    void SaveToFile(std::string file_name)
+    {
+        _file_name = file_name;
+    }
+
         //split helpers
     std::vector<std::string> split(const std::string &s, char delim) 
     {
@@ -187,6 +196,11 @@ class TileMap
         }
     }
 
+    std::string& GetFile()
+    {
+        return _file_name;
+    }
+
     int HeightPx()
     {
         return _tiles.size()*TILE_HEIGHT;
@@ -210,6 +224,7 @@ class TileMap
 
  private:
     std::vector<std::vector<Tile*>> _tiles;
+    std::string _file_name;
     bool _active = false;
 };
 #endif

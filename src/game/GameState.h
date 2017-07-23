@@ -44,6 +44,22 @@ class GameState : public FPSRunnable
 
     }
 
+    template<typename T>
+    void SetSystems(T& systems_list)
+    {
+        //iterate over systems and add them
+        _system_controller.Reset();
+    }
+    
+
+    template<typename T>
+    void SetEntities(T& entities_list)
+    {
+        //iterate over entities and add them
+        _entity_manager.Clear();
+    }
+
+
     void SetCurrentInstance(Instance * instance)
     {
         _current_instance = instance;

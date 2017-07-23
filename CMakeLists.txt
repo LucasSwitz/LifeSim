@@ -12,8 +12,8 @@ include_directories($ENV{LUA_INCLUDE_DIR} ".")
 include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
 include_directories($ENV{IMGUI_INCLUDE_DIR} ".")
 include_directories($ENV{IMGUI_SFML_INCLUDE_DIR} ".")
+include_directories($ENV{PROTOBUF_INCLUDE_DIR} ".")
 include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS})
-
 
 file(GLOB_RECURSE SOURCES
     imgui.cpp
@@ -21,7 +21,8 @@ file(GLOB_RECURSE SOURCES
     imgui-SFML.cpp
     main.cpp
     src/*.h
-    src/*.cpp)
+    src/*.cpp
+    src/*.cc)
 
 add_executable(${PROJECT_NAME_STR} ${SOURCES})
 
@@ -39,6 +40,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME_STR} $ENV{GTEST_LIB_DIR}/libgtest.a)
 target_link_libraries(${PROJECT_NAME_STR} $ENV{LUA_LIB_DIR}/liblua5.2.a)
+target_link_libraries(${PROJECT_NAME_STR} $ENV{PROTOBUF_LIB_DIR}/libprotobuf.a)
 target_link_libraries(${PROJECT_NAME_STR} $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
 target_link_libraries(${PROJECT_NAME_STR} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 

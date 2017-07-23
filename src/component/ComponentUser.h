@@ -17,6 +17,9 @@ class ComponentUser
   friend class GameState;
   public:
     void AddComponent(Component *component, bool add_to_component_users = true);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, std::string value);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, bool value);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, float value);
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name) const;
     void DisableComponent(std::string name);
