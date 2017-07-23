@@ -22,7 +22,7 @@ void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cach
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
-// #### DESIGN GUI HERE
+// #### DESIGN GUI HERE_selcected_file
     DrawMenuBar();
     log.Draw("Log");
     entity_table.Draw("Entities");
@@ -52,11 +52,13 @@ void DevelopmentOverlay::DrawMenuBar()
                 }                
             }
 
-            if (ImGui::MenuItem("Load Instance", "CTRL+SHIFT+I")) 
+            if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I")) 
             {
-                ImGui::BeginChild("Select Instance");
-                ImGui::Text("Test");
+                FolderContents instance_files("/home/pabu/Desktop/LifeSim/src/graphics/gui/gui_tools");
+                ImGui::BeginChild("Instance Selection",ImVec2(300,200),true,ImGuiWindowFlags_NoScrollbar);
+                instance_files.Draw();
                 ImGui::EndChild();
+                ImGui::EndMenu();
             }
             if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I")) 
             {

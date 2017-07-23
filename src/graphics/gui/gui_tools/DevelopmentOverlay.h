@@ -13,6 +13,7 @@
 #include "src/graphics/gui/gui_tools/DevelopmentOverlayListener.h"
 #include "src/graphics/gui/gui_tools/SystemMonitor.h"
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
+#include "src/graphics/gui/gui_tools/FolderContents.h"
 
 class DevelopmentOverlay
 {
