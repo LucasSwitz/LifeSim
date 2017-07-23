@@ -14,6 +14,7 @@
 #include "src/graphics/gui/gui_tools/SystemMonitor.h"
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
 #include "src/graphics/gui/gui_tools/FolderContents.h"
+#include "src/graphics/gui/gui_tools/SaveDialog.h"
 
 class DevelopmentOverlay
 {
@@ -36,5 +37,7 @@ class DevelopmentOverlay
         void DrawMenuBar();
         DevelopmentOverlayListener* _listener = nullptr;
         bool _focused = false;
+
+        SaveDialog _save_dialog;
 };
 #endif

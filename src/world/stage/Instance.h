@@ -83,7 +83,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map.LoadFromFile(file_name);
     }
 
-    TileMap GetTileMap()
+    TileMap& GetTileMap()
     {
         return _tile_map;
     }

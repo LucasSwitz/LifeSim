@@ -11,6 +11,7 @@ class FolderContents
   public:
     FolderContents(const std::string &folder_path) : _folder_path(folder_path)
     {
+
     }
     std::string Draw()
     {
@@ -25,9 +26,15 @@ class FolderContents
         }
         ImGui::PushItemWidth(-1);
         ImGui::ListBoxVector("", &_selected_file, files);
+        ImGui::PopItemWidth();
+
+        if(_selected_file != -1)
+        {
+            return files[_selected_file];
+        }
 
         //if selection return file name
-        ImGui::PopItemWidth();
+        return "";
 
     }
 

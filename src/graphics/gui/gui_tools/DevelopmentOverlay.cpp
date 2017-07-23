@@ -2,10 +2,9 @@
 
 DevelopmentOverlay::DevelopmentOverlay()
 {
-
 }
 
-void DevelopmentOverlay::Init(PMIDGWindow* window)
+void DevelopmentOverlay::Init(PMIDGWindow *window)
 {
     ImGui::SFML::Init(window->SFWindow());
     window->AddWindowListener(&instance_editor);
@@ -13,23 +12,23 @@ void DevelopmentOverlay::Init(PMIDGWindow* window)
     log.Clear();
 }
 
-Log& DevelopmentOverlay::GetLog()
+Log &DevelopmentOverlay::GetLog()
 {
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow*  window, TextureCache& texture_cache, float seconds_elapsed, Brush& brush)
+void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
-// #### DESIGN GUI HERE_selcected_file
+    // #### DESIGN GUI HERE_selcected_file
     DrawMenuBar();
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
     system_monitor.Draw("System Monitor");
     edit_mode_controls.Draw("Edit Mode Controls", *window);
-// #### RENDER GUI HERE
+    // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());
 }
@@ -44,70 +43,99 @@ void DevelopmentOverlay::DrawMenuBar()
         }
         if (ImGui::BeginMenu("Instance"))
         {
-            if (ImGui::MenuItem("New Instance", "CTRL+I")) 
-            {              
-                if(_listener)
+            if (ImGui::MenuItem("New Instance", "CTRL+I"))
+            {
+                if (_listener)
                 {
-                    _listener->OnCreateBlankInstance(30,30);
-                }                
+                    _listener->OnCreateBlankInstance(30, 30);
+                }
             }
 
-            if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I")) 
+            if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
             {
-                FolderContents instance_files("/home/pabu/Desktop/LifeSim/src/graphics/gui/gui_tools");
-                ImGui::BeginChild("Instance Selection",ImVec2(300,200),true,ImGuiWindowFlags_NoScrollbar);
-                instance_files.Draw();
+                FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
+                ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                std::string file_name = instance_files.Draw();
+                if (!file_name.empty())
+                {
+                    if (_listener)
+                    {
+                        _listener->OnLoadGameStateFile(file_name);
+                    }
+                }
+
                 ImGui::EndChild();
                 ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I")) 
+            if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I"))
             {
                 ImGui::BeginChild("Select Instance");
-                ImGui::Text("Test");
+
                 ImGui::EndChild();
-            } 
-            if (ImGui::MenuItem("Save As Instance....", "CTRL+SHIFT+I")) 
+            }
+            if (ImGui::BeginMenu("Save As Instance....", "CTRL+SHIFT+I"))
             {
-                ImGui::BeginChild("Select Instance");
-                ImGui::Text("Test");
+                ImGui::BeginChild("Save Instance##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
+                std::string file_name = _save_dialog.Draw();
+
+                if (!file_name.empty())
+                {
+                    if (_listener)
+                    {
+                        _listener->OnSaveGameStateFile(file_name);
+                    }
+                }
+
                 ImGui::EndChild();
-            } 
+                ImGui::EndMenu();
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Stage"))
         {
-            if (ImGui::MenuItem("New Stage", "CTRL+S")) {}
-            if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S")) {} 
+            if (ImGui::MenuItem("New Stage", "CTRL+S"))
+            {
+            }
+            if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S"))
+            {
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("World"))
         {
-            if (ImGui::MenuItem("New World", "CTRL+W")) {}
-            if (ImGui::MenuItem("Load World", "CTRL+SHIFT+W")) {} 
+            if (ImGui::MenuItem("New World", "CTRL+W"))
+            {
+            }
+            if (ImGui::MenuItem("Load World", "CTRL+SHIFT+W"))
+            {
+            }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Entity"))
         {
-            if (ImGui::MenuItem("New Entity", "ImGui::EndCTRL+E")) {}
-            if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E")) {} 
+            if (ImGui::MenuItem("New Entity", "ImGui::EndCTRL+E"))
+            {
+            }
+            if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E"))
+            {
+            }
             ImGui::EndMenu();
-        }       
-        ImGui::EndMainMenuBar(); 
+        }
+        ImGui::EndMainMenuBar();
     }
 }
 
 bool DevelopmentOverlay::IsFocused()
 {
-    return log.IsFocused() || entity_table.IsFocused() || 
-    instance_editor.IsFocused() || system_monitor.IsFocused()
-    || edit_mode_controls.IsFocused();
+    return log.IsFocused() || entity_table.IsFocused() ||
+           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused();
 }
 void DevelopmentOverlay::Shutdown()
 {
     ImGui::SFML::Shutdown();
 }
 
-void DevelopmentOverlay::SetListener(DevelopmentOverlayListener* listener)
+void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
 {
     _listener = listener;
 }

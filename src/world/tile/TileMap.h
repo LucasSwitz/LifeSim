@@ -42,7 +42,6 @@ class TileMap
     //use load from vector
     void LoadFromFile(std::string file_path)
     {
-
         _file_name = file_path;
         
         std::ifstream map_stream(file_path);
@@ -75,6 +74,21 @@ class TileMap
     void SaveToFile(std::string file_name)
     {
         _file_name = file_name;
+    
+        std::ofstream file_out(file_name);
+
+        for(std::vector<Tile*>& vect : _tiles)
+        {
+            for(Tile* tile : vect)
+            {
+                file_out << tile->GetID();
+                file_out << " ";
+            }
+
+            file_out << "\n";
+        }
+
+        file_out.close();
     }
 
         //split helpers
@@ -220,6 +234,11 @@ class TileMap
                 delete *tile_it;
             }
         }
+    }
+
+    ~TileMap()
+    {
+        Erase();
     }
 
  private:

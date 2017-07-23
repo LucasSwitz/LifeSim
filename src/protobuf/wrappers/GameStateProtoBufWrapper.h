@@ -92,6 +92,7 @@ class GameStateProtoBufWrapper
         pmidgserialized::Instance *serialized_instance = serialized_game_state.mutable_instance();
 
         std::string tile_map_file = instance.GetTileMap().GetFile();
+
         serialized_instance->set_tilemap(tile_map_file);
     }
 
@@ -107,7 +108,7 @@ class GameStateProtoBufWrapper
 
             int entity_id = current_entity.id();
 
-            Entity *e = new Entity(0,"",true, entity_id);
+            Entity *e = new Entity(0,"",false, entity_id);
 
             int num_of_components = current_entity.components_size();
 
