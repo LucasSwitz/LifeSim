@@ -16,11 +16,22 @@ class GameStateProtoBufWrapper
         for (auto it = systems_list.begin(); it != systems_list.end(); it++)
         {
             pmidgserialized::System *system = serialized_game_state.add_active_systems();
-            std::string name = *it;
+            std::string name = (*it)->GetName();
             system->set_name(name);
         }
     }
 
+
+    void SetEntities(std::map<int, Entity*> &entities_list)
+    {   
+        std::list<Entity*> entities;
+        for(auto it = entities_list.begin(); it != entities_list.end(); it++)
+        {
+            entities.push_back(it->second);
+        }
+
+        SetEntities(entities);
+    }
     template <typename T>
     void SetEntities(T &entities_list)
     {
@@ -152,11 +163,11 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void GetInstance(Instance &instance)
+    void GetInstance(Instance* instance)
     {
         //create instance and call tilemap factor
         std::string tile_map_file = serialized_game_state.instance().tilemap();
-        instance.GetTileMap().LoadFromFile(tile_map_file);
+        instance->GetTileMap().LoadFromFile(tile_map_file);
     }
 
     void FromFile(std::string file_name)

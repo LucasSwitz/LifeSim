@@ -48,22 +48,22 @@ TEST_F(GameStateProBufTest, TestGetEntities)
     ASSERT_EQ(2,entities[2]->ID()); 
 }
 
-TEST_F(GameStateProBufTest, SaveToFileTest)
+/*TEST_F(GameStateProBufTest, SaveToFileTest)
 {
     GameStateProtoBufWrapper game_state_proto_buf;
 
-    std::list<std::string> systems  = 
+    std::list<System*> systems  = 
     {
-        "TestSystem1",
-        "TestSystem2",
-        "TestSystem3"
+        new System("TestSystem1"),
+        new System("TestSystem2"),
+        new System("TestSystem3")
     };
 
     Instance i;
     game_state_proto_buf.SetSystems(systems);
     game_state_proto_buf.SetInstance(i);
     game_state_proto_buf.ToFile("proto_buf_system_output.pmidg");
-}
+}*/
 
 TEST_F(GameStateProBufTest, ReadFromFile)
 {

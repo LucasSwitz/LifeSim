@@ -52,7 +52,24 @@ void DevelopmentOverlay::DrawMenuBar()
                 }                
             }
 
-            if (ImGui::MenuItem("Load Instance", "CTRL+SHIFT+I")) {} 
+            if (ImGui::MenuItem("Load Instance", "CTRL+SHIFT+I")) 
+            {
+                ImGui::BeginChild("Select Instance");
+                ImGui::Text("Test");
+                ImGui::EndChild();
+            }
+            if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I")) 
+            {
+                ImGui::BeginChild("Select Instance");
+                ImGui::Text("Test");
+                ImGui::EndChild();
+            } 
+            if (ImGui::MenuItem("Save As Instance....", "CTRL+SHIFT+I")) 
+            {
+                ImGui::BeginChild("Select Instance");
+                ImGui::Text("Test");
+                ImGui::EndChild();
+            } 
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Stage"))

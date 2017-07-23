@@ -11,24 +11,46 @@ class GameLoader
         {
             GameStateProtoBufWrapper gameStateProtoBuf;
             gameStateProtoBuf.FromFile(file_name);
-            GameStateFromProtobuf(GameStateFromProtoBuf, state);
+            GameStateFromProtoBuf(gameStateProtoBuf, state);
+        }
+
+            
+        void Save(const std::string& file_path, const std::string& file_name, GameState& state)
+        {
+            Save(file_path + "//" + file_name, state);
         }
 
         void Save(std::string file_name, GameState& game_state)
         {
             GameStateProtoBufWrapper gameStateProtoBuf;
-            gameStateProtoBuf.SetInstance(game_state.GetCurrentInstance());
-            gameStateProtoBuf.SetEntities(game_entity.EntityMananger()->GetAllEntities());
-            gameStateProtoBuf.SetSystems(game_state.SystemController()->GetAllSystems());
+            gameStateProtoBuf.SetInstance(*game_state.GetInstance());
+            gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());
+            gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetSystemInExecutionSequence());
             gameStateProtoBuf.ToFile(file_name);
         }
 
-        void GameStateFromProtoBuf(GameStateProtoBufWrapper& protobuf, GameState* game_state)
+        void GameStateFromProtoBuf(GameStateProtoBufWrapper& protobuf, GameState& game_state)
         {
-            // Get all entities from protobuf and add them
-            // Get all systems from protobuf and add them
-            // Get Instance and set it
+            std::list<Entity*> entities; 
+            std::list<std::string> systems; 
+            Instance* instance = new Instance();
+
         
+            protobuf.GetEntities(entities);
+            protobuf.GetSystems(systems);
+            protobuf.GetInstance(instance);
+
+            for(Entity* e : entities)
+            {
+                game_state.AddEntity(e);
+            }
+
+            for(std::string& system : systems)
+            {
+                game_state.AddSystem(system);
+            }
+
+            game_state.SetCurrentInstance(instance);
         }   
 };
 #endif

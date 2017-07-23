@@ -10,6 +10,7 @@
 #include "src/game/FPSRunner.h"
 #include "src/game/GameState.h"
 #include "src/game/mode/ProgramMode.h"
+#include "src/game/control/GameLoader.h"
 #include "src/utils/window/WindowUtils.h"
 #include "src/utils/sfml/SFMLUtils.h"
 #include "src/system/SystemController.h"
@@ -233,6 +234,18 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             }
         }
         return nullptr;
+    }
+
+    void OnSaveInstance(const std::string& file_path,const std::string& file_name)
+    {
+        GameLoader loader;
+        loader.Save(file_path,file_name,_game_state);
+    }
+
+    void OnLoad(const std::string& file_path)
+    {
+        GameLoader loader;
+        loader.Load(file_path,_game_state);
     }
 
   private:

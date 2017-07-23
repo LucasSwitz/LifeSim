@@ -11,8 +11,7 @@
 
 class GameState : public FPSRunnable
 {
-    public:
-
+  public:
     void Load()
     {
         Setup();
@@ -26,11 +25,11 @@ class GameState : public FPSRunnable
         MessageDispatch::GiveOwnership(&_message_dispatch);
     }
 
-    void Tick(float seconds_elapsed) 
+    void Tick(float seconds_elapsed)
     {
         _system_controller.Update(seconds_elapsed);
 
-        if(_current_instance)
+        if (_current_instance)
             _current_instance->Tick(seconds_elapsed);
     }
 
@@ -39,37 +38,62 @@ class GameState : public FPSRunnable
 
     }
 
+    void SetCurrentInstance(Instance *instance)
+    {
+        _current_instance = instance;
+    }
+
+    void AddSystem(std::string system_name)
+    {
+        _system_controller.AddToSystemExecutionSequence(system_name);
+    }
+
+    void AddSystem(System *system)
+    {
+        _system_controller.AddToSystemExecutionSequence(system);
+    }
+
+    void AddEntity(Entity* e)
+    {
+        _entity_manager.RegisterEntity(e);
+        AddComponentUser(e);
+    }
+
+    void AddComponentUser(ComponentUser* user)
+    {
+        user->EnableAll();
+    }
+
     GameState Copy()
     {
 
     }
 
-    template<typename T>
-    void SetSystems(T& systems_list)
+    EntityManager& GetEntityManager()
     {
-        //iterate over systems and add them
-        _system_controller.Reset();
-    }
-    
-
-    template<typename T>
-    void SetEntities(T& entities_list)
-    {
-        //iterate over entities and add them
-        _entity_manager.Clear();
+        return _entity_manager;
     }
 
-
-    void SetCurrentInstance(Instance * instance)
+    ComponentUserBase& GetComponentUserBase()
     {
-        _current_instance = instance;
+        return _component_users;
     }
-    
-    private:
-        EntityManager _entity_manager;
-        ComponentUserBase _component_users;
-        SystemController _system_controller;
-        MessageDispatch _message_dispatch;
-        Instance* _current_instance;
+
+    SystemController& GetSystemController()
+    {
+        return _system_controller;
+    }
+
+    Instance* GetInstance()
+    {
+        return _current_instance;
+    }
+
+  private:
+    EntityManager _entity_manager;
+    ComponentUserBase _component_users;
+    SystemController _system_controller;
+    MessageDispatch _message_dispatch;
+    Instance *_current_instance;
 };
 #endif
