@@ -89,12 +89,6 @@ class GameState : public FPSRunnable
         return _current_instance;
     }
 
-    ~GameState
-    {
-        //Clear SystemController - needs to delete entites
-        //Clear EntityManager - needs to delete systems
-        //Clear message dispatch 
-    }
 
   private:
     EntityManager _entity_manager;
