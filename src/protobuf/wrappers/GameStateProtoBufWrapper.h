@@ -40,8 +40,11 @@ class GameStateProtoBufWrapper
             pmidgserialized::Entity *serialized_entity = serialized_game_state.add_entities();
 
             int id = e->ID();
-            serialized_entity->set_id(id);
+            std::string name = e->GetPrototypeName();
 
+            serialized_entity->set_id(id);
+            serialized_entity->set_name(name);
+            
              std::unordered_map<std::string, Component*>components = e->GetAllComponents();
 
             if (components.size() > 0)
@@ -114,8 +117,9 @@ class GameStateProtoBufWrapper
             pmidgserialized::Entity current_entity = serialized_game_state.entities(i);
 
             int entity_id = current_entity.id();
+            std::string name = current_entity.name();
 
-            Entity *e = new Entity(0, "", false, entity_id);
+            Entity *e = new Entity(0, name, false, entity_id);
 
             int num_of_components = current_entity.components_size();
             // iterate over components

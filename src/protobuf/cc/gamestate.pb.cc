@@ -84,8 +84,10 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, id_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, components_),
-  0,
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Entity, name_),
+  1,
   ~0u,
+  0,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(System, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(System, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -144,13 +146,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 0, 8, sizeof(GameState)},
-  { 11, 18, sizeof(Entity)},
-  { 20, 26, sizeof(System)},
-  { 27, 33, sizeof(Instance)},
-  { 34, 43, sizeof(Component)},
-  { 47, 54, sizeof(ComponentValueString)},
-  { 56, 63, sizeof(ComponentValueBool)},
-  { 65, 72, sizeof(ComponentValueFloat)},
+  { 11, 19, sizeof(Entity)},
+  { 22, 28, sizeof(System)},
+  { 29, 35, sizeof(Instance)},
+  { 36, 45, sizeof(Component)},
+  { 49, 56, sizeof(ComponentValueString)},
+  { 58, 65, sizeof(ComponentValueBool)},
+  { 67, 74, sizeof(ComponentValueFloat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -233,23 +235,23 @@ void AddDescriptorsImpl() {
       "ameState\022)\n\010entities\030\001 \003(\0132\027.pmidgserial"
       "ized.Entity\022/\n\016active_systems\030\002 \003(\0132\027.pm"
       "idgserialized.System\022+\n\010instance\030\003 \002(\0132\031"
-      ".pmidgserialized.Instance\"D\n\006Entity\022\n\n\002i"
+      ".pmidgserialized.Instance\"R\n\006Entity\022\n\n\002i"
       "d\030\001 \002(\005\022.\n\ncomponents\030\002 \003(\0132\032.pmidgseria"
-      "lized.Component\"\026\n\006System\022\014\n\004name\030\001 \002(\t\""
-      "\033\n\010Instance\022\017\n\007tilemap\030\001 \002(\t\"\315\001\n\tCompone"
-      "nt\022\014\n\004name\030\001 \002(\t\022<\n\rstring_values\030\002 \003(\0132"
-      "%.pmidgserialized.ComponentValueString\0228"
-      "\n\013bool_values\030\003 \003(\0132#.pmidgserialized.Co"
-      "mponentValueBool\022:\n\014float_values\030\004 \003(\0132$"
-      ".pmidgserialized.ComponentValueFloat\"9\n\024"
-      "ComponentValueString\022\022\n\nvalue_name\030\001 \002(\t"
-      "\022\r\n\005value\030\002 \002(\t\"7\n\022ComponentValueBool\022\022\n"
-      "\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\010\"8\n\023Comp"
-      "onentValueFloat\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005v"
-      "alue\030\002 \002(\002"
+      "lized.Component\022\014\n\004name\030\003 \002(\t\"\026\n\006System\022"
+      "\014\n\004name\030\001 \002(\t\"\033\n\010Instance\022\017\n\007tilemap\030\001 \002"
+      "(\t\"\315\001\n\tComponent\022\014\n\004name\030\001 \002(\t\022<\n\rstring"
+      "_values\030\002 \003(\0132%.pmidgserialized.Componen"
+      "tValueString\0228\n\013bool_values\030\003 \003(\0132#.pmid"
+      "gserialized.ComponentValueBool\022:\n\014float_"
+      "values\030\004 \003(\0132$.pmidgserialized.Component"
+      "ValueFloat\"9\n\024ComponentValueString\022\022\n\nva"
+      "lue_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"7\n\022Compone"
+      "ntValueBool\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value"
+      "\030\002 \002(\010\"8\n\023ComponentValueFloat\022\022\n\nvalue_n"
+      "ame\030\001 \002(\t\022\r\n\005value\030\002 \002(\002"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 690);
+      descriptor, 704);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gamestate.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -718,6 +720,7 @@ void GameState::set_allocated_instance(::pmidgserialized::Instance* instance) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Entity::kIdFieldNumber;
 const int Entity::kComponentsFieldNumber;
+const int Entity::kNameFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Entity::Entity()
@@ -735,12 +738,17 @@ Entity::Entity(const Entity& from)
       _cached_size_(0),
       components_(from.components_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.has_name()) {
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
   id_ = from.id_;
   // @@protoc_insertion_point(copy_constructor:pmidgserialized.Entity)
 }
 
 void Entity::SharedCtor() {
   _cached_size_ = 0;
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   id_ = 0;
 }
 
@@ -750,6 +758,7 @@ Entity::~Entity() {
 }
 
 void Entity::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void Entity::SetCachedSize(int size) const {
@@ -778,6 +787,10 @@ Entity* Entity::New(::google::protobuf::Arena* arena) const {
 void Entity::Clear() {
 // @@protoc_insertion_point(message_clear_start:pmidgserialized.Entity)
   components_.Clear();
+  if (has_name()) {
+    GOOGLE_DCHECK(!name_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
+    (*name_.UnsafeRawStringPointer())->clear();
+  }
   id_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -819,6 +832,22 @@ bool Entity::MergePartialFromCodedStream(
         break;
       }
 
+      // required string name = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->name().data(), this->name().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "pmidgserialized.Entity.name");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0 ||
@@ -849,7 +878,7 @@ void Entity::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required int32 id = 1;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->id(), output);
   }
 
@@ -857,6 +886,16 @@ void Entity::SerializeWithCachedSizes(
   for (unsigned int i = 0, n = this->components_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->components(i), output);
+  }
+
+  // required string name = 3;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "pmidgserialized.Entity.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->name(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -874,7 +913,7 @@ void Entity::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required int32 id = 1;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->id(), target);
   }
 
@@ -885,6 +924,17 @@ void Entity::SerializeWithCachedSizes(
         2, this->components(i), deterministic, target);
   }
 
+  // required string name = 3;
+  if (cached_has_bits & 0x00000001u) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "pmidgserialized.Entity.name");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->name(), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -893,6 +943,26 @@ void Entity::SerializeWithCachedSizes(
   return target;
 }
 
+size_t Entity::RequiredFieldsByteSizeFallback() const {
+// @@protoc_insertion_point(required_fields_byte_size_fallback_start:pmidgserialized.Entity)
+  size_t total_size = 0;
+
+  if (has_name()) {
+    // required string name = 3;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  if (has_id()) {
+    // required int32 id = 1;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->id());
+  }
+
+  return total_size;
+}
 size_t Entity::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:pmidgserialized.Entity)
   size_t total_size = 0;
@@ -902,11 +972,19 @@ size_t Entity::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         unknown_fields());
   }
-  // required int32 id = 1;
-  if (has_id()) {
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required string name = 3;
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+
+    // required int32 id = 1;
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->id());
+
+  } else {
+    total_size += RequiredFieldsByteSizeFallback();
   }
   // repeated .pmidgserialized.Component components = 2;
   {
@@ -949,8 +1027,16 @@ void Entity::MergeFrom(const Entity& from) {
   (void) cached_has_bits;
 
   components_.MergeFrom(from.components_);
-  if (from.has_id()) {
-    set_id(from.id());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 3u) {
+    if (cached_has_bits & 0x00000001u) {
+      set_has_name();
+      name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+    }
+    if (cached_has_bits & 0x00000002u) {
+      id_ = from.id_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -969,7 +1055,7 @@ void Entity::CopyFrom(const Entity& from) {
 }
 
 bool Entity::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->components())) return false;
   return true;
 }
@@ -980,6 +1066,7 @@ void Entity::Swap(Entity* other) {
 }
 void Entity::InternalSwap(Entity* other) {
   components_.InternalSwap(&other->components_);
+  name_.Swap(&other->name_);
   std::swap(id_, other->id_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -996,13 +1083,13 @@ void Entity::InternalSwap(Entity* other) {
 
 // required int32 id = 1;
 bool Entity::has_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 void Entity::set_has_id() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
 }
 void Entity::clear_has_id() {
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 void Entity::clear_id() {
   id_ = 0;
@@ -1046,6 +1133,69 @@ const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >&
 Entity::components() const {
   // @@protoc_insertion_point(field_list:pmidgserialized.Entity.components)
   return components_;
+}
+
+// required string name = 3;
+bool Entity::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+void Entity::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+void Entity::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+void Entity::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+const ::std::string& Entity::name() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Entity.name)
+  return name_.GetNoArena();
+}
+void Entity::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:pmidgserialized.Entity.name)
+}
+#if LANG_CXX11
+void Entity::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:pmidgserialized.Entity.name)
+}
+#endif
+void Entity::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:pmidgserialized.Entity.name)
+}
+void Entity::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:pmidgserialized.Entity.name)
+}
+::std::string* Entity::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:pmidgserialized.Entity.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* Entity::release_name() {
+  // @@protoc_insertion_point(field_release:pmidgserialized.Entity.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void Entity::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Entity.name)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

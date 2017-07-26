@@ -8,6 +8,22 @@ void SystemController::AddPassiveSystem(const std::string &system_name)
     AddPassiveSystem(system);
 }
 
+std::list<System*>::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string& system_name)
+{
+    auto it = _systems_execution_sequence.begin();
+
+    for(; it != _systems_execution_sequence.end(); it++)
+    {
+        if((*it)->GetName().compare(system_name) == 0)
+        {
+            it = _systems_execution_sequence.erase(it);
+            break;
+        }
+    }
+
+    return it;
+}
+
 void SystemController::AddPassiveSystem(System *system)
 {
     LOG->LogInfo(1, "Adding Passive System: %s \n", system->GetName().c_str());
@@ -160,4 +176,14 @@ void SystemController::MoveDown(System *system)
             };
         }
     }
+}
+
+void SystemController::Lock()
+{
+    _system_lock.lock();
+}
+
+void SystemController::Unlock()
+{
+    _system_lock.unlock();
 }

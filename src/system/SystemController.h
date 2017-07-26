@@ -3,6 +3,7 @@
 
 #include <list>
 #include <chrono>
+#include <mutex>
 
 #include "src/system/SystemFactory.h"
 #include "src/utils/logging/Logging.h"
@@ -20,8 +21,11 @@ public:
   void AddPassiveSystem(const std::string &system_name);
   void AddPassiveSystem(System *system);
   void AddToSystemExecutionSequence(System *system);
+  std::list<System *>::iterator RemoveFromSystemExecutionSequence(const std::string &system_name);
   void MoveUp(std::string system_name);
   void MoveDown(std::string system_down);
+  void Lock();
+  void Unlock();
 
   const System *GetSystemInExecutionSequenceAt(int index);
 
@@ -59,6 +63,7 @@ private:
   void MoveUp(System *system_name);
   void MoveDown(System *system_down);
   static SystemController *_instance;
+  std::mutex _system_lock;
 };
 
 #endif

@@ -279,6 +279,21 @@ class Entity : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >&
       components() const;
 
+  // required string name = 3;
+  bool has_name() const;
+  void clear_name();
+  static const int kNameFieldNumber = 3;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
   // required int32 id = 1;
   bool has_id() const;
   void clear_id();
@@ -290,11 +305,17 @@ class Entity : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
  private:
   void set_has_id();
   void clear_has_id();
+  void set_has_name();
+  void clear_has_name();
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable int _cached_size_;
   ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component > components_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::int32 id_;
   friend struct protobuf_gamestate_2eproto::TableStruct;
 };
@@ -1103,13 +1124,13 @@ inline void GameState::set_allocated_instance(::pmidgserialized::Instance* insta
 
 // required int32 id = 1;
 inline bool Entity::has_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void Entity::set_has_id() {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
 }
 inline void Entity::clear_has_id() {
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void Entity::clear_id() {
   id_ = 0;
@@ -1153,6 +1174,69 @@ inline const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component 
 Entity::components() const {
   // @@protoc_insertion_point(field_list:pmidgserialized.Entity.components)
   return components_;
+}
+
+// required string name = 3;
+inline bool Entity::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Entity::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Entity::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Entity::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+inline const ::std::string& Entity::name() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Entity.name)
+  return name_.GetNoArena();
+}
+inline void Entity::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:pmidgserialized.Entity.name)
+}
+#if LANG_CXX11
+inline void Entity::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:pmidgserialized.Entity.name)
+}
+#endif
+inline void Entity::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:pmidgserialized.Entity.name)
+}
+inline void Entity::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:pmidgserialized.Entity.name)
+}
+inline ::std::string* Entity::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:pmidgserialized.Entity.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Entity::release_name() {
+  // @@protoc_insertion_point(field_release:pmidgserialized.Entity.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Entity::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Entity.name)
 }
 
 // -------------------------------------------------------------------

@@ -20,6 +20,8 @@ Log &DevelopmentOverlay::GetLog()
 
 void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
+    
+
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
     // #### DESIGN GUI HERE_selcected_file
