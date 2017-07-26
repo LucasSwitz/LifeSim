@@ -17,7 +17,8 @@ TestEntity =
             },
             Graphics = 
             {
-                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png"
+                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
+                layer = 1
             },
             Velocity =
             {

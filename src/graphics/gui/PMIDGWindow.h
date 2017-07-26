@@ -4,6 +4,7 @@
 #include <queue>
 #include <unordered_map>
 #include <list>
+#include <climits>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -25,6 +26,17 @@
 class PMIDGWindow : public EventSubscriber
 {
   public:
+    struct LayeredGraphic
+    {
+        LayeredGraphic(sf::Drawable *draw, int lay) : drawable(draw), layer(lay){};
+        ~LayeredGraphic()
+        {
+            delete drawable;
+        }
+        int layer = 0;
+        sf::Drawable *drawable;
+    };
+
     PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "HELLO!")
     {
         EngineEventManager::Instance()->RegisterSubscriber(this);
@@ -49,11 +61,12 @@ class PMIDGWindow : public EventSubscriber
         _window.clear(sf::Color::White);
     }
 
+
     void Render()
     {
         while (!_drawables_queue.empty())
         {
-            sf::Drawable *to_draw = _drawables_queue.front();
+            sf::Drawable *to_draw = _drawables_queue.top()->drawable;
             _window.draw(*to_draw);
             _drawables_queue.pop();
             delete to_draw;
@@ -67,7 +80,12 @@ class PMIDGWindow : public EventSubscriber
 
     void Draw(sf::Drawable *drawable)
     {
-        _drawables_queue.push(drawable);
+        LayeredGraphic *lg = new LayeredGraphic(drawable, INT_MAX);
+    }
+
+    void Draw(LayeredGraphic *lg)
+    {
+        _drawables_queue.push(lg);
     }
 
     void DrawNow(sf::Drawable &drawable)
@@ -84,13 +102,17 @@ class PMIDGWindow : public EventSubscriber
         }
 
         std::string sprite_path = user->GetComponentValueString("Graphics", "sprite");
+        int layer = user->GetComponentValueFloat("Graphics", "layer");
+
         sf::Texture *texture = nullptr;
 
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
             sf::Sprite *sprite = new sf::Sprite();
-            _preprocesser.ProcessComponentUser(user,texture,sprite);
-            Draw(sprite);
+            _preprocesser.ProcessComponentUser(user, texture, sprite);
+
+            LayeredGraphic* lg = new LayeredGraphic(sprite, layer);
+            Draw(lg);
         }
         else
         {
@@ -192,8 +214,17 @@ class PMIDGWindow : public EventSubscriber
     sf::RenderWindow _window;
 
   private:
+    class GraphicsComparator
+    {
+      public:
+        bool operator()(LayeredGraphic *g1, LayeredGraphic *g2)
+        {
+            return g1->layer > g2->layer;
+        }
+    };
+
     TextureCache _texture_cache;
-    std::queue<sf::Drawable *> _drawables_queue;
+    std::priority_queue<LayeredGraphic *, std::vector<LayeredGraphic *>, GraphicsComparator> _drawables_queue;
     std::list<SFMLWindowListener *> _window_listeners;
     GraphicsPreprocessor _preprocesser;
 };

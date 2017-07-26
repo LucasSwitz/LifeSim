@@ -14,6 +14,7 @@ class GameLoader
 
     void Load(std::string file_path, GameState &state)
     {
+        std::cout << "Loading game from file: " << file_path << std::endl;
         GameStateProtoBufWrapper gameStateProtoBuf;
         gameStateProtoBuf.FromFile(file_path);
         GameStateFromProtoBuf(gameStateProtoBuf, state);
@@ -26,6 +27,7 @@ class GameLoader
 
     void Save(std::string file_name, GameState &game_state)
     {
+        std::cout << "Saving game to file: " << file_name << std::endl;
         GameStateProtoBufWrapper gameStateProtoBuf;
         gameStateProtoBuf.SetInstance(*game_state.GetInstance());
         gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());

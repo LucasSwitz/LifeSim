@@ -15,7 +15,8 @@ TestTile2 =
         },
         Graphics  = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/textures/diamonds.jpg"
+            sprite = "/home/pabu/Desktop/LifeSim/res/textures/diamonds.jpg",
+            layer = 0
         }
     }
 }

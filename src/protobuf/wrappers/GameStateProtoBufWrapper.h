@@ -21,11 +21,10 @@ class GameStateProtoBufWrapper
         }
     }
 
-
-    void SetEntities(std::map<int, Entity*> &entities_list)
-    {   
-        std::list<Entity*> entities;
-        for(auto it = entities_list.begin(); it != entities_list.end(); it++)
+    void SetEntities(std::map<int, Entity *> &entities_list)
+    {
+        std::list<Entity *> entities;
+        for (auto it = entities_list.begin(); it != entities_list.end(); it++)
         {
             entities.push_back(it->second);
         }
@@ -43,44 +42,52 @@ class GameStateProtoBufWrapper
             int id = e->ID();
             serialized_entity->set_id(id);
 
-            auto components = e->GetAllComponents();
+             std::unordered_map<std::string, Component*>components = e->GetAllComponents();
 
             if (components.size() > 0)
             {
-                pmidgserialized::Component *serialized_component = serialized_entity->add_components();
 
                 for (auto it = components.begin(); it != components.end(); it++)
                 {
+                    pmidgserialized::Component *serialized_component = serialized_entity->add_components();
+
                     Component *component = it->second;
                     std::string name = component->GetName();
                     serialized_component->set_name(name);
 
-                    auto float_values = component->GetAllFloatValues();
-                    auto string_values = component->GetAllStringValues();
-                    auto bool_values = component->GetAllBoolValues();
+                    std::unordered_map<std::string, Component::ComponentValue<float>> &float_values = 
+                                                    component->GetAllFloatValues();
 
-                    for (auto it = float_values.begin(); it != float_values.end(); it++)
+                    std::unordered_map<std::string, Component::ComponentValue<std::string>> &string_values = 
+                                                    component->GetAllStringValues();
+
+                    std::unordered_map<std::string, Component::ComponentValue<bool>> &bool_values = 
+                                                    component->GetAllBoolValues();
+
+                    for (auto it_vals = float_values.begin(); it_vals != float_values.end(); it_vals++)
                     {
                         pmidgserialized::ComponentValueFloat *serialized_component_value =
                             serialized_component->add_float_values();
 
-                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueFloat, float>(it->second, serialized_component_value);
+                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueFloat, float>
+                                                        (it_vals->second, serialized_component_value);
                     }
 
-                    for (auto it = string_values.begin(); it != string_values.end(); it++)
+                    for (auto it_vals = string_values.begin(); it_vals != string_values.end(); it_vals++)
                     {
                         pmidgserialized::ComponentValueString *serialized_component_value =
                             serialized_component->add_string_values();
-
-                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueString, std::string>(it->second, serialized_component_value);
+                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueString, std::string>
+                                                        (it_vals->second, serialized_component_value);
                     }
 
-                    for (auto it = bool_values.begin(); it != bool_values.end(); it++)
+                    for (auto it_vals = bool_values.begin(); it_vals != bool_values.end(); it_vals++)
                     {
                         pmidgserialized::ComponentValueBool *serialized_component_value =
                             serialized_component->add_bool_values();
 
-                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueBool, bool>(it->second, serialized_component_value);
+                        ConfigureSerializedComponentUser<pmidgserialized::ComponentValueBool, bool>
+                                                        (it_vals->second, serialized_component_value);
                     }
                 }
             }
@@ -108,17 +115,15 @@ class GameStateProtoBufWrapper
 
             int entity_id = current_entity.id();
 
-            Entity *e = new Entity(0,"",false, entity_id);
+            Entity *e = new Entity(0, "", false, entity_id);
 
             int num_of_components = current_entity.components_size();
-
             // iterate over components
             for (int k = 0; k < num_of_components; k++)
             {
                 pmidgserialized::Component current_component = current_entity.components(k);
 
                 std::string current_component_name = current_component.name();
-
                 int num_of_bool_values = current_component.bool_values_size();
                 int num_of_string_values = current_component.string_values_size();
                 int num_of_float_values = current_component.float_values_size();
@@ -131,7 +136,7 @@ class GameStateProtoBufWrapper
                     ConfigureComponentUser<pmidgserialized::ComponentValueBool, bool>(e, current_component_name, current_value);
                 }
 
-                for (int j = 0; j < num_of_bool_values; j++)
+                for (int j = 0; j < num_of_string_values; j++)
                 {
                     pmidgserialized::ComponentValueString current_value =
                         current_component.string_values(j);
@@ -164,7 +169,7 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void GetInstance(Instance* instance)
+    void GetInstance(Instance *instance)
     {
         //create instance and call tilemap factor
         std::string tile_map_file = serialized_game_state.instance().tilemap();
@@ -198,6 +203,7 @@ class GameStateProtoBufWrapper
     {
         std::string component_value_name = component_value.GetName();
         T value = component_value.GetValue();
+
 
         serialized_component_value->set_value_name(component_value_name);
         serialized_component_value->set_value(value);

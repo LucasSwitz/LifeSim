@@ -13,10 +13,9 @@
 #include "src/graphics/gui/gui_tools/DevelopmentOverlayListener.h"
 #include "src/graphics/gui/gui_tools/SystemMonitor.h"
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
-#include "src/graphics/gui/gui_tools/FolderContents.h"
-#include "src/graphics/gui/gui_tools/SaveDialog.h"
+#include "src/graphics/gui/gui_tools/MainMenu.h"
 
-class DevelopmentOverlay
+class DevelopmentOverlay : public MainMenuListener
 {
     public:
         DevelopmentOverlay();
@@ -27,11 +26,17 @@ class DevelopmentOverlay
         void SetListener(DevelopmentOverlayListener* listener);
         bool IsFocused();
 
+        // Inhertited from MainMenuListener
+        void NewInstancePressed();
+        void LoadInstancePressed(std::string& file_name);
+        void SaveInstancePressed(std::string& file_name);
+    
         Log log;
         EntityTable entity_table;
         InstanceEditor instance_editor;
         SystemMonitor system_monitor;
         EditModeControls edit_mode_controls;
+        MainMenu main_menu;
 
     private:
         void DrawMenuBar();

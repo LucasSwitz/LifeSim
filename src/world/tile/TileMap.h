@@ -42,6 +42,7 @@ class TileMap
     //use load from vector
     void LoadFromFile(std::string file_path)
     {
+        std::cout << "Loading Tilemap From File: " << file_path << std::endl;
         _file_name = file_path;
         
         std::ifstream map_stream(file_path);

@@ -25,7 +25,8 @@ TestTile =
         },
         Graphics  = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/textures/pumpkin.jpg"
+            sprite = "/home/pabu/Desktop/LifeSim/res/textures/pumpkin.jpg",
+            layer = 0
         }
     }
 }

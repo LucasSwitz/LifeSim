@@ -5,7 +5,6 @@ ComponentUserBase* ComponentUserBase::_instance = nullptr;
 
 void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 {
-
     if(!ComponentExists(component_name))
     {
         _component_users_directory.insert(std::make_pair(component_name, new std::list<ComponentUser*>()));

@@ -10,6 +10,7 @@ void DevelopmentOverlay::Init(PMIDGWindow *window)
     window->AddWindowListener(&instance_editor);
     instance_editor.Init();
     log.Clear();
+    main_menu.SetListener(this);
 }
 
 Log &DevelopmentOverlay::GetLog()
@@ -22,7 +23,7 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
     // #### DESIGN GUI HERE_selcected_file
-    DrawMenuBar();
+    main_menu.Draw();
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
@@ -33,95 +34,27 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache
     ImGui::SFML::Render(window->SFWindow());
 }
 
-void DevelopmentOverlay::DrawMenuBar()
+void DevelopmentOverlay::LoadInstancePressed(std::string &file_name)
 {
-    if (ImGui::BeginMainMenuBar())
+    if (_listener)
     {
-        if (ImGui::BeginMenu("File"))
-        {
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Instance"))
-        {
-            if (ImGui::MenuItem("New Instance", "CTRL+I"))
-            {
-                if (_listener)
-                {
-                    _listener->OnCreateBlankInstance(30, 30);
-                }
-            }
+        _listener->OnLoadGameStateFile(file_name);
+    }
+}
 
-            if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
-            {
-                FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
-                ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                std::string file_name = instance_files.Draw();
-                if (!file_name.empty())
-                {
-                    if (_listener)
-                    {
-                        _listener->OnLoadGameStateFile(file_name);
-                    }
-                }
+void DevelopmentOverlay::SaveInstancePressed(std::string &file_name)
+{
+    if (_listener)
+    {
+        _listener->OnSaveGameStateFile(file_name);
+    }
+}
 
-                ImGui::EndChild();
-                ImGui::EndMenu();
-            }
-            if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I"))
-            {
-                ImGui::BeginChild("Select Instance");
-
-                ImGui::EndChild();
-            }
-            if (ImGui::BeginMenu("Save As Instance....", "CTRL+SHIFT+I"))
-            {
-                ImGui::BeginChild("Save Instance##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
-                std::string file_name = _save_dialog.Draw();
-
-                if (!file_name.empty())
-                {
-                    if (_listener)
-                    {
-                        _listener->OnSaveGameStateFile(file_name);
-                    }
-                }
-
-                ImGui::EndChild();
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Stage"))
-        {
-            if (ImGui::MenuItem("New Stage", "CTRL+S"))
-            {
-            }
-            if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("World"))
-        {
-            if (ImGui::MenuItem("New World", "CTRL+W"))
-            {
-            }
-            if (ImGui::MenuItem("Load World", "CTRL+SHIFT+W"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Entity"))
-        {
-            if (ImGui::MenuItem("New Entity", "ImGui::EndCTRL+E"))
-            {
-            }
-            if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E"))
-            {
-            }
-            ImGui::EndMenu();
-        }
-        ImGui::EndMainMenuBar();
+void DevelopmentOverlay::NewInstancePressed()
+{
+    if(_listener)
+    {
+        _listener->OnCreateBlankInstance(30,30);
     }
 }
 

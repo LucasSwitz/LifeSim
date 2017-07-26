@@ -28,8 +28,6 @@ void EntityManager::RegisterEntity(Entity *entity)
     _entity_map.insert(std::make_pair(entity->_id, entity));
 }
 
-
-
 EntityManager* EntityManager::Instance()
 {
     return _instance;
@@ -62,8 +60,10 @@ void EntityManager::Clear()
 
 EntityManager::~EntityManager()
 {
-    /*for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
-        {
+    std::cout << "Cleaning up entities...." << std::endl;
+    for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
+    {
+        if(it->second)
             delete it->second;
-        }*/
+    }
 }

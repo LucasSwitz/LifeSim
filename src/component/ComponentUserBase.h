@@ -47,6 +47,14 @@ class ComponentUserBase
     void GetAllUsersWithComponents(std::list<std::string> &list, std::list<ComponentUser *> &matches);
     void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);
 
+    ~ComponentUserBase()
+    {
+        std::cout << "Cleaning up Component Users...." << std::endl;
+        for(auto it = _component_users_directory.begin(); it != _component_users_directory.end(); it++)
+        {
+            delete it->second;
+        }
+    }
   private:
     ComponentUserBase(){};
 

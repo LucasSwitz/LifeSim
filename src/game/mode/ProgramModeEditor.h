@@ -244,6 +244,9 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
         GameLoader loader;
         loader.Load(file_path,file_name,*_game_state);
+
+        static_cast<PMIDGEditorWindow *>(_window)->OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
+                                                                        _game_state->GetInstance()->GetTileMap().HeightPx());
     }
 
     void OnSaveGameStateFile(const std::string& file_name) override
