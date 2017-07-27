@@ -508,15 +508,28 @@ class Instance : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::std::string* release_tilemap();
   void set_allocated_tilemap(::std::string* tilemap);
 
+  // required int32 id = 2;
+  bool has_id() const;
+  void clear_id();
+  static const int kIdFieldNumber = 2;
+  ::google::protobuf::int32 id() const;
+  void set_id(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:pmidgserialized.Instance)
  private:
   void set_has_tilemap();
   void clear_has_tilemap();
+  void set_has_id();
+  void clear_has_id();
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable int _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr tilemap_;
+  ::google::protobuf::int32 id_;
   friend struct protobuf_gamestate_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -1371,6 +1384,30 @@ inline void Instance::set_allocated_tilemap(::std::string* tilemap) {
   }
   tilemap_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), tilemap);
   // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Instance.tilemap)
+}
+
+// required int32 id = 2;
+inline bool Instance::has_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Instance::set_has_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Instance::clear_has_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Instance::clear_id() {
+  id_ = 0;
+  clear_has_id();
+}
+inline ::google::protobuf::int32 Instance::id() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Instance.id)
+  return id_;
+}
+inline void Instance::set_id(::google::protobuf::int32 value) {
+  set_has_id();
+  id_ = value;
+  // @@protoc_insertion_point(field_set:pmidgserialized.Instance.id)
 }
 
 // -------------------------------------------------------------------

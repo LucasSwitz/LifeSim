@@ -11,9 +11,9 @@
 
 class Instance : public EventSubscriber, public FPSRunnable
 {
-
  public:
-    Instance(int id = -1) : _id(id){}
+
+    Instance(int id = -1);
     ~Instance()
     {
         _tile_map.Erase();
@@ -109,11 +109,17 @@ class Instance : public EventSubscriber, public FPSRunnable
         return _loaded;
     }
 
+    void SetID(int id)
+    {
+        _id = id;
+    }
+
 
     protected:
         std::string name;
         std::string _tile_map_name = "";
         int _id;
+        static int last_id;
     private:
         TileMap _tile_map;
         std::list<Entity*> _local_entities;
@@ -121,6 +127,4 @@ class Instance : public EventSubscriber, public FPSRunnable
         bool _open;
         
 };
-
-
 #endif

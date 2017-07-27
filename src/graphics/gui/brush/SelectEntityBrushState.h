@@ -50,7 +50,7 @@ class SelectEntityBrushState : public BrushState
             if (e.type == sf::Event::MouseButtonPressed)
             {
                 _selection_state = MOVING;
-                return true;
+                return false;
             }
             else if (e.type == sf::Event::MouseButtonReleased)
             {

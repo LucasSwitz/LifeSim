@@ -104,6 +104,7 @@ class GameStateProtoBufWrapper
         std::string tile_map_file = instance.GetTileMap().GetFile();
 
         serialized_instance->set_tilemap(tile_map_file);
+        serialized_instance->set_id(instance.GetID());
     }
 
     template <typename T>
@@ -177,7 +178,10 @@ class GameStateProtoBufWrapper
     {
         //create instance and call tilemap factor
         std::string tile_map_file = serialized_game_state.instance().tilemap();
+        int id = serialized_game_state.instance().id();
+
         instance->GetTileMap().LoadFromFile(tile_map_file);
+        instance->SetID(id);
     }
 
     void FromFile(std::string file_name)

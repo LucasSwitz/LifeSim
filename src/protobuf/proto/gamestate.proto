@@ -24,6 +24,7 @@ message System
 message Instance
 {
     required string tilemap = 1;
+    required int32 id = 2;
 }
 
 message Component
