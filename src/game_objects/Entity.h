@@ -25,6 +25,9 @@ public:
     std::string& GetPrototypeName();
     Entity* Clone(bool is_prototype=false);
 
+    std::list<Subscription> GetSubscriptions();
+    void OnEvent(Event& e);
+
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
 

@@ -3,6 +3,7 @@
 
 #include <map>
 #include "src/utils/lua/LuaList.h"
+#include "src/event/EventSubscriber.h"
 
 #define Entity_Manager EntityManager::Instance()
 /**
@@ -10,7 +11,7 @@
 **/
 class Entity;
 
-class EntityManager
+class EntityManager : public EventSubscriber
 {
   friend class GameState;
 

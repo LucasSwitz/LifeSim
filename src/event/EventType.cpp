@@ -19,3 +19,4 @@
  int EventType::CHANGE_INSTANCE_EVENT = 14;
  int EventType::EXIT_STAGE_EVENT = 15;
  int EventType::DRAW_REQUEST_EVENT = 16;
+ int EventType::SPAWN_ENTITY_EVENT = 17;

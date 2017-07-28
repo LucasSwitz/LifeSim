@@ -37,7 +37,7 @@ class PMIDGWindow : public EventSubscriber
         sf::Drawable *drawable;
     };
 
-    PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "HELLO!")
+    PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "PMIDG")
     {
         EngineEventManager::Instance()->RegisterSubscriber(this);
     }

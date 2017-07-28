@@ -63,6 +63,30 @@ void EntityManager::Clear()
     _entity_map.clear();
 }
 
+void EntityManager::OnEvent(Event& e)
+{
+    switch(e.type)
+    {
+        case EventType::SPAWN_ENTITY_EVENT:
+            Entity* e = e.InfoToType<Entity*>();
+            e->EnableAll();
+            RegisterEntity(e);
+        break;
+        default:
+            return;
+    }
+}
+
+std::list<Subscription> EntityManager::GetSubscriptions()
+{
+    std::list<Subscription> subs = 
+    {
+        Subscription(SPAWN_ENTITY_EVENT)
+    }
+
+    return subs;
+}
+
 EntityManager::~EntityManager()
 {
     std::cout << "Cleaning up entities...." << std::endl;

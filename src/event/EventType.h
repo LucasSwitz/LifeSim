@@ -26,6 +26,7 @@ class EventType
     static int CHANGE_INSTANCE_EVENT;
     static int EXIT_STAGE_EVENT;
     static int DRAW_REQUEST_EVENT;
+    static int SPAWN_ENTITY_EVENT;
 
 };
 #endif
