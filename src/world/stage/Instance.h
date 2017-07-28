@@ -114,9 +114,19 @@ class Instance : public EventSubscriber, public FPSRunnable
         _id = id;
     }
 
+    void SetName(const std::string& name)
+    {
+        _name = name;
+    }
+
+    std::string& GetName()
+    {
+        return _name;
+    }
+
 
     protected:
-        std::string name;
+        std::string _name;
         std::string _tile_map_name = "";
         int _id;
         static int last_id;

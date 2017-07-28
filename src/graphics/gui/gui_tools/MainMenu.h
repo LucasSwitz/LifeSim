@@ -13,6 +13,8 @@ class MainMenu
     {
         if (ImGui::BeginMainMenuBar())
         {
+            _focused = ImGui::IsRootWindowOrAnyChildHovered();
+
             if (ImGui::BeginMenu("File"))
             {
                 ImGui::EndMenu();
@@ -29,6 +31,7 @@ class MainMenu
 
                 if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
                 {
+                    _focused = true;
                     FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
                     ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
                     std::string file_name = instance_files.Draw();
@@ -101,6 +104,11 @@ class MainMenu
         }
     }
 
+    bool IsFocused()
+    {
+        return _focused || _save_dialog.IsFocused();
+    }
+
     void SetListener(MainMenuListener *listener)
     {
         _listener = listener;
@@ -109,5 +117,6 @@ class MainMenu
   private:
     MainMenuListener *_listener;
     SaveDialog _save_dialog;
+    bool _focused = false;
 };
 #endif

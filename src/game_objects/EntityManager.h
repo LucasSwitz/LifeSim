@@ -27,6 +27,7 @@ public:
 
   void Clear();
   bool IDAvailable(int id);
+  bool HasEntity(int id);
 
   LuaList<Entity *> *AsLuaList();
 

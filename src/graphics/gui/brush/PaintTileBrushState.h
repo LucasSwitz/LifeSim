@@ -15,12 +15,13 @@ class PaintTileBrushState : public BrushState
 
     PaintTileBrushState(Tile *selected) : _selected_tile(selected){};
 
-    void PaintWindow(PMIDGWindow &window) override
+    bool PaintWindow(PMIDGWindow &window) override
     {
         if (_painting_state == PAINTING)
         {
             RenderSelectBox(window);
         }
+        return false;
     }
 
     bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance) override

@@ -9,7 +9,7 @@ class SelectEntityBrushState : public BrushState
   public:
     enum SelectionState
     {
-        SELECTED,
+        RELEASED,
         MOVING
     };
 
@@ -30,16 +30,15 @@ class SelectEntityBrushState : public BrushState
         }
     }
 
-    void PaintWindow(PMIDGWindow &window) override
+    bool PaintWindow(PMIDGWindow &window) override
     {
         switch (_selection_state)
         {
-        case SELECTED:
-            break;
-
+        case RELEASED:
+            return true;
         case MOVING:
             MoveEntity(window);
-            break;
+            return false;
         }
     }
 
@@ -54,7 +53,7 @@ class SelectEntityBrushState : public BrushState
             }
             else if (e.type == sf::Event::MouseButtonReleased)
             {
-                _selection_state = SELECTED;
+                _selection_state = RELEASED;
                 return true;
             }
         }

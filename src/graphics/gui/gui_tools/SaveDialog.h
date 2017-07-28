@@ -11,7 +11,9 @@ class SaveDialog
     {
         
         ImGui::InputText("Name##SaveDialog", buf, 256);
+        _focused = ImGui::IsRootWindowOrAnyChildHovered();
         ImGui::SameLine();
+
 
         if(ImGui::Button("Save##SaveDialog"))
         {
@@ -21,7 +23,13 @@ class SaveDialog
         return "";
     }
 
+    bool IsFocused()
+    {
+        return _focused;
+    }
+
     private:
+    bool _focused = false;
     char buf[256] = {};        
 };
 #endif

@@ -11,7 +11,11 @@ class Brush
     void PaintWindow(PMIDGWindow &window)
     {
         if (_state)
-            _state->PaintWindow(window);
+        {
+            if(_state->PaintWindow(window))
+                _state = nullptr;
+        }
+
     }
 
     bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance)

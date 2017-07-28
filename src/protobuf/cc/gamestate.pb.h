@@ -508,6 +508,21 @@ class Instance : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::std::string* release_tilemap();
   void set_allocated_tilemap(::std::string* tilemap);
 
+  // required string name = 3;
+  bool has_name() const;
+  void clear_name();
+  static const int kNameFieldNumber = 3;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  #if LANG_CXX11
+  void set_name(::std::string&& value);
+  #endif
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
   // required int32 id = 2;
   bool has_id() const;
   void clear_id();
@@ -521,6 +536,8 @@ class Instance : public ::google::protobuf::Message /* @@protoc_insertion_point(
   void clear_has_tilemap();
   void set_has_id();
   void clear_has_id();
+  void set_has_name();
+  void clear_has_name();
 
   // helper for ByteSizeLong()
   size_t RequiredFieldsByteSizeFallback() const;
@@ -529,6 +546,7 @@ class Instance : public ::google::protobuf::Message /* @@protoc_insertion_point(
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable int _cached_size_;
   ::google::protobuf::internal::ArenaStringPtr tilemap_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::int32 id_;
   friend struct protobuf_gamestate_2eproto::TableStruct;
 };
@@ -1388,13 +1406,13 @@ inline void Instance::set_allocated_tilemap(::std::string* tilemap) {
 
 // required int32 id = 2;
 inline bool Instance::has_id() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void Instance::set_has_id() {
-  _has_bits_[0] |= 0x00000002u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void Instance::clear_has_id() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void Instance::clear_id() {
   id_ = 0;
@@ -1408,6 +1426,69 @@ inline void Instance::set_id(::google::protobuf::int32 value) {
   set_has_id();
   id_ = value;
   // @@protoc_insertion_point(field_set:pmidgserialized.Instance.id)
+}
+
+// required string name = 3;
+inline bool Instance::has_name() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Instance::set_has_name() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Instance::clear_has_name() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Instance::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  clear_has_name();
+}
+inline const ::std::string& Instance::name() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Instance.name)
+  return name_.GetNoArena();
+}
+inline void Instance::set_name(const ::std::string& value) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:pmidgserialized.Instance.name)
+}
+#if LANG_CXX11
+inline void Instance::set_name(::std::string&& value) {
+  set_has_name();
+  name_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:pmidgserialized.Instance.name)
+}
+#endif
+inline void Instance::set_name(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:pmidgserialized.Instance.name)
+}
+inline void Instance::set_name(const char* value, size_t size) {
+  set_has_name();
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:pmidgserialized.Instance.name)
+}
+inline ::std::string* Instance::mutable_name() {
+  set_has_name();
+  // @@protoc_insertion_point(field_mutable:pmidgserialized.Instance.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Instance::release_name() {
+  // @@protoc_insertion_point(field_release:pmidgserialized.Instance.name)
+  clear_has_name();
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Instance::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    set_has_name();
+  } else {
+    clear_has_name();
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Instance.name)
 }
 
 // -------------------------------------------------------------------

@@ -125,14 +125,6 @@ std::unordered_map<std::string, Component *> &ComponentUser::GetAllComponents()
     return _components;
 }
 
-ComponentUser::~ComponentUser()
-{
-    for (auto it = _components.begin(); it != _components.end(); it++)
-    {
-        ComponentUserBase::Instance()->DeRegister(it->first, *this);
-        delete it->second;
-    }
-}
 
 void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value)
 {
@@ -162,4 +154,19 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
     }
 
     GetComponent(component_name)->SetFloatValue(value_name, value);
+}
+
+
+ComponentUser::~ComponentUser()
+{
+    for (auto it = _components.begin(); it != _components.end();)
+    {
+        if(ComponentUserBase::Instance())
+            ComponentUserBase::Instance()->DeRegister(it->first, *this);
+        
+        Component* to_delete = it->second;
+        it = _components.erase(it);
+
+        delete to_delete;
+    }
 }

@@ -9,6 +9,7 @@ class PMIDGEditorWindow : public PMIDGWindow
     void OnInstanceSizeChange(int width, int height)
     {
         orig_view = sf::View(sf::FloatRect(0, 0, width, height));
+        orig_view.setCenter(width/2,height/2);
         _window.setView(orig_view);
     }
 

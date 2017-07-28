@@ -33,26 +33,26 @@ class InstanceEditor : public SFMLWindowListener
         ImGui::Begin("Instance Editor");
         
             _focused = ImGui::IsRootWindowOrAnyChildHovered();
-            if (ImGui::TreeNode("Tile Map"))
+            if (ImGui::TreeNode("Tile Map##InstanceEditor"))
             {
                 tile_map_editor.Draw(texture_cache,brush);
                 ImGui::TreePop();
             }
 
-            if (ImGui::TreeNode("Entites"))
+            if (ImGui::TreeNode("Entites##InstanceEditor"))
             {
                 entity_editor.Draw(texture_cache,brush);
                 ImGui::TreePop();
             }
 
-            if (ImGui::TreeNode("Events"))
+            if (ImGui::TreeNode("Events##InstanceEditor"))
             {
                 ImGui::TreePop();
             }
 
             ImGui::InputInt2("##Resize Instance", new_instance_dims);
             ImGui::SameLine();
-            if (ImGui::Button("Resize Instance"))
+            if (ImGui::Button("Resize Instance##InstanceEditor"))
             {
                 //this thing needs a reference of the instance
             }

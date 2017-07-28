@@ -102,6 +102,13 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnCreateBlankInstance(int rows, int columns) override
     {
+        if(_game_state)
+            delete _game_state;
+
+        _game_state = new GameState();
+        _game_state->Setup();
+        _game_runner.SetRunnable(_game_state);
+        
         Instance *i = new Instance();
         _game_state->SetCurrentInstance(i);
 
@@ -149,24 +156,20 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                         {
                             _brush.SetState(new SelectEntityBrushState(entity));
                         }
-
-                        if(_brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance()))
-                        {
-                            _brush.SetState(nullptr);
-                        }
                     }
+                    _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance());
                 }
-                else if (e.type == sf::Event::MouseWheelMoved)
-                {
-                    _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
-                    _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
+            }
+            else if (e.type == sf::Event::MouseWheelMoved)
+            {
+                _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
+                _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
 
-                    static_cast<PMIDGEditorWindow *>(_window)->Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
-                }
-                else if (e.type == sf::Event::KeyPressed)
-                {
-                    _brush.OnKeyboardEvent(e, _game_state->GetInstance());
-                }
+                static_cast<PMIDGEditorWindow *>(_window)->Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
+            }
+            else if (e.type == sf::Event::KeyPressed)
+            {
+                _brush.OnKeyboardEvent(e, _game_state->GetInstance());
             }
         }
     }
@@ -241,25 +244,25 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         if (_game_state)
             delete _game_state;
 
-        _brush.SetState(nullptr);
         _game_state = new GameState();
         _game_state->Setup();
-        _game_runner.SetRunnable(_game_state);
 
         GameLoader loader;
         loader.Load(file_path, file_name, *_game_state);
 
         static_cast<PMIDGEditorWindow *>(_window)->OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
                                                                         _game_state->GetInstance()->GetTileMap().HeightPx());
+        _game_runner.SetRunnable(_game_state);
     }
 
     void OnSaveGameStateFile(const std::string &file_name) override
     {
         if (_game_state && _game_state->GetInstance())
         {
-            _game_state->GetInstance()->GetTileMap()
-                .SaveToFile(tile_maps_path + "/" + std::to_string(_game_state->GetInstance()->GetID()) + ".pmidgM");
+            _game_state->GetInstance()->SetName(file_name);
+            _game_state->GetInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" + _game_state->GetInstance()->GetName() + ".pmidgM");
             GameLoader loader;
+
             loader.Save(file_path, file_name, *_game_state);
         }
     }

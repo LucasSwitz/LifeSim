@@ -18,7 +18,8 @@ class ComponentUser;
 
 class ComponentUserBase
 {
-  friend class GameState;
+    friend class GameState;
+
   public:
     static ComponentUserBase *Instance()
     {
@@ -49,12 +50,27 @@ class ComponentUserBase
 
     ~ComponentUserBase()
     {
-        std::cout << "Cleaning up Component Users...." << std::endl;
-        for(auto it = _component_users_directory.begin(); it != _component_users_directory.end(); it++)
+        /*for (auto it = _component_users_directory.begin(); it != _component_users_directory.end();)
         {
-            delete it->second;
-        }
+            std::list<ComponentUser *> *list_to_delete = it->second;
+
+            for (auto it_list = list_to_delete->begin(); it_list != list_to_delete->end();)
+            {
+                ComponentUser *user_to_delete = *it_list;
+
+                it_list = list_to_delete->erase(it_list);
+
+                delete user_to_delete;
+            }
+
+            delete list_to_delete;
+
+            it = _component_users_directory.erase(it);
+        }*/
+
+        _instance = nullptr;
     }
+
   private:
     ComponentUserBase(){};
 

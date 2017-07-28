@@ -69,5 +69,9 @@ Entity *Entity::Clone(bool is_prototype)
 
 Entity::~Entity()
 {
-    EntityManager::Instance()->DeregisterEntity(_id);
+    if(EntityManager::Instance())
+    {
+        if(EntityManager::Instance()->Instance()->HasEntity(_id))
+        EntityManager::Instance()->DeregisterEntity(_id);
+    }
 }

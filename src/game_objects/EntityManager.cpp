@@ -43,6 +43,11 @@ int EntityManager::GetNumberOfEntities()
     return _entity_map.size();
 }
 
+bool EntityManager::HasEntity(int id)
+{
+    return !IDAvailable(id);
+}
+
 LuaList<Entity*>* EntityManager::AsLuaList()
 {
     return LuaList<Entity*>::FromMapToLuaList<int, Entity*>(_entity_map);
@@ -61,9 +66,11 @@ void EntityManager::Clear()
 EntityManager::~EntityManager()
 {
     std::cout << "Cleaning up entities...." << std::endl;
-    for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
+    for(auto it = _entity_map.begin(); it != _entity_map.end();)
     {
-        if(it->second)
-            delete it->second;
+        Entity* to_delete = it->second;
+        it = _entity_map.erase(it);
+
+        delete to_delete;
     }
 }
