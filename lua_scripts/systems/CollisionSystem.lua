@@ -16,7 +16,7 @@ CollisionSystem =
             compare_it = it.next
             while compare_it ~= nil do
                 compare = compare_it.data
-                collision_data = self.GetCollision(entity, compare)
+                collision_data = self.GetCollision(entity, compare,time)
                 if collision_data ~= nil then
                     --e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
                     --EventManager.Instance():LaunchEvent(e)
@@ -37,22 +37,23 @@ CollisionSystem =
             it = it.next
         end
     end,
-    CheckCollision = function(entity_1, entity_2)
-        return (entity_1:GetNumber("Position","x")  < entity_2:GetNumber("Collision","width") 
-                                                        + entity_2:GetNumber("Position","x")  and
-                entity_2:GetNumber("Position","x")  < entity_1:GetNumber("Position","x") 
-                                                        + entity_1:GetNumber("Collision","width") and
-                entity_1:GetNumber("Position","y")  < entity_2:GetNumber("Position","y") 
-                                                        + entity_2:GetNumber("Collision","height") and
-                entity_2:GetNumber("Position","y")  < entity_1:GetNumber("Position","y") 
-                                                        + entity_1:GetNumber("Collision","height"))
-    end, 
-    GetCollision = function(collider_1, collider_2)
-        collider_1_pos = {x = collider_1:GetNumber("Position","x"),
-                          y = collider_1:GetNumber("Position","y")}
+    CheckCollision = function(entity_1, entity_2, time)
+        entity_1_future_x = entity_1:GetNumber("Position","x") + entity_1:GetNumber("Velocity","x")*time
+        entity_1_future_y = entity_1:GetNumber("Position","y") + entity_1:GetNumber("Velocity","y")*time
+        entity_2_future_x = entity_2:GetNumber("Position","x") + entity_2:GetNumber("Velocity","x")*time
+        entity_2_future_y = entity_2:GetNumber("Position","y") + entity_2:GetNumber("Velocity","y")*time
 
-        collider_2_pos = {x = collider_2:GetNumber("Position","x"),
-                          y = collider_2:GetNumber("Position","y")}
+        return (entity_1_future_x  < entity_2_future_x + entity_2:GetNumber("Collision","width")  and
+                entity_2_future_x  < entity_1_future_x + entity_1:GetNumber("Collision","width")  and
+                entity_1_future_y  < entity_2_future_y + entity_2:GetNumber("Collision","height")  and
+                entity_2_future_y  < entity_1_future_y + entity_1:GetNumber("Collision","height"))
+    end, 
+    GetCollision = function(collider_1, collider_2, time)
+        collider_1_pos = {x = collider_1:GetNumber("Position","x") + collider_1:GetNumber("Velocity","x")*time,
+                          y = collider_1:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time}
+
+        collider_2_pos = {x = collider_2:GetNumber("Position","x") + collider_2:GetNumber("Velocity","x")*time,
+                          y = collider_2:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time}
 
         collider_1_dims = {width = collider_1:GetNumber("Collision","width"),
                            height = collider_1:GetNumber("Collision","height")}
