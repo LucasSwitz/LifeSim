@@ -12,13 +12,6 @@ DoImpulse = function(collision_data)
     collider_1_vel = {x = 0, y = 0}
     collider_2_vel = {x = 0, y = 0}
 
-    if collider_1:HasComponent("Velocity") then
-        collider_1_vel = {
-                            x = collider_1:GetNumber("Velocity","x"),
-                            y = collider_1:GetNumber("Velocity","y")
-                        }
-    end
-
     if collider_2:HasComponent("Velocity") then    
         collider_2_vel = {
                             x = collider_2:GetNumber("Velocity","x"),
@@ -48,30 +41,12 @@ DoImpulse = function(collision_data)
     impulse = {x = norm.x*impulse_scale, 
                y = norm.y*impulse_scale}
 
-    collider_1_vel.x = collider_1_vel.x + collision_data.distance.x + (1/collider_1_mass) * impulse.x 
-    collider_1_vel.y = collider_1_vel.y + collision_data.distance.y + (1/collider_1_mass) * impulse.y 
-
     collider_2_vel.x = collider_2_vel.x - (1/collider_2_mass) * impulse.x 
     collider_2_vel.y = collider_2_vel.y - (1/collider_2_mass) * impulse.y
-
     
-    if collider_1:HasComponent("Velocity") then
-        if math.abs(collider_1_vel.y) < 4 then
-            collider_1:SetNumber("Velocity","y",-.01)
-        else
-            collider_1:SetNumber("Velocity","y",collider_1_vel.y)
-        end
-
-        if math.abs(collider_1_vel.x) < 0 then
-            collider_1:SetNumber("Velocity","x",.005)
-        else
-            collider_1:SetNumber("Velocity","x",collider_1_vel.x)
-        end
-    end
-
     if collider_2:HasComponent("Velocity") then
         if math.abs(collider_2_vel.y) < 4 then
-            collider_2:SetNumber("Velocity","y",-.01)
+            collider_2:SetNumber("Velocity","y",-.25*collision_data.overlap)
         else
             collider_2:SetNumber("Velocity","y",collider_2_vel.y)
         end
@@ -82,49 +57,22 @@ DoImpulse = function(collision_data)
             collider_2:SetNumber("Velocity","x",collider_2_vel.x)
         end
     end
-    --DoCorrection(collision_data)
-     
 end
-
-DoCorrection = function(collision_data)
-    collider_1 = collision_data.collider_1
-    collider_2 = collision_data.collider_2
-
-    collider_1_mass = collider_1:GetNumber("Mass","mass")
-    collider_2_mass = collider_1:GetNumber("Mass","mass")
-
-    correction  = { x = collision_data.distance.x*correct_percent*math.max(collision_data.overlap - correct_threshold, 0.0) 
-                        / ((collider_1_mass + collider_2_mass)),
-                    y = collision_data.distance.y*correct_percent*math.max(collision_data.overlap - correct_threshold, 0.0) 
-                            / ((collider_1_mass + collider_2_mass))
-                }       
-
-    collider_1_pos = {x = collider_1:GetNumber("Position","x"),
-                      y = collider_1:GetNumber("Position","y")}
-
-    collider_2_pos = {x = collider_2:GetNumber("Position","x"),
-                     y = collider_2:GetNumber("Position","y")}
-
-
-    collider_1_pos.x = collider_1_pos.x - (1 / collider_1_mass) * correction.x
-    collider_1_pos.y = collider_1_pos.y - (1 / collider_1_mass) * correction.y
-
-    collider_2_pos.x = collider_2_pos.x + (1 / collider_2_mass) * correction.x
-    collider_2_pos.y = collider_2_pos.y + (1 / collider_2_mass) * correction.y
-
-    if math.abs(collision_data.overlap.x) > 4 then 
-        collider_1:SetNumber("Position","x",collider_1_pos.x)
-        collider_2:SetNumber("Position","x",collider_2_pos.x)
-
-    end
-    collider_2:SetNumber("Position","y",collider_2_pos.y)
-    collider_1:SetNumber("Position","y",collider_1_pos.y)
-
-end
-
 
 Dot = function(v1, v2) 
     return v1.x*v2.x + v1.y*v2.y
+end
+
+Project = function(v1,v2)
+    mag2 = Mag2(v1)
+    --print("Mag:" .. tostring(mag2))
+    dot = Dot(v1,v2)
+    --print("Dot: " .. tostring(dot))
+    return {x = (v1.x*dot) / mag2, y = (v1.y*dot) / mag2}
+end
+
+Mag2 = function(v1)
+    return v1.x*v1.x + v1.y*v1.y
 end
 
 if collision_data ~= nil then

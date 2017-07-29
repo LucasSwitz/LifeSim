@@ -24,10 +24,14 @@ CollisionSystem =
                     script_2 = compare:GetString("Collision", "collision_script")
 
                     if string.len(script_1) > 0 then
+                        collision_data.collider_1 = entity
+                        collision_data.collider_2 = compare
                         loadfile(script_1)(collision_data)
                     end
 
                     if string.len(script_2) > 0 then
+                        collision_data.collider_1 = compare
+                        collision_data.collider_2 = entity
                         loadfile(script_2)(collision_data)
                     end
 
@@ -37,23 +41,12 @@ CollisionSystem =
             it = it.next
         end
     end,
-    CheckCollision = function(entity_1, entity_2, time)
-        entity_1_future_x = entity_1:GetNumber("Position","x") + entity_1:GetNumber("Velocity","x")*time
-        entity_1_future_y = entity_1:GetNumber("Position","y") + entity_1:GetNumber("Velocity","y")*time
-        entity_2_future_x = entity_2:GetNumber("Position","x") + entity_2:GetNumber("Velocity","x")*time
-        entity_2_future_y = entity_2:GetNumber("Position","y") + entity_2:GetNumber("Velocity","y")*time
-
-        return (entity_1_future_x  < entity_2_future_x + entity_2:GetNumber("Collision","width")  and
-                entity_2_future_x  < entity_1_future_x + entity_1:GetNumber("Collision","width")  and
-                entity_1_future_y  < entity_2_future_y + entity_2:GetNumber("Collision","height")  and
-                entity_2_future_y  < entity_1_future_y + entity_1:GetNumber("Collision","height"))
-    end, 
     GetCollision = function(collider_1, collider_2, time)
-        collider_1_pos = {x = collider_1:GetNumber("Position","x") + collider_1:GetNumber("Velocity","x")*time,
-                          y = collider_1:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time}
+        collider_1_pos = {x = collider_1:GetNumber("Position","x") + collider_1:GetNumber("Velocity","x")*time/2,
+                          y = collider_1:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time/2}
 
-        collider_2_pos = {x = collider_2:GetNumber("Position","x") + collider_2:GetNumber("Velocity","x")*time,
-                          y = collider_2:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time}
+        collider_2_pos = {x = collider_2:GetNumber("Position","x") + collider_2:GetNumber("Velocity","x")*time/2,
+                          y = collider_2:GetNumber("Position","y") + collider_2:GetNumber("Velocity","y")*time/2}
 
         collider_1_dims = {width = collider_1:GetNumber("Collision","width"),
                            height = collider_1:GetNumber("Collision","height")}
@@ -69,7 +62,6 @@ CollisionSystem =
         collider_2_ext_x = collider_2_dims.width / 2.0;
 
         x_overlap = collider_1_ext_x + collider_2_ext_x - math.abs(distance.x)
-
 
         if x_overlap > 0 then
             collider_1_ext_y = collider_1_dims.height / 2.0; 
