@@ -29,6 +29,11 @@ Rock =
             width = 24,
             height = 24,
             collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/GenericWallCollision.lua",
+        },
+        Velocity =
+        {
+            x = 0,
+            y = 0
         }
     }
 }

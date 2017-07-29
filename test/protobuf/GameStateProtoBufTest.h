@@ -22,9 +22,9 @@ TEST_F(GameStateProBufTest, TestAddEntities)
 
     std::list<Entity*> entities = 
     {
-        new Entity(0,"TestEntity1",true, 0),
-        new Entity(0,"TestEntity2",true, 1),
-        new Entity(0,"TestEntity3",true, 2)
+        new Entity(0,"TestEntity1", 0),
+        new Entity(0,"TestEntity2", 1),
+        new Entity(0,"TestEntity3", 2)
     };
 
     Instance i;

@@ -9,6 +9,7 @@
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
 #include "src/game_objects/LuaEntity.h"
+#include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
 #include "src/controllers/Keyboard.h"
@@ -145,6 +146,10 @@ class LuaBindings
             .beginClass<DebugFlags>("DebugFlags")
                 .addStaticFunction("Instance", &DebugFlags::Instance)
                 .addFunction("Set", &DebugFlags::Set)
+            .endClass()
+            .beginClass<LuaEntityFactory>("EntityFactory")
+                .addStaticFunction("Instance",&LuaEntityFactory::Instance)
+                .addFunction("Get",&LuaEntityFactory::GetEntity)
             .endClass();
         } 
  };

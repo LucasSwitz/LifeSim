@@ -41,13 +41,11 @@ bool ComponentUser::HasComponent(std::string name) const
     return _components.find(name) != _components.end();
 }
 
-void ComponentUser::AddComponent(Component *component, bool add_to_user_base)
+void ComponentUser::AddComponent(Component *component)
 {
     std::string component_name = component->GetName();
 
     _components.insert(std::make_pair(component_name, component));
-    if (add_to_user_base)
-        EnableComponent(component_name);
 }
 
 std::string ComponentUser::GetComponentValueString(std::string component_name, std::string value_name) const

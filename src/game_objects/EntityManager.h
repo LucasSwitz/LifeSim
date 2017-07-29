@@ -4,6 +4,9 @@
 #include <map>
 #include "src/utils/lua/LuaList.h"
 #include "src/event/EventSubscriber.h"
+#include "src/event/Event.h"
+#include "src/event/EventType.h"
+#include "src/event/messaging/MessageDispatch.h"
 
 #define Entity_Manager EntityManager::Instance()
 /**
@@ -16,8 +19,9 @@ class EntityManager : public EventSubscriber
   friend class GameState;
 
 public:
-  static EntityManager* Instance();
+  static EntityManager *Instance();
   ~EntityManager();
+  EntityManager();
 
   void RegisterEntity(Entity *entity);
   Entity *GetEntityByID(int id);
@@ -32,9 +36,13 @@ public:
 
   LuaList<Entity *> *AsLuaList();
 
+  std::list<Subscription> GetSubscriptions();
+  void OnEvent(Event &e);
+
   static void GiveOwnership(EntityManager *instance)
   {
-      _instance = instance;
+    _instance = instance;
+    MessageDispatch::Instance()->RegisterSubscriber(_instance);
   }
 
 private:

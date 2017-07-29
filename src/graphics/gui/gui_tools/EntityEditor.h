@@ -40,7 +40,8 @@ class EntityEditor
             if(!selected_entity_prototype || selected_entity_prototype->GetPrototypeName() != entity_scripts.at(selected_entity))
             {
                 delete selected_entity_prototype;
-                selected_entity_prototype = LuaEntityFactory::Instance()->GetEntity(entity_scripts.at(selected_entity),true);
+                selected_entity_prototype = LuaEntityFactory::Instance()
+                    ->GetEntityByName(entity_scripts.at(selected_entity));
 
                 brush.SetState(new PaintEntityBrushState(selected_entity_prototype));
             }

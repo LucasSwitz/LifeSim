@@ -35,7 +35,7 @@ class LuaTile : public Tile
             LuaRef component_ref = it.second;
             LuaComponent* new_component = new LuaComponent(key);
             new_component->FromLuaRef(component_ref);
-            ComponentUser::AddComponent(new_component, false); // Tile will not immediately be added to CUB.
+            ComponentUser::AddComponent(new_component); // Tile will not immediately be added to CUB.
                                                                // TileMap will have to enable them
         }
     }

@@ -121,7 +121,7 @@ class GameStateProtoBufWrapper
             int entity_id = current_entity.id();
             std::string name = current_entity.name();
 
-            Entity *e = new Entity(0, name, false, entity_id);
+            Entity *e = new Entity(0, name, entity_id);
 
             int num_of_components = current_entity.components_size();
             // iterate over components

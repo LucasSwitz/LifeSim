@@ -22,6 +22,7 @@ class PaintEntityBrushState : public BrushState
                 Entity *e = _prototype->Clone();
                 e->SetComponentValueFloat("Position", "x", event_world_position.x);
                 e->SetComponentValueFloat("Position", "y", event_world_position.y);
+                EntityManager::Instance()->RegisterEntity(e);
             }
             return true;
         }

@@ -19,10 +19,10 @@ class GameState : public FPSRunnable
 
     void Setup()
     {
+        MessageDispatch::GiveOwnership(&_message_dispatch);
         EntityManager::GiveOwnership(&_entity_manager);
         ComponentUserBase::GiveOwnership(&_component_users);
         SystemController::GiveOwnership(&_system_controller);
-        MessageDispatch::GiveOwnership(&_message_dispatch);
     }
 
     void Tick(float seconds_elapsed)
@@ -35,7 +35,6 @@ class GameState : public FPSRunnable
 
     void Unload()
     {
-
     }
 
     void SetCurrentInstance(Instance *instance)
@@ -53,48 +52,47 @@ class GameState : public FPSRunnable
         _system_controller.AddToSystemExecutionSequence(system);
     }
 
-    void AddEntity(Entity* e)
+    void AddEntity(Entity *e)
     {
         _entity_manager.RegisterEntity(e);
         AddComponentUser(e);
     }
 
-    void AddComponentUser(ComponentUser* user)
+    void AddComponentUser(ComponentUser *user)
     {
         user->EnableAll();
     }
 
     GameState Copy()
     {
-
     }
 
-    EntityManager& GetEntityManager()
+    EntityManager &GetEntityManager()
     {
         return _entity_manager;
     }
 
-    ComponentUserBase& GetComponentUserBase()
+    ComponentUserBase &GetComponentUserBase()
     {
         return _component_users;
     }
 
-    SystemController& GetSystemController()
+    SystemController &GetSystemController()
     {
         return _system_controller;
     }
 
-    Instance* GetInstance()
+    Instance *GetInstance()
     {
         return _current_instance;
     }
 
-
   private:
-    EntityManager _entity_manager;
     ComponentUserBase _component_users;
     SystemController _system_controller;
     MessageDispatch _message_dispatch;
+    EntityManager _entity_manager;
+
     Instance *_current_instance = nullptr;
 };
 #endif

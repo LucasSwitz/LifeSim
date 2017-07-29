@@ -20,7 +20,7 @@ class LuaEntity : public Entity
 {
     public:
 
-    LuaEntity(bool is_protoype = false) : Entity(Entity::LUA_DEFINED_ENTITY,"",is_protoype)
+    LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY,"")
     {
         
     };

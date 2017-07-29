@@ -1,6 +1,6 @@
 --PREAMBLE_START
 ScriptType = "System"
-Name = "CharacterIdleState"
+Name = "CharacterAttackingState"
 --PREAMBLE_END
 
 Stages = 
@@ -8,20 +8,14 @@ Stages =
     Start = function(character)
         character:SetString("Animation","animation","Idle")
         character:SetBool("Animation","started",false)
-
         character:SetString("State","stage","Execute")
     end,
     Execute = function(character)
-        if Keyboard.Instance():Get("W") or
-           Keyboard.Instance():Get("A") or
-           Keyboard.Instance():Get("S") or
-           Keyboard.Instance():Get("D") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterWalkingState.lua"
-        elseif Keyboard.Instance():Get("E") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"
-        end
+        loadfile("/home/pabu/Desktop/LifeSim/lua_scripts/actions/ActionThrowRock.lua")(character)
+        return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"
     end,
     End = function(character)
+
     end
 }
 

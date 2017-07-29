@@ -174,6 +174,11 @@ class PMIDGWindow : public EventSubscriber
                 Event new_event(EventType::D_DOWN_EVENT, -1, -1);
                 EngineEventManager::Instance()->LaunchEvent(new_event);
             }
+            else if (e.key.code == sf::Keyboard::E)
+            {
+                Event new_event(EventType::E_DOWN_EVENT, -1, -1);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
+            }
         }
         else if (e.type == sf::Event::KeyReleased)
         {
@@ -195,6 +200,11 @@ class PMIDGWindow : public EventSubscriber
             else if (e.key.code == sf::Keyboard::D)
             {
                 Event new_event(EventType::D_UP_EVENT, -1, -1);
+                EngineEventManager::Instance()->LaunchEvent(new_event);
+            }
+            else if (e.key.code == sf::Keyboard::E)
+            {
+                Event new_event(EventType::E_UP_EVENT, -1, -1);
                 EngineEventManager::Instance()->LaunchEvent(new_event);
             }
         }
