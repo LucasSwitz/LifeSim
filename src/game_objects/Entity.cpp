@@ -65,8 +65,6 @@ Entity* Entity::DowncastFromComponentUser(ComponentUser* caster)
 
 Entity::~Entity()
 {
-    std::cout << "Deleted: " << ID() << std::endl;
-
     if (EntityManager::Instance())
     {
         if (EntityManager::Instance()->Instance()->HasEntity(_id))

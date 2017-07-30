@@ -112,7 +112,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         Instance *i = new Instance();
         _game_state->SetCurrentInstance(i);
 
-        _game_state->GetInstance()->GetTileMap().Blank(10, 10);
+        _game_state->GetInstance()->GetTileMap().Blank(rows, columns);
 
         _game_state->GetInstance()->Open();
 
@@ -150,7 +150,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 }
                 else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
                 {
-                    std::cout << "Click!" << std::endl;
                     if (Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
                     {
                         if (e.type == sf::Event::MouseButtonPressed)
