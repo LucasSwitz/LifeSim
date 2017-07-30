@@ -8,37 +8,43 @@ CollisionSystem =
     --shitty O(n^2) collision detection 
     after = "GravitySystem",
     Update = function(self,time)
-        local entities = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(entities, {"Collision"})
-        local it = entities:Iterator()
-        while it ~= null do
-            entity = it.data
-            compare_it = it.next
-            while compare_it ~= nil do
-                compare = compare_it.data
-                collision_data = self.GetCollision(entity, compare,time)
+        local entities = LuaListEntity()
+        local colliders = LuaListComponentUser()
+
+        ComponentUsers.Instance():GetAllEntities(entities,"Collision")
+        ComponentUsers.Instance():GetAll(colliders, {"Collision"})
+
+        --ComponentUsers.Instance():GetAllNonEntities(colliders, {"Collision"})
+        local entity_it = entities:Iterator()
+        while entity_it ~= nil do
+            entity = entity_it.data
+            collider_it = colliders:Iterator()
+            while collider_it ~= nil do
+                collider = collider_it.data
+                collision_data = self.GetCollision(collider,entity,time)
                 if collision_data ~= nil then
                     --e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
                     --EventManager.Instance():LaunchEvent(e)
-                    script_1 = entity:GetString("Collision","collision_script")
-                    script_2 = compare:GetString("Collision", "collision_script")
+                    script_1 = entity:GetString(   "Collision", "collision_script")
+                    script_2 = collider:GetString( "Collision", "collision_script" )
 
                     if string.len(script_1) > 0 then
+                        --print("Doing Collision 1!")
                         collision_data.collider_1 = entity
-                        collision_data.collider_2 = compare
+                        collision_data.collider_2 = collider
                         loadfile(script_1)(collision_data)
                     end
 
                     if string.len(script_2) > 0 then
-                        collision_data.collider_1 = compare
+                        collision_data.collider_1 = collider
                         collision_data.collider_2 = entity
                         loadfile(script_2)(collision_data)
                     end
 
                 end
-                compare_it = compare_it.next
+                collider_it = collider_it.next
             end
-            it = it.next
+            entity_it = entity_it.next
         end
     end,
     GetCollision = function(collider_1, collider_2, time)
@@ -50,7 +56,6 @@ CollisionSystem =
 
         collider_1_dims = {width = collider_1:GetNumber("Collision","width"),
                            height = collider_1:GetNumber("Collision","height")}
-
 
         collider_2_dims = {width = collider_2:GetNumber("Collision","width"),
                            height = collider_2:GetNumber("Collision","height")}
@@ -72,8 +77,7 @@ CollisionSystem =
             if y_overlap > 0 then 
                 if x_overlap > y_overlap  then
                     if(distance.y < 0) then
-                        return {
-                                collider_1 = collider_1,
+                        return {collider_1 = collider_1,
                                 collider_2 = collider_2,
                                 norm  = 
                                 {

@@ -8,6 +8,7 @@
 template <typename T>
 struct LuaListNode
 {
+  public:
     LuaListNode(T new_data) : data(new_data){};
 
     T data;
@@ -15,7 +16,6 @@ struct LuaListNode
 
     ~LuaListNode()
     {
-
     }
 };
 
@@ -43,21 +43,26 @@ class LuaList
             _head = _tail;
     }
 
-    LuaListNode<T>* Iterator()
+    void SetHead(LuaListNode<T> *head)
+    {
+        _head = head;
+    }
+
+    LuaListNode<T> *Iterator()
     {
         return _head;
     }
 
     ~LuaList()
     {
-         LuaListNode<T> * it = Iterator();
-         
-         while(it != nullptr)
-         {
-             LuaListNode<T>* next = it->next;
-             delete it;
-             it = next;
-         }
+        LuaListNode<T> *it = Iterator();
+
+        while (it != nullptr)
+        {
+            LuaListNode<T> *next = it->next;
+            delete it;
+            it = next;
+        }
     }
 
     int Size()
@@ -66,7 +71,7 @@ class LuaList
     }
 
     template <typename key, typename value>
-    static LuaList<value>* FromMapToLuaList(std::map<key, value> &map)
+    static LuaList<value> *FromMapToLuaList(std::map<key, value> &map)
     {
         LuaList *list = new LuaList();
 
@@ -79,18 +84,19 @@ class LuaList
     }
 
     template <typename value>
-    static void FromListToLuaList(std::list<value>& map, LuaList& list)
+    static void FromListToLuaList(std::list<value> &map, LuaList &list)
     {
         for (auto it = map.begin(); it != map.end(); it++)
         {
             list.Add(*it);
         }
     }
+  
+  int _size = 0;
 
   private:
     LuaListNode<T> *_head = nullptr;
     LuaListNode<T> *_tail = nullptr;
-    int _size = 0;
 };
 
 #endif

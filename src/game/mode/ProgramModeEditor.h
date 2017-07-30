@@ -150,6 +150,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 }
                 else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
                 {
+                    std::cout << "Click!" << std::endl;
                     if (Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
                     {
                         if (e.type == sf::Event::MouseButtonPressed)

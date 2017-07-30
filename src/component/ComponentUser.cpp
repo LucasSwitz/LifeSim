@@ -72,7 +72,7 @@ float ComponentUser::GetComponentValueFloat(std::string component_name, std::str
     if (!HasComponent(component_name))
     {
         //std::cout << "has no component: " << component_name << std::endl;
-        return -1;
+        return 0;
     }
     return _components.at(component_name)->GetFloatValue(value_name);
 }
