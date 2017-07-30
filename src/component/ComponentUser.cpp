@@ -1,6 +1,16 @@
 #include "ComponentUser.h"
 #include "src/component/ComponentUserBase.h"
 
+int ComponentUser::ID() const
+{
+    return _id;
+}
+
+void ComponentUser::SetID(int id)
+{
+    _id = id;
+}
+
 void ComponentUser::RemoveComponent(std::string name)
 {
     if (HasComponent(name))
@@ -160,7 +170,9 @@ ComponentUser::~ComponentUser()
     for (auto it = _components.begin(); it != _components.end();)
     {
         if(ComponentUserBase::Instance())
+        {
             ComponentUserBase::Instance()->DeRegister(it->first, *this);
+        }
         
         Component* to_delete = it->second;
         it = _components.erase(it);

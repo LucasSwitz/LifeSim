@@ -45,3 +45,8 @@ void LuaEntity::ConfigureAllComponentsFromLua(const LuaRef &ref)
         ComponentUser::AddComponent(new_component);
     }
 }
+
+LuaEntity::~LuaEntity()
+{
+    
+}

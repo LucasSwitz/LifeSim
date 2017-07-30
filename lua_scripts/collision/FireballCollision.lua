@@ -1,7 +1,8 @@
 collision_data = ...
 
 if collision_data ~= nil then
-    fireball_id = collision_data.collider_1.id
-    e = Event(EventType.DELETE_ENTITY_EVENT,fireball_id,-1)
+    fireball = Entity.Downcast(collision_data.collider_1)
+    fireball_id = fireball.id
+    e = Event(EventType.DELETE_ENTITY_EVENT,-1,fireball_id)
     MessageDispatch.Instance():LaunchEvent(e)
-do
+end

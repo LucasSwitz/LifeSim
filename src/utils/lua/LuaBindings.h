@@ -40,14 +40,15 @@ class LuaBindings
                 .addFunction("GetBool", &ComponentUser::GetComponentBoolValue)
                 .addFunction("GetComponent", &ComponentUser::GetComponent)
                 .addFunction("HasComponent",&ComponentUser::HasComponent)
+                .addProperty("id",&ComponentUser::ID)
             .endClass()
             .deriveClass<Entity, ComponentUser>("Entity")
                 .addConstructor<void(*)(void)>()
-                .addProperty("id", &Entity::ID)
                 .addFunction("IsType", &Entity::IsType)
                 .addFunction("Call", &Entity::CallFunction)
                 .addStaticData("CPP_DEFINED_ENTITY", &Entity::CPP_DEFINED_ENTITY)
                 .addStaticData("LUA_DEFINED_ENTITY", &Entity::LUA_DEFINED_ENTITY)
+                .addStaticFunction("Downcast",&Entity::DowncastFromComponentUser)
             .endClass()
             .deriveClass<LuaEntity, Entity>("LuaEntity")
                 .addStaticFunction("Downcast",&LuaEntity::DownCastFromEntity)
@@ -80,6 +81,7 @@ class LuaBindings
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
+                .addFunction("Last",&EntityManager::GetNewest)
             .endClass()
             .beginClass<Component>("Component")
                 .addFunction("GetNumber", &Component::GetFloatValue)
@@ -97,7 +99,7 @@ class LuaBindings
                 .addStaticData("HEALTH_UPDATE_EVENT", &EventType::HEALTH_UPDATE_EVENT, false)
                 .addStaticData("COLLISION_EVENT", &EventType::COLLISION_EVENT, false)
                 .addStaticData("DAMAGE_EVENT", &EventType::DAMAGE_EVENT, false)
-                .addStaticData("DELETE_ENTITY_EVETN", &EventType::DELETE_ENTITY_EVENT, false)
+                .addStaticData("DELETE_ENTITY_EVENT", &EventType::DELETE_ENTITY_EVENT, false)
                 .addStaticData("CONDITION_ADD_EVENT", &EventType::CONDITION_ADD_EVENT, false)
                 .addStaticData("W_DOWN_EVENT", &EventType::W_DOWN_EVENT, false)
                 .addStaticData("W_UP_EVENT", &EventType::W_UP_EVENT, false)
@@ -147,12 +149,8 @@ class LuaBindings
             .beginClass<DebugFlags>("DebugFlags")
                 .addStaticFunction("Instance", &DebugFlags::Instance)
                 .addFunction("Set", &DebugFlags::Set)
-            .endClass()
-            .beginClass<LuaEntityFactory>("EntityFactory")
-                .addStaticFunction("Instance",&LuaEntityFactory::Instance)
-                .addFunction("Get",&LuaEntityFactory::GetEntity)
             .endClass();
-        } 
+    } 
  };
 
  #endif

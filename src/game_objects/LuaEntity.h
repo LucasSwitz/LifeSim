@@ -72,6 +72,8 @@ class LuaEntity : public Entity
         return *_entity_table;
     }
 
+    virtual ~LuaEntity();
+
     private:
     std::shared_ptr<LuaRef> _entity_table;
 };

@@ -22,10 +22,12 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& us
 
     std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
 
-    for(auto it = list->begin(); it != list->end(); it++)
+    for(auto it = list->begin(); it != list->end();)
     {
         if (*it == &user)
             it = list->erase(it);
+        else
+            it++;
     }
 }
 
@@ -86,6 +88,8 @@ void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string>& list, 
     {
         for(auto user_it = matches.begin(); user_it != matches.end();)
         {
+            if (!(*user_it))
+                continue;
             if(!((*user_it)->HasComponent(*comp_name)))
             {
                 user_it = matches.erase(user_it);

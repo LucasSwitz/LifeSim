@@ -36,7 +36,7 @@ TestEntity =
             },
             Mass = 
             {
-                mass = 1
+                mass = 10
             },
             Collision = 
             {

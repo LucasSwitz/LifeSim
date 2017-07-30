@@ -87,7 +87,7 @@ class Component
     {
         if (!HasFloatValue(name))
         {
-            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return -1;
         }
         return _float_components.at(name).GetValue();

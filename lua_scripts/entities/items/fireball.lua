@@ -4,7 +4,7 @@ Name = "Fireball"
 PrototypeID = 111
 --PREAMBLE_END
 
-Rock = 
+Fireball = 
 {
     Components = 
     {
@@ -16,24 +16,31 @@ Rock =
         Graphics = 
         {
             sprite = "/home/pabu/Desktop/LifeSim/res/sprites/fireball.png",
-            width = 100,
-            height = 100,
+            width = 10,
+            height = 10,
             layer = 1
         },
         Mass = 
         {
-            mass = 10
+            mass = .001
         },
         Collision = 
         {
-            width = 24,
-            height = 24,
+            width = 10,
+            height = 10,
             collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/FireballCollision.lua",
         },
         Velocity =
         {
             x = 0,
             y = 0
+        },
+        Acceleration = 
+        {
+            force_x = 0,
+            force_y = 0,
+            x = 0,
+            y= 0
         }
     }
 }

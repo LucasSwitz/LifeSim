@@ -5,7 +5,6 @@ EntityManager *EntityManager::_instance = nullptr;
 
 EntityManager::EntityManager()
 {
-    
 }
 
 Entity *EntityManager::GetEntityByID(int id)
@@ -14,7 +13,8 @@ Entity *EntityManager::GetEntityByID(int id)
 
     if (it == _entity_map.end())
     {
-        //TODO: Throw exception
+        std::cout << "No Entity With id: " << id << std::endl;
+        return nullptr;
     }
 
     return _entity_map.at(id);
@@ -71,20 +71,42 @@ void EntityManager::OnEvent(Event &e)
 {
     if (e.id == EventType::SPAWN_ENTITY_EVENT)
     {
-        Entity* entity = e.InfoToType<Entity *>();
+        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.target_id);
         entity->EnableAll();
         RegisterEntity(entity);
+    }
+    else if (e.id == EventType::DELETE_ENTITY_EVENT)
+    {
+        if (HasEntity(e.target_id))
+        {
+            MarkForDelete(GetEntityByID(e.target_id));
+        }
     }
 }
 
 std::list<Subscription> EntityManager::GetSubscriptions()
 {
     std::list<Subscription> subs =
-    {
-        Subscription(EventType::SPAWN_ENTITY_EVENT)
-    };
+        {
+            Subscription(EventType::SPAWN_ENTITY_EVENT),
+            Subscription(EventType::DELETE_ENTITY_EVENT)};
 
     return subs;
+}
+
+void EntityManager::MarkForDelete(Entity *e)
+{
+    _delete_set.insert(e);
+}
+
+void EntityManager::Clean()
+{
+    for (auto it = _delete_set.begin(); it != _delete_set.end();)
+    {
+        Entity *e = *it;
+        delete e;
+        it = _delete_set.erase(it);
+    }
 }
 
 EntityManager::~EntityManager()
@@ -94,7 +116,14 @@ EntityManager::~EntityManager()
     {
         Entity *to_delete = it->second;
         it = _entity_map.erase(it);
-
         delete to_delete;
     }
+}
+
+Entity *EntityManager::GetNewest()
+{
+    if (_entity_map.empty())
+        return nullptr;
+    else
+        return _entity_map.rbegin()->second;
 }

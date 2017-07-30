@@ -34,7 +34,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         return new_entity;
     }
 
-    Entity *GetEntityByName(std::string name)
+    Entity* GetEntityByName(std::string name)
     {
         if(!EntityPrototypeExists(name))
         {   

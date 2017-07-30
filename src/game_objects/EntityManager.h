@@ -2,11 +2,13 @@
 #define ENTITYMANAGER_H
 
 #include <map>
+#include <set>
 #include "src/utils/lua/LuaList.h"
 #include "src/event/EventSubscriber.h"
 #include "src/event/Event.h"
 #include "src/event/EventType.h"
 #include "src/event/messaging/MessageDispatch.h"
+#include "src/game_objects/LuaEntityFactory.h"
 
 #define Entity_Manager EntityManager::Instance()
 /**
@@ -30,6 +32,8 @@ public:
   std::map<int, Entity *> &GetAllEntities();
   int GetNumberOfEntities();
 
+  Entity* GetNewest();
+
   void Clear();
   bool IDAvailable(int id);
   bool HasEntity(int id);
@@ -38,6 +42,9 @@ public:
 
   std::list<Subscription> GetSubscriptions();
   void OnEvent(Event &e);
+
+  void MarkForDelete(Entity* e);
+  void Clean();
 
   static void GiveOwnership(EntityManager *instance)
   {
@@ -48,6 +55,7 @@ public:
 private:
   std::map<int, Entity *> _entity_map;
   static EntityManager *_instance;
+  std::set<Entity*> _delete_set;
 };
 
 #endif

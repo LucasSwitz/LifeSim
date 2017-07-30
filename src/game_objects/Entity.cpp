@@ -4,9 +4,9 @@ int Entity::_lastId = ENTITY_ID_START - 1;
 int Entity::CPP_DEFINED_ENTITY = 0;
 int Entity::LUA_DEFINED_ENTITY = 1;
 
-Entity::Entity(int type, std::string prototype_name, int id) : _type(type), _prototype_name(prototype_name), _id(id)
+Entity::Entity(int type, std::string prototype_name, int id) :
+                _type(type), _prototype_name(prototype_name)
 {
-
     if (_id == -1)
     {
         _lastId++;
@@ -15,11 +15,6 @@ Entity::Entity(int type, std::string prototype_name, int id) : _type(type), _pro
         while (!EntityManager::Instance()->IDAvailable(_id))
             _id++;
     }
-}
-
-int Entity::ID() const
-{
-    return _id;
 }
 
 bool Entity::IsType(int type) const
@@ -59,8 +54,19 @@ Entity *Entity::Clone()
     return e;
 }
 
+Entity* Entity::DowncastFromComponentUser(ComponentUser* caster)
+{
+    Entity* e = dynamic_cast<Entity*>(caster);
+    if(e)
+        return e;
+    return nullptr;
+}
+
+
 Entity::~Entity()
 {
+    std::cout << "Deleted: " << ID() << std::endl;
+
     if (EntityManager::Instance())
     {
         if (EntityManager::Instance()->Instance()->HasEntity(_id))

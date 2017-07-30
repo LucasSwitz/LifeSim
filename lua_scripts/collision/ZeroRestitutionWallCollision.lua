@@ -26,8 +26,6 @@ DoImpulse = function(collision_data)
 
     collider_2_vel.x = collider_2_vel.x - projection.x
     collider_2_vel.y = collider_2_vel.y - projection.y
-    print("Normy: ".. tostring(collision_data.norm.y))
-    print("Normx: ".. tostring(collision_data.norm.x))
     if collider_2:HasComponent("Velocity") then
         collider_2:SetNumber("Velocity","y",collider_2_vel.y)
         if math.abs(collider_2_vel.x) < 0 then

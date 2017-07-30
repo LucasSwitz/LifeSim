@@ -31,6 +31,8 @@ class GameState : public FPSRunnable
 
         if (_current_instance)
             _current_instance->Tick(seconds_elapsed);
+
+        _entity_manager.Clean();
     }
 
     void Unload()

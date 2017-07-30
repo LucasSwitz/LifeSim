@@ -65,9 +65,7 @@ end
 
 Project = function(v1,v2)
     mag2 = Mag2(v1)
-    --print("Mag:" .. tostring(mag2))
     dot = Dot(v1,v2)
-    --print("Dot: " .. tostring(dot))
     return {x = (v1.x*dot) / mag2, y = (v1.y*dot) / mag2}
 end
 
