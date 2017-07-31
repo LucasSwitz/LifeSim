@@ -11,9 +11,9 @@
 
 class Instance : public EventSubscriber, public FPSRunnable
 {
-
  public:
-    Instance(int id = -1) : _id(id){}
+
+    Instance(int id = -1);
     ~Instance()
     {
         _tile_map.Erase();
@@ -51,7 +51,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _open = true;   
     }
 
-    virtual void Update(float seconds_elapsed) override
+    virtual void Tick(float seconds_elapsed) override
     {
         
     }
@@ -83,7 +83,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map.LoadFromFile(file_name);
     }
 
-    TileMap GetTileMap()
+    TileMap& GetTileMap()
     {
         return _tile_map;
     }
@@ -109,11 +109,27 @@ class Instance : public EventSubscriber, public FPSRunnable
         return _loaded;
     }
 
+    void SetID(int id)
+    {
+        _id = id;
+    }
+
+    void SetName(const std::string& name)
+    {
+        _name = name;
+    }
+
+    std::string& GetName()
+    {
+        return _name;
+    }
+
 
     protected:
-        std::string name;
+        std::string _name;
         std::string _tile_map_name = "";
         int _id;
+        static int last_id;
     private:
         TileMap _tile_map;
         std::list<Entity*> _local_entities;
@@ -121,6 +137,4 @@ class Instance : public EventSubscriber, public FPSRunnable
         bool _open;
         
 };
-
-
 #endif

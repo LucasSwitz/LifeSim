@@ -17,7 +17,8 @@ Rock =
         {
             sprite = "/home/pabu/Desktop/LifeSim/res/sprites/rock.png",
             width = 100,
-            height = 100
+            height = 100,
+            layer = 1
         },
         Mass = 
         {
@@ -27,7 +28,12 @@ Rock =
         {
             width = 24,
             height = 24,
-            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/GenericWallCollision.lua",
+            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/ZeroRestitutionWallCollision.lua",
+        },
+        Velocity =
+        {
+            x = 0,
+            y = 0
         }
     }
 }

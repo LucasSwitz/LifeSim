@@ -4,7 +4,7 @@
 #include <memory>
 #include <iostream>
 #include "src/utils/lua/LuaUniversal.h"
-#include "src/event/EventManager.h"
+#include "src/event/messaging/MessageDispatch.h"
 #include "src/system/System.h"
 #include "src/event/Event.h"
 

@@ -1,9 +1,27 @@
 #include "SystemController.h"
 
+SystemController* SystemController::_instance = nullptr;
+
 void SystemController::AddPassiveSystem(const std::string &system_name)
 {
     System *system = SystemFactory::Instance()->GetSystem(system_name);
     AddPassiveSystem(system);
+}
+
+std::list<System*>::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string& system_name)
+{
+    auto it = _systems_execution_sequence.begin();
+
+    for(; it != _systems_execution_sequence.end(); it++)
+    {
+        if((*it)->GetName().compare(system_name) == 0)
+        {
+            it = _systems_execution_sequence.erase(it);
+            break;
+        }
+    }
+
+    return it;
 }
 
 void SystemController::AddPassiveSystem(System *system)
@@ -158,4 +176,14 @@ void SystemController::MoveDown(System *system)
             };
         }
     }
+}
+
+void SystemController::Lock()
+{
+    _system_lock.lock();
+}
+
+void SystemController::Unlock()
+{
+    _system_lock.unlock();
 }

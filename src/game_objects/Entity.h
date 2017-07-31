@@ -16,14 +16,15 @@ class Entity : public ComponentUser
 
 public:
     virtual ~Entity();
-    Entity(int type, std::string _prototype_name="",bool is_protoype = false);
+    Entity(int type = 0, std::string _prototype_name="", int id = -1);
     virtual void Tick(){};
     static int _lastId;
 
-    int ID() const;
     bool IsType(int type) const;
     std::string& GetPrototypeName();
-    Entity* Clone(bool is_prototype=false);
+    Entity* Clone();
+
+    static Entity* DowncastFromComponentUser(ComponentUser* caster);
 
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
@@ -31,10 +32,8 @@ public:
 protected:
     void SetID(int id);
     void SetPrototypeName(std::string& name);
-    bool is_prototype;
 
 private:
-    int _id;
     int _type;
     std::string _prototype_name;
 };

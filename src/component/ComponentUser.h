@@ -14,14 +14,23 @@ class ComponentUserBase;
 
 class ComponentUser
 {
+  friend class GameState;
   public:
-    void AddComponent(Component *component, bool add_to_component_users = true);
+    ComponentUser(int id = -1) : _id(id){};
+    int ID() const;
+
+
+    void AddComponent(Component *component);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, std::string value);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, bool value);
+    void AddComponentValue(const std::string& component_name, const std::string& value_name, float value);
     void RemoveComponent(std::string name);
     bool HasComponent(std::string name) const;
     void DisableComponent(std::string name);
     void EnableComponent(std::string name);
     void DisableAll();
     void EnableAll();
+
 
     Component* GetComponent(std::string name);
 
@@ -42,5 +51,7 @@ class ComponentUser
   protected:
       std::unordered_map<std::string, Component*> _components;
       bool _is_hidden;
+      void SetID(int id);
+      int _id;
 };
 #endif

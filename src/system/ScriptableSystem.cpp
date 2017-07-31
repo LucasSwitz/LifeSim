@@ -59,7 +59,7 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
                     _get_subscriptions_function = std::make_unique<LuaRef>(event_table["GetSubscriptions"]);
                 }
 
-                EventManager::Instance()->RegisterSubscriber(this);
+                MessageDispatch::Instance()->RegisterSubscriber(this);
             }
         }
     }

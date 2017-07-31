@@ -21,7 +21,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_id_to_name.insert(std::make_pair(prototype_id, prototype_name));
     };
 
-    Entity* GetEntity(int id, bool is_protoype = false)
+    Entity* GetEntity(int id)
     {
         if(!EntityPrototypeExists(id))
         {
@@ -29,12 +29,12 @@ class LuaEntityFactory : public ScriptFactory<std::string>
             return nullptr;
         }
 
-        LuaEntity *new_entity = new LuaEntity(is_protoype);
+        LuaEntity *new_entity = new LuaEntity();
         new_entity->LoadScript(LUA_STATE, _entity_scripts.at(id), _entity_id_to_name.at(id));
         return new_entity;
     }
 
-    Entity *GetEntity(std::string name, bool is_protoype = false)
+    Entity* GetEntityByName(std::string name)
     {
         if(!EntityPrototypeExists(name))
         {   
@@ -42,7 +42,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
             return nullptr;
         }
         
-        return this->GetEntity(_entity_name_to_id.at(name), is_protoype);
+        return this->GetEntity(_entity_name_to_id.at(name));
     }
 
     static LuaEntityFactory *Instance()

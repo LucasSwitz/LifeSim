@@ -1,8 +1,10 @@
 #include "ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
+
+ComponentUserBase* ComponentUserBase::_instance = nullptr;
+
 void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
 {
-
     if(!ComponentExists(component_name))
     {
         _component_users_directory.insert(std::make_pair(component_name, new std::list<ComponentUser*>()));
@@ -20,10 +22,12 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& us
 
     std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
 
-    for(auto it = list->begin(); it != list->end(); it++)
+    for(auto it = list->begin(); it != list->end();)
     {
         if (*it == &user)
             it = list->erase(it);
+        else
+            it++;
     }
 }
 
@@ -32,7 +36,7 @@ bool ComponentUserBase::ComponentExists(std::string component_name)
     return _component_users_directory.find(component_name) != _component_users_directory.end();
 }
 
-void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string component_name, LuaList<Entity*>* lua_list)
+void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(LuaList<Entity*>* lua_list, std::string component_name)
 {
     std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
     std::list<Entity*> entities;
@@ -45,10 +49,8 @@ void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(std::string componen
         ComponentUser* user = *it;
         Entity* e = dynamic_cast<Entity*>(user);
         if(e)
-            entities.push_back(e);
+            lua_list->Add(e);
     }
-
-    LuaList<Entity*>::FromListToLuaList<Entity*>(entities, *lua_list);
 }
 
 void ComponentUserBase::GetAllUsersWithComponents(std::initializer_list<std::string> list,
@@ -86,6 +88,8 @@ void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string>& list, 
     {
         for(auto user_it = matches.begin(); user_it != matches.end();)
         {
+            if (!(*user_it))
+                continue;
             if(!((*user_it)->HasComponent(*comp_name)))
             {
                 user_it = matches.erase(user_it);

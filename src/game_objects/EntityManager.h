@@ -2,7 +2,13 @@
 #define ENTITYMANAGER_H
 
 #include <map>
+#include <set>
 #include "src/utils/lua/LuaList.h"
+#include "src/event/EventSubscriber.h"
+#include "src/event/Event.h"
+#include "src/event/EventType.h"
+#include "src/event/messaging/MessageDispatch.h"
+#include "src/game_objects/LuaEntityFactory.h"
 
 #define Entity_Manager EntityManager::Instance()
 /**
@@ -10,27 +16,46 @@
 **/
 class Entity;
 
-class EntityManager
+class EntityManager : public EventSubscriber
 {
-  public:
-    static EntityManager* Instance();
-    ~EntityManager();
+  friend class GameState;
 
-    void RegisterEntity(Entity* entity);
-    Entity *GetEntityByID(int id);
-    void DeregisterEntity(int id);
-    
-    std::map<int, Entity*>& GetAllEntities();
-    int GetNumberOfEntities();
+public:
+  static EntityManager *Instance();
+  ~EntityManager();
+  EntityManager();
 
-    void Clear();
-    bool IDAvailable(int id);
+  void RegisterEntity(Entity *entity);
+  Entity *GetEntityByID(int id);
+  void DeregisterEntity(int id);
 
-    LuaList<Entity*>* AsLuaList();
+  std::map<int, Entity *> &GetAllEntities();
+  int GetNumberOfEntities();
 
+  Entity* GetNewest();
 
-  private:
-    std::map<int, Entity *> _entity_map;
+  void Clear();
+  bool IDAvailable(int id);
+  bool HasEntity(int id);
+
+  LuaList<Entity *> *AsLuaList();
+
+  std::list<Subscription> GetSubscriptions();
+  void OnEvent(Event &e);
+
+  void MarkForDelete(Entity* e);
+  void Clean();
+
+  static void GiveOwnership(EntityManager *instance)
+  {
+    _instance = instance;
+    MessageDispatch::Instance()->RegisterSubscriber(_instance);
+  }
+
+private:
+  std::map<int, Entity *> _entity_map;
+  static EntityManager *_instance;
+  std::set<Entity*> _delete_set;
 };
 
 #endif

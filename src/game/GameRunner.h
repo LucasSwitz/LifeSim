@@ -1,36 +1,24 @@
 #ifndef GAMERUNNER_H
 #define GAMERUNNER_H
 
-#include "src/system/SystemController.h"
-#include "src/world/stage/Stage.h"
-#include "src/world/stage/LuaStageFactory.h"
-#include "src/world/tile/LuaTileFactory.h"
+#include "src/game/FPSRunner.h"
+#include "src/game/GameState.h"
 
-
-#define FRAMES_PER_SEC 30
-
-/**
-  GameRunner runs the game at a specified FPS.
-**/
-class GameRunner
+class GameRunner : public FPSRunner
 {
-  public:
-    GameRunner();
-    void Update(float seconds_elapsed);
-    void Init();
-    void Shutdown();
-    void OnEvent(Event& e);
-    void ChangeStage(Stage* stage);
-    int UpdateStage(float seconds);
-    bool Initialized();
-    Stage* GetCurrentStage();
-    std::list<Subscription> GetSubscriptions();
+    public:
+        GameRunner(int fps) : FPSRunner(fps)
+        {
 
-  private:
+        }
 
-    int UpdateSystems(float time);
-    Stage* _current_stage = nullptr;
-    bool _initialized;
+        void SetGameState(GameState* game_state)
+        {
+            _game_state = game_state;
+            this->SetRunnable(_game_state);
+        }
+
+    private:
+        GameState* _game_state;        
 };
-
 #endif

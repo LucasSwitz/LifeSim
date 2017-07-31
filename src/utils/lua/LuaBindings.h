@@ -9,6 +9,7 @@
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
 #include "src/game_objects/LuaEntity.h"
+#include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
 #include "src/controllers/Keyboard.h"
@@ -18,7 +19,10 @@
 #include "src/utils/debug/DebugFlags.h"
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EngineEventManager.h"
+
 
 using namespace luabridge;
 class LuaBindings
@@ -36,13 +40,15 @@ class LuaBindings
                 .addFunction("GetBool", &ComponentUser::GetComponentBoolValue)
                 .addFunction("GetComponent", &ComponentUser::GetComponent)
                 .addFunction("HasComponent",&ComponentUser::HasComponent)
+                .addProperty("id",&ComponentUser::ID)
             .endClass()
             .deriveClass<Entity, ComponentUser>("Entity")
-                .addProperty("id", &Entity::ID)
+                .addConstructor<void(*)(void)>()
                 .addFunction("IsType", &Entity::IsType)
                 .addFunction("Call", &Entity::CallFunction)
                 .addStaticData("CPP_DEFINED_ENTITY", &Entity::CPP_DEFINED_ENTITY)
                 .addStaticData("LUA_DEFINED_ENTITY", &Entity::LUA_DEFINED_ENTITY)
+                .addStaticFunction("Downcast",&Entity::DowncastFromComponentUser)
             .endClass()
             .deriveClass<LuaEntity, Entity>("LuaEntity")
                 .addStaticFunction("Downcast",&LuaEntity::DownCastFromEntity)
@@ -68,12 +74,14 @@ class LuaBindings
             .beginClass<LuaList<Entity*>>("LuaListEntity")
                 .addConstructor<void (*)(void)>()
                 .addFunction("Iterator", &LuaList<Entity*>::Iterator)
+                .addFunction("Size",&LuaList<Entity*>::Size)
             .endClass()
             .beginClass<EntityManager>("EntityManager")
                 .addStaticFunction("Instance", &EntityManager::Instance)
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
+                .addFunction("Last",&EntityManager::GetNewest)
             .endClass()
             .beginClass<Component>("Component")
                 .addFunction("GetNumber", &Component::GetFloatValue)
@@ -91,24 +99,31 @@ class LuaBindings
                 .addStaticData("HEALTH_UPDATE_EVENT", &EventType::HEALTH_UPDATE_EVENT, false)
                 .addStaticData("COLLISION_EVENT", &EventType::COLLISION_EVENT, false)
                 .addStaticData("DAMAGE_EVENT", &EventType::DAMAGE_EVENT, false)
-                .addStaticData("DELETE_ENTITY_EVETN", &EventType::DELETE_ENTITY_EVENT, false)
+                .addStaticData("DELETE_ENTITY_EVENT", &EventType::DELETE_ENTITY_EVENT, false)
                 .addStaticData("CONDITION_ADD_EVENT", &EventType::CONDITION_ADD_EVENT, false)
                 .addStaticData("W_DOWN_EVENT", &EventType::W_DOWN_EVENT, false)
                 .addStaticData("W_UP_EVENT", &EventType::W_UP_EVENT, false)
                 .addStaticData("S_DOWN_EVENT", &EventType::S_DOWN_EVENT, false)
                 .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
                 .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
+                .addStaticData("SPAWN_ENTITY_EVENT",&EventType::SPAWN_ENTITY_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
                 .addConstructor<void (*)(int,int,int)>()
                 .addStaticFunction("ComponentUserEvent",&Event::Create<ComponentUser>)
+                .addStaticFunction("EntityEvent",&Event::Create<Entity>)
                 .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)
             .endClass()
             .beginClass<EventManager>("EventManager")
-                .addStaticFunction("Instance", &EventManager::Instance)
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
+            .endClass()
+            .deriveClass<MessageDispatch,EventManager>("MessageDispatch")
+                .addStaticFunction("Instance",&MessageDispatch::Instance)
+            .endClass()
+            .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
+                .addStaticFunction("Instance",&EngineEventManager::Instance)
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
                 .addStaticFunction("Instance",&ComponentUserBase::Instance)
@@ -135,7 +150,7 @@ class LuaBindings
                 .addStaticFunction("Instance", &DebugFlags::Instance)
                 .addFunction("Set", &DebugFlags::Set)
             .endClass();
-        } 
+    } 
  };
 
  #endif

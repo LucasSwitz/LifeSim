@@ -39,7 +39,9 @@ Stages =
             character:SetNumber("Velocity","x", 0)
         end
         
-        if not x and not y then
+        if Keyboard.Instance():Get("E") then
+            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"  
+        elseif not x and not y then
             return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"   
         end
     end,

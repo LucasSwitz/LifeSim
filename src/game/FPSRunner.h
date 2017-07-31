@@ -1,43 +1,49 @@
 #ifndef FPSRUNNER_H
 #define FPSRUNNER_H
 
-
+#include <chrono>
+#include <cmath>
 #include "src/game/FPSRunnable.h"
+#include "src/system/SystemController.h"
 
 class FPSRunner
 {
   public:
-
-    FPSRunner()
+    FPSRunner(int FPS) : _fps(FPS)
     {
 
     }
 
-    void Update(float seconds_elapsed)
-    {    
-        RunGameSystems(seconds_elapsed);
-
-        if(_runnable)
-            _runnable->Update(seconds_elapsed);    
-    }
-
-    void RunGameSystems(float seconds_elapsed)
+    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time)
     {
-        SystemController::Instance()->Update(seconds_elapsed); //change this game specific systems
+        if (_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
+            _last_time = std::chrono::high_resolution_clock::now();
+
+        std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time);
+
+        double seconds_elapsed_since_last_update = std::abs(diff.count());
+        if (seconds_elapsed_since_last_update > (1.0 / (_fps)))
+        {
+            TickRunnable(seconds_elapsed_since_last_update);
+            _last_time = current_time;
+        }
     }
 
-    void SetRunnable(FPSRunnable* runnable)
+    void TickRunnable(float seconds_elapsed)
+    {
+        if (_runnable)
+            _runnable->Tick(seconds_elapsed);
+    }
+
+    void SetRunnable(FPSRunnable *runnable)
     {
         _runnable = runnable;
     }
 
-    void OnSFEvent(sf::Event& event)
-    {
-
-    }
-
-    protected:
-        FPSRunnable* _runnable = nullptr;
+  protected:
+    FPSRunnable *_runnable = nullptr;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
+    int _fps;
 };
 
 #endif

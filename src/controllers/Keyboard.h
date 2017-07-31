@@ -3,7 +3,7 @@
 
 #include  <unordered_map>
 #include "src/event/EventSubscriber.h"
-#include "src/event/EventManager.h"
+#include "src/event/EngineEventManager.h"
 class KeyboardController : public EventSubscriber
 {
     public:
@@ -36,6 +36,10 @@ class KeyboardController : public EventSubscriber
                 keys.find("S")->second = false;
             else if (e.id == EventType::D_UP_EVENT)
                 keys.find("D")->second = false;
+            else if (e.id == EventType::E_DOWN_EVENT)
+                keys.find("E")->second = true;
+            else if (e.id == EventType::E_UP_EVENT)
+                keys.find("E")->second = false;
     }
 
     std::list<Subscription> GetSubscriptions()
@@ -47,7 +51,9 @@ class KeyboardController : public EventSubscriber
                                         Subscription(EventType::W_UP_EVENT),
                                         Subscription(EventType::S_UP_EVENT),
                                         Subscription(EventType::A_UP_EVENT),
-                                        Subscription(EventType::D_UP_EVENT)};
+                                        Subscription(EventType::D_UP_EVENT),
+                                        Subscription(EventType::E_DOWN_EVENT),
+                                        Subscription(EventType::E_UP_EVENT)};
 
         return subs;
     }
@@ -56,11 +62,12 @@ class KeyboardController : public EventSubscriber
     std::unordered_map<std::string, bool> keys = {{"W",false},
                                                   {"A",false},
                                                   {"S",false},
-                                                  {"D",false}};
+                                                  {"D",false},
+                                                  {"E",false}};
 
     KeyboardController()
     {
-        EventManager::Instance()->RegisterSubscriber(this);
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
 };                                                                      

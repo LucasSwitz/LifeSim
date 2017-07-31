@@ -21,6 +21,7 @@ class EventSubscriber;
 
 class EventManager
 {
+    friend class GameState;
 public:
 
     void LaunchEvent(Event& e);
@@ -29,12 +30,6 @@ public:
 
     bool EventExists(int event_id);
     bool TagExists(int event_id, int tag_id);
-
-    static EventManager* Instance()
-    {
-        static EventManager instance;
-        return &instance;
-    }
 
 protected:
     void AddNewEvent(int event_id);

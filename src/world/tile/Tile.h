@@ -21,7 +21,6 @@ class Tile : public ComponentUser
 
     Tile *Clone()
     {
-    int _id;
         Tile *t = new Tile(_id, _name);
         std::unordered_map<std::string, Component *> components = GetAllComponents();
         for (auto it = components.begin(); it != components.end(); it++)

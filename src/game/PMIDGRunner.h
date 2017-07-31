@@ -8,7 +8,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 #include "src/game/mode/ProgramModeEditor.h"
-#include "src/game/gui/PMIDGWindow.h"
+#include "src/graphics/gui/PMIDGWindow.h"
 
 #define FRAMES_PER_SEC 30
 
@@ -27,14 +27,12 @@ class PMIDGRunner : public EventSubscriber
         LuaBindings::Bind(LUA_STATE);
         LuaEntityFactory::Instance()->PopulateFactory();
         SystemFactory::Instance()->PopulateFactory();
-        EventManager::Instance()->RegisterSubscriber(this);
+        EngineEventManager::GiveOwnership(&_event_manager);
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
     void Init(Type type)
     {
-        _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();
-
-
         switch (type)
         {
         case EDITOR:
@@ -48,30 +46,12 @@ class PMIDGRunner : public EventSubscriber
 
     void Run()
     {
-        if (_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
-            _last_time = std::chrono::high_resolution_clock::now();
-
         while (!_window_closed)
         {
-            auto current_time = std::chrono::high_resolution_clock::now();
-
-            std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time);
-
-            double seconds_elapsed_since_last_update = std::abs(diff.count());
-
-            if (seconds_elapsed_since_last_update > (1.0 / (FRAMES_PER_SEC)))
+            if (_mode)
             {
-                if (_mode)
-                {
-                    _window->Clear();
-                    _window->PollEvents();
-                    _mode->Update(seconds_elapsed_since_last_update);
-                    _window->Render();
-                    _mode->Render(seconds_elapsed_since_last_update);
-                    _window->Display();
-                }
-
-                _last_time = current_time;
+                std::chrono::time_point<std::chrono::high_resolution_clock> current_time = std::chrono::high_resolution_clock::now();
+                _mode->Update(current_time);
             }
         }
     }
@@ -91,9 +71,9 @@ class PMIDGRunner : public EventSubscriber
     }
 
   private:
-    PMIDGWindow *_window;
-    ProgramMode *_mode;
-    std::chrono::time_point<std::chrono::high_resolution_clock> _last_time;
+    PMIDGWindow *_window = nullptr;
+    ProgramMode *_mode = nullptr;
+    EngineEventManager _event_manager;
     bool _window_closed = false;
 };
 

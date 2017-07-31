@@ -1,13 +1,20 @@
 #include "EntityManager.h"
 #include "src/game_objects/Entity.h"
 
+EntityManager *EntityManager::_instance = nullptr;
+
+EntityManager::EntityManager()
+{
+}
+
 Entity *EntityManager::GetEntityByID(int id)
 {
     auto it = _entity_map.find(id);
 
     if (it == _entity_map.end())
     {
-        //TODO: Throw exception
+        std::cout << "No Entity With id: " << id << std::endl;
+        return nullptr;
     }
 
     return _entity_map.at(id);
@@ -15,22 +22,22 @@ Entity *EntityManager::GetEntityByID(int id)
 
 void EntityManager::DeregisterEntity(int id)
 {
-    if(!IDAvailable(id))
+    if (!IDAvailable(id))
         _entity_map.erase(_entity_map.find(id));
 }
 
 void EntityManager::RegisterEntity(Entity *entity)
 {
     _entity_map.insert(std::make_pair(entity->_id, entity));
+    entity->EnableAll();
 }
 
-EntityManager* EntityManager::Instance()
+EntityManager *EntityManager::Instance()
 {
-    static EntityManager instance;
-    return &instance;
+    return _instance;
 }
 
-std::map<int, Entity *>& EntityManager::GetAllEntities()
+std::map<int, Entity *> &EntityManager::GetAllEntities()
 {
     return _entity_map;
 }
@@ -40,9 +47,14 @@ int EntityManager::GetNumberOfEntities()
     return _entity_map.size();
 }
 
-LuaList<Entity*>* EntityManager::AsLuaList()
+bool EntityManager::HasEntity(int id)
 {
-    return LuaList<Entity*>::FromMapToLuaList<int, Entity*>(_entity_map);
+    return !IDAvailable(id);
+}
+
+LuaList<Entity *> *EntityManager::AsLuaList()
+{
+    return LuaList<Entity *>::FromMapToLuaList<int, Entity *>(_entity_map);
 }
 
 bool EntityManager::IDAvailable(int id)
@@ -55,10 +67,63 @@ void EntityManager::Clear()
     _entity_map.clear();
 }
 
+void EntityManager::OnEvent(Event &e)
+{
+    if (e.id == EventType::SPAWN_ENTITY_EVENT)
+    {
+        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.target_id);
+        entity->EnableAll();
+        RegisterEntity(entity);
+    }
+    else if (e.id == EventType::DELETE_ENTITY_EVENT)
+    {
+        if (HasEntity(e.target_id))
+        {
+            MarkForDelete(GetEntityByID(e.target_id));
+        }
+    }
+}
+
+std::list<Subscription> EntityManager::GetSubscriptions()
+{
+    std::list<Subscription> subs =
+        {
+            Subscription(EventType::SPAWN_ENTITY_EVENT),
+            Subscription(EventType::DELETE_ENTITY_EVENT)};
+
+    return subs;
+}
+
+void EntityManager::MarkForDelete(Entity *e)
+{
+    _delete_set.insert(e);
+}
+
+void EntityManager::Clean()
+{
+    for (auto it = _delete_set.begin(); it != _delete_set.end();)
+    {
+        Entity *e = *it;
+        delete e;
+        it = _delete_set.erase(it);
+    }
+}
+
 EntityManager::~EntityManager()
 {
-    /*for(auto it = _entity_map.begin(); it != _entity_map.end(); it++)
-        {
-            delete it->second;
-        }*/
+    std::cout << "Cleaning up entities...." << std::endl;
+    for (auto it = _entity_map.begin(); it != _entity_map.end();)
+    {
+        Entity *to_delete = it->second;
+        it = _entity_map.erase(it);
+        delete to_delete;
+    }
+}
+
+Entity *EntityManager::GetNewest()
+{
+    if (_entity_map.empty())
+        return nullptr;
+    else
+        return _entity_map.rbegin()->second;
 }
