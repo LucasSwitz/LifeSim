@@ -1,0 +1,12 @@
+apt get install libsfml-dev
+sudo apt-get install libxmu-dev libxi-dev
+apt-get install lua5.3
+apt-get install liblua5.3-dev
+wget https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.tar.gz
+tar -xzvf protobuf-cpp-3.3.0.tar.gz
+cd protobuf-cpp-3.3.0
+./configure
+make
+make check
+make install
+ldconfig
