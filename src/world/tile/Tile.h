@@ -15,7 +15,7 @@
 class Tile : public ComponentUser
 {
   public:
-    Tile(int id, std::string name) : _id(id), _name(name) {}
+    Tile(int id, std::string name) : _id(id), _name(name), ComponentUser(CU_TYPE_TILE){}
     int GetID()
     {
         return _id;

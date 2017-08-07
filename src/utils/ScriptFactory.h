@@ -15,14 +15,10 @@ template <typename T>
 class ScriptFactory
 {
   public:
-    ScriptFactory(std::string search_directory, std::string script_type, bool configurable = false) : _search_directory(search_directory), 
-    _script_type(script_type), _configurable(configurable) {}
-
     struct Preamble
     {
         bool IsValid()
         {
-
             return !preamble_flags.empty() && HasFlag("ScriptType");
         }
 
@@ -30,7 +26,7 @@ class ScriptFactory
         {
             return preamble_flags.at(flag_name);
         }
-        
+
         bool HasFlag(std::string flag_name)
         {
             return preamble_flags.find("Name") != preamble_flags.end();
@@ -43,18 +39,17 @@ class ScriptFactory
             //get preamble lines
 
             std::string line = "";
-            
-            //this is inefficient. Find a better way so you're no skipping first iteration.
 
+            //this is inefficient. Find a better way so you're no skipping first iteration.
 
             std::getline(stream, line);
 
             //make sure this file has a preamble
-            if(line.find(PREAMBLE_START) == std::string::npos)
+            if (line.find(PREAMBLE_START) == std::string::npos)
             {
                 return pre;
             }
-            
+
             while (line.find(PREAMBLE_END) == std::string::npos)
             {
 
@@ -69,12 +64,11 @@ class ScriptFactory
                     value.erase(remove_if(value.begin(), value.end(), isspace), value.end());
                     value.erase(std::remove(value.begin(), value.end(), '"'), value.end());
 
-                    pre.preamble_flags.insert(std::make_pair(key,value));
+                    pre.preamble_flags.insert(std::make_pair(key, value));
                 }
 
                 std::getline(stream, line);
             }
-
 
             return pre;
         }
@@ -87,9 +81,11 @@ class ScriptFactory
         std::unordered_map<std::string, std::string> preamble_flags;
     };
 
+    ScriptFactory(std::string search_directory, std::string script_type, bool configurable = false) : _search_directory(search_directory), _script_type(script_type), _configurable(configurable) {}
+
     void PopulateFactory(std::string search_directory = "", bool reset = false)
     {
-        if(reset)
+        if (reset)
             Reset();
 
         if (search_directory.empty())
@@ -112,8 +108,8 @@ class ScriptFactory
                     {
 
                         //std::cout << "Adding Script: " << preamble.GetFlag("Name") << std::endl;
-                        if(_configurable)
-                        { 
+                        if (_configurable)
+                        {
                             AddScript(preamble, Configure(current_path_string, preamble.GetFlag("Name")));
                         }
                         else
@@ -143,8 +139,7 @@ class ScriptFactory
 
     virtual void AddScript(Preamble &pre, T *scriptable_object){};
     virtual void AddScript(Preamble &pre, std::string script_path){};
-    virtual void Reset(){}
-
+    virtual void Reset() {}
 
   private:
     std::string _search_directory;

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "src/component/Component.h"
+#include "src/component/ComponentUserType.h"
 
 /**
   Component User's simply maintain a list of active components, and also register themselves

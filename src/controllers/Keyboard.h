@@ -4,6 +4,7 @@
 #include  <unordered_map>
 #include "src/event/EventSubscriber.h"
 #include "src/event/EngineEventManager.h"
+#include "src/controllers/IODevice.h"
 
 /*
     The Keyboard controller is a convient global reference for all keyboard inputs. This class
@@ -11,13 +12,17 @@
     key Events. 
 */
 
-class KeyboardController : public EventSubscriber
+#define W_KEY_TRIGGER 0
+#define A_KEY_TRIGGER 1
+#define S_KEY_TRIGGER 2
+#define D_KEY_TRIGGER 3
+#define E_KEY_TRIGGER 4
+
+class KeyboardController : public IODevice, public EventSubscriber
 {
     public:
-    const bool& Get(const std::string& key_name) const
-    {
-        return keys.at(key_name);
-    }
+
+    void Poll(){};
 
     static KeyboardController* Instance()
     {
@@ -28,25 +33,25 @@ class KeyboardController : public EventSubscriber
     void OnEvent(Event& e)
     {
             if(e.id == EventType::W_DOWN_EVENT)
-                keys.find("W")->second = true;
+                Set(W_KEY_TRIGGER,true);
             else if (e.id == EventType::A_DOWN_EVENT)
-                keys.find("A")->second = true;
+                Set(A_KEY_TRIGGER,true);
             else if (e.id == EventType::S_DOWN_EVENT)
-                keys.find("S")->second = true;
+                Set(S_KEY_TRIGGER,true);
             else if (e.id == EventType::D_DOWN_EVENT)
-                keys.find("D")->second = true;
-            else if (e.id == EventType::W_UP_EVENT)
-                keys.find("W")->second = false;
-            else if (e.id == EventType::A_UP_EVENT)
-                keys.find("A")->second = false;
-            else if (e.id == EventType::S_UP_EVENT)
-                keys.find("S")->second = false;
-            else if (e.id == EventType::D_UP_EVENT)
-                keys.find("D")->second = false;
+                Set(D_KEY_TRIGGER,true);
             else if (e.id == EventType::E_DOWN_EVENT)
-                keys.find("E")->second = true;
+                Set(E_KEY_TRIGGER,true);
+            else if (e.id == EventType::W_UP_EVENT)
+                Set(W_KEY_TRIGGER,false);
+            else if (e.id == EventType::A_UP_EVENT)
+                Set(A_KEY_TRIGGER,false);
+            else if (e.id == EventType::S_UP_EVENT)
+                Set(S_KEY_TRIGGER,false);
+            else if (e.id == EventType::D_UP_EVENT)
+                Set(D_KEY_TRIGGER,false);
             else if (e.id == EventType::E_UP_EVENT)
-                keys.find("E")->second = false;
+                Set(E_KEY_TRIGGER,false);
     }
 
     std::list<Subscription> GetSubscriptions()
@@ -65,13 +70,6 @@ class KeyboardController : public EventSubscriber
         return subs;
     }
     
-    private:
-    std::unordered_map<std::string, bool> keys = {{"W",false},
-                                                  {"A",false},
-                                                  {"S",false},
-                                                  {"D",false},
-                                                  {"E",false}};
-
     KeyboardController()
     {
         EngineEventManager::Instance()->RegisterSubscriber(this);

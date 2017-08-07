@@ -1,11 +1,12 @@
 #include "Entity.h"
 #include "src/game_objects/EntityManager.h"
+
 int Entity::_lastId = ENTITY_ID_START - 1;
 int Entity::CPP_DEFINED_ENTITY = 0;
 int Entity::LUA_DEFINED_ENTITY = 1;
 
-Entity::Entity(int type, std::string prototype_name, int id) :
-                _type(type), _prototype_name(prototype_name)
+Entity::Entity(int type, std::string prototype_name, int id) : ComponentUser(CU_TYPE_ENTITY), 
+        _type(type), _prototype_name(prototype_name)
 {
     if (_id == -1)
     {

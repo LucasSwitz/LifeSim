@@ -22,7 +22,9 @@
 #include "src/graphics/gui/PMIDGWindow.h"
 #include "src/event/messaging/MessageDispatch.h"
 #include "src/event/EngineEventManager.h"
-
+#include "src/controllers/PlayerController.h"
+#include "src/controllers/ControllerBase.h"
+#include "src/game/resources/ResourceManager.h"
 
 using namespace luabridge;
 class LuaBindings
@@ -31,6 +33,7 @@ class LuaBindings
         static void Bind(lua_State *L)
         { 
             getGlobalNamespace(L)
+            .addFunction("Res",&ResourceManager::GetResource)
             .beginClass<ComponentUser>("ComponentUser")
                 .addFunction("GetNumber", &ComponentUser::GetComponentValueFloat)
                 .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)
@@ -132,9 +135,11 @@ class LuaBindings
             .endClass()
             .beginClass<LuaRef>("LuaRef")
             .endClass()
-            .beginClass<KeyboardController>("Keyboard")
+            .beginClass<IODevice>("IODevice")
+                .addFunction("Get",&IODevice::Get)
+            .endClass()
+            .deriveClass<KeyboardController, IODevice>("Keyboard")
                 .addStaticFunction("Instance", &KeyboardController::Instance)
-                .addFunction("Get",&KeyboardController::Get)
             .endClass()
             .beginClass<Instance>("Instance")
             .endClass()
