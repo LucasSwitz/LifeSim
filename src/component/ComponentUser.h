@@ -16,8 +16,9 @@ class ComponentUser
 {
   friend class GameState;
   public:
-    ComponentUser(int id = -1) : _id(id){};
+    ComponentUser(int type, int id = -1) : _id(id){};
     int ID() const;
+    int Type() const;
 
 
     void AddComponent(Component *component);
@@ -53,5 +54,6 @@ class ComponentUser
       bool _is_hidden;
       void SetID(int id);
       int _id;
+      int _type;
 };
 #endif

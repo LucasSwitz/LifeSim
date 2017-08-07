@@ -9,15 +9,16 @@
 
 #define UNIVERSAL_EVENT_TAG -1 //get all events of specific ID, reguardless of tag
 
-typedef std::unordered_map<int, std::list<EventSubscriber*>*> event_tag_map;
-typedef std::list<EventSubscriber*> tag_sub_list;
-
-class EventSubscriber;
-
 /**
     EventManager handles all launched events and relays them to the appropriate subscriber. 
     Subscribers are indexed first by the Event id and then by tags.
 **/
+
+
+typedef std::unordered_map<int, std::list<EventSubscriber*>*> event_tag_map;
+typedef std::list<EventSubscriber*> tag_sub_list;
+
+class EventSubscriber;
 
 class EventManager
 {

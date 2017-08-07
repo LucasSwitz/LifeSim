@@ -9,6 +9,12 @@
 #include "src/game/FPSRunnable.h"
 #include "src/world/stage/Instance.h"
 
+/**
+    Purpose: GameState describes all game operating specific details. This includes 
+             information about active entities, running systems, loaded instances, etc.
+             A GameState can be operated by an FPSRunnable.
+**/
+
 class GameState : public FPSRunnable
 {
   public:

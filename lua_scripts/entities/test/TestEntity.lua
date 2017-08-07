@@ -17,7 +17,7 @@ TestEntity =
             },
             Graphics = 
             {
-                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                sprite = "/home/lucas/Desktop/LifeSim/res/sprites/mario_1.png",
                 layer = 1
             },
             Velocity =
@@ -46,7 +46,7 @@ TestEntity =
             },
             State = 
             {
-                state = "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua",
+                state = "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua",
                 stage = "Start"
             },
             Animation =
@@ -67,43 +67,43 @@ TestEntity =
                             Frame1 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                sprite= "/home/lucas/Desktop/LifeSim/res/sprites/mario_1.png",
                                 next = "Frame2"
                             },
                             Frame2 = 
                             {
                                 duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_2.png",
+                                sprite = "/home/lucas/Desktop/LifeSim/res/sprites/mario_2.png",
                                 next = "Frame3"
                             },
                             Frame3 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_3.png",
+                                sprite= "/home/lucas/Desktop/LifeSim/res/sprites/mario_3.png",
                                 next = "Frame4"
                             },
                             Frame4 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_4.png",
+                                sprite= "/home/lucas/Desktop/LifeSim/res/sprites/mario_4.png",
                                 next = "Frame5"
                             },
                             Frame5 = 
                             {
                                 duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_5.png",
+                                sprite = "/home/lucas/Desktop/LifeSim/res/sprites/mario_5.png",
                                 next = "Frame6"
                             },
                             Frame6 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_6.png",
+                                sprite= "/home/lucas/Desktop/LifeSim/res/sprites/mario_6.png",
                                 next = "Frame7"
                             },
                             Frame7 = 
                             {
                                 duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_7.png",
+                                sprite = "/home/lucas/Desktop/LifeSim/res/sprites/mario_7.png",
                                 next = "Frame1"
                             }
                         }
@@ -116,7 +116,7 @@ TestEntity =
                             Still =
                             {
                                 duration = 0,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                sprite = "/home/lucas/Desktop/LifeSim/res/sprites/mario_1.png",
                                 next = "Still"
                             }
                         }

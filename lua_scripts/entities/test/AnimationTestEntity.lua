@@ -14,7 +14,7 @@ AnimationTestEntity =
             },
             Animation =
             {
-                curent_frame_sprite = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
+                curent_frame_sprite = "/home/lucas/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                 current_animation = "Idle",
                 current_frame = "Still",
                 current_frame_time_left = 0.0,
@@ -30,13 +30,13 @@ AnimationTestEntity =
                             Frame1 = 
                             {
                                 duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
+                                sprite_file = "/home/lucas/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                                 next_frame_name = "Frame2"
                             },
                             Frame2 = 
                             {
                                 duration = 2,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/mario_jump.png",
+                                sprite_file = "/home/lucas/Desktop/LifeSim/res/sprites/mario_jump.png",
                                 next_frame_name = "Frame1"
                             }
                         }
@@ -48,7 +48,7 @@ AnimationTestEntity =
                             Still =
                             {
                                 duration = 0,
-                                sprite_file = "/home/pabu/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
+                                sprite_file = "/home/lucas/Desktop/LifeSim/res/sprites/8_Bit_Mario.png",
                                 next_frame = "Still"
                             }
                         }

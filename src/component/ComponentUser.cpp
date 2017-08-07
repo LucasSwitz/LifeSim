@@ -6,6 +6,11 @@ int ComponentUser::ID() const
     return _id;
 }
 
+int ComponentUser::Type() const
+{
+    return _type;
+}
+
 void ComponentUser::SetID(int id)
 {
     _id = id;

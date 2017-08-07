@@ -15,14 +15,14 @@ TestTile2 =
         },
         Graphics  = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/textures/diamonds.jpg",
+            sprite = "/home/lucas/Desktop/LifeSim/res/textures/diamonds.jpg",
             layer = 0
         },
         Collision = 
         {
             width = 32,
             height = 32,
-            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/ZeroRestitutionWallCollision.lua"
+            collision_script = "/home/lucas/Desktop/LifeSim/lua_scripts/collision/ZeroRestitutionWallCollision.lua"
         },
     }
 }

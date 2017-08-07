@@ -5,6 +5,10 @@
 #include "src/world/stage/Stage.h"
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/world/stage/LuaInstanceFactory.h"
+
+/**
+    Purpose: Stage defined by a Lua file.
+**/
 class LuaStage : public Stage
 {
     public:

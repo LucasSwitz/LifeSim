@@ -5,6 +5,10 @@
 #include "src/system/ScriptableSystem.h"
 #include "src/utils/ScriptFactory.h"
 
+/**
+    Factory for all System classes. Systems can be retrieved by supplying a valid name.
+**/
+
 class SystemFactory : public ScriptFactory<ScriptableSystem>
 {
 public:
@@ -20,7 +24,7 @@ public:
 
    static SystemFactory* Instance()
   {
-    static SystemFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/systems", "System");
+    static SystemFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/systems", "System");
 
     return &instance;
   }

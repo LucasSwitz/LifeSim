@@ -14,7 +14,7 @@ Stages =
     end,
     Execute = function(character)
         if character:GetNumber("Velocity","y") == 0 then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"
         end
     end,
     End = function(character)

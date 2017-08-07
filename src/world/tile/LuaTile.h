@@ -4,8 +4,9 @@
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/component/LuaComponent.h"
 
-
-//has components, but no identity
+/**
+    Purpose: Tile defined by a Lua file.
+**/
 class LuaTile : public Tile
 {   
 

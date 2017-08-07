@@ -4,6 +4,12 @@
 #include "src/game/GameState.h"
 #include "src/protobuf/wrappers/GameStateProtoBufWrapper.h"
 
+/**
+    Purpose: A GameLoader instance can be used to load implementation specific
+             details into a GameState instance. This class depends on GameStateProtoBufWrapper to
+             import/export GameState data to/from serialized forms.
+**/
+
 class GameLoader
 {
   public:

@@ -5,6 +5,13 @@
 
 #define TILE_WIDTH 32
 #define TILE_HEIGHT 32
+
+/**
+    Purpose: A Tile is described by a position and graphic. Tiles can be used as the building
+    blocks for an Instance. Although the most basic tiles simply define position and grapic
+    components, tiles can take on any component nessesary. This leaves many options for creative
+    tile effects. 
+**/
 class Tile : public ComponentUser
 {
   public:

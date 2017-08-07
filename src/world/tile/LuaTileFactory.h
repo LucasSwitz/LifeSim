@@ -5,6 +5,10 @@
 #include "src/world/tile/LuaTile.h"
 #include "src/utils/lua/LuaUniversal.h"
 
+/**
+    Purpose: The LuaTileFactory can be used to create Lua defined Tiles by supplying
+    a valid name or ID.
+**/
 class LuaTileFactory : public ScriptFactory<std::string>
 {
 
@@ -21,7 +25,7 @@ class LuaTileFactory : public ScriptFactory<std::string>
 
   static LuaTileFactory* Instance()
   {
-    static LuaTileFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/world/tiles", "Tile");
+    static LuaTileFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/world/tiles", "Tile");
 
     return &instance;
   }

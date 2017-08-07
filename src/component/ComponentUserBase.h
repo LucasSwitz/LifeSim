@@ -12,7 +12,7 @@
 /**
     ComponentUserBase stores all component users and indexes them by the components they own.
     The Singleton instance of this class can be queried the get all ComponentUsers who have a specific
-    component.
+    component. 
 **/
 class ComponentUser;
 

@@ -11,8 +11,8 @@ Stages =
         character:SetString("State","stage","Execute")
     end,
     Execute = function(character)
-        loadfile("/home/pabu/Desktop/LifeSim/lua_scripts/actions/ActionShootFireball.lua")(character)
-        return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"
+        loadfile("/home/lucas/Desktop/LifeSim/lua_scripts/actions/ActionShootFireball.lua")(character)
+        return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"
     end,
     End = function(character)
 

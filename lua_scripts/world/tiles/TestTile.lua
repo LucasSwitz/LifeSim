@@ -17,7 +17,7 @@ TestTile =
         {
             width = 32,
             height = 32,
-            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/GenericWallCollision.lua"
+            collision_script = "/home/lucas/Desktop/LifeSim/lua_scripts/collision/GenericWallCollision.lua"
         },
         Mass = 
         {
@@ -25,7 +25,7 @@ TestTile =
         },
         Graphics  = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/textures/pumpkin.jpg",
+            sprite = "/home/lucas/Desktop/LifeSim/res/textures/pumpkin.jpg",
             layer = 0
         }
     }

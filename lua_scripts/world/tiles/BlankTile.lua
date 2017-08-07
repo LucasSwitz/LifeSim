@@ -10,7 +10,7 @@ BlankTile =
     {
         Graphics = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/textures/blank.jpg",
+            sprite = "/home/lucas/Desktop/LifeSim/res/textures/blank.jpg",
             layer = 0
         },
         Position = 

@@ -5,6 +5,10 @@
 #include "src/utils/ScriptFactory.h"
 #include "src/world/stage/LuaStage.h"
 
+/**
+    Purpose: LuaStageFactory can be used to create Lua defined Stages by supplying 
+             a valid name or ID.
+**/
 class LuaStageFactory : public ScriptFactory<std::string>
 {
 
@@ -19,7 +23,7 @@ class LuaStageFactory : public ScriptFactory<std::string>
 
    static LuaStageFactory* Instance()
   {
-    static LuaStageFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/world/stages", "Stage");
+    static LuaStageFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/world/stages", "Stage");
 
     return &instance;
   }

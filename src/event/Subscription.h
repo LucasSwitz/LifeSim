@@ -6,8 +6,8 @@
 #include "src/utils/lua/LuaUniversal.h"
 
 /**
-    Subscriptions are used by subscribers to describe the events they would like to listen
-    to. An optional tags set can be set to listen to a specific subset of an event type. 
+    Purpose: Subscriptions are used by subscribers to describe the events they would like to listen
+             to. An optional tags set can be set to listen to a specific subset of an event type. 
 **/
 struct Subscription
 {

@@ -3,6 +3,12 @@
 
 #include "src/event/EventManager.h"
 
+/**
+    Purpose: The EngineEventManager is an event manager for all engine specific operations.
+            Unlike other EventManager implementations, the global EngineEventManager instance
+            does not change throughout the engines operation.
+
+**/
 class EngineEventManager : public EventManager
 {
   public:

@@ -7,7 +7,13 @@
 #include "src/event/EventType.h"
 #include "src/game/FPSRunnable.h"
 
-//requires a loading screen to tranistion
+/**
+    Purpose: Stages are purely logical containers for handling asset loading,
+    active instances, and transitioning to stages. When a stage is loaded, it will
+    load all graphics asset required by the children instances. Every stage can have multiple
+    instances, but will only ever have one active instance (the instance that is rendered and
+    players can interact with).
+**/
 
 class Stage : public EventSubscriber, public FPSRunnable
 {

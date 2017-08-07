@@ -12,6 +12,11 @@
 
 #define FRAMES_PER_SEC 30
 
+/**
+    Purpose: PMIDGRunner handles the main operating loop of the program. Instances of PMIDGRunner
+             have a PMIDGMode that will carry out operating procedures for the program. 
+**/
+
 class PMIDGRunner : public EventSubscriber
 {
   public:

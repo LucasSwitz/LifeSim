@@ -7,6 +7,10 @@
 #include "src/game_objects/Entity.h"
 #include "src/system/System.h"
 
+/**
+    Purpose: Wrapper for protocol buffer classes generated using the Google protocol buffer compiler. 
+**/
+
 class GameStateProtoBufWrapper
 {
   public:

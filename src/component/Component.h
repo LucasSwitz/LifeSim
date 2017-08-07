@@ -3,7 +3,8 @@
 
 /**
     Class the Controls all component logic. This class can be extended to support other forms of component
-    loading (from Lua objects for example).
+    loading (from Lua objects for example). ComponentUsers can be indenfified by their id field. This id
+    should be consitent across all child classes that require unique identification (i.e Entity).
 **/
 
 #include <unordered_map>

@@ -10,7 +10,12 @@
 
 #define BLANK_TILE_SCRIPT "BlankTile"
 
-/* Manges all tiles currently in memory*/
+/**
+    Purpose: TileMap is a container for a grid of tiles. The tile grid can
+    be populated via a file, a std::vector, or an array. The TileMap is responsible
+    enabling and disabling all of its Tiles' graphics components.
+**/
+
 class TileMap
 {
  public:

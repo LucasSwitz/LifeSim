@@ -40,9 +40,9 @@ Stages =
         end
         
         if Keyboard.Instance():Get("E") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"  
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"  
         elseif not x and not y then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"   
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterIdleState.lua"   
         end
     end,
     End = function(character)

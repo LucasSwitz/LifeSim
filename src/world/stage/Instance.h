@@ -7,7 +7,11 @@
 #include "src/event/Event.h"
 #include "src/game/FPSRunnable.h"
 
-/*Manages a specific game level, Can load and unload systems from the SystemController*/
+/*
+    Purpose: Instances describe the currently rendering tile map, and handles the transition to
+             other instances. When an instance goes out of scope it may allow all live entities
+             contained to remain operating, but must disable their graphics componenets. 
+*/
 
 class Instance : public EventSubscriber, public FPSRunnable
 {

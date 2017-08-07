@@ -13,12 +13,12 @@ Stages =
     end,
     Execute = function(character)
         if Keyboard.Instance():Get("W") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterJumpState.lua"
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterJumpState.lua"
         elseif Keyboard.Instance():Get("A") or
                Keyboard.Instance():Get("D") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterWalkingState.lua"
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterWalkingState.lua"
         elseif Keyboard.Instance():Get("E") then
-            return "/home/pabu/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"
+            return "/home/lucas/Desktop/LifeSim/lua_scripts/states/character_state/CharacterAttackingState.lua"
         end
     end,
     End = function(character)

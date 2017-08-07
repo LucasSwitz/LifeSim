@@ -4,6 +4,13 @@
 #include  <unordered_map>
 #include "src/event/EventSubscriber.h"
 #include "src/event/EngineEventManager.h"
+
+/*
+    The Keyboard controller is a convient global reference for all keyboard inputs. This class
+    is not bound to any specific input handler, but is rather configured by input handlers launching
+    key Events. 
+*/
+
 class KeyboardController : public EventSubscriber
 {
     public:

@@ -4,6 +4,10 @@
 #include "src/world/stage/Instance.h"
 #include "src/utils/lua/LuaUniversal.h"
 
+/**
+    Purpose: Instance defined by a Lua file.
+**/
+
 class LuaInstance : public Instance
 {
 public:

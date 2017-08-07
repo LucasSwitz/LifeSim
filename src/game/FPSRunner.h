@@ -6,6 +6,11 @@
 #include "src/game/FPSRunnable.h"
 #include "src/system/SystemController.h"
 
+/**
+        Purpose: An FPS Runner can be used to tick and FPSRunner at a given frequency.
+        Tick frequency is determined by the provided FPS parameter. 
+**/
+
 class FPSRunner
 {
   public:

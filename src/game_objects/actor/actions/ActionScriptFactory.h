@@ -22,7 +22,7 @@ public:
 protected:
 
 private:
-    ActionScriptFactory() : ScriptFactory<std::string>("/home/pabu/Desktop/LifeSim/lua_scripts/actions", "Action"){};
+    ActionScriptFactory() : ScriptFactory<std::string>("/home/lucas/Desktop/LifeSim/lua_scripts/actions", "Action"){};
     std::unordered_map<std::string, std::string> _action_map;
 };
 
