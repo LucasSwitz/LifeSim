@@ -32,7 +32,7 @@ void Entity::SetPrototypeName(std::string &name)
 {
     _prototype_name = name;
 }
-//request a special ID number
+
 void Entity::SetID(int id)
 {
     if (id < 0)

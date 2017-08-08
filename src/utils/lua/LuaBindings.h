@@ -12,7 +12,7 @@
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
-#include "src/controllers/Keyboard.h"
+#include "src/controllers/KeyboardController.h"
 #include "src/world/tile/Tile.h"
 #include "src/world/stage/Stage.h"
 #include "src/world/stage/Instance.h"
@@ -140,6 +140,11 @@ class LuaBindings
             .endClass()
             .deriveClass<KeyboardController, IODevice>("Keyboard")
                 .addStaticFunction("Instance", &KeyboardController::Instance)
+                .addStaticData("W",&KeyboardController::W_S_TRIGGER)
+                .addStaticData("A",&KeyboardController::A_S_TRIGGER)
+                .addStaticData("S",&KeyboardController::S_S_TRIGGER)
+                .addStaticData("D",&KeyboardController::D_S_TRIGGER)
+                .addStaticData("E",&KeyboardController::E_S_TRIGGER)
             .endClass()
             .beginClass<Instance>("Instance")
             .endClass()

@@ -1,9 +1,8 @@
-#ifndef COMPONENTUSERTYPE_H
-#define COMPONENTUSERTYPE_H
+#ifndef COMPONENTUSERTYPES_H
+#define COMPONENTUSERTYPES_H
 
-#define CU_TYPE_ENTITY 0
-#define CU_TYPE_TILE 1
-
+#define CU_TYPE_TILE 0
+#define CU_TYPE_ENTITY 1
 
 class ComponentUserType
 {

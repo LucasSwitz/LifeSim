@@ -28,7 +28,7 @@ public:
         LuaTileFactory::Instance()->PopulateFactory();
         SystemFactory::Instance()->PopulateFactory();
         SystemController::Instance()->Reset();
-        tile_map.LoadFromFile("/home/lucas/Desktop/LifeSim/res/tile_maps/TestTileMap.txt");    
+        tile_map.LoadFromFile("/home/pabu/Desktop/LifeSim/res/tile_maps/TestTileMap.txt");    
     }
 
     void SetUp()

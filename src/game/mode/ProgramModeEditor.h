@@ -276,8 +276,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     Brush _brush;
     GameState *_game_state;
     WindowTransformState _window_transform_state = DORMANT;
-    std::string file_path = "/home/lucas/Desktop/LifeSim/build/instances";
-    std::string tile_maps_path = "/home/lucas/Desktop/LifeSim/res/tile_maps";
+    std::string file_path = "/home/pabu/Desktop/LifeSim/build/instances";
+    std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
 };
 
 #endif
