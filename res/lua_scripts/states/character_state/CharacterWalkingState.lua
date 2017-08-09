@@ -13,7 +13,7 @@ Stages =
     end,
     Execute = function(character)
         -- check which direction the key press is and apply force accordingly
-        --look for keypress up or attack button, call end, set new state
+        -- look for keypress up or attack button, call end, set new state
 
         if Keyboard.Instance():Get(Keyboard.W) then
             return Res("CharacterJumpState.lua")
@@ -21,10 +21,12 @@ Stages =
 
         x = true
         if Keyboard.Instance():Get(Keyboard.A) then
-            character:SetNumber("Velocity","heading",180)
+            character:SetNumber("Position","heading",180)
+            character:SetBool("Graphics","invert",true)
             character:SetNumber("Velocity","x", -100)   
         elseif Keyboard.Instance():Get(Keyboard.D) then
-            character:SetNumber("Velocity","heading",0)
+            character:SetNumber("Position","heading",0)
+            character:SetBool("Graphics","invert",false)
             character:SetNumber("Velocity","x", 100)
         else
             x = false

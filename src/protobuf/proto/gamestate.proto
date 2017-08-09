@@ -34,6 +34,7 @@ message Component
     repeated ComponentValueString string_values = 2;
     repeated ComponentValueBool bool_values = 3;
     repeated ComponentValueFloat float_values = 4;
+    repeated Component subcomponents = 5;
 }
 
 message ComponentValueString

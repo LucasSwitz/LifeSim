@@ -64,6 +64,7 @@ class PaintTileBrushState : public BrushState
                         replaced = _selected_tile->Clone();
                         replaced->SetComponentValueFloat("Position", "x", x);
                         replaced->SetComponentValueFloat("Position", "y", y);
+                        replaced->EnableAll();
                     }
                 }
                 _painting_state = DORMANT;

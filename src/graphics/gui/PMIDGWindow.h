@@ -103,7 +103,6 @@ class PMIDGWindow : public EventSubscriber
 
         std::string sprite_path = user->GetComponentValueString("Graphics", "sprite");
         int layer = user->GetComponentValueFloat("Graphics", "layer");
-
         sf::Texture *texture = nullptr;
 
         if (texture = _texture_cache.GetTexture(sprite_path))

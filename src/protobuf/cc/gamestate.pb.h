@@ -660,6 +660,18 @@ class Component : public ::google::protobuf::Message /* @@protoc_insertion_point
   const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentValueFloat >&
       float_values() const;
 
+  // repeated .pmidgserialized.Component subcomponents = 5;
+  int subcomponents_size() const;
+  void clear_subcomponents();
+  static const int kSubcomponentsFieldNumber = 5;
+  const ::pmidgserialized::Component& subcomponents(int index) const;
+  ::pmidgserialized::Component* mutable_subcomponents(int index);
+  ::pmidgserialized::Component* add_subcomponents();
+  ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >*
+      mutable_subcomponents();
+  const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >&
+      subcomponents() const;
+
   // required string name = 1;
   bool has_name() const;
   void clear_name();
@@ -686,6 +698,7 @@ class Component : public ::google::protobuf::Message /* @@protoc_insertion_point
   ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentValueString > string_values_;
   ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentValueBool > bool_values_;
   ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentValueFloat > float_values_;
+  ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component > subcomponents_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   friend struct protobuf_gamestate_2eproto::TableStruct;
 };
@@ -1646,6 +1659,36 @@ inline const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentV
 Component::float_values() const {
   // @@protoc_insertion_point(field_list:pmidgserialized.Component.float_values)
   return float_values_;
+}
+
+// repeated .pmidgserialized.Component subcomponents = 5;
+inline int Component::subcomponents_size() const {
+  return subcomponents_.size();
+}
+inline void Component::clear_subcomponents() {
+  subcomponents_.Clear();
+}
+inline const ::pmidgserialized::Component& Component::subcomponents(int index) const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Get(index);
+}
+inline ::pmidgserialized::Component* Component::mutable_subcomponents(int index) {
+  // @@protoc_insertion_point(field_mutable:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Mutable(index);
+}
+inline ::pmidgserialized::Component* Component::add_subcomponents() {
+  // @@protoc_insertion_point(field_add:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >*
+Component::mutable_subcomponents() {
+  // @@protoc_insertion_point(field_mutable_list:pmidgserialized.Component.subcomponents)
+  return &subcomponents_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >&
+Component::subcomponents() const {
+  // @@protoc_insertion_point(field_list:pmidgserialized.Component.subcomponents)
+  return subcomponents_;
 }
 
 // -------------------------------------------------------------------

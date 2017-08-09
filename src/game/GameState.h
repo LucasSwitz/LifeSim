@@ -63,13 +63,7 @@ class GameState : public FPSRunnable
     void AddEntity(Entity *e)
     {
         _entity_manager.RegisterEntity(e);
-        AddComponentUser(e);
-    }
-
-    void AddComponentUser(ComponentUser *user)
-    {
-        user->EnableAll();
-    }
+     }
 
     GameState Copy()
     {

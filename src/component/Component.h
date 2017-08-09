@@ -40,6 +40,9 @@ class Component
         T value;
     };
 
+        Component(std::string name = "") : _name(name){};
+
+
     //STRING ----------------------------
 
     bool HasStringValue(std::string name) const
@@ -59,7 +62,7 @@ class Component
     {
         if (!HasStringValue(name))
         {
-            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return "";
         }
         return _string_components.at(name).GetValue();
@@ -109,7 +112,7 @@ class Component
     {
         if (!HasBoolValue(name))
         {
-            std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
+            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return false;
         }
         return _bool_components.at(name).GetValue();
@@ -148,9 +151,11 @@ class Component
         return _sub_components.at(name);
     }
 
-    Component(std::string name = "") : _name(name){};
+    std::unordered_map<std::string, Component *> &GetSubcomponents()
+    {
+        return _sub_components;
+    }
 
-  protected:
     void AddValue(std::string name, std::string value)
     {
         _string_components.insert(std::make_pair(name, ComponentValue<std::string>(name, value)));
@@ -171,6 +176,7 @@ class Component
         _sub_components.insert(std::make_pair(sub_component->_name, sub_component));
     }
 
+  protected:
   protected:
     std::string _name;
 

@@ -67,7 +67,7 @@ std::string ComponentUser::GetComponentValueString(std::string component_name, s
 {
     if (!HasComponent(component_name))
     {
-        std::cout << "has no component: " << component_name << std::endl;
+        //std::cout << "has no component: " << component_name << std::endl;
         return "";
     }
     else if (!_components.at(component_name)->HasStringValue(value_name))
@@ -104,7 +104,7 @@ void ComponentUser::SetComponentValueFloat(std::string component_name, std::stri
     }
 }
 
-bool ComponentUser::GetComponentBoolValue(std::string component_name, std::string component_name_value)
+bool ComponentUser::GetComponentValueBool(std::string component_name, std::string component_name_value)
 {
     if (!HasComponent(component_name))
     {
@@ -114,7 +114,7 @@ bool ComponentUser::GetComponentBoolValue(std::string component_name, std::strin
     return _components.at(component_name)->GetBoolValue(component_name_value);
 }
 
-void ComponentUser::SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value)
+void ComponentUser::SetComponentValueBool(std::string component_name, std::string component_name_value, bool value)
 {
     if (!HasComponent(component_name))
     {

@@ -34,7 +34,7 @@ struct EditModeControls
                     rect.setOutlineColor(sf::Color::Red);
                     rect.setOutlineThickness(2);
                     rect.setFillColor(sf::Color::Transparent);
-                    rect.setPosition(x-width/2.0,y-height/2.0);
+                    rect.setPosition(x,y);
                     window.DrawNow(rect);
                 }
             }

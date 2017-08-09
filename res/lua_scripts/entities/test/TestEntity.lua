@@ -13,7 +13,8 @@ TestEntity =
             Position = 
             {
                 x = 90,
-                y = 90
+                y = 90,
+                heading = 0
             },
             Graphics = 
             {
@@ -25,7 +26,6 @@ TestEntity =
                 x = 0, -- px/second
                 y = 0,
                 max = 100,
-                heading = 0
             },
             Acceleration = 
             {

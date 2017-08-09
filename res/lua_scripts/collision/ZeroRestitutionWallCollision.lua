@@ -27,9 +27,13 @@ DoImpulse = function(collision_data)
     collider_2_vel.x = collider_2_vel.x - projection.x
     collider_2_vel.y = collider_2_vel.y - projection.y
     if collider_2:HasComponent("Velocity") then
-        collider_2:SetNumber("Velocity","y",collider_2_vel.y)
-        if math.abs(collider_2_vel.x) < 0 then
-            collider_2:SetNumber("Velocity","x",.005)
+        if(math.abs(collider_2_vel.y) < 10)  then
+            collider_2:SetNumber("Velocity","y",-.1*((norm.y + .1) + .5))
+        else
+            collider_2:SetNumber("Velocity","y",collider_2_vel.y)
+        end
+        if math.abs(collider_2_vel.x) < 10 then
+            collider_2:SetNumber("Velocity","x",0)
         else
             collider_2:SetNumber("Velocity","x",collider_2_vel.x)
         end
