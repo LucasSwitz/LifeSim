@@ -3,6 +3,7 @@
 
 #include "src/game_objects/Entity.h"
 #include "src/graphics/gui/brush/BrushState.h"
+#include "src/graphics/gui/gui_tools/CurrentSelectionWindow.h"
 
 class SelectEntityBrushState : public BrushState
 {
@@ -28,6 +29,7 @@ class SelectEntityBrushState : public BrushState
             _selected->SetComponentValueFloat("Position", "x", world_mouse_position.x);
             _selected->SetComponentValueFloat("Position", "y", world_mouse_position.y);
         }
+
     }
 
     bool PaintWindow(PMIDGWindow &window) override
@@ -35,21 +37,24 @@ class SelectEntityBrushState : public BrushState
         switch (_selection_state)
         {
         case RELEASED:
-            return true;
+            return false;
         case MOVING:
             MoveEntity(window);
             return false;
         }
+
+        
     }
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance) override
+    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+        ComponentUser* c = nullptr) override
     {
-        if (_selected)
+        if (c == _selected)
         {
             if (e.type == sf::Event::MouseButtonPressed)
             {
                 _selection_state = MOVING;
-                return false;
+                return true;
             }
             else if (e.type == sf::Event::MouseButtonReleased)
             {
@@ -57,6 +62,8 @@ class SelectEntityBrushState : public BrushState
                 return true;
             }
         }
+
+        return false;
     }
 
     bool OnKeyboardEvent(sf::Event &e, Instance *instance) override
@@ -71,9 +78,17 @@ class SelectEntityBrushState : public BrushState
         }
     }
 
+
+    void DrawExtras() override
+    {
+        if(_selected)
+            selection_window.Draw(_selected);
+    }
+
   private:
     Entity *_selected = nullptr;
     SelectionState _selection_state;
+    CurrentSelectionWindow selection_window;
 };
 
 #endif

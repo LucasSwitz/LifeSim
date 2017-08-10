@@ -11,7 +11,8 @@ class BrushState
 {
   public:
     virtual bool OnKeyboardEvent(sf::Event& e,Instance* instance){};
-    virtual bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance){};
+    virtual bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance, ComponentUser* c = nullptr){};
     virtual bool PaintWindow(PMIDGWindow& window) {return false;};
+    virtual void DrawExtras(){};
 };
 #endif

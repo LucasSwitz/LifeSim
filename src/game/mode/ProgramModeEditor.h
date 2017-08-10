@@ -73,9 +73,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             {
                 PanView();
             }
-            _brush.PaintWindow(*_window);
         }
-
         _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed, _brush);
     }
 
@@ -156,8 +154,12 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                         {
                             _brush.SetState(new SelectEntityBrushState(entity));
                         }
+                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance(),entity);
                     }
-                    _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance());
+                    else
+                    {
+                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance());
+                    }
                 }
             }
             else if (e.type == sf::Event::MouseWheelMoved)

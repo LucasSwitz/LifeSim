@@ -16,7 +16,7 @@ class ComponentUserEditor : public SFMLWindowListener
 {
 
   public:
-    void Draw(TextureCache &texture_cache, ComponentUser &user)
+    void Draw(ComponentUser &user)
     {
         if ( ImGui::BeginChild("Components"))
         {
@@ -38,9 +38,9 @@ class ComponentUserEditor : public SFMLWindowListener
             if (ImGui::TreeNode(component_name.c_str()))
             {
                
-               std::unordered_map<std::string, Component::ComponentValue<std::string>> string_values = current_component->GetAllStringValues();
-               std::unordered_map<std::string, Component::ComponentValue<float>> float_values = current_component->GetAllFloatValues();
-               std::unordered_map<std::string, Component::ComponentValue<bool>> bool_values = current_component->GetAllBoolValues();
+               std::unordered_map<std::string, Component::ComponentValue<std::string>>& string_values = current_component->GetAllStringValues();
+               std::unordered_map<std::string, Component::ComponentValue<float>>& float_values = current_component->GetAllFloatValues();
+               std::unordered_map<std::string, Component::ComponentValue<bool>>& bool_values = current_component->GetAllBoolValues();
 
                 for (auto it = string_values.begin(); it != string_values.end(); it++)
                 {
@@ -64,9 +64,9 @@ class ComponentUserEditor : public SFMLWindowListener
                 for (auto it = float_values.begin(); it != float_values.end(); it++)
                 {
                     std::string current_key = it->first;
-                    int current_value = it->second.GetValue();
+                   
 
-                    ImGui::InputInt(current_key.c_str(),&current_value);
+                    ImGui::InputFloat(current_key.c_str(),it->second.GetValuePtr(), .1f, 10f);
                 }   
 
                 for (auto it = bool_values.begin(); it != bool_values.end(); it++)

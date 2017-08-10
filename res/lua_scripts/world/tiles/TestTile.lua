@@ -11,7 +11,7 @@ TestTile =
         Position =
         {
             x = 0,
-            y = 0
+            y = 0,
         },
         Collision = 
         {
@@ -26,7 +26,9 @@ TestTile =
         Graphics  = 
         {
             sprite = Res("pumpkin.jpg"),
-            layer = 0
+            layer = 0,
+            width = 32,
+            height = 32
         }
     }
 }

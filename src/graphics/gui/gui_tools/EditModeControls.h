@@ -31,10 +31,15 @@ struct EditModeControls
                     int y = user->GetComponentValueFloat("Position","y");
 
                     sf::RectangleShape rect(sf::Vector2f(width, height));
+                    sf::CircleShape circ(2);
+                    circ.setFillColor(sf::Color::Green);
+                    circ.setPosition(x,y);
+                    window.DrawNow(circ);
+
                     rect.setOutlineColor(sf::Color::Red);
                     rect.setOutlineThickness(2);
                     rect.setFillColor(sf::Color::Transparent);
-                    rect.setPosition(x,y);
+                    rect.setPosition(x-width/2,y-height/2 );
                     window.DrawNow(rect);
                 }
             }

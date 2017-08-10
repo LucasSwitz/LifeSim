@@ -16,8 +16,8 @@ Fireball =
         Graphics = 
         {
             sprite = Res("fireball.png"),
-            width = 10,
-            height = 10,
+            width = 32,
+            height = 32,
             layer = 1
         },
         Mass = 

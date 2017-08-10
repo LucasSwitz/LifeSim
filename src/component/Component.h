@@ -31,6 +31,11 @@ class Component
             return value;
         }
 
+        T* GetValuePtr()
+        {
+            return &value;
+        }
+
         std::string GetName()
         {
             return name;

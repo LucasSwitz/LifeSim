@@ -48,17 +48,19 @@ CollisionSystem =
         end
     end,
     GetCollision = function(collider_1, collider_2, time)
+        collider_1_dims = {width = collider_1:GetNumber("Collision","width"),
+                           height = collider_1:GetNumber("Collision","height")}
+
+        collider_2_dims = {width = collider_2:GetNumber("Collision","width"),
+                           height = collider_2:GetNumber("Collision","height")}
+
         collider_1_pos = {x = collider_1:GetNumber("Position","x") + collider_1:GetNumber("Velocity","x")*time/2,
                           y = collider_1:GetNumber("Position","y") + collider_1:GetNumber("Velocity","y")*time/2}
 
         collider_2_pos = {x = collider_2:GetNumber("Position","x") + collider_2:GetNumber("Velocity","x")*time/2,
                           y = collider_2:GetNumber("Position","y") + collider_2:GetNumber("Velocity","y")*time/2}
 
-        collider_1_dims = {width = collider_1:GetNumber("Collision","width"),
-                           height = collider_1:GetNumber("Collision","height")}
 
-        collider_2_dims = {width = collider_2:GetNumber("Collision","width"),
-                           height = collider_2:GetNumber("Collision","height")}
 
         distance = {x = collider_1_pos.x - collider_2_pos.x, 
                     y = collider_1_pos.y - collider_2_pos.y}

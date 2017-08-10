@@ -19,7 +19,9 @@ TestEntity =
             Graphics = 
             {
                 sprite = Res("mario_1.png"),
-                layer = 1
+                layer = 1,
+                width = 32,
+                height = 32
             },
             Velocity =
             {

@@ -11,22 +11,22 @@ class GraphicsPreprocessor
   public:
     void ProcessComponentUser(ComponentUser *user, sf::Texture *texture, sf::Sprite *sprite)
     {
-        float scale_x = (float)TILE_WIDTH / texture->getSize().x;
-        float scale_y = (float)TILE_HEIGHT / texture->getSize().y;
         float width = user->GetComponentValueFloat("Graphics", "width");
         float height = user->GetComponentValueFloat("Graphics", "height");
+        float scale_x = width / texture->getSize().x;
+        float scale_y = height / texture->getSize().y;
 
         bool invert = user->GetComponentValueBool("Graphics", "invert");
 
         sprite->setTexture(*texture);
-        sprite->setPosition(user->GetComponentValueFloat("Position", "x") - width*scale_x / 2.0 ,
-                            user->GetComponentValueFloat("Position", "y") - height*scale_y / 2.0); 
+        sprite->setScale(scale_x, scale_y);
+        sprite->setPosition(user->GetComponentValueFloat("Position", "x") - width/2.0,
+                            user->GetComponentValueFloat("Position", "y") - height/2.0); 
        if (invert)
        {
-            scale_x*=-1;
+            sprite->setScale(-scale_x, scale_y);
             sprite->setOrigin({sprite->getLocalBounds().width, 0});
        }
-        sprite->setScale(scale_x, scale_y);
         // Extra Settings
         if (user->GetComponent("Graphics")->HasFloatValue("opacity"))
         {
