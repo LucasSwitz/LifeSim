@@ -22,3 +22,4 @@ int EventType::DRAW_REQUEST_EVENT = 16;
 int EventType::SPAWN_ENTITY_EVENT = 17;
 int EventType::E_DOWN_EVENT = 18;
 int EventType::E_UP_EVENT = 19;
+int EventType::STOP_PROGRAM_EVENT = 20;

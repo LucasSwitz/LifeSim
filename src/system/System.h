@@ -12,7 +12,7 @@
 class System : public EventSubscriber
 {
   public:
-    const std::string& GetName()
+    const std::string& GetName() const
     {
         return _name;
     }

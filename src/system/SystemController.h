@@ -17,6 +17,16 @@ class SystemController
   friend class GameState;
 
 public:
+  SystemController(const SystemController &system_controller)
+  {
+    const std::list<System *> &systems = system_controller.GetSystemInExecutionSequence();
+
+    for (auto it = systems.begin(); it != systems.end(); it++)
+    {
+      AddToSystemExecutionSequence((*it)->GetName());
+    }
+  }
+
   void AddToSystemExecutionSequence(const std::string &system_name);
   void AddPassiveSystem(const std::string &system_name);
   void AddPassiveSystem(System *system);
@@ -50,8 +60,8 @@ public:
     _instance = instance;
   }
 
-  std::list<System *> &GetSystemInExecutionSequence();
-  std::list<System *> &GetPassiveSystems();
+  const std::list<System *> &GetSystemInExecutionSequence() const;
+  const std::list<System *> &GetPassiveSystems() const;
 
 protected:
   SystemController(){};
@@ -60,7 +70,21 @@ protected:
   std::list<System *> _passive_systems;
 
 private:
-  void MoveUp(System *system_name);
+  class SystemNameComparator
+  {
+  public:
+    explicit SystemNameComparator(std::string name) : _name(name){}
+    inline bool operator()(System*& s)
+    {
+      return s->GetName().compare(_name) == 0;
+    }
+
+  private:
+    std::string _name;
+  };
+
+  void
+  MoveUp(System *system_name);
   void MoveDown(System *system_down);
   static SystemController *_instance;
   std::mutex _system_lock;

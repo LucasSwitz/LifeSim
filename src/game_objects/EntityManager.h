@@ -25,11 +25,22 @@ public:
   ~EntityManager();
   EntityManager();
 
+  EntityManager(const EntityManager& manager)
+  {
+    const std::map<int, Entity*>& entities = manager.GetAllEntities();
+
+    for(auto it = entities.begin(); it != entities.end(); it++)
+    {
+      Entity* e = new Entity(*it->second);
+      RegisterEntity(e);
+    }
+  }
+
   void RegisterEntity(Entity *entity);
   Entity *GetEntityByID(int id);
   void DeregisterEntity(int id);
 
-  std::map<int, Entity *> &GetAllEntities();
+  const std::map<int, Entity *>& GetAllEntities() const;
   int GetNumberOfEntities();
 
   Entity* GetNewest();

@@ -18,6 +18,16 @@
 class GameState : public FPSRunnable
 {
   public:
+
+    GameState(){};
+    GameState(const GameState& game_state) : _message_dispatch(), 
+                                             _entity_manager(game_state._entity_manager),
+                                             _system_controller(game_state._system_controller),
+                                             _current_instance(game_state._current_instance)
+    {
+        //all the things need to add themselves to the component user base
+    }
+    
     void Load()
     {
         Setup();
@@ -51,7 +61,7 @@ class GameState : public FPSRunnable
     }
 
     void AddSystem(std::string system_name)
-    {
+    {            
         _system_controller.AddToSystemExecutionSequence(system_name);
     }
 

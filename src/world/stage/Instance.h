@@ -6,6 +6,7 @@
 #include "src/game_objects/Entity.h"
 #include "src/event/Event.h"
 #include "src/game/FPSRunnable.h"
+#include "src/game_objects/EntityManager.h"
 
 /*
     Purpose: Instances describe the currently rendering tile map, and handles the transition to
@@ -18,6 +19,10 @@ class Instance : public EventSubscriber, public FPSRunnable
  public:
 
     Instance(int id = -1);
+
+    Instance(const Instance& instance)
+    {}
+
     ~Instance()
     {
         _tile_map.Erase();
@@ -48,8 +53,9 @@ class Instance : public EventSubscriber, public FPSRunnable
     {
         _tile_map.Show();
 
-        for(Entity* e: _local_entities)
+        for(int& i: _local_entities)
         {
+            Entity* e = EntityManager::Instance()->GetEntityByID(i);
             e->EnableComponent("Graphics");
         }
         _open = true;   
@@ -65,10 +71,11 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map.Hide();
 
         //should have different options for what components to remove at different levels of closing.
-        for(Entity* e : _local_entities)
+        for(int& i: _local_entities)
         {
+            Entity* e = EntityManager::Instance()->GetEntityByID(i);
             e->DisableComponent("Graphics");
-        }        
+        }      
         _open = false;
     }
 
@@ -136,7 +143,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         static int last_id;
     private:
         TileMap _tile_map;
-        std::list<Entity*> _local_entities;
+        std::list<int> _local_entities;
         bool _loaded;
         bool _open;
         

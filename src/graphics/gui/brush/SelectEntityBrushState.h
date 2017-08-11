@@ -62,7 +62,7 @@ class SelectEntityBrushState : public BrushState
                 return true;
             }
         }
-
+        _selection_state = RELEASED;
         return false;
     }
 

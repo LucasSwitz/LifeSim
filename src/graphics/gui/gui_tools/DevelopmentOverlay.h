@@ -30,7 +30,11 @@ class DevelopmentOverlay : public MainMenuListener
         void NewInstancePressed();
         void LoadInstancePressed(std::string& file_name);
         void SaveInstancePressed(std::string& file_name);
-    
+
+        //Inherited from EditModeControlListener
+        void OnLaunchGameRunner();
+        void OnStopGameRunner();
+
         Log log;
         EntityTable entity_table;
         InstanceEditor instance_editor;

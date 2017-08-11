@@ -25,7 +25,7 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void SetEntities(std::map<int, Entity *> &entities_list)
+    void SetEntities(const std::map<int, Entity *> &entities_list)
     {
         std::list<Entity *> entities;
         for (auto it = entities_list.begin(); it != entities_list.end(); it++)
@@ -35,6 +35,7 @@ class GameStateProtoBufWrapper
 
         SetEntities(entities);
     }
+    
     template <typename T>
     void SetEntities(T &entities_list)
     {
@@ -107,7 +108,6 @@ class GameStateProtoBufWrapper
         {
             pmidgserialized::Component* serialized_sub_component =
                 serialized_component->add_subcomponents();
-            std::cout << it_vals->second->GetName() << std::endl;
             ConfigureSerializedComponent(serialized_sub_component, it_vals->second);
         }
     }
@@ -236,7 +236,6 @@ class GameStateProtoBufWrapper
     {
         std::string value_name = serialized_value.value_name();
         T value = serialized_value.value();
-        std::cout << "Added: " << value_name  << ":" << value << std::endl;
         c->AddValue(value_name, value);
     }
 
@@ -245,7 +244,6 @@ class GameStateProtoBufWrapper
     {
         std::string component_value_name = component_value.GetName();
         T value = component_value.GetValue();
-        std::cout << "Added: " << component_value_name << ":" << value << std::endl;
         serialized_component_value->set_value_name(component_value_name);
         serialized_component_value->set_value(value);
     }

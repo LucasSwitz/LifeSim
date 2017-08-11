@@ -12,7 +12,7 @@ struct EntityTable
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
-        std::map<int, Entity*>& map = EntityManager::Instance()->GetAllEntities(); 
+        const std::map<int, Entity*>& map = EntityManager::Instance()->GetAllEntities(); 
 
         for(auto it = map.begin(); it != map.end(); it++)
         {

@@ -50,12 +50,17 @@ class InstanceEditor : public SFMLWindowListener
                 ImGui::TreePop();
             }
 
-            ImGui::InputInt2("##Resize Instance", new_instance_dims);
+            if(ImGui::TreeNode("Systems##InstanceEditor"))
+            {
+                ImGui::TreePop();
+            }
+
+            /*ImGui::InputInt2("##Resize Instance", new_instance_dims);
             ImGui::SameLine();
             if (ImGui::Button("Resize Instance##InstanceEditor"))
             {
                 //this thing needs a reference of the instance
-            }
+            }*/
         
         ImGui::End();
     }

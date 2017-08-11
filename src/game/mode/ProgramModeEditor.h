@@ -14,12 +14,13 @@
 #include "src/utils/window/WindowUtils.h"
 #include "src/utils/sfml/SFMLUtils.h"
 #include "src/system/SystemController.h"
+#include "src/game/PMIDGGameRunner.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
 #define GAME_RUNNER_FPS 30
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable, public EventSubscriber
 {
 
   public:
@@ -29,16 +30,17 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         PANNING
     };
 
-    ProgramModeEditor(PMIDGEditorWindow *window) : ProgramMode(window), FPSRunner(EDITOR_MODE_FPS),
-                                                   _editor_runner(EDITOR_MODE_FPS), _game_runner(GAME_RUNNER_FPS)
+    ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
+                          _editor_runner(EDITOR_MODE_FPS), _game_runner(GAME_RUNNER_FPS)
     {
         _game_state = new GameState();
 
         LuaTileFactory::Instance()->PopulateFactory();
+        EngineEventManager::Instance()->RegisterSubscriber(this);
 
-        _dev_tools.Init(window);
+        _dev_tools.Init(&_window);
         _dev_tools.SetListener(this);
-        _window->AddWindowListener(this);
+        _window.AddWindowListener(this);
 
         _game_state->Setup();
         _game_runner.SetRunnable(_game_state);
@@ -47,6 +49,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Load()
     {
+
     }
 
     void Update(std::chrono::time_point<std::chrono::high_resolution_clock> &current_time) override
@@ -57,40 +60,16 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Tick(float seconds_elapsed)
     {
-        _window->Clear();
-        _window->PollEvents();
-        _window->Render();
+        _window.Clear();
+        _window.PollEvents();
+        _window.Render();
         Render(seconds_elapsed);
-        _window->Display();
-    }
-
-    void Render(float seconds_elapsed) override
-    {
-        //chance to draw Dev Tools
-        if (!_dev_tools.IsFocused())
-        {
-            if (_window_transform_state == PANNING)
-            {
-                PanView();
-            }
-        }
-        _dev_tools.Render(_window, _window->GetTextureCache(), seconds_elapsed, _brush);
+        _window.Display();
     }
 
     void Unload()
     {
-    }
 
-    void PanView()
-    {
-        sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(_window->SFWindow());
-
-        int delta_x = screen_mouse_position.x - _mouse_history.x1;
-        int delta_y = screen_mouse_position.y - _mouse_history.y1;
-
-        _mouse_history.x1 = screen_mouse_position.x;
-        _mouse_history.y1 = screen_mouse_position.y;
-        static_cast<PMIDGEditorWindow *>(_window)->MoveView(-delta_x, -delta_y);
     }
 
     void Exit() override
@@ -98,15 +77,17 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _dev_tools.Shutdown();
     }
 
+    //######################### DEV TOOL CALLBACKS ########################
+
     void OnCreateBlankInstance(int rows, int columns) override
     {
-        if(_game_state)
+        if (_game_state)
             delete _game_state;
 
         _game_state = new GameState();
         _game_state->Setup();
         _game_runner.SetRunnable(_game_state);
-        
+
         Instance *i = new Instance();
         _game_state->SetCurrentInstance(i);
 
@@ -114,13 +95,68 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
         _game_state->GetInstance()->Open();
 
-        static_cast<PMIDGEditorWindow *>(_window)->OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
-                                                                        _game_state->GetInstance()->GetTileMap().HeightPx());
+        _window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
+                                     _game_state->GetInstance()->GetTileMap().HeightPx());
     }
 
-    void OnCreateBlankStage()
+    void OnLaunchGameRunner() override
     {
+        PMIDGGameRunner* game_runner = new PMIDGGameRunner();
+        game_runner->RunInstance(*_game_state->GetInstance());
+        _editor_runner.SetRunnable(game_runner);
     }
+
+    void OnStopGameRunner() override
+    {
+        _editor_runner.CleanRunnable();
+        _editor_runner.SetRunnable(this);
+    }
+
+    //###################### ENGINE EVENTS ################################
+    void OnEvent(Event &e)
+    {
+        if (e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
+        {
+            Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
+            EngineEventManager::Instance()->LaunchEvent(e);
+        }
+    }
+
+    std::list<Subscription> GetSubscriptions()
+    {
+        std::list<Subscription> subs = {EventType::CLOSE_GAME_WINDOW_EVENT};
+        return subs;
+    }
+
+    // ######################## LOADING / SAVING #################################
+    void OnLoadGameStateFile(const std::string &file_name) override
+    {
+        if (_game_state)
+            delete _game_state;
+
+        _game_state = new GameState();
+        _game_state->Setup();
+
+        GameLoader loader;
+        loader.Load(file_path, file_name, *_game_state);
+
+        _window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
+                                     _game_state->GetInstance()->GetTileMap().HeightPx());
+        _game_runner.SetRunnable(_game_state);
+    }
+
+    void OnSaveGameStateFile(const std::string &file_name) override
+    {
+        if (_game_state && _game_state->GetInstance())
+        {
+            _game_state->GetInstance()->SetName(file_name);
+            _game_state->GetInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" +
+                                                                _game_state->GetInstance()->GetName() + ".pmidgM");
+            GameLoader loader;
+            loader.Save(file_path, file_name, *_game_state);
+        }
+    }
+
 
     bool OnWindowEvent(sf::Event &e)
     {
@@ -129,7 +165,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         if (!_dev_tools.IsFocused())
         {
             sf::Vector2i pixel_pos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
-            sf::Vector2f world_pos = _window->SFWindow().mapPixelToCoords(pixel_pos);
+            sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(pixel_pos);
 
             if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
             {
@@ -154,7 +190,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                         {
                             _brush.SetState(new SelectEntityBrushState(entity));
                         }
-                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance(),entity);
+                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance(), entity);
                     }
                     else
                     {
@@ -167,7 +203,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
                 _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
 
-                static_cast<PMIDGEditorWindow *>(_window)->Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
+                _window.Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
             }
             else if (e.type == sf::Event::KeyPressed)
             {
@@ -176,21 +212,44 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         }
     }
 
-    void OnSFEvent(sf::Event &event)
+    //################ SCREEN CONTROLS #################
+
+    void Render(float seconds_elapsed) override
     {
+        //chance to draw Dev Tools
+        if (!_dev_tools.IsFocused())
+        {
+            if (_window_transform_state == PANNING)
+            {
+                PanView();
+            }
+        }
+        _dev_tools.Render(&_window, _window.GetTextureCache(), seconds_elapsed, _brush);
+    }
+
+    void PanView()
+    {
+        sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(_window.SFWindow());
+
+        int delta_x = screen_mouse_position.x - _mouse_history.x1;
+        int delta_y = screen_mouse_position.y - _mouse_history.y1;
+
+        _mouse_history.x1 = screen_mouse_position.x;
+        _mouse_history.y1 = screen_mouse_position.y;
+        _window.MoveView(-delta_x, -delta_y);
     }
 
     bool ClickOnActiveTileMap(int x, int y)
     {
-        sf::Vector2f world_cords = _window->SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
+        sf::Vector2f world_cords = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
         return _game_state->GetInstance() && _game_state->GetInstance()->GetTileMap().TileAt(world_cords.x, world_cords.y);
     }
 
     Entity *ClickOnEntity(int x, int y)
     {
-        sf::Vector2f world_pos = _window->SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
+        sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
-        std::map<int, Entity *> &entities = EntityManager::Instance()->GetAllEntities();
+        const std::map<int, Entity *> &entities = EntityManager::Instance()->GetAllEntities();
 
         for (auto it = entities.begin(); it != entities.end(); it++)
         {
@@ -241,34 +300,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         return nullptr;
     }
 
-    void OnLoadGameStateFile(const std::string &file_name) override
-    {
-        if (_game_state)
-            delete _game_state;
-
-        _game_state = new GameState();
-        _game_state->Setup();
-
-        GameLoader loader;
-        loader.Load(file_path, file_name, *_game_state);
-
-        static_cast<PMIDGEditorWindow *>(_window)->OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
-                                                                        _game_state->GetInstance()->GetTileMap().HeightPx());
-        _game_runner.SetRunnable(_game_state);
-    }
-
-    void OnSaveGameStateFile(const std::string &file_name) override
-    {
-        if (_game_state && _game_state->GetInstance())
-        {
-            _game_state->GetInstance()->SetName(file_name);
-            _game_state->GetInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" + _game_state->GetInstance()->GetName() + ".pmidgM");
-            GameLoader loader;
-
-            loader.Save(file_path, file_name, *_game_state);
-        }
-    }
-
   private:
     FPSRunner _game_runner;
     FPSRunner _editor_runner;
@@ -278,6 +309,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     Brush _brush;
     GameState *_game_state;
     WindowTransformState _window_transform_state = DORMANT;
+    PMIDGEditorWindow _window;
     std::string file_path = "/home/pabu/Desktop/LifeSim/build/instances";
     std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
 };

@@ -41,8 +41,7 @@ class PMIDGRunner : public EventSubscriber
         switch (type)
         {
         case EDITOR:
-            _window = new PMIDGEditorWindow();
-            _mode = new ProgramModeEditor(static_cast<PMIDGEditorWindow *>(_window));
+            _mode = new ProgramModeEditor();
             break;
         case GAME:
             break;
@@ -51,7 +50,7 @@ class PMIDGRunner : public EventSubscriber
 
     void Run()
     {
-        while (!_window_closed)
+        while (!_program_stopped)
         {
             if (_mode)
             {
@@ -63,23 +62,22 @@ class PMIDGRunner : public EventSubscriber
 
     void OnEvent(Event &e) override
     {
-        if (e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
+        if (e.id == EventType::STOP_PROGRAM_EVENT)
         {
-            _window_closed = true;
+            _program_stopped = true;
         }
     }
 
     std::list<Subscription> GetSubscriptions()
     {
-        std::list<Subscription> list = {Subscription(EventType::CLOSE_GAME_WINDOW_EVENT)};
+        std::list<Subscription> list = {Subscription(EventType::STOP_PROGRAM_EVENT)};
         return list;
     }
 
   private:
-    PMIDGWindow *_window = nullptr;
     ProgramMode *_mode = nullptr;
     EngineEventManager _event_manager;
-    bool _window_closed = false;
+    bool _program_stopped = false;
 };
 
 #endif

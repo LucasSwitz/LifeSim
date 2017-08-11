@@ -66,7 +66,7 @@ class ComponentUserEditor : public SFMLWindowListener
                     std::string current_key = it->first;
                    
 
-                    ImGui::InputFloat(current_key.c_str(),it->second.GetValuePtr(), .1f, 10f);
+                    ImGui::InputFloat(current_key.c_str(),it->second.GetValuePtr(), .1f, 1.0f);
                 }   
 
                 for (auto it = bool_values.begin(); it != bool_values.end(); it++)

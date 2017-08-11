@@ -29,5 +29,6 @@ class EventType
     static int SPAWN_ENTITY_EVENT;
     static int E_DOWN_EVENT;
     static int E_UP_EVENT;
+    static int STOP_PROGRAM_EVENT;
 };
 #endif

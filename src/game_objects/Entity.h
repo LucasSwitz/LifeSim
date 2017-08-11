@@ -11,29 +11,41 @@
     ID.
 **/
 class Entity : public ComponentUser
-{ 
+{
     friend class EntityManager;
 
-public:
+  public:
     virtual ~Entity();
-    Entity(int type = 0, std::string _prototype_name="", int id = -1);
+    Entity(int type = 0, std::string _prototype_name = "", int id = -1);
+    Entity(Entity &e) : ComponentUser(CU_TYPE_ENTITY)
+    {
+        std::unordered_map<std::string, Component *>& components = e.GetAllComponents();
+        for (auto it = components.begin(); it != components.end(); it++)
+        {
+            Component *c = new Component(*(it->second));
+            AddComponent(c);
+        }
+        _id = e._id;
+        _prototype_name = _prototype_name;
+    }
+    
     virtual void Tick(){};
     static int _lastId;
 
     bool IsType(int type) const;
-    std::string& GetPrototypeName();
-    Entity* Clone();
+    std::string &GetPrototypeName();
+    Entity *Clone();
 
-    static Entity* DowncastFromComponentUser(ComponentUser* caster);
+    static Entity *DowncastFromComponentUser(ComponentUser *caster);
 
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
 
-protected:
+  protected:
     void SetID(int id);
-    void SetPrototypeName(std::string& name);
+    void SetPrototypeName(std::string &name);
 
-private:
+  private:
     int _type;
     std::string _prototype_name;
 };

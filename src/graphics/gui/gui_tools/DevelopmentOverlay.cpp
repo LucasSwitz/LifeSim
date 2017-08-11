@@ -77,3 +77,14 @@ void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
 {
     _listener = listener;
 }
+
+void DevelopmentOverlay::OnLaunchGameRunner()
+{
+    if(_listener)
+        _listener->OnLaunchGameRunner();
+}
+void DevelopmentOverlay::OnStopGameRunner()
+{
+    if(_listener)
+        _listener->OnStopGameRunner();
+}

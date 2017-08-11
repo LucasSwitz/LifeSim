@@ -41,9 +41,9 @@ void SystemController::AddToSystemExecutionSequence(System *system)
     std::list<System *>::iterator insert_position = _systems_execution_sequence.end();
 
     //Make sure system isn't already added
-    auto it = std::find(_systems_execution_sequence.begin(),
+    auto it = std::find_if(_systems_execution_sequence.begin(),
                         _systems_execution_sequence.end(),
-                        system);
+                        SystemNameComparator(system->GetName()));
 
     if (it == _systems_execution_sequence.end())
     {
@@ -57,9 +57,9 @@ void SystemController::AddToSystemExecutionSequence(System *system)
             //previous system is a real system
             if (before_system)
             {
-                auto it = std::find(_systems_execution_sequence.begin(),
+                auto it = std::find_if(_systems_execution_sequence.begin(),
                                     _systems_execution_sequence.end(),
-                                    before_system);
+                                    SystemNameComparator(system_before_name));
 
                 //previous system is already in Sequence
                 if (it != _systems_execution_sequence.end())
@@ -114,12 +114,12 @@ void SystemController::Update(float seconds_since_last_update)
     }
 }
 
-std::list<System *> &SystemController::GetSystemInExecutionSequence()
+const std::list<System *> &SystemController::GetSystemInExecutionSequence() const
 {
     return _systems_execution_sequence;
 }
 
-std::list<System *> &SystemController::GetPassiveSystems()
+const std::list<System *> &SystemController::GetPassiveSystems() const
 {
     return _passive_systems;
 }
