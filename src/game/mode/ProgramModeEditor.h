@@ -49,6 +49,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Load()
     {
+        _window.Focus();
     }
 
     void Update(std::chrono::time_point<std::chrono::high_resolution_clock> &current_time) override
@@ -113,9 +114,10 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnStopGameRunner() override
     {
+        _game_state->Setup();
         _external_game_runner = nullptr;
         _editor_runner.SetRunnable(this);
-        _game_state->Setup();
+        _window.Focus();
     }
 
     void OnGameRunnerShutdown()

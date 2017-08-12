@@ -8,6 +8,7 @@
 #include "src/event/Subscription.h"
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
+#include "src/game/EngineGlobals.h"
 #include "src/game_objects/LuaEntity.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
@@ -34,6 +35,7 @@ class LuaBindings
         { 
             getGlobalNamespace(L)
             .addFunction("Res",&ResourceManager::GetResource)
+            .addFunction("TARGET_WINDOW",&EngineGlobals::GetTargetWindow)
             .beginClass<ComponentUser>("ComponentUser")
                 .addFunction("GetNumber", &ComponentUser::GetComponentValueFloat)
                 .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)

@@ -66,9 +66,5 @@ Entity* Entity::DowncastFromComponentUser(ComponentUser* caster)
 
 Entity::~Entity()
 {
-    if (EntityManager::Instance())
-    {
-        if (EntityManager::Instance()->Instance()->HasEntity(_id))
-            EntityManager::Instance()->DeregisterEntity(_id);
-    }
+    
 }

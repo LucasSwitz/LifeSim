@@ -50,6 +50,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         _game_state = new GameState(game_state);
         SetRunnable(_game_state);
         _game_state->Setup();
+        _window.Focus();
         _game_state->GetInstance()->Open();
     }
 
@@ -109,7 +110,6 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     ~PMIDGGameRunner()
     {
-        std::cout << "Deleted!" << std::endl;
         delete _game_state;
     }
 

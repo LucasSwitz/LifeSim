@@ -5,6 +5,7 @@ EntityManager *EntityManager::_instance = nullptr;
 
 EntityManager::EntityManager()
 {
+    
 }
 
 Entity *EntityManager::GetEntityByID(int id)
@@ -103,6 +104,7 @@ void EntityManager::Clean()
     for (auto it = _delete_set.begin(); it != _delete_set.end();)
     {
         Entity *e = *it;
+        DeregisterEntity(e->ID());
         delete e;
         it = _delete_set.erase(it);
     }

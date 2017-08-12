@@ -23,6 +23,9 @@
 
 #include "src/graphics/gui/rendering/GraphicsPreprocessor.h"
 
+
+#include "src/game/EngineGlobals.h"
+
 class PMIDGWindow : public EventSubscriber
 {
   public:
@@ -80,6 +83,12 @@ class PMIDGWindow : public EventSubscriber
         _window.display();
     }
 
+    void Focus()
+    {
+        std::cout << "Focused: " << _id << std::endl;
+        EngineGlobals::TargetWindow = _id;
+    }
+
     void Draw(sf::Drawable *drawable)
     {
         LayeredGraphic *lg = new LayeredGraphic(drawable, INT_MAX);
@@ -133,7 +142,7 @@ class PMIDGWindow : public EventSubscriber
 
     void OnEvent(Event &e)
     {
-        if (e.id == EventType::DRAW_REQUEST_EVENT)
+        if (e.id == EventType::DRAW_REQUEST_EVENT && e.target_id == _id)
         {
             ComponentUser *user = e.InfoToType<ComponentUser *>();
             DrawComponentUser(user);
@@ -142,7 +151,7 @@ class PMIDGWindow : public EventSubscriber
 
     std::list<Subscription> GetSubscriptions() override
     {
-        std::list<Subscription> subs = {Subscription(EventType::DRAW_REQUEST_EVENT)};
+        std::list<Subscription> subs = {Subscription(EventType::DRAW_REQUEST_EVENT), {_id}};
         return subs;
     }
 
@@ -228,6 +237,7 @@ class PMIDGWindow : public EventSubscriber
 
     ~PMIDGWindow()
     {
+        EngineEventManager::Instance()->Deregister(this);
         while(!_drawables_queue.empty())
         {
             delete _drawables_queue.top();

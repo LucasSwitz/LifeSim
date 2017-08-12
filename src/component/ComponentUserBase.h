@@ -50,7 +50,7 @@ class ComponentUserBase
 
     ~ComponentUserBase()
     {
-        _instance = nullptr;
+        
     }
 
   private:

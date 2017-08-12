@@ -36,9 +36,10 @@ class GameState : public FPSRunnable
     void Setup()
     {
         MessageDispatch::GiveOwnership(&_message_dispatch);
-        EntityManager::GiveOwnership(&_entity_manager);
         ComponentUserBase::GiveOwnership(&_component_users);
+        EntityManager::GiveOwnership(&_entity_manager);
         SystemController::GiveOwnership(&_system_controller);
+        std::cout << "Number of Entities: " << _entity_manager.GetNumberOfEntities() << std::endl;
     }
 
     void Tick(float seconds_elapsed)
@@ -77,6 +78,7 @@ class GameState : public FPSRunnable
 
     GameState Copy()
     {
+        
     }
 
     EntityManager &GetEntityManager()

@@ -50,37 +50,10 @@ class EditModeControls
                 }
             }
         }
-
-        if (!_play_button_down)
+        if (ImGui::Button("Play##NotStarted"))
         {
-            if (ImGui::Button("Play##NotStarted"))
-            {
-                if (_listener)
-                    _listener->OnLaunchGameRunner();
-                _play_button_down = true;
-            }
-        }
-        else
-        {
-            if (!_pause_button_down)
-            {
-                if (ImGui::Button("Pause"))
-                {
-                    _pause_button_down = true;
-                }
-            }
-            else
-            {
-                if (ImGui::Button("Play##Started"))
-                    _pause_button_down = false;
-            }
-            ImGui::SameLine();
-            if (ImGui::Button("Stop"))
-            {
-                if (_listener)
-                    _listener->OnStopGameRunner();
-                _play_button_down = false;
-            }
+            if (_listener)
+                _listener->OnLaunchGameRunner();
         }
         ImGui::End();
     }
