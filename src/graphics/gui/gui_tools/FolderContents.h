@@ -11,7 +11,6 @@ class FolderContents
   public:
     FolderContents(const std::string &folder_path) : _folder_path(folder_path)
     {
-
     }
     std::string Draw()
     {
@@ -21,27 +20,25 @@ class FolderContents
         {
             path current_path = current_dir.path();
             std::string file_name = current_path.filename();
-            if(_filter.PassFilter(file_name.c_str()))
-                files.push_back(file_name); 
+            if (_filter.PassFilter(file_name.c_str()))
+                files.push_back(file_name);
         }
         ImGui::PushItemWidth(-1);
         ImGui::ListBoxVector("", &_selected_file, files);
         ImGui::PopItemWidth();
 
-        if(_selected_file != -1)
+        if (_selected_file != -1)
         {
             return files[_selected_file];
         }
 
         //if selection return file name
         return "";
-
     }
 
   private:
     std::string _folder_path;
     int _selected_file = -1;
     ImGuiTextFilter _filter;
-
 };
 #endif

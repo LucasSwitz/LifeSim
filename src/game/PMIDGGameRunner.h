@@ -4,46 +4,58 @@
 
 #define GAME_FPS 30
 
-class PMIDGGameRunner : public FPSRunner, public FPSRunnable
+class PMIDGGameRunnerListener
+{
+  public:
+    virtual void OnGameRunnerShutdown() = 0;
+};
+
+class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscriber
 {
 
   public:
-
     PMIDGGameRunner() : FPSRunner(GAME_FPS)
     {
-
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
     void RunStage(Stage stage)
     {
-        
     }
 
-    void RunInstance(Instance& instance)
+    void RunInstance(Instance &instance)
     {
-        if(!_game_state)
+        if (!_game_state)
             CreateGameState();
 
-        Instance* copy_instance = new Instance(instance);
+        Instance *copy_instance = new Instance(instance);
         _game_state->SetCurrentInstance(copy_instance);
+        _game_state->Setup();
     }
 
-    void RunGameState(const std::string& file_path)
+    void RunGameState(const std::string &file_path)
     {
-
     }
 
-    void RunGameState(GameState& game_state)
+    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock> &current_time)
     {
-        if(_game_state)
+        FPSRunner::Update(current_time);
+    }
+
+    void RunGameState(GameState &game_state)
+    {
+        if (_game_state)
             delete _game_state;
+
         _game_state = new GameState(game_state);
         SetRunnable(_game_state);
+        _game_state->Setup();
+        _game_state->GetInstance()->Open();
     }
 
     void CreateGameState()
     {
-        if(_game_state)
+        if (_game_state)
             delete _game_state;
         _game_state = new GameState();
         SetRunnable(_game_state);
@@ -51,7 +63,6 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable
 
     void Load()
     {
-
     }
 
     void Tick(float seconds_elapsed)
@@ -64,11 +75,48 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable
 
     void Unload()
     {
+        std::cout << "Unloaded!" << std::endl;
+    }
 
+    void SetListener(PMIDGGameRunnerListener *listener)
+    {
+        _listener = listener;
+    }
+
+    void OnEvent(Event &e)
+    {
+        if (e.id == EventType::CLOSE_WINDOW_EVENT)
+        {
+            Shutdown();
+        }
+    }
+
+    void Shutdown()
+    {
+        _window.Shutdown();
+        if (_listener)
+            _listener->OnGameRunnerShutdown();
+
+        delete this;
+    }
+
+    std::list<Subscription> GetSubscriptions()
+    {
+        std::list<Subscription> subs = {Subscription(EventType::CLOSE_WINDOW_EVENT, {_window.ID()})};
+
+        return subs;
+    }
+
+    ~PMIDGGameRunner()
+    {
+        std::cout << "Deleted!" << std::endl;
+        delete _game_state;
     }
 
   private:
     PMIDGWindow _window;
-    GameState* _game_state = nullptr;
+    GameState *_game_state = nullptr;
+    PMIDGGameRunnerListener *_listener = nullptr;
+    bool _shutdown = false;
 };
 #endif

@@ -40,6 +40,8 @@ class PMIDGWindow : public EventSubscriber
     PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "PMIDG")
     {
         EngineEventManager::Instance()->RegisterSubscriber(this);
+        _id = last_id;
+        last_id++;
     }
 
     sf::RenderWindow &SFWindow()
@@ -148,7 +150,7 @@ class PMIDGWindow : public EventSubscriber
     {
         if (e.type == sf::Event::Closed)
         {
-            Event new_event(EventType::CLOSE_GAME_WINDOW_EVENT, -1, -1);
+            Event new_event(EventType::CLOSE_WINDOW_EVENT, _id, -1);
             EngineEventManager::Instance()->LaunchEvent(new_event);
         }
         else if (e.type == sf::Event::KeyPressed)
@@ -219,6 +221,20 @@ class PMIDGWindow : public EventSubscriber
         _window_listeners.push_back(listener);
     }
 
+    int ID()
+    {
+        return _id;
+    }
+
+    ~PMIDGWindow()
+    {
+        while(!_drawables_queue.empty())
+        {
+            delete _drawables_queue.top();
+            _drawables_queue.pop();
+        }
+    }
+
   protected:
     sf::RenderWindow _window;
 
@@ -236,6 +252,8 @@ class PMIDGWindow : public EventSubscriber
     std::priority_queue<LayeredGraphic *, std::vector<LayeredGraphic *>, GraphicsComparator> _drawables_queue;
     std::list<SFMLWindowListener *> _window_listeners;
     GraphicsPreprocessor _preprocesser;
+    int _id;
+    static int last_id;
 };
 
 #endif

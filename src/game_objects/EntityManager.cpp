@@ -126,3 +126,8 @@ Entity *EntityManager::GetNewest()
     else
         return _entity_map.rbegin()->second;
 }
+
+int EntityManager::Size()
+{
+    return _entity_map.size();
+}

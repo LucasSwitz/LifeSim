@@ -32,6 +32,7 @@ class ComponentUser
     void EnableComponent(std::string name);
     void DisableAll();
     void EnableAll();
+    void EnableAll(ComponentUserBase& component_user_base);
 
 
     Component* GetComponent(std::string name);

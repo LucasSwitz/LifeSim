@@ -21,7 +21,7 @@ class GameState : public FPSRunnable
 
     GameState(){};
     GameState(const GameState& game_state) : _message_dispatch(), 
-                                             _entity_manager(game_state._entity_manager),
+                                             _entity_manager(game_state._entity_manager, _component_users),
                                              _system_controller(game_state._system_controller),
                                              _current_instance(game_state._current_instance)
     {

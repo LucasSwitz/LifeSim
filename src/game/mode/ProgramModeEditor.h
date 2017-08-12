@@ -20,7 +20,7 @@
 #define EDITOR_MODE_FPS 30
 #define GAME_RUNNER_FPS 30
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable, public EventSubscriber
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable, public EventSubscriber, public PMIDGGameRunnerListener
 {
 
   public:
@@ -49,13 +49,18 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Load()
     {
-
     }
 
     void Update(std::chrono::time_point<std::chrono::high_resolution_clock> &current_time) override
     {
         _editor_runner.Update(current_time);
-        _game_runner.Update(current_time);
+
+        if (_external_game_runner)
+            _external_game_runner->Update(current_time);
+        else
+        {
+            _game_runner.Update(current_time);
+        }
     }
 
     void Tick(float seconds_elapsed)
@@ -69,7 +74,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Unload()
     {
-
     }
 
     void Exit() override
@@ -101,30 +105,40 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnLaunchGameRunner() override
     {
-        PMIDGGameRunner* game_runner = new PMIDGGameRunner();
-        game_runner->RunInstance(*_game_state->GetInstance());
-        _editor_runner.SetRunnable(game_runner);
+        _external_game_runner = new PMIDGGameRunner();
+        _external_game_runner->SetListener(this);
+        _external_game_runner->RunGameState(*_game_state);
+        _editor_runner.SetRunnable(_external_game_runner);
     }
 
     void OnStopGameRunner() override
     {
-        _editor_runner.CleanRunnable();
+        _external_game_runner = nullptr;
         _editor_runner.SetRunnable(this);
+        _game_state->Setup();
+    }
+
+    void OnGameRunnerShutdown()
+    {
+        OnStopGameRunner();
     }
 
     //###################### ENGINE EVENTS ################################
     void OnEvent(Event &e)
     {
-        if (e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
+        if (e.id == EventType::CLOSE_WINDOW_EVENT)
         {
-            Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
-            EngineEventManager::Instance()->LaunchEvent(e);
+            if (e.sender_id == _window.ID())
+            {
+                Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
+                EngineEventManager::Instance()->LaunchEvent(e);
+            }
         }
     }
 
     std::list<Subscription> GetSubscriptions()
     {
-        std::list<Subscription> subs = {EventType::CLOSE_GAME_WINDOW_EVENT};
+        std::list<Subscription> subs = {EventType::CLOSE_WINDOW_EVENT};
         return subs;
     }
 
@@ -156,7 +170,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             loader.Save(file_path, file_name, *_game_state);
         }
     }
-
 
     bool OnWindowEvent(sf::Event &e)
     {
@@ -303,6 +316,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
   private:
     FPSRunner _game_runner;
     FPSRunner _editor_runner;
+    PMIDGGameRunner *_external_game_runner = nullptr;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     int _abs_scroll_ticks = 50;

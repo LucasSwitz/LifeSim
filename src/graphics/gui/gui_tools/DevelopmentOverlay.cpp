@@ -11,6 +11,7 @@ void DevelopmentOverlay::Init(PMIDGWindow *window)
     instance_editor.Init();
     log.Clear();
     main_menu.SetListener(this);
+    edit_mode_controls.SetListener(this);
 }
 
 Log &DevelopmentOverlay::GetLog()

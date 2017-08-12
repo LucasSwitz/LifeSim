@@ -100,6 +100,6 @@ class EditModeControls
     bool _show_collision_boxes = false;
     bool _play_button_down = false;
     bool _pause_button_down = false;
-    EditModeControlsListener *_listener;
+    EditModeControlsListener *_listener = nullptr;
 };
 #endif

@@ -15,7 +15,7 @@
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
 #include "src/graphics/gui/gui_tools/MainMenu.h"
 
-class DevelopmentOverlay : public MainMenuListener
+class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListener
 {
     public:
         DevelopmentOverlay();

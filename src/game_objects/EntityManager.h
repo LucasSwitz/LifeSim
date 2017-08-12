@@ -9,6 +9,7 @@
 #include "src/event/EventType.h"
 #include "src/event/messaging/MessageDispatch.h"
 #include "src/game_objects/LuaEntityFactory.h"
+#include "src/component/ComponentUserBase.h"
 
 #define Entity_Manager EntityManager::Instance()
 /**
@@ -25,14 +26,15 @@ public:
   ~EntityManager();
   EntityManager();
 
-  EntityManager(const EntityManager& manager)
+  EntityManager(const EntityManager& manager, ComponentUserBase& component_user_base)
   {
     const std::map<int, Entity*>& entities = manager.GetAllEntities();
 
     for(auto it = entities.begin(); it != entities.end(); it++)
     {
       Entity* e = new Entity(*it->second);
-      RegisterEntity(e);
+      e->EnableAll(component_user_base);
+      _entity_map.insert(std::make_pair(e->_id, e));
     }
   }
 
@@ -48,6 +50,8 @@ public:
   void Clear();
   bool IDAvailable(int id);
   bool HasEntity(int id);
+
+  int Size();
 
   LuaList<Entity *> *AsLuaList();
 
