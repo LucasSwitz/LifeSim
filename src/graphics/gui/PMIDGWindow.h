@@ -23,7 +23,6 @@
 
 #include "src/graphics/gui/rendering/GraphicsPreprocessor.h"
 
-
 #include "src/game/EngineGlobals.h"
 
 class PMIDGWindow : public EventSubscriber
@@ -42,9 +41,9 @@ class PMIDGWindow : public EventSubscriber
 
     PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "PMIDG")
     {
-        EngineEventManager::Instance()->RegisterSubscriber(this);
         _id = last_id;
         last_id++;
+        EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
     sf::RenderWindow &SFWindow()
@@ -66,7 +65,6 @@ class PMIDGWindow : public EventSubscriber
         _window.clear(sf::Color::White);
     }
 
-
     void Render()
     {
         while (!_drawables_queue.empty())
@@ -85,7 +83,6 @@ class PMIDGWindow : public EventSubscriber
 
     void Focus()
     {
-        std::cout << "Focused: " << _id << std::endl;
         EngineGlobals::TargetWindow = _id;
     }
 
@@ -121,7 +118,7 @@ class PMIDGWindow : public EventSubscriber
             sf::Sprite *sprite = new sf::Sprite();
             _preprocesser.ProcessComponentUser(user, texture, sprite);
 
-            LayeredGraphic* lg = new LayeredGraphic(sprite, layer);
+            LayeredGraphic *lg = new LayeredGraphic(sprite, layer);
             Draw(lg);
         }
         else
@@ -137,6 +134,7 @@ class PMIDGWindow : public EventSubscriber
 
     void Shutdown()
     {
+        EngineEventManager::Instance()->Deregister(this);
         _window.close();
     }
 
@@ -147,11 +145,18 @@ class PMIDGWindow : public EventSubscriber
             ComponentUser *user = e.InfoToType<ComponentUser *>();
             DrawComponentUser(user);
         }
+        else if (e.id == EventType::RECENTER_VIEW_EVENT && e.target_id == _id)
+        {
+           std::vector<float>* center_coords = 
+                e.InfoToType<std::vector<float>*>();
+            SetViewCenter((*center_coords)[0],(*center_coords)[1]);
+        }
     }
 
     std::list<Subscription> GetSubscriptions() override
     {
-        std::list<Subscription> subs = {Subscription(EventType::DRAW_REQUEST_EVENT), {_id}};
+        std::list<Subscription> subs = {Subscription(EventType::DRAW_REQUEST_EVENT, {_id}),
+                                        Subscription(EventType::RECENTER_VIEW_EVENT,{_id})};
         return subs;
     }
 
@@ -237,12 +242,19 @@ class PMIDGWindow : public EventSubscriber
 
     ~PMIDGWindow()
     {
-        EngineEventManager::Instance()->Deregister(this);
-        while(!_drawables_queue.empty())
+        
+        while (!_drawables_queue.empty())
         {
             delete _drawables_queue.top();
             _drawables_queue.pop();
         }
+    }
+
+    void SetViewCenter(float x, float y)
+    {
+        sf::View view = _window.getView();
+        view.setCenter(x,y);
+        _window.setView(view);
     }
 
   protected:

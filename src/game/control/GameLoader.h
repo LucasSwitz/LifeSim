@@ -37,7 +37,7 @@ class GameLoader
         GameStateProtoBufWrapper gameStateProtoBuf;
         gameStateProtoBuf.SetInstance(*game_state.GetInstance());
         gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());
-        gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetSystemInExecutionSequence());
+        gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetExecutionSequence());
         gameStateProtoBuf.ToFile(file_name);
     }
 

@@ -52,6 +52,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         _game_state->Setup();
         _window.Focus();
         _game_state->GetInstance()->Open();
+        SystemController::Instance()->AddToSystemExecutionSequence("FollowCharacterCamera");    
     }
 
     void CreateGameState()
@@ -95,6 +96,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
     void Shutdown()
     {
         _window.Shutdown();
+        
         if (_listener)
             _listener->OnGameRunnerShutdown();
 

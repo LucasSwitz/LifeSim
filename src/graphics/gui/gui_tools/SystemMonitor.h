@@ -15,8 +15,8 @@ class SystemMonitor
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         std::unordered_map<std::string, std::string> available_systems = SystemFactory::Instance()->GetAllSystems();
-        const std::list<System *> &active_systems = SystemController::Instance()->GetSystemInExecutionSequence();
-        const std::list<System *> &passive_systems = SystemController::Instance()->GetPassiveSystems();
+        std::list<System *> &active_systems = SystemController::Instance()->GetExecutionSequenceMutable();
+        std::list<System *> &passive_systems = SystemController::Instance()->GetPassiveSystemsMutable();
 
         for (auto it = active_systems.begin(); it != active_systems.end(); it++)
         {
@@ -61,7 +61,7 @@ class SystemMonitor
         ImGui::ListBoxVector("", &selected_system, systems);
     }
 
-    void DrawSystemList(const std::list<System *>& list, std::string type)
+    void DrawSystemList(std::list<System *> &list, std::string type)
     {
         int i = 0;
         for (auto it = list.begin(); it != list.end();)
@@ -80,8 +80,10 @@ class SystemMonitor
             std::string button_name_up = "+##" + name;
             std::string button_name_down = "-##" + name;
             std::string button_name_kill = "x##" + name;
+
             if (ImGui::SmallButton(button_name_up.c_str()))
             {
+                std::cout << "Moving Up: " << name << std::endl;
                 SystemController::Instance()->MoveUp(name);
             }
 
@@ -92,11 +94,30 @@ class SystemMonitor
                 SystemController::Instance()->MoveDown(name);
             }
             ImGui::SameLine(440);
+
+            if ((*it)->IsPaused())
+            {
+                std::string button_name_unpause = ">##" + name;
+                if (ImGui::SmallButton(button_name_unpause.c_str()))
+                {
+                    (*it)->Unpause();
+                }
+            }
+            else
+            {
+                std::string button_name_pause = "|##" + name;
+                if (ImGui::SmallButton(button_name_pause.c_str()))
+                {
+                    (*it)->Pause();
+                }
+            }
+            ImGui::SameLine(460);
             if (ImGui::SmallButton(button_name_kill.c_str()))
             {
                 it = SystemController::Instance()->RemoveFromSystemExecutionSequence(name);
                 continue;
             }
+
             i++;
             it++;
         }

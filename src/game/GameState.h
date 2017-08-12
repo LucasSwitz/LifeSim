@@ -39,7 +39,6 @@ class GameState : public FPSRunnable
         ComponentUserBase::GiveOwnership(&_component_users);
         EntityManager::GiveOwnership(&_entity_manager);
         SystemController::GiveOwnership(&_system_controller);
-        std::cout << "Number of Entities: " << _entity_manager.GetNumberOfEntities() << std::endl;
     }
 
     void Tick(float seconds_elapsed)

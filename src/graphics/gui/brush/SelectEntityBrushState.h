@@ -72,7 +72,8 @@ class SelectEntityBrushState : public BrushState
         {
             if (e.key.code == sf::Keyboard::Delete)
             {
-                delete _selected;
+                Event e(EventType::DELETE_ENTITY_EVENT, -1, _selected->ID());
+                MessageDispatch::Instance()->LaunchEvent(e);
                 _selected = nullptr;
             }
         }

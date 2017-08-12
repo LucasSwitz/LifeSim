@@ -21,7 +21,6 @@ void EventManager::RegisterSubscriber(EventSubscriber *subscriber)
 
 void EventManager::LaunchEvent(Event &e)
 {
-
     if (!EventExists(e.id))
     {
         AddNewEvent(e.id);
@@ -47,7 +46,7 @@ void EventManager::LaunchEvent(Event &e)
         tag_sub_list *tag_subscribers_list = id_subscribers->at(*tag_it);
         for (auto it = tag_subscribers_list->begin(); it != tag_subscribers_list->end(); it++)
         {
-            (*it)->OnEvent(e);
+                (*it)->OnEvent(e);
         }
     }
 }
@@ -59,6 +58,7 @@ void EventManager::Deregister(EventSubscriber *subscriber)
     {
         Subscription current_subscription = *sub_it;
         std::set<int> tags = current_subscription.tags;
+        tags.insert(UNIVERSAL_EVENT_TAG);
         if (tags.empty())
             Deregister(subscriber, current_subscription.id, UNIVERSAL_EVENT_TAG);
         for (auto tag_it = tags.begin(); tag_it != tags.end(); tag_it++)
@@ -71,6 +71,7 @@ void EventManager::Deregister(EventSubscriber *subscriber)
 
 void EventManager::Deregister(EventSubscriber *subscriber, int event_id, int event_tag)
 {
+
     if (!EventExists(event_id) || !TagExists(event_id, event_tag))
     {
         return;
@@ -79,8 +80,11 @@ void EventManager::Deregister(EventSubscriber *subscriber, int event_id, int eve
     event_tag_map *tag_map = _subscription_registry.at(event_id);
     tag_sub_list *sub_list = tag_map->at(event_tag);
     auto subscriber_it = std::find(sub_list->begin(), sub_list->end(), subscriber);
+
     if (subscriber_it != sub_list->end())
+    {
         sub_list->erase(subscriber_it);
+    }
 }
 
 void EventManager::AddSubscriberToSubscription(EventSubscriber *sub, int event_id, int event_tag)

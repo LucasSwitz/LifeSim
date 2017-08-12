@@ -19,7 +19,7 @@ class SystemController
 public:
   SystemController(const SystemController &system_controller)
   {
-    const std::list<System *> &systems = system_controller.GetSystemInExecutionSequence();
+    const std::list<System *> &systems = system_controller.GetExecutionSequence();
 
     for (auto it = systems.begin(); it != systems.end(); it++)
     {
@@ -37,7 +37,7 @@ public:
   void Lock();
   void Unlock();
 
-  const System *GetSystemInExecutionSequenceAt(int index);
+  const System *GetExecutionSequenceAt(int index);
 
   int GetSequenceSize();
 
@@ -60,8 +60,10 @@ public:
     _instance = instance;
   }
 
-  const std::list<System *> &GetSystemInExecutionSequence() const;
+  const std::list<System *> &GetExecutionSequence() const;
   const std::list<System *> &GetPassiveSystems() const;
+  std::list<System *> &GetExecutionSequenceMutable();
+  std::list<System *> &GetPassiveSystemsMutable();
 
 protected:
   SystemController(){};

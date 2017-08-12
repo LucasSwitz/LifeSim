@@ -5,6 +5,7 @@
 #include <list>
 #include <unordered_map>
 #include <iostream>
+#include <vector>
 
 
 extern "C" {
@@ -90,7 +91,21 @@ class LuaUniversal
             {
                 list.push_back(lua_tointeger(L, -1));
             }
+            lua_pop(L, 1);
+        }
+    }
 
+    static void FloatVectorFromLuaTable(std::vector<float>& list,lua_State *L)
+    {
+        int length = get_length(L, -1);
+        for (int i = 0; i < length; i++)
+        {
+            lua_pushinteger(L, i + 1);
+            lua_gettable(L, -2);
+            if (lua_isnumber(L, -1))
+            {
+                list.push_back(lua_tonumber(L, -1));
+            }
             lua_pop(L, 1);
         }
     }

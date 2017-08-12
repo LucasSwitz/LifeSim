@@ -30,5 +30,6 @@ class EventType
     static int E_DOWN_EVENT;
     static int E_UP_EVENT;
     static int STOP_PROGRAM_EVENT;
+    static int RECENTER_VIEW_EVENT;
 };
 #endif

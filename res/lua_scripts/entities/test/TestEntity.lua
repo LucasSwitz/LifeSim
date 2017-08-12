@@ -9,7 +9,10 @@ TestEntity =
         id = 0,
         Components = 
         {
-
+            Player = 
+            {   
+                id = 1
+            },
             Position = 
             {
                 x = 90,

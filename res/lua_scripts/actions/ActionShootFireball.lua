@@ -20,11 +20,11 @@ SpawnFireball = function(user)
             y = math.sin(math.rad(heading))   
     }
 
-    fireball:SetNumber("Position","x", user_position.x+(user:GetNumber("Collision","width")+2)*direction.x)
+    fireball:SetNumber("Position","x", user_position.x+(user:GetNumber("Collision","width")+1)*direction.x)
     fireball:SetNumber("Position","y", user_position.y)
     
-    fireball:SetNumber("Velocity","x",30*direction.x)
-    fireball:SetNumber("Velocity","y",30*direction.y)
+    fireball:SetNumber("Velocity","x",300*direction.x)
+    fireball:SetNumber("Velocity","y",300*direction.y)
 
     if direction.x == -1 then
         fireball:SetBool("Graphics","invert",true)

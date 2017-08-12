@@ -32,6 +32,21 @@ class System : public EventSubscriber
         _last_runtime = time;
     }
 
+    void Pause()
+    {
+        _paused = true;
+    }
+
+    void Unpause()
+    {
+        _paused = false;
+    }
+
+    bool IsPaused()
+    {
+        return _paused;
+    }
+
    virtual void Update(float seconds_since_last_update) = 0;
    void OnEvent(Event& e) override{};
     std::list<Subscription> GetSubscriptions() override{
@@ -44,6 +59,7 @@ class System : public EventSubscriber
     std::string _name = "";
     std::string _after = "";
     double _last_runtime = 0.0; //milliseconds
+    bool _paused = false;
 };
 
 #endif
