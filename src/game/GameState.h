@@ -30,7 +30,7 @@ class GameState : public FPSRunnable
     
     void Load()
     {
-        Setup();
+        
     }
 
     void Setup()

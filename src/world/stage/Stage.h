@@ -9,8 +9,8 @@
 
 /**
     Purpose: Stages are purely logical containers for handling asset loading,
-    active instances, and transitioning to stages. When a stage is loaded, it will
-    load all graphics asset required by the children instances. Every stage can have multiple
+    active instances, and transitioning to other stages. When a stage is loaded, it will
+    load all graphics asset required by the root instance. Every stage can have multiple
     instances, but will only ever have one active instance (the instance that is rendered and
     players can interact with).
 **/
@@ -59,10 +59,8 @@ public:
         else
         {
             //error, no root instance specified
-        }
-            
+        }  
     }
-
 
     bool HasInstance(int id)
     {
@@ -106,7 +104,7 @@ public:
         }
     }
 
-    virtual std::list<Subscription> GetSubscriptions() //should really change this to pass lists by reference
+    virtual std::list<Subscription> GetSubscriptions()
     {
         std::list<Subscription> subs = {Subscription(EventType::CHANGE_INSTANCE_EVENT)};
         return subs;

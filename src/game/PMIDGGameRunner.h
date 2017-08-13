@@ -21,6 +21,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     void RunStage(Stage stage)
     {
+
     }
 
     void RunInstance(Instance &instance)
@@ -30,16 +31,12 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
         Instance *copy_instance = new Instance(instance);
         _game_state->SetCurrentInstance(copy_instance);
-        _game_state->Setup();
+        Run();
     }
 
     void RunGameState(const std::string &file_path)
     {
-    }
 
-    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock> &current_time)
-    {
-        FPSRunner::Update(current_time);
     }
 
     void RunGameState(GameState &game_state)
@@ -48,23 +45,24 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
             delete _game_state;
 
         _game_state = new GameState(game_state);
+        Run();
+    }
+
+    void Run()
+    {
         SetRunnable(_game_state);
         _game_state->Setup();
         _window.Focus();
         _game_state->GetInstance()->Open();
-        SystemController::Instance()->AddToSystemExecutionSequence("FollowCharacterCamera");    
     }
 
     void CreateGameState()
     {
         if (_game_state)
             delete _game_state;
+
         _game_state = new GameState();
         SetRunnable(_game_state);
-    }
-
-    void Load()
-    {
     }
 
     void Tick(float seconds_elapsed)
@@ -77,7 +75,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     void Unload()
     {
-        std::cout << "Unloaded!" << std::endl;
+        
     }
 
     void SetListener(PMIDGGameRunnerListener *listener)
