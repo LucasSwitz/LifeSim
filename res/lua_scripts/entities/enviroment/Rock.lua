@@ -16,8 +16,8 @@ Rock =
         Graphics = 
         {
             sprite = Res("rock.png"),
-            width = 100,
-            height = 100,
+            width = 128,
+            height = 128,
             layer = 1
         },
         Mass = 
@@ -26,8 +26,8 @@ Rock =
         },
         Collision = 
         {
-            width = 24,
-            height = 24,
+            width = 64,
+            height = 64,
             collision_script = Res("ZeroRestitutionWallCollision.lua"),
         },
         Velocity =

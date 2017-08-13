@@ -55,7 +55,7 @@ class EntityEditor
                 ImGui::SameLine();
                 
             }
-            _component_editor.Draw(texture_cache, *selected_entity_prototype);
+            _component_editor.Draw(*selected_entity_prototype);
         }
     }
 

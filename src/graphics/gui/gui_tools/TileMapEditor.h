@@ -54,7 +54,7 @@ class TileMapEditor
             ImGui::Image(*texture, sf::Vector2f(2 * TILE_WIDTH, 2 * TILE_HEIGHT));
 
             ImGui::SameLine();
-            _component_editor.Draw(texture_cache, *selected_tile_prototype);
+            _component_editor.Draw(*selected_tile_prototype);
         }
     }
 

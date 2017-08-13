@@ -25,8 +25,8 @@ TEST_F(ScriptableSystemTest, TestOrderingMechanics)
     SystemController::Instance()->AddToSystemExecutionSequence("TestSystem2");
     SystemController::Instance()->AddToSystemExecutionSequence("TestSystem3");
 
-    EXPECT_TRUE(first == SystemController::Instance()->GetSystemInExecutionSequenceAt(0));
-    EXPECT_TRUE(second == SystemController::Instance()->GetSystemInExecutionSequenceAt(1));
-    EXPECT_TRUE(third == SystemController::Instance()->GetSystemInExecutionSequenceAt(2));
+    EXPECT_TRUE(first == SystemController::Instance()->GetExecutionSequenceAt(0));
+    EXPECT_TRUE(second == SystemController::Instance()->GetExecutionSequenceAt(1));
+    EXPECT_TRUE(third == SystemController::Instance()->GetExecutionSequenceAt(2));
 }
 #endif

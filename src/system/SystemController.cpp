@@ -41,9 +41,9 @@ void SystemController::AddToSystemExecutionSequence(System *system)
     std::list<System *>::iterator insert_position = _systems_execution_sequence.end();
 
     //Make sure system isn't already added
-    auto it = std::find(_systems_execution_sequence.begin(),
+    auto it = std::find_if(_systems_execution_sequence.begin(),
                         _systems_execution_sequence.end(),
-                        system);
+                        SystemNameComparator(system->GetName()));
 
     if (it == _systems_execution_sequence.end())
     {
@@ -57,9 +57,9 @@ void SystemController::AddToSystemExecutionSequence(System *system)
             //previous system is a real system
             if (before_system)
             {
-                auto it = std::find(_systems_execution_sequence.begin(),
+                auto it = std::find_if(_systems_execution_sequence.begin(),
                                     _systems_execution_sequence.end(),
-                                    before_system);
+                                    SystemNameComparator(system_before_name));
 
                 //previous system is already in Sequence
                 if (it != _systems_execution_sequence.end())
@@ -89,7 +89,7 @@ void SystemController::AddToSystemExecutionSequence(System *system)
     }
 }
 
-const System *SystemController::GetSystemInExecutionSequenceAt(int index)
+const System *SystemController::GetExecutionSequenceAt(int index)
 {
     std::list<System *>::iterator it = std::next(_systems_execution_sequence.begin(), index);
     return *it;
@@ -104,6 +104,9 @@ void SystemController::Update(float seconds_since_last_update)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
+        if((*it)->IsPaused())
+            continue;
+
         auto start_time = std::chrono::high_resolution_clock::now();
 
         (*it)->Update(seconds_since_last_update);
@@ -114,12 +117,22 @@ void SystemController::Update(float seconds_since_last_update)
     }
 }
 
-std::list<System *> &SystemController::GetSystemInExecutionSequence()
+const std::list<System *> &SystemController::GetExecutionSequence() const
 {
     return _systems_execution_sequence;
 }
 
-std::list<System *> &SystemController::GetPassiveSystems()
+std::list<System*> &SystemController::GetExecutionSequenceMutable()
+{
+    return _systems_execution_sequence;
+}
+
+const std::list<System *> &SystemController::GetPassiveSystems() const
+{
+    return _passive_systems;
+}
+
+std::list<System*> &SystemController::GetPassiveSystemsMutable()
 {
     return _passive_systems;
 }
@@ -144,7 +157,7 @@ void SystemController::MoveUp(System *system)
         auto next = std::next(it);
         if (next != _systems_execution_sequence.end())
         {
-            if (*next == system)
+            if ((*next)->GetName().compare(system->GetName()) == 0)
             {
                 std::swap(*it, *(next));
                 return;
@@ -169,7 +182,7 @@ void SystemController::MoveDown(System *system)
         auto next = std::next(it);
         if (next != _systems_execution_sequence.end())
         {
-            if (*it == system)
+            if ((*it)->GetName().compare(system->GetName()) == 0)
             {
                 std::swap(*it, *(next));
                 return;

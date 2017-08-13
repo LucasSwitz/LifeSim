@@ -5,6 +5,7 @@ EntityManager *EntityManager::_instance = nullptr;
 
 EntityManager::EntityManager()
 {
+    
 }
 
 Entity *EntityManager::GetEntityByID(int id)
@@ -37,7 +38,7 @@ EntityManager *EntityManager::Instance()
     return _instance;
 }
 
-std::map<int, Entity *> &EntityManager::GetAllEntities()
+const std::map<int, Entity *>& EntityManager::GetAllEntities() const
 {
     return _entity_map;
 }
@@ -72,7 +73,6 @@ void EntityManager::OnEvent(Event &e)
     if (e.id == EventType::SPAWN_ENTITY_EVENT)
     {
         Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.target_id);
-        entity->EnableAll();
         RegisterEntity(entity);
     }
     else if (e.id == EventType::DELETE_ENTITY_EVENT)
@@ -104,6 +104,7 @@ void EntityManager::Clean()
     for (auto it = _delete_set.begin(); it != _delete_set.end();)
     {
         Entity *e = *it;
+        DeregisterEntity(e->ID());
         delete e;
         it = _delete_set.erase(it);
     }
@@ -126,4 +127,9 @@ Entity *EntityManager::GetNewest()
         return nullptr;
     else
         return _entity_map.rbegin()->second;
+}
+
+int EntityManager::Size()
+{
+    return _entity_map.size();
 }

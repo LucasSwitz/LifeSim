@@ -32,4 +32,4 @@ class IODevice
         std::map<int, bool> _triggers;
 };
 
-#endif IODEVICE_H
+#endif 

@@ -18,10 +18,12 @@ class Brush
 
     }
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance)
+
+    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+        ComponentUser* c = nullptr)
     {
         if (_state)
-            return _state->OnInstanceMouseEvent(e, event_world_position, instance);
+            return _state->OnInstanceMouseEvent(e, event_world_position, instance, c);
         return false;
     }
 
@@ -38,6 +40,12 @@ class Brush
             delete _state;
 
         _state = state;
+    }
+
+    void DrawExtras()
+    {
+        if(_state)
+            _state->DrawExtras();
     }
 
   private:

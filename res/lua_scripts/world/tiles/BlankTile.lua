@@ -11,7 +11,9 @@ BlankTile =
         Graphics = 
         {
             sprite = "/home/pabu/Desktop/LifeSim/res/textures/blank.jpg",
-            layer = 0
+            layer = 0,
+            width = 32,
+            height = 32
         },
         Position = 
         {

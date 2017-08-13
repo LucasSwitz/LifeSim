@@ -9,23 +9,28 @@ TestEntity =
         id = 0,
         Components = 
         {
-
+            Player = 
+            {   
+                id = 1
+            },
             Position = 
             {
                 x = 90,
-                y = 90
+                y = 90,
+                heading = 0
             },
             Graphics = 
             {
                 sprite = Res("mario_1.png"),
-                layer = 1
+                layer = 1,
+                width = 32,
+                height = 32
             },
             Velocity =
             {
                 x = 0, -- px/second
                 y = 0,
                 max = 100,
-                heading = 0
             },
             Acceleration = 
             {

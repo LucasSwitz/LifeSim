@@ -14,11 +14,13 @@ Stages =
     end,
     Execute = function(character)
         if Keyboard.Instance():Get(Keyboard.A) then
-            character:SetNumber("Velocity","heading",180)
+            character:SetNumber("Position","heading",180)
             character:SetNumber("Velocity","x", -100)   
+            character:SetBool("Graphics","invert",true)
         elseif Keyboard.Instance():Get(Keyboard.D) then
-            character:SetNumber("Velocity","heading",0)
+            character:SetNumber("Position","heading",0)
             character:SetNumber("Velocity","x", 100)
+            character:SetBool("Graphics","invert",false)
         else
             x = false
             character:SetNumber("Velocity","x", 0)

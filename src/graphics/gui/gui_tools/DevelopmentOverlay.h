@@ -15,7 +15,7 @@
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
 #include "src/graphics/gui/gui_tools/MainMenu.h"
 
-class DevelopmentOverlay : public MainMenuListener
+class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListener
 {
     public:
         DevelopmentOverlay();
@@ -30,7 +30,11 @@ class DevelopmentOverlay : public MainMenuListener
         void NewInstancePressed();
         void LoadInstancePressed(std::string& file_name);
         void SaveInstancePressed(std::string& file_name);
-    
+
+        //Inherited from EditModeControlListener
+        void OnLaunchGameRunner();
+        void OnStopGameRunner();
+
         Log log;
         EntityTable entity_table;
         InstanceEditor instance_editor;

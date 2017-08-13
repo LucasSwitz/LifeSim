@@ -45,6 +45,12 @@ class FPSRunner
         _runnable = runnable;
     }
 
+    void CleanRunnable()
+    {
+        _runnable->Unload();
+        delete _runnable;
+    }
+
   protected:
     FPSRunnable *_runnable = nullptr;
     std::chrono::time_point<std::chrono::high_resolution_clock> _last_time = std::chrono::time_point<std::chrono::high_resolution_clock>::min();

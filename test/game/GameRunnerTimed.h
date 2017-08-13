@@ -42,7 +42,7 @@ class GameRunnerTimed : public GameRunner
 
         void OnEvent(Event& e) override
         {
-            if(e.id == EventType::CLOSE_GAME_WINDOW_EVENT)
+            if(e.id == EventType::CLOSE_WINDOW_EVENT)
             {
                 _window_closed = true;
             }
@@ -52,7 +52,7 @@ class GameRunnerTimed : public GameRunner
 
         std::list<Subscription> GetSubscriptions()
         {
-            std::list<Subscription> list = {Subscription(EventType::CLOSE_GAME_WINDOW_EVENT)};
+            std::list<Subscription> list = {Subscription(EventType::CLOSE_WINDOW_EVENT)};
             return list;
         }
 

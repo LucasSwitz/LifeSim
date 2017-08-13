@@ -2,6 +2,7 @@
 #define EVENT_H
 
 #include <set>
+#include "src/utils/lua/LuaUniversal.h"
 #include "src/component/ComponentUser.h"
 
 /** 
@@ -35,6 +36,13 @@ struct Event
         e.extra_info = static_cast<void*>(data);
 
         return e;
+    }
+
+    static Event CreateT(int event_id,int sender, int target, lua_State* L)
+    {
+        std::vector<float>* floats = new std::vector<float>();
+        LuaUniversal::FloatVectorFromLuaTable(*floats, L);
+        return Event::Create<std::vector<float>>(event_id, sender, target, floats);
     }
 
     template<typename T> 

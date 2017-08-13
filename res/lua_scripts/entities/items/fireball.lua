@@ -15,9 +15,9 @@ Fireball =
         },
         Graphics = 
         {
-            sprite = "/home/pabu/Desktop/LifeSim/res/sprites/fireball.png",
-            width = 10,
-            height = 10,
+            sprite = Res("fireball.png"),
+            width = 32,
+            height = 32,
             layer = 1
         },
         Mass = 
@@ -28,7 +28,7 @@ Fireball =
         {
             width = 10,
             height = 10,
-            collision_script = "/home/pabu/Desktop/LifeSim/lua_scripts/collision/FireballCollision.lua",
+            collision_script = Res("FireballCollision.lua"),
         },
         Velocity =
         {

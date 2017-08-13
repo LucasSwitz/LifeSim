@@ -24,7 +24,8 @@ class PaintTileBrushState : public BrushState
         return false;
     }
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance) override
+    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+        ComponentUser* c = nullptr) override
     {
         if (e.type == sf::Event::MouseButtonPressed)
         {
@@ -64,6 +65,7 @@ class PaintTileBrushState : public BrushState
                         replaced = _selected_tile->Clone();
                         replaced->SetComponentValueFloat("Position", "x", x);
                         replaced->SetComponentValueFloat("Position", "y", y);
+                        replaced->EnableAll();
                     }
                 }
                 _painting_state = DORMANT;

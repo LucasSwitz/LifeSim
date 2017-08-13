@@ -32,6 +32,7 @@ class ComponentUser
     void EnableComponent(std::string name);
     void DisableAll();
     void EnableAll();
+    void EnableAll(ComponentUserBase& component_user_base);
 
 
     Component* GetComponent(std::string name);
@@ -43,8 +44,8 @@ class ComponentUser
     void SetComponentValueFloat (std::string component_name, std::string component_name_value, float value);
 
 
-    bool GetComponentBoolValue(std::string component_name, std::string component_name_value);
-    void SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value); 
+    bool GetComponentValueBool(std::string component_name, std::string component_name_value);
+    void SetComponentValueBool(std::string component_name, std::string component_name_value, bool value); 
     void CallFunction(std::string component_name, std::string value_name);
 
     std::unordered_map<std::string, Component*>& GetAllComponents();

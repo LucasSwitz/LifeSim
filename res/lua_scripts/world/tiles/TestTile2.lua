@@ -11,12 +11,14 @@ TestTile2 =
         Position =
         {
             x = 0,
-            y = 0
+            y = 0,
         },
         Graphics  = 
         {
             sprite = Res("diamonds.jpg"),
-            layer = 0
+            layer = 0,
+            width = 32,
+            height = 32
         },
         Collision = 
         {

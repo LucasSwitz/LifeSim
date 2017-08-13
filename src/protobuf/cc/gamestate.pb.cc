@@ -115,7 +115,9 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, string_values_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, bool_values_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, float_values_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, subcomponents_),
   0,
+  ~0u,
   ~0u,
   ~0u,
   ~0u,
@@ -153,10 +155,10 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 11, 19, sizeof(Entity)},
   { 22, 28, sizeof(System)},
   { 29, 37, sizeof(Instance)},
-  { 40, 49, sizeof(Component)},
-  { 53, 60, sizeof(ComponentValueString)},
-  { 62, 69, sizeof(ComponentValueBool)},
-  { 71, 78, sizeof(ComponentValueFloat)},
+  { 40, 50, sizeof(Component)},
+  { 55, 62, sizeof(ComponentValueString)},
+  { 64, 71, sizeof(ComponentValueBool)},
+  { 73, 80, sizeof(ComponentValueFloat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -243,20 +245,21 @@ void AddDescriptorsImpl() {
       "d\030\001 \002(\005\022.\n\ncomponents\030\002 \003(\0132\032.pmidgseria"
       "lized.Component\022\014\n\004name\030\003 \002(\t\"\026\n\006System\022"
       "\014\n\004name\030\001 \002(\t\"5\n\010Instance\022\017\n\007tilemap\030\001 \002"
-      "(\t\022\n\n\002id\030\002 \002(\005\022\014\n\004name\030\003 \002(\t\"\315\001\n\tCompone"
+      "(\t\022\n\n\002id\030\002 \002(\005\022\014\n\004name\030\003 \002(\t\"\200\002\n\tCompone"
       "nt\022\014\n\004name\030\001 \002(\t\022<\n\rstring_values\030\002 \003(\0132"
       "%.pmidgserialized.ComponentValueString\0228"
       "\n\013bool_values\030\003 \003(\0132#.pmidgserialized.Co"
       "mponentValueBool\022:\n\014float_values\030\004 \003(\0132$"
-      ".pmidgserialized.ComponentValueFloat\"9\n\024"
-      "ComponentValueString\022\022\n\nvalue_name\030\001 \002(\t"
-      "\022\r\n\005value\030\002 \002(\t\"7\n\022ComponentValueBool\022\022\n"
-      "\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\010\"8\n\023Comp"
-      "onentValueFloat\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005v"
-      "alue\030\002 \002(\002"
+      ".pmidgserialized.ComponentValueFloat\0221\n\r"
+      "subcomponents\030\005 \003(\0132\032.pmidgserialized.Co"
+      "mponent\"9\n\024ComponentValueString\022\022\n\nvalue"
+      "_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"7\n\022ComponentV"
+      "alueBool\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 "
+      "\002(\010\"8\n\023ComponentValueFloat\022\022\n\nvalue_name"
+      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\002"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 730);
+      descriptor, 781);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gamestate.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -2080,6 +2083,7 @@ const int Component::kNameFieldNumber;
 const int Component::kStringValuesFieldNumber;
 const int Component::kBoolValuesFieldNumber;
 const int Component::kFloatValuesFieldNumber;
+const int Component::kSubcomponentsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Component::Component()
@@ -2097,7 +2101,8 @@ Component::Component(const Component& from)
       _cached_size_(0),
       string_values_(from.string_values_),
       bool_values_(from.bool_values_),
-      float_values_(from.float_values_) {
+      float_values_(from.float_values_),
+      subcomponents_(from.subcomponents_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.has_name()) {
@@ -2148,6 +2153,7 @@ void Component::Clear() {
   string_values_.Clear();
   bool_values_.Clear();
   float_values_.Clear();
+  subcomponents_.Clear();
   if (has_name()) {
     GOOGLE_DCHECK(!name_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
     (*name_.UnsafeRawStringPointer())->clear();
@@ -2218,6 +2224,18 @@ bool Component::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated .pmidgserialized.Component subcomponents = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(42u)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_subcomponents()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0 ||
@@ -2275,6 +2293,12 @@ void Component::SerializeWithCachedSizes(
       4, this->float_values(i), output);
   }
 
+  // repeated .pmidgserialized.Component subcomponents = 5;
+  for (unsigned int i = 0, n = this->subcomponents_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->subcomponents(i), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2319,6 +2343,13 @@ void Component::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
         4, this->float_values(i), deterministic, target);
+  }
+
+  // repeated .pmidgserialized.Component subcomponents = 5;
+  for (unsigned int i = 0, n = this->subcomponents_size(); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        5, this->subcomponents(i), deterministic, target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -2377,6 +2408,17 @@ size_t Component::ByteSizeLong() const {
     }
   }
 
+  // repeated .pmidgserialized.Component subcomponents = 5;
+  {
+    unsigned int count = this->subcomponents_size();
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->subcomponents(i));
+    }
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -2409,6 +2451,7 @@ void Component::MergeFrom(const Component& from) {
   string_values_.MergeFrom(from.string_values_);
   bool_values_.MergeFrom(from.bool_values_);
   float_values_.MergeFrom(from.float_values_);
+  subcomponents_.MergeFrom(from.subcomponents_);
   if (from.has_name()) {
     set_has_name();
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -2434,6 +2477,7 @@ bool Component::IsInitialized() const {
   if (!::google::protobuf::internal::AllAreInitialized(this->string_values())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->bool_values())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->float_values())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->subcomponents())) return false;
   return true;
 }
 
@@ -2445,6 +2489,7 @@ void Component::InternalSwap(Component* other) {
   string_values_.InternalSwap(&other->string_values_);
   bool_values_.InternalSwap(&other->bool_values_);
   float_values_.InternalSwap(&other->float_values_);
+  subcomponents_.InternalSwap(&other->subcomponents_);
   name_.Swap(&other->name_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
@@ -2610,6 +2655,36 @@ const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::ComponentValueFlo
 Component::float_values() const {
   // @@protoc_insertion_point(field_list:pmidgserialized.Component.float_values)
   return float_values_;
+}
+
+// repeated .pmidgserialized.Component subcomponents = 5;
+int Component::subcomponents_size() const {
+  return subcomponents_.size();
+}
+void Component::clear_subcomponents() {
+  subcomponents_.Clear();
+}
+const ::pmidgserialized::Component& Component::subcomponents(int index) const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Get(index);
+}
+::pmidgserialized::Component* Component::mutable_subcomponents(int index) {
+  // @@protoc_insertion_point(field_mutable:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Mutable(index);
+}
+::pmidgserialized::Component* Component::add_subcomponents() {
+  // @@protoc_insertion_point(field_add:pmidgserialized.Component.subcomponents)
+  return subcomponents_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >*
+Component::mutable_subcomponents() {
+  // @@protoc_insertion_point(field_mutable_list:pmidgserialized.Component.subcomponents)
+  return &subcomponents_;
+}
+const ::google::protobuf::RepeatedPtrField< ::pmidgserialized::Component >&
+Component::subcomponents() const {
+  // @@protoc_insertion_point(field_list:pmidgserialized.Component.subcomponents)
+  return subcomponents_;
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

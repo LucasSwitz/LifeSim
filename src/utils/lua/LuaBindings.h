@@ -8,6 +8,7 @@
 #include "src/event/Subscription.h"
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
+#include "src/game/EngineGlobals.h"
 #include "src/game_objects/LuaEntity.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
@@ -34,13 +35,14 @@ class LuaBindings
         { 
             getGlobalNamespace(L)
             .addFunction("Res",&ResourceManager::GetResource)
+            .addFunction("TARGET_WINDOW",&EngineGlobals::GetTargetWindow)
             .beginClass<ComponentUser>("ComponentUser")
                 .addFunction("GetNumber", &ComponentUser::GetComponentValueFloat)
                 .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)
                 .addFunction("GetString", &ComponentUser::GetComponentValueString)
                 .addFunction("SetString", &ComponentUser::SetComponentValueString)
-                .addFunction("SetBool", &ComponentUser::SetComponentBoolValue)
-                .addFunction("GetBool", &ComponentUser::GetComponentBoolValue)
+                .addFunction("SetBool", &ComponentUser::SetComponentValueBool)
+                .addFunction("GetBool", &ComponentUser::GetComponentValueBool)
                 .addFunction("GetComponent", &ComponentUser::GetComponent)
                 .addFunction("HasComponent",&ComponentUser::HasComponent)
                 .addProperty("id",&ComponentUser::ID)
@@ -110,11 +112,13 @@ class LuaBindings
                 .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
                 .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
                 .addStaticData("SPAWN_ENTITY_EVENT",&EventType::SPAWN_ENTITY_EVENT,false)
+                .addStaticData("RECENTER_VIEW_EVENT",&EventType::RECENTER_VIEW_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
                 .addConstructor<void (*)(int,int,int)>()
                 .addStaticFunction("ComponentUserEvent",&Event::Create<ComponentUser>)
                 .addStaticFunction("EntityEvent",&Event::Create<Entity>)
+                .addStaticFunction("FloatsEvent",&Event::CreateT)
                 .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)

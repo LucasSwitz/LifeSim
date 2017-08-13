@@ -3,6 +3,7 @@
 
 #include <list>
 #include <unordered_map>
+#include <algorithm>
 #include "src/event/Subscription.h"
 #include "src/event/Event.h"
 #include "src/event/EventSubscriber.h"
@@ -24,10 +25,12 @@ class EventManager
 {
     friend class GameState;
 public:
-
+    EventManager(): _subscription_registry() {}
     void LaunchEvent(Event& e);
 
     void RegisterSubscriber(EventSubscriber* sub);
+    void Deregister(EventSubscriber *sub);
+    void Deregister(EventSubscriber *sub, int event_id, int event_tag);
 
     bool EventExists(int event_id);
     bool TagExists(int event_id, int tag_id);

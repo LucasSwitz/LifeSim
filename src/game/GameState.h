@@ -18,16 +18,26 @@
 class GameState : public FPSRunnable
 {
   public:
+
+    GameState(){};
+    GameState(const GameState& game_state) : _message_dispatch(), 
+                                             _entity_manager(game_state._entity_manager, _component_users),
+                                             _system_controller(game_state._system_controller),
+                                             _current_instance(game_state._current_instance)
+    {
+        //all the things need to add themselves to the component user base
+    }
+    
     void Load()
     {
-        Setup();
+        
     }
 
     void Setup()
     {
         MessageDispatch::GiveOwnership(&_message_dispatch);
-        EntityManager::GiveOwnership(&_entity_manager);
         ComponentUserBase::GiveOwnership(&_component_users);
+        EntityManager::GiveOwnership(&_entity_manager);
         SystemController::GiveOwnership(&_system_controller);
     }
 
@@ -51,7 +61,7 @@ class GameState : public FPSRunnable
     }
 
     void AddSystem(std::string system_name)
-    {
+    {            
         _system_controller.AddToSystemExecutionSequence(system_name);
     }
 
@@ -63,16 +73,11 @@ class GameState : public FPSRunnable
     void AddEntity(Entity *e)
     {
         _entity_manager.RegisterEntity(e);
-        AddComponentUser(e);
-    }
-
-    void AddComponentUser(ComponentUser *user)
-    {
-        user->EnableAll();
-    }
+     }
 
     GameState Copy()
     {
+        
     }
 
     EntityManager &GetEntityManager()

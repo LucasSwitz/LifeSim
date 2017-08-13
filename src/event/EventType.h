@@ -22,12 +22,14 @@ class EventType
     static int S_UP_EVENT;
     static int D_DOWN_EVENT;
     static int D_UP_EVENT;
-    static int CLOSE_GAME_WINDOW_EVENT;
+    static int CLOSE_WINDOW_EVENT;
     static int CHANGE_INSTANCE_EVENT;
     static int EXIT_STAGE_EVENT;
     static int DRAW_REQUEST_EVENT;
     static int SPAWN_ENTITY_EVENT;
     static int E_DOWN_EVENT;
     static int E_UP_EVENT;
+    static int STOP_PROGRAM_EVENT;
+    static int RECENTER_VIEW_EVENT;
 };
 #endif

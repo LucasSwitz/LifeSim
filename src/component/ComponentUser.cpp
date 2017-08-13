@@ -31,9 +31,14 @@ void ComponentUser::EnableComponent(std::string name)
 
 void ComponentUser::EnableAll()
 {
+    EnableAll(*ComponentUserBase::Instance());
+}
+
+void ComponentUser::EnableAll(ComponentUserBase &user_base)
+{
     for (auto it = _components.begin(); it != _components.end(); it++)
     {
-        ComponentUserBase::Instance()->Register(it->first, *this);
+        user_base.Register(it->first, *this);
     }
 }
 
@@ -67,7 +72,7 @@ std::string ComponentUser::GetComponentValueString(std::string component_name, s
 {
     if (!HasComponent(component_name))
     {
-        std::cout << "has no component: " << component_name << std::endl;
+        //std::cout << "has no component: " << component_name << std::endl;
         return "";
     }
     else if (!_components.at(component_name)->HasStringValue(value_name))
@@ -104,7 +109,7 @@ void ComponentUser::SetComponentValueFloat(std::string component_name, std::stri
     }
 }
 
-bool ComponentUser::GetComponentBoolValue(std::string component_name, std::string component_name_value)
+bool ComponentUser::GetComponentValueBool(std::string component_name, std::string component_name_value)
 {
     if (!HasComponent(component_name))
     {
@@ -114,7 +119,7 @@ bool ComponentUser::GetComponentBoolValue(std::string component_name, std::strin
     return _components.at(component_name)->GetBoolValue(component_name_value);
 }
 
-void ComponentUser::SetComponentBoolValue(std::string component_name, std::string component_name_value, bool value)
+void ComponentUser::SetComponentValueBool(std::string component_name, std::string component_name_value, bool value)
 {
     if (!HasComponent(component_name))
     {
@@ -138,7 +143,6 @@ std::unordered_map<std::string, Component *> &ComponentUser::GetAllComponents()
     return _components;
 }
 
-
 void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value)
 {
     if (!HasComponent(component_name))
@@ -146,7 +150,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
         AddComponent(new Component(component_name));
     }
 
-    GetComponent(component_name)->SetStringValue(value_name,value);
+    GetComponent(component_name)->SetStringValue(value_name, value);
 }
 
 void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, bool value)
@@ -156,7 +160,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
         AddComponent(new Component(component_name));
     }
 
-    GetComponent(component_name)->SetBoolValue(value_name,value);
+    GetComponent(component_name)->SetBoolValue(value_name, value);
 }
 
 void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, float value)
@@ -169,17 +173,16 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
     GetComponent(component_name)->SetFloatValue(value_name, value);
 }
 
-
 ComponentUser::~ComponentUser()
 {
     for (auto it = _components.begin(); it != _components.end();)
     {
-        if(ComponentUserBase::Instance())
+        if (ComponentUserBase::Instance())
         {
             ComponentUserBase::Instance()->DeRegister(it->first, *this);
         }
-        
-        Component* to_delete = it->second;
+
+        Component *to_delete = it->second;
         it = _components.erase(it);
 
         delete to_delete;
