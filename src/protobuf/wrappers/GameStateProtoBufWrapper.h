@@ -3,9 +3,10 @@
 
 #include <fstream>
 #include "src/protobuf/cc/gamestate.pb.h"
-#include "src/world/stage/Instance.h"
+#include "src/world/stage/Stage.h"
 #include "src/game_objects/Entity.h"
 #include "src/system/System.h"
+#include "src/utils/lua/LuaUniversal.h"
 
 /**
     Purpose: Wrapper for protocol buffer classes generated using the Google protocol buffer compiler. 
@@ -112,15 +113,17 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void SetInstance(Instance &instance)
+
+    void SetStage(Stage& stage)
     {
-        pmidgserialized::Instance *serialized_instance = serialized_game_state.mutable_instance();
+        pmidgserialized::Stage* serialzied_stage = serialized_game_state.mutable_stage();
+        
+        LuaStage* lua_stage = dynamic_cast<LuaStage*>(&stage);
+        std::string file = lua_stage->GetFile();
+        std::string name = lua_stage->GetName();
 
-        std::string tile_map_file = instance.GetTileMap().GetFile();
-
-        serialized_instance->set_tilemap(tile_map_file);
-        serialized_instance->set_id(instance.GetID());
-        serialized_instance->set_name(instance.GetName());
+        serialzied_stage->set_file(file);
+        serialzied_stage->set_name(name);
     }
 
     template <typename T>
@@ -206,16 +209,13 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void GetInstance(Instance *instance)
+    void GetStage(Stage* stage)
     {
-        //create instance and call tilemap factor
-        std::string tile_map_file = serialized_game_state.instance().tilemap();
-        int id = serialized_game_state.instance().id();
-        std::string name = serialized_game_state.instance().name();
+        pmidgserialized::Stage serializied_stage = serialized_game_state.stage();
+        LuaStage* lua_stage = dynamic_cast<LuaStage*>(stage);
 
-        instance->GetTileMap().LoadFromFile(tile_map_file);
-        instance->SetID(id);
-        instance->SetName(name);
+        if(lua_stage)
+            lua_stage->LoadFromFile(LUA_STATE,serializied_stage.file(),serializied_stage.name());
     }
 
     void FromFile(std::string file_name)

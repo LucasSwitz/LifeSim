@@ -18,8 +18,9 @@ Log &DevelopmentOverlay::GetLog()
 {
     return log;
 }
-
-void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
+ 
+void DevelopmentOverlay::Render(PMIDGWindow *window, GameState* game_state, 
+                    TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
@@ -33,6 +34,7 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
+    stage_editor.Draw(game_state->GetStage());
     system_monitor.Draw("System Monitor");
     edit_mode_controls.Draw("Edit Mode Controls", *window);
     // #### RENDER GUI HERE
@@ -61,6 +63,14 @@ void DevelopmentOverlay::NewInstancePressed()
     if (_listener)
     {
         _listener->OnCreateBlankInstance(30, 30);
+    }
+}
+
+void DevelopmentOverlay::NewStagePressed()
+{
+    if(_listener)
+    {
+        _listener->OnCreateBlankStage();
     }
 }
 

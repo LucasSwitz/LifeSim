@@ -23,7 +23,7 @@ class GameState : public FPSRunnable
     GameState(const GameState& game_state) : _message_dispatch(), 
                                              _entity_manager(game_state._entity_manager, _component_users),
                                              _system_controller(game_state._system_controller),
-                                             _current_instance(game_state._current_instance)
+                                             _current_stage(game_state._current_stage)
     {
         //all the things need to add themselves to the component user base
     }
@@ -45,19 +45,33 @@ class GameState : public FPSRunnable
     {
         _system_controller.Update(seconds_elapsed);
 
-        if (_current_instance)
-            _current_instance->Tick(seconds_elapsed);
+        if (_current_stage)
+            _current_stage->Tick(seconds_elapsed);
 
         _entity_manager.Clean();
     }
 
     void Unload()
     {
+
     }
 
-    void SetCurrentInstance(Instance *instance)
+    void SetStage(Stage* stage)
     {
-        _current_instance = instance;
+        _current_stage = stage;
+        _current_stage->Load();
+        _current_stage->Enter();
+    }
+
+    void ChangeState(Stage* new_stage)
+    {
+        if(_current_stage)
+        {
+            _current_stage->Exit();
+            _current_stage->Unload();
+        }
+
+        SetStage(new_stage);
     }
 
     void AddSystem(std::string system_name)
@@ -75,9 +89,9 @@ class GameState : public FPSRunnable
         _entity_manager.RegisterEntity(e);
      }
 
-    GameState Copy()
+    Stage* GetStage()
     {
-        
+        return _current_stage;
     }
 
     EntityManager &GetEntityManager()
@@ -95,17 +109,12 @@ class GameState : public FPSRunnable
         return _system_controller;
     }
 
-    Instance *GetInstance()
-    {
-        return _current_instance;
-    }
 
   private:
     ComponentUserBase _component_users;
     SystemController _system_controller;
     MessageDispatch _message_dispatch;
     EntityManager _entity_manager;
-
-    Instance *_current_instance = nullptr;
+    Stage* _current_stage = nullptr;
 };
 #endif

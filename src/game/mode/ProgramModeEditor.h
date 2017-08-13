@@ -86,22 +86,27 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnCreateBlankInstance(int rows, int columns) override
     {
-        if (_game_state)
-            delete _game_state;
+        Instance *i = new Instance();
 
+        i->GetTileMap().Blank(rows, columns);
+
+        _game_state->GetStage()->AddInstance(i);
+
+        /*_window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
+                                     _game_state->GetInstance()->GetTileMap().HeightPx());*/
+    }
+
+    void OnCreateBlankStage()
+    {
         _game_state = new GameState();
         _game_state->Setup();
         _game_runner.SetRunnable(_game_state);
 
-        Instance *i = new Instance();
-        _game_state->SetCurrentInstance(i);
+        Stage *s = new Stage();
 
-        _game_state->GetInstance()->GetTileMap().Blank(rows, columns);
+        _game_state->SetStage(s);
 
-        _game_state->GetInstance()->Open();
-
-        _window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
-                                     _game_state->GetInstance()->GetTileMap().HeightPx());
+        _window.SetName("New Stage Name");
     }
 
     void OnLaunchGameRunner() override
@@ -156,18 +161,17 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         GameLoader loader;
         loader.Load(file_path, file_name, *_game_state);
 
-        _window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
-                                     _game_state->GetInstance()->GetTileMap().HeightPx());
         _game_runner.SetRunnable(_game_state);
     }
 
     void OnSaveGameStateFile(const std::string &file_name) override
     {
-        if (_game_state && _game_state->GetInstance())
+        if (_game_state && _game_state->GetStage())
         {
-            _game_state->GetInstance()->SetName(file_name);
-            _game_state->GetInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" +
-                                                                _game_state->GetInstance()->GetName() + ".pmidgM");
+            _game_state->GetStage()->SetName(file_name);
+
+            _game_state->GetStage()->GetCurrentInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" +
+                                                                                   _game_state->GetStage()->GetName() + ".pmidgM");
             GameLoader loader;
             loader.Save(file_path, file_name, *_game_state);
         }
@@ -205,11 +209,11 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                         {
                             _brush.SetState(new SelectEntityBrushState(entity));
                         }
-                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance(), entity);
+                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetStage()->GetCurrentInstance(), entity);
                     }
                     else
                     {
-                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetInstance());
+                        _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetStage()->GetCurrentInstance());
                     }
                 }
             }
@@ -222,7 +226,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             }
             else if (e.type == sf::Event::KeyPressed)
             {
-                _brush.OnKeyboardEvent(e, _game_state->GetInstance());
+                _brush.OnKeyboardEvent(e, _game_state->GetStage()->GetCurrentInstance());
             }
         }
     }
@@ -239,7 +243,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 PanView();
             }
         }
-        _dev_tools.Render(&_window, _window.GetTextureCache(), seconds_elapsed, _brush);
+        _dev_tools.Render(&_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
     }
 
     void PanView()
@@ -256,12 +260,19 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     bool ClickOnActiveTileMap(int x, int y)
     {
+        if (!CanEdit())
+            return false;
+
+        Instance *instance = _game_state->GetStage()->GetCurrentInstance();
         sf::Vector2f world_cords = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
-        return _game_state->GetInstance() && _game_state->GetInstance()->GetTileMap().TileAt(world_cords.x, world_cords.y);
+        return instance->GetTileMap().TileAt(world_cords.x, world_cords.y);
     }
 
     Entity *ClickOnEntity(int x, int y)
     {
+        if (!CanEdit())
+            return nullptr;
+
         sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
         const std::map<int, Entity *> &entities = EntityManager::Instance()->GetAllEntities();
@@ -313,6 +324,11 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
             }
         }
         return nullptr;
+    }
+
+    bool CanEdit()
+    {
+        return _game_state && _game_state->GetStage() && _game_state->GetStage()->GetCurrentInstance();
     }
 
   private:

@@ -257,6 +257,11 @@ class PMIDGWindow : public EventSubscriber
         _window.setView(view);
     }
 
+    void SetName(std::string name)
+    {
+        _window.setTitle(name);
+    }
+
   protected:
     sf::RenderWindow _window;
 

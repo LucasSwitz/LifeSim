@@ -11,6 +11,7 @@ class DevelopmentOverlayListener
     virtual void OnSaveGameStateFile(const std::string &file_name){};
     virtual void OnLaunchGameRunner(){};
     virtual void OnStopGameRunner(){};
+    virtual void OnCreateBlankStage(){};
 };
 
 #endif

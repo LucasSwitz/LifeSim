@@ -74,6 +74,10 @@ class MainMenu
             {
                 if (ImGui::MenuItem("New Stage", "CTRL+S"))
                 {
+                    if(_listener)
+                    {
+                        _listener->NewStagePressed();
+                    }
                 }
                 if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S"))
                 {

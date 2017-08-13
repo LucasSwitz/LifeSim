@@ -60,6 +60,7 @@ class LuaStage : public Stage
 
     void LoadFromFile(lua_State* lua_state, const std::string script_path, const std::string& stage_name)
     {
+        _file = script_path;
          if (luaL_dofile(lua_state, script_path.c_str()) == 0)
         {
             LuaRef stage_table = getGlobal(lua_state, stage_name.c_str());
@@ -105,6 +106,11 @@ class LuaStage : public Stage
         {
             std::cout << "Error, can't open script: " << script_path << std::endl;
         }
+    }
+
+    std::string GetFile()
+    {
+        return _file;
     }
 
     private:
@@ -163,6 +169,8 @@ class LuaStage : public Stage
         std::unique_ptr<LuaRef> _exit_function;
         std::unique_ptr<LuaRef> _on_event_function;
         std::unique_ptr<LuaRef> _get_subscriptions_function;
+
+        std::string _file;
 
 };
 

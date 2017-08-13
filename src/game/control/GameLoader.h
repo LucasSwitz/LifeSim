@@ -35,7 +35,7 @@ class GameLoader
     {
         std::cout << "Saving game to file: " << file_name << std::endl;
         GameStateProtoBufWrapper gameStateProtoBuf;
-        gameStateProtoBuf.SetInstance(*game_state.GetInstance());
+        gameStateProtoBuf.SetStage(*game_state.GetStage());
         gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());
         gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetExecutionSequence());
         gameStateProtoBuf.ToFile(file_name);
@@ -45,11 +45,11 @@ class GameLoader
     {
         std::list<Entity *> entities;
         std::list<std::string> systems;
-        Instance *instance = new Instance();
+        Stage* stage = new Stage();
 
         protobuf.GetEntities(entities);
         protobuf.GetSystems(systems);
-        protobuf.GetInstance(instance);
+        protobuf.GetStage(stage);
 
         for (Entity *e : entities)
         {
@@ -61,8 +61,7 @@ class GameLoader
             game_state.AddSystem(system);
         }
 
-        instance->GetTileMap().Show();
-        game_state.SetCurrentInstance(instance);
+        game_state.SetStage(stage);
     }
 };
 #endif

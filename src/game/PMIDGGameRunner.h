@@ -19,21 +19,6 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         EngineEventManager::Instance()->RegisterSubscriber(this);
     }
 
-    void RunStage(Stage stage)
-    {
-
-    }
-
-    void RunInstance(Instance &instance)
-    {
-        if (!_game_state)
-            CreateGameState();
-
-        Instance *copy_instance = new Instance(instance);
-        _game_state->SetCurrentInstance(copy_instance);
-        Run();
-    }
-
     void RunGameState(const std::string &file_path)
     {
 
@@ -48,12 +33,21 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         Run();
     }
 
+    void RunGameState(GameState &game_state, int instance_id)
+    {
+        if (_game_state)
+            delete _game_state;
+
+        _game_state = new GameState(game_state);
+        _game_state->GetStage()->SetCurrentInstance(instance_id);
+        Run();
+    }
+
     void Run()
     {
         SetRunnable(_game_state);
         _game_state->Setup();
         _window.Focus();
-        _game_state->GetInstance()->Open();
     }
 
     void CreateGameState()
@@ -65,7 +59,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         SetRunnable(_game_state);
     }
 
-    void Tick(float seconds_elapsed)
+    void Tick(float seconds_elapsed) override
     {
         _window.Clear();
         _window.PollEvents();
@@ -73,6 +67,11 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
         _window.Display();
     }
 
+    void Load()
+    {
+
+    }
+    
     void Unload()
     {
         
