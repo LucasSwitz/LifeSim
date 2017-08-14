@@ -20,6 +20,7 @@ class Stage : public EventSubscriber, public FPSRunnable
   public:
     void Load() override
     {
+        MessageDispatch::Instance()->RegisterSubscriber(this);
     }
 
     void Unload() override
@@ -128,12 +129,21 @@ class Stage : public EventSubscriber, public FPSRunnable
         {
             int instance_id = *(e.InfoToType<int *>());
             ChangeInstance(instance_id);
+        } 
+        else if (e.id == EventType::ENTITY_SPAWNED_EVENT)
+        {
+            Entity* entity = e.InfoToType<Entity*>();
+            int instance_id = e.target_id;
+            Instance* instance = GetInstance(instance_id);
+            instance->AddLocalEntity(entity->ID());
         }
     }
 
     virtual std::list<Subscription> GetSubscriptions()
     {
-        std::list<Subscription> subs = {Subscription(EventType::CHANGE_INSTANCE_EVENT)};
+        std::list<Subscription> subs = {Subscription(EventType::CHANGE_INSTANCE_EVENT),
+                                        Subscription(EventType::ENTITY_SPAWNED_EVENT)
+                                        };
         return subs;
     }
 

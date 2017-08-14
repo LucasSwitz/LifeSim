@@ -1,10 +1,9 @@
 #include "src/world/stage/Instance.h"
-int Instance::last_id = -1;
+int Instance::last_id = 0;
 
 Instance::Instance(int id) : _id(id)
 {
-    if (_id == -1)
-    {
-        _id = last_id++;
-    }
+    
+    _id = last_id;
+    last_id++;
 }

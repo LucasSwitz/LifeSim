@@ -135,6 +135,12 @@ class Instance : public EventSubscriber, public FPSRunnable
         return _name;
     }
 
+    void AddLocalEntity(int id)
+    {
+        std::cout << "Added Local Entity: " << id << std::endl;
+        _local_entities.push_back(id);
+    }
+
 
     protected:
         std::string _name;

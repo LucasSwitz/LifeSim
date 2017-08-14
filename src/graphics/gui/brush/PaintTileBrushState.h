@@ -60,9 +60,8 @@ class PaintTileBrushState : public BrushState
                         float y = replaced->GetComponentValueFloat("Position", "y");
 
                         it = _boxed_tiles.erase(it);
-                        delete replaced;
-    
-                        replaced = _selected_tile->Clone();
+                            
+                        *replaced = *_selected_tile->Clone();
                         replaced->SetComponentValueFloat("Position", "x", x);
                         replaced->SetComponentValueFloat("Position", "y", y);
                         replaced->EnableAll();

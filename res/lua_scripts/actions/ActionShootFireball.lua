@@ -2,7 +2,7 @@
 SpawnFireball = function(user)
     FIREBALL_ENTITY_ID = 111
 
-    e = Event.EntityEvent(EventType.SPAWN_ENTITY_EVENT,-1,FIREBALL_ENTITY_ID,fireball)
+    e = Event.EntityEvent(EventType.SPAWN_ENTITY_EVENT_PROTOTYPE,-1,FIREBALL_ENTITY_ID,fireball)
     MessageDispatch.Instance():LaunchEvent(e)
 
     fireball = EntityManager.Instance():Last() --has to be done like this because of LuaBridge

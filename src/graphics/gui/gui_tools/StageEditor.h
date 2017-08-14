@@ -16,6 +16,7 @@ class StageEditor
         if (!stage)
             return;
         ImGui::Begin("Stage Editor");
+        _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         _instance_ids.clear();
         const std::unordered_map<int, Instance *> instance_map = stage->GetInstances();
@@ -35,9 +36,16 @@ class StageEditor
         ImGui::End();
     }
 
+
+    bool IsFocused()
+    {
+        return _focused;
+    }
+
   private:
     std::vector<std::string> _instance_ids;
     int _selected_instance = -1;
     int _last_selection = -1;
+    bool _focused = false;
 };
 #endif

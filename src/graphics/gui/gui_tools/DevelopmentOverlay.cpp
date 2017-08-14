@@ -77,7 +77,8 @@ void DevelopmentOverlay::NewStagePressed()
 bool DevelopmentOverlay::IsFocused()
 {
     return log.IsFocused() || entity_table.IsFocused() ||
-           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() || main_menu.IsFocused();
+           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() || 
+           main_menu.IsFocused() || stage_editor.IsFocused();
 }
 void DevelopmentOverlay::Shutdown()
 {

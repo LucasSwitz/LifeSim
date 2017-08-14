@@ -111,7 +111,7 @@ class LuaBindings
                 .addStaticData("S_DOWN_EVENT", &EventType::S_DOWN_EVENT, false)
                 .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
                 .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
-                .addStaticData("SPAWN_ENTITY_EVENT",&EventType::SPAWN_ENTITY_EVENT,false)
+                .addStaticData("SPAWN_ENTITY_EVENT_PROTOTYPE",&EventType::SPAWN_ENTITY_EVENT_PROTOTYPE,false)
                 .addStaticData("RECENTER_VIEW_EVENT",&EventType::RECENTER_VIEW_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")

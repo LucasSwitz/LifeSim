@@ -1,6 +1,7 @@
 #ifndef PAINTENTITYBRUSHSTATE_H
 #define PAINTENTITYBRUSHSTATE_H
 
+#include "src/event/messaging/MessageDispatch.h"
 #include "src/graphics/gui/brush/BrushState.h"
 #include "src/game_objects/Entity.h"
 
@@ -23,7 +24,8 @@ class PaintEntityBrushState : public BrushState
                 Entity *e = _prototype->Clone();
                 e->SetComponentValueFloat("Position", "x", event_world_position.x);
                 e->SetComponentValueFloat("Position", "y", event_world_position.y);
-                EntityManager::Instance()->RegisterEntity(e);
+                Event event(EventType::SPAWN_ENTITY_EVENT,-1,instance->GetID(),e);
+                MessageDispatch::Instance()->LaunchEvent(event);
             }
             return true;
         }

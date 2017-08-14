@@ -26,10 +26,13 @@ class EventType
     static int CHANGE_INSTANCE_EVENT;
     static int EXIT_STAGE_EVENT;
     static int DRAW_REQUEST_EVENT;
-    static int SPAWN_ENTITY_EVENT;
+    static int SPAWN_ENTITY_EVENT_PROTOTYPE;
     static int E_DOWN_EVENT;
     static int E_UP_EVENT;
     static int STOP_PROGRAM_EVENT;
     static int RECENTER_VIEW_EVENT;
+    static int SPAWN_ENTITY_EVENT;
+    static int ENTITY_SPAWNED_EVENT;
+
 };
 #endif
