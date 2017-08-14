@@ -43,7 +43,7 @@ class ComponentUserBase
     std::list<ComponentUser *> *GetAllUsersWithComponent(std::string component_name);
     void GetAllUsersWithComponents(std::initializer_list<std::string> list,
                                    std::list<ComponentUser *> &user_list);
-    void GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser *> *lua_list, lua_State *L);
+    void GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser *>* lua_list, lua_State *L);
     void GetAllEntitesWithComponentAsLuaList(LuaList<Entity *> *lua_list, std::string component_name);
     void GetAllUsersWithComponents(std::list<std::string> &list, std::list<ComponentUser *> &matches);
     void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);

@@ -75,6 +75,7 @@ class LuaBindings
                 .addConstructor<void (*)(void)>()
                 .addFunction("Iterator", &LuaList<ComponentUser*>::Iterator)
                 .addFunction("Size",&LuaList<ComponentUser*>::Size)
+                .addFunction("Free",&LuaList<ComponentUser*>::Free)
             .endClass()
             .beginClass<LuaList<Entity*>>("LuaListEntity")
                 .addConstructor<void (*)(void)>()
