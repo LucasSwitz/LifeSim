@@ -4,8 +4,8 @@
 class MainMenuListener
 {
     public:
-        virtual void LoadInstancePressed(std::string& file_name) = 0;
-        virtual void SaveInstancePressed(std::string& file_name) = 0;
+        virtual void LoadStagePressed(std::string& stage_name) = 0;
+        virtual void SaveStagePressed(std::string& file_name) = 0;
         virtual void NewInstancePressed() = 0;
         virtual void NewStagePressed() = 0;
 };

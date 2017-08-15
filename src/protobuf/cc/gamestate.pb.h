@@ -493,6 +493,18 @@ class Stage : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
 
   // accessors -------------------------------------------------------
 
+  // repeated int32 instances = 3;
+  int instances_size() const;
+  void clear_instances();
+  static const int kInstancesFieldNumber = 3;
+  ::google::protobuf::int32 instances(int index) const;
+  void set_instances(int index, ::google::protobuf::int32 value);
+  void add_instances(::google::protobuf::int32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+      instances() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+      mutable_instances();
+
   // required string file = 1;
   bool has_file() const;
   void clear_file();
@@ -523,12 +535,21 @@ class Stage : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
+  // optional int32 root_instance = 4;
+  bool has_root_instance() const;
+  void clear_root_instance();
+  static const int kRootInstanceFieldNumber = 4;
+  ::google::protobuf::int32 root_instance() const;
+  void set_root_instance(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:pmidgserialized.Stage)
  private:
   void set_has_file();
   void clear_has_file();
   void set_has_name();
   void clear_has_name();
+  void set_has_root_instance();
+  void clear_has_root_instance();
 
   // helper for ByteSizeLong()
   size_t RequiredFieldsByteSizeFallback() const;
@@ -536,8 +557,10 @@ class Stage : public ::google::protobuf::Message /* @@protoc_insertion_point(cla
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::HasBits<1> _has_bits_;
   mutable int _cached_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::int32 > instances_;
   ::google::protobuf::internal::ArenaStringPtr file_;
   ::google::protobuf::internal::ArenaStringPtr name_;
+  ::google::protobuf::int32 root_instance_;
   friend struct protobuf_gamestate_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
@@ -1468,6 +1491,60 @@ inline void Stage::set_allocated_name(::std::string* name) {
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
   // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Stage.name)
+}
+
+// repeated int32 instances = 3;
+inline int Stage::instances_size() const {
+  return instances_.size();
+}
+inline void Stage::clear_instances() {
+  instances_.Clear();
+}
+inline ::google::protobuf::int32 Stage::instances(int index) const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Stage.instances)
+  return instances_.Get(index);
+}
+inline void Stage::set_instances(int index, ::google::protobuf::int32 value) {
+  instances_.Set(index, value);
+  // @@protoc_insertion_point(field_set:pmidgserialized.Stage.instances)
+}
+inline void Stage::add_instances(::google::protobuf::int32 value) {
+  instances_.Add(value);
+  // @@protoc_insertion_point(field_add:pmidgserialized.Stage.instances)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+Stage::instances() const {
+  // @@protoc_insertion_point(field_list:pmidgserialized.Stage.instances)
+  return instances_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+Stage::mutable_instances() {
+  // @@protoc_insertion_point(field_mutable_list:pmidgserialized.Stage.instances)
+  return &instances_;
+}
+
+// optional int32 root_instance = 4;
+inline bool Stage::has_root_instance() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Stage::set_has_root_instance() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Stage::clear_has_root_instance() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Stage::clear_root_instance() {
+  root_instance_ = 0;
+  clear_has_root_instance();
+}
+inline ::google::protobuf::int32 Stage::root_instance() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Stage.root_instance)
+  return root_instance_;
+}
+inline void Stage::set_root_instance(::google::protobuf::int32 value) {
+  set_has_root_instance();
+  root_instance_ = value;
+  // @@protoc_insertion_point(field_set:pmidgserialized.Stage.root_instance)
 }
 
 // -------------------------------------------------------------------

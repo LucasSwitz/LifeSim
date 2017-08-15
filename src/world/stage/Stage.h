@@ -6,11 +6,12 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 #include "src/game/FPSRunnable.h"
+#include "src/world/stage/LuaInstanceFactory.h"
 
 /**
     Purpose: Stages are purely logical containers for handling asset loading,
     active instances, and transitioning to other stages. When a stage is loaded, it will
-    load all graphics asset required by the root instance. Every stage can have multiple
+    load all graphics asset requgired by the root instance. Every stage can have multiple
     instances, but will only ever have one active instance (the instance that is rendered and
     players can interact with).
 **/
@@ -74,9 +75,19 @@ class Stage : public EventSubscriber, public FPSRunnable
         _instances.insert(std::make_pair(instance->GetID(), instance));
     }
 
+    void AddInstance(int id)
+    {
+        AddInstance(LuaInstanceFactory::Inst()->GetInstance(id));
+    }
+
     void SetRootInstance(Instance *instance)
     {
         _root_instance = instance;
+    }
+
+    void SetRootInstance(int id)
+    {
+        SetRootInstance(LuaInstanceFactory::Inst()->GetInstance(id));
     }
 
     void SetCurrentInstance(int id, bool do_load = true)
@@ -157,10 +168,15 @@ class Stage : public EventSubscriber, public FPSRunnable
         _name = name;
     }
 
-    const std::unordered_map<int, Instance*> GetInstances() const
+    const std::unordered_map<int, Instance*>& GetInstances() const
     {
         return _instances;
     } 
+
+    Instance* GetRootInstance()
+    {
+        return _root_instance;
+    }
 
   protected:
     Instance *_current_instance = nullptr;

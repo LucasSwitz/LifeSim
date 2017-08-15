@@ -102,7 +102,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _game_state->Setup();
         _game_runner.SetRunnable(_game_state);
 
-        Stage *s = new Stage();
+        Stage *s = new LuaStage();
 
         _game_state->SetStage(s);
 
@@ -150,7 +150,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     }
 
     // ######################## LOADING / SAVING #################################
-    void OnLoadGameStateFile(const std::string &file_name) override
+    void OnLoadStageFile(const std::string &file_name) override
     {
         if (_game_state)
             delete _game_state;
@@ -164,14 +164,21 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _game_runner.SetRunnable(_game_state);
     }
 
-    void OnSaveGameStateFile(const std::string &file_name) override
+    void OnSaveStageFile(const std::string &file_name) override
     {
         if (_game_state && _game_state->GetStage())
         {
             _game_state->GetStage()->SetName(file_name);
-
-            _game_state->GetStage()->GetCurrentInstance()->GetTileMap().SaveToFile(tile_maps_path + "/" +
-                                                                                   _game_state->GetStage()->GetName() + ".pmidgM");
+            
+            const std::unordered_map<int,Instance*>& instances = _game_state->GetStage()->GetInstances();
+            for(auto it = instances.begin(); it != instances.end(); it++)
+            {
+                Instance* instance = it->second; 
+                instance->GetTileMap().SaveToFile(tile_maps_path + "/" +
+                                        _game_state->GetStage()->GetName() + "#"+ std::to_string(instance->GetID()) 
+                                        + ".pmidgM");
+            }
+            
             GameLoader loader;
             loader.Save(file_path, file_name, *_game_state);
         }
@@ -342,7 +349,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     GameState *_game_state;
     WindowTransformState _window_transform_state = DORMANT;
     PMIDGEditorWindow _window;
-    std::string file_path = "/home/pabu/Desktop/LifeSim/build/instances";
+    std::string file_path = "/home/pabu/Desktop/LifeSim/build/stages";
     std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
 };
 

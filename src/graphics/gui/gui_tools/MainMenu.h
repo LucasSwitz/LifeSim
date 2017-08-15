@@ -5,11 +5,12 @@
 #include "src/graphics/gui/gui_tools/FolderContents.h"
 #include "src/graphics/gui/gui_tools/SaveDialog.h"
 #include "src/graphics/gui/gui_tools/MainMenuListener.h"
+#include "src/game/GameState.h"
 
 class MainMenu
 {
   public:
-    void Draw()
+    void Draw(GameState* game_state)
     {
         if (ImGui::BeginMainMenuBar())
         {
@@ -19,7 +20,7 @@ class MainMenu
             {
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Instance"))
+            if (ImGui::BeginMenu("Instance", game_state->GetStage()))
             {
                 if (ImGui::MenuItem("New Instance", "CTRL+I"))
                 {
@@ -29,7 +30,7 @@ class MainMenu
                     }
                 }
 
-                if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
+                /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
                 {
                     _focused = true;
                     FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
@@ -67,7 +68,7 @@ class MainMenu
 
                     ImGui::EndChild();
                     ImGui::EndMenu();
-                }
+                }*/
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Stage"))
@@ -79,8 +80,37 @@ class MainMenu
                         _listener->NewStagePressed();
                     }
                 }
-                if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S"))
+                if (ImGui::BeginMenu("Load Stage", "CTRL+SHIFT+S"))
                 {
+                    _focused = true;
+                    ImGui::BeginChild("Stage Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                    FolderContents stage_files("/home/pabu/Desktop/LifeSim/build/stages");
+                    std::string file_name = stage_files.Draw();
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->LoadStagePressed(file_name);
+                        }
+                    }
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
+                }
+                if(ImGui::BeginMenu("Save as Stage..."))
+                {
+                    ImGui::BeginChild("Save Stage##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
+                    std::string file_name = _save_dialog.Draw();
+
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->SaveStagePressed(file_name);
+                        }
+                    }
+
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }

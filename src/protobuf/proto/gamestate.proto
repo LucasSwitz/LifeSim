@@ -25,6 +25,8 @@ message Stage
 {
     required string file = 1;
     required string name = 2;
+    repeated int32 instances = 3;
+    optional int32 root_instance = 4;
 }
 
 message Component

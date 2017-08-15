@@ -32,6 +32,8 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         void NewInstancePressed();
         void LoadInstancePressed(std::string& file_name);
         void SaveInstancePressed(std::string& file_name);
+        void LoadStagePressed(std::string& file_name);
+        void SaveStagePressed(std::string& file_name);
         void NewStagePressed();
 
         //Inherited from EditModeControlListener

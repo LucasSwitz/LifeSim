@@ -18,19 +18,19 @@ Log &DevelopmentOverlay::GetLog()
 {
     return log;
 }
- 
-void DevelopmentOverlay::Render(PMIDGWindow *window, GameState* game_state, 
-                    TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
+
+void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
+                                TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
 
     brush.DrawExtras();
-    
+
     if (!IsFocused())
         brush.PaintWindow(*window);
     // #### DESIGN GUI HERE_selcected_file
-    main_menu.Draw();
+    main_menu.Draw(game_state);
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
@@ -40,22 +40,6 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, GameState* game_state,
     // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());
-}
-
-void DevelopmentOverlay::LoadInstancePressed(std::string &file_name)
-{
-    if (_listener)
-    {
-        _listener->OnLoadGameStateFile(file_name);
-    }
-}
-
-void DevelopmentOverlay::SaveInstancePressed(std::string &file_name)
-{
-    if (_listener)
-    {
-        _listener->OnSaveGameStateFile(file_name);
-    }
 }
 
 void DevelopmentOverlay::NewInstancePressed()
@@ -68,16 +52,32 @@ void DevelopmentOverlay::NewInstancePressed()
 
 void DevelopmentOverlay::NewStagePressed()
 {
-    if(_listener)
+    if (_listener)
     {
         _listener->OnCreateBlankStage();
+    }
+}
+
+void DevelopmentOverlay::LoadStagePressed(std::string &file_name)
+{
+    if (_listener)
+    {
+        _listener->OnLoadStageFile(file_name);
+    }
+}
+
+void DevelopmentOverlay::SaveStagePressed(std::string &file_name)
+{
+    if (_listener)
+    {
+        _listener->OnSaveStageFile(file_name);
     }
 }
 
 bool DevelopmentOverlay::IsFocused()
 {
     return log.IsFocused() || entity_table.IsFocused() ||
-           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() || 
+           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() ||
            main_menu.IsFocused() || stage_editor.IsFocused();
 }
 void DevelopmentOverlay::Shutdown()
@@ -92,11 +92,11 @@ void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
 
 void DevelopmentOverlay::OnLaunchGameRunner()
 {
-    if(_listener)
+    if (_listener)
         _listener->OnLaunchGameRunner();
 }
 void DevelopmentOverlay::OnStopGameRunner()
 {
-    if(_listener)
+    if (_listener)
         _listener->OnStopGameRunner();
 }

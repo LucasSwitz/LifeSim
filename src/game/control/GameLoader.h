@@ -45,10 +45,11 @@ class GameLoader
     {
         std::list<Entity *> entities;
         std::list<std::string> systems;
-        Stage* stage = new Stage();
+        LuaStage* stage = new LuaStage();
 
         protobuf.GetEntities(entities);
         protobuf.GetSystems(systems);
+
         protobuf.GetStage(stage);
 
         for (Entity *e : entities)

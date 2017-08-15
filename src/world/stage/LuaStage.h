@@ -170,7 +170,7 @@ class LuaStage : public Stage
         std::unique_ptr<LuaRef> _on_event_function;
         std::unique_ptr<LuaRef> _get_subscriptions_function;
 
-        std::string _file;
+        std::string _file = "";
 
 };
 

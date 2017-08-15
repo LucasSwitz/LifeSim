@@ -14,6 +14,8 @@ extern "C" {
 #include "lualib.h"
 }
 
+#include "src/game/resources/ResourceManager.h"
+
 #define LUA_STATE LuaUniversal::Instance()->GetLuaState()
 
 using namespace luabridge;
@@ -30,6 +32,11 @@ class LuaUniversal
     {
         L = luaL_newstate();
         luaL_openlibs(L);
+    }
+
+    void CollectGarbage()
+    {
+        luaL_dofile(L,Res("CollectGarbage.lua").c_str());
     }
 
     static LuaUniversal *Instance()
@@ -63,7 +70,7 @@ class LuaUniversal
         lua_pop(L, 1); // pop table
         return result;
     }
-
+    
     static void StringListFromLuaTable(lua_State *L, std::list<std::string>& list)
     {
         int length = get_length(L, -1);

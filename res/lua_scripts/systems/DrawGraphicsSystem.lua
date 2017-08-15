@@ -15,7 +15,5 @@ DrawGraphicsSystem =
             EngineEventManager.Instance():LaunchEvent(e)
             it = it.next
         end
-        --drawables:Free()
-        collectgarbage()
     end
 }

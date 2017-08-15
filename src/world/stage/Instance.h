@@ -145,7 +145,7 @@ class Instance : public EventSubscriber, public FPSRunnable
     protected:
         std::string _name;
         std::string _tile_map_name = "";
-        int _id;
+        int _id = -1;
         static int last_id;
     private:
         TileMap _tile_map;

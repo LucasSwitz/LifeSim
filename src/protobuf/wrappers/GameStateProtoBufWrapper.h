@@ -122,6 +122,17 @@ class GameStateProtoBufWrapper
         std::string file = lua_stage->GetFile();
         std::string name = lua_stage->GetName();
 
+        const std::unordered_map<int, Instance*>& instances = lua_stage->GetInstances();
+
+        for(auto it = instances.begin(); it != instances.end(); it++)
+        {
+            int instance_id = it->first;
+            serialzied_stage->add_instances(instance_id);
+        }
+
+        if(lua_stage->GetRootInstance())
+            serialzied_stage->set_root_instance(lua_stage->GetRootInstance()->GetID());
+
         serialzied_stage->set_file(file);
         serialzied_stage->set_name(name);
     }
@@ -209,13 +220,26 @@ class GameStateProtoBufWrapper
         }
     }
 
-    void GetStage(Stage* stage)
+    void GetStage(LuaStage* stage)
     {
-        pmidgserialized::Stage serializied_stage = serialized_game_state.stage();
-        LuaStage* lua_stage = dynamic_cast<LuaStage*>(stage);
+        pmidgserialized::Stage serialized_stage = serialized_game_state.stage();
 
-        if(lua_stage)
-            lua_stage->LoadFromFile(LUA_STATE,serializied_stage.file(),serializied_stage.name());
+        if(stage)
+            stage->LoadFromFile(LUA_STATE,serialized_stage.file(),serialized_stage.name());
+
+        int num_of_instances = serialized_stage.instances_size();
+
+        for(int i =0; i < num_of_instances; i++)
+        {
+            int instance_id = serialized_stage.instances(i);
+            stage->AddInstance(instance_id);
+        }
+
+        if(serialized_stage.has_root_instance())
+        {
+            int root_instance_id = serialized_stage.root_instance();
+            stage->SetRootInstance(root_instance_id);
+        }
     }
 
     void FromFile(std::string file_name)

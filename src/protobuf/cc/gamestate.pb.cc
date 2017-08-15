@@ -102,8 +102,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stage, file_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stage, name_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stage, instances_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Stage, root_instance_),
   0,
   1,
+  ~0u,
+  2,
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, _has_bits_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Component, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -152,11 +156,11 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 0, 8, sizeof(GameState)},
   { 11, 19, sizeof(Entity)},
   { 22, 28, sizeof(System)},
-  { 29, 36, sizeof(Stage)},
-  { 38, 48, sizeof(Component)},
-  { 53, 60, sizeof(ComponentValueString)},
-  { 62, 69, sizeof(ComponentValueBool)},
-  { 71, 78, sizeof(ComponentValueFloat)},
+  { 29, 38, sizeof(Stage)},
+  { 42, 52, sizeof(Component)},
+  { 57, 64, sizeof(ComponentValueString)},
+  { 66, 73, sizeof(ComponentValueBool)},
+  { 75, 82, sizeof(ComponentValueFloat)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -242,21 +246,22 @@ void AddDescriptorsImpl() {
       "idgserialized.Stage\"R\n\006Entity\022\n\n\002id\030\001 \002("
       "\005\022.\n\ncomponents\030\002 \003(\0132\032.pmidgserialized."
       "Component\022\014\n\004name\030\003 \002(\t\"\026\n\006System\022\014\n\004nam"
-      "e\030\001 \002(\t\"#\n\005Stage\022\014\n\004file\030\001 \002(\t\022\014\n\004name\030\002"
-      " \002(\t\"\200\002\n\tComponent\022\014\n\004name\030\001 \002(\t\022<\n\rstri"
-      "ng_values\030\002 \003(\0132%.pmidgserialized.Compon"
-      "entValueString\0228\n\013bool_values\030\003 \003(\0132#.pm"
-      "idgserialized.ComponentValueBool\022:\n\014floa"
-      "t_values\030\004 \003(\0132$.pmidgserialized.Compone"
-      "ntValueFloat\0221\n\rsubcomponents\030\005 \003(\0132\032.pm"
-      "idgserialized.Component\"9\n\024ComponentValu"
-      "eString\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 \002"
-      "(\t\"7\n\022ComponentValueBool\022\022\n\nvalue_name\030\001"
-      " \002(\t\022\r\n\005value\030\002 \002(\010\"8\n\023ComponentValueFlo"
-      "at\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\002"
+      "e\030\001 \002(\t\"M\n\005Stage\022\014\n\004file\030\001 \002(\t\022\014\n\004name\030\002"
+      " \002(\t\022\021\n\tinstances\030\003 \003(\005\022\025\n\rroot_instance"
+      "\030\004 \001(\005\"\200\002\n\tComponent\022\014\n\004name\030\001 \002(\t\022<\n\rst"
+      "ring_values\030\002 \003(\0132%.pmidgserialized.Comp"
+      "onentValueString\0228\n\013bool_values\030\003 \003(\0132#."
+      "pmidgserialized.ComponentValueBool\022:\n\014fl"
+      "oat_values\030\004 \003(\0132$.pmidgserialized.Compo"
+      "nentValueFloat\0221\n\rsubcomponents\030\005 \003(\0132\032."
+      "pmidgserialized.Component\"9\n\024ComponentVa"
+      "lueString\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002"
+      " \002(\t\"7\n\022ComponentValueBool\022\022\n\nvalue_name"
+      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\010\"8\n\023ComponentValueF"
+      "loat\022\022\n\nvalue_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\002"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 757);
+      descriptor, 799);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "gamestate.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -1535,6 +1540,8 @@ void System::set_allocated_name(::std::string* name) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Stage::kFileFieldNumber;
 const int Stage::kNameFieldNumber;
+const int Stage::kInstancesFieldNumber;
+const int Stage::kRootInstanceFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Stage::Stage()
@@ -1549,7 +1556,8 @@ Stage::Stage(const Stage& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
       _has_bits_(from._has_bits_),
-      _cached_size_(0) {
+      _cached_size_(0),
+      instances_(from.instances_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   file_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.has_file()) {
@@ -1559,6 +1567,7 @@ Stage::Stage(const Stage& from)
   if (from.has_name()) {
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
   }
+  root_instance_ = from.root_instance_;
   // @@protoc_insertion_point(copy_constructor:pmidgserialized.Stage)
 }
 
@@ -1566,6 +1575,7 @@ void Stage::SharedCtor() {
   _cached_size_ = 0;
   file_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  root_instance_ = 0;
 }
 
 Stage::~Stage() {
@@ -1603,6 +1613,7 @@ Stage* Stage::New(::google::protobuf::Arena* arena) const {
 
 void Stage::Clear() {
 // @@protoc_insertion_point(message_clear_start:pmidgserialized.Stage)
+  instances_.Clear();
   if (_has_bits_[0 / 32] & 3u) {
     if (has_file()) {
       GOOGLE_DCHECK(!file_.IsDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited()));
@@ -1613,6 +1624,7 @@ void Stage::Clear() {
       (*name_.UnsafeRawStringPointer())->clear();
     }
   }
+  root_instance_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -1653,6 +1665,38 @@ bool Stage::MergePartialFromCodedStream(
             this->name().data(), this->name().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
             "pmidgserialized.Stage.name");
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated int32 instances = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 1, 24u, input, this->mutable_instances())));
+        } else if (static_cast< ::google::protobuf::uint8>(tag) ==
+                   static_cast< ::google::protobuf::uint8>(26u)) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, this->mutable_instances())));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // optional int32 root_instance = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u)) {
+          set_has_root_instance();
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &root_instance_)));
         } else {
           goto handle_unusual;
         }
@@ -1708,6 +1752,17 @@ void Stage::SerializeWithCachedSizes(
       2, this->name(), output);
   }
 
+  // repeated int32 instances = 3;
+  for (int i = 0, n = this->instances_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(
+      3, this->instances(i), output);
+  }
+
+  // optional int32 root_instance = 4;
+  if (cached_has_bits & 0x00000004u) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->root_instance(), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1742,6 +1797,15 @@ void Stage::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->name(), target);
+  }
+
+  // repeated int32 instances = 3;
+  target = ::google::protobuf::internal::WireFormatLite::
+    WriteInt32ToArray(3, this->instances_, target);
+
+  // optional int32 root_instance = 4;
+  if (cached_has_bits & 0x00000004u) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->root_instance(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1795,6 +1859,22 @@ size_t Stage::ByteSizeLong() const {
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
+  // repeated int32 instances = 3;
+  {
+    size_t data_size = ::google::protobuf::internal::WireFormatLite::
+      Int32Size(this->instances_);
+    total_size += 1 *
+                  ::google::protobuf::internal::FromIntSize(this->instances_size());
+    total_size += data_size;
+  }
+
+  // optional int32 root_instance = 4;
+  if (has_root_instance()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->root_instance());
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -1824,8 +1904,9 @@ void Stage::MergeFrom(const Stage& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  instances_.MergeFrom(from.instances_);
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 3u) {
+  if (cached_has_bits & 7u) {
     if (cached_has_bits & 0x00000001u) {
       set_has_file();
       file_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.file_);
@@ -1834,6 +1915,10 @@ void Stage::MergeFrom(const Stage& from) {
       set_has_name();
       name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
     }
+    if (cached_has_bits & 0x00000004u) {
+      root_instance_ = from.root_instance_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -1861,8 +1946,10 @@ void Stage::Swap(Stage* other) {
   InternalSwap(other);
 }
 void Stage::InternalSwap(Stage* other) {
+  instances_.InternalSwap(&other->instances_);
   file_.Swap(&other->file_);
   name_.Swap(&other->name_);
+  std::swap(root_instance_, other->root_instance_);
   std::swap(_has_bits_[0], other->_has_bits_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
@@ -2000,6 +2087,60 @@ void Stage::set_allocated_name(::std::string* name) {
   }
   name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
   // @@protoc_insertion_point(field_set_allocated:pmidgserialized.Stage.name)
+}
+
+// repeated int32 instances = 3;
+int Stage::instances_size() const {
+  return instances_.size();
+}
+void Stage::clear_instances() {
+  instances_.Clear();
+}
+::google::protobuf::int32 Stage::instances(int index) const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Stage.instances)
+  return instances_.Get(index);
+}
+void Stage::set_instances(int index, ::google::protobuf::int32 value) {
+  instances_.Set(index, value);
+  // @@protoc_insertion_point(field_set:pmidgserialized.Stage.instances)
+}
+void Stage::add_instances(::google::protobuf::int32 value) {
+  instances_.Add(value);
+  // @@protoc_insertion_point(field_add:pmidgserialized.Stage.instances)
+}
+const ::google::protobuf::RepeatedField< ::google::protobuf::int32 >&
+Stage::instances() const {
+  // @@protoc_insertion_point(field_list:pmidgserialized.Stage.instances)
+  return instances_;
+}
+::google::protobuf::RepeatedField< ::google::protobuf::int32 >*
+Stage::mutable_instances() {
+  // @@protoc_insertion_point(field_mutable_list:pmidgserialized.Stage.instances)
+  return &instances_;
+}
+
+// optional int32 root_instance = 4;
+bool Stage::has_root_instance() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+void Stage::set_has_root_instance() {
+  _has_bits_[0] |= 0x00000004u;
+}
+void Stage::clear_has_root_instance() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+void Stage::clear_root_instance() {
+  root_instance_ = 0;
+  clear_has_root_instance();
+}
+::google::protobuf::int32 Stage::root_instance() const {
+  // @@protoc_insertion_point(field_get:pmidgserialized.Stage.root_instance)
+  return root_instance_;
+}
+void Stage::set_root_instance(::google::protobuf::int32 value) {
+  set_has_root_instance();
+  root_instance_ = value;
+  // @@protoc_insertion_point(field_set:pmidgserialized.Stage.root_instance)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

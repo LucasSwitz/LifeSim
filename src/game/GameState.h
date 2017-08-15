@@ -7,7 +7,7 @@
 #include "src/system/SystemController.h"
 
 #include "src/game/FPSRunnable.h"
-#include "src/world/stage/Instance.h"
+#include "src/world/stage/Stage.h"
 
 /**
     Purpose: GameState describes all game operating specific details. This includes 
@@ -49,6 +49,9 @@ class GameState : public FPSRunnable
             _current_stage->Tick(seconds_elapsed);
 
         _entity_manager.Clean();
+
+        //if using lua
+        LuaUniversal::Instance()->CollectGarbage();
     }
 
     void Unload()
