@@ -18,7 +18,7 @@ class Instance : public EventSubscriber, public FPSRunnable
 {
  public:
 
-    Instance(int id = -1);
+    Instance(int id = -1, std::string name = "");
 
     Instance(const Instance& instance)
     {}
@@ -30,14 +30,15 @@ class Instance : public EventSubscriber, public FPSRunnable
 
     virtual void Load() override
     {
+        std::cout << "Loading: " << _tile_map_name << std::endl;
         //load all local entites, do a cutscene, whatevs
-        if(!_tile_map_name.empty())
+        if(!_tile_map_name.empty() && !_loaded)
         {
             _tile_map.LoadFromFile(_tile_map_name);
         }
         else
         {
-            std::cout << "TileMap already loaded!" << std::endl;
+            std::cout << "TileMap already loaded or no file given!" << std::endl;
         }
         _loaded = true;
     }
@@ -51,6 +52,9 @@ class Instance : public EventSubscriber, public FPSRunnable
 
     virtual void Open()
     {
+        if(!_loaded)
+            Load();
+
         _tile_map.Show();
 
         for(int& i: _local_entities)
@@ -105,7 +109,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map = map;
     }   
 
-    int GetID()
+    int& GetID()
     {
         return _id;
     }
@@ -137,7 +141,6 @@ class Instance : public EventSubscriber, public FPSRunnable
 
     void AddLocalEntity(int id)
     {
-        std::cout << "Added Local Entity: " << id << std::endl;
         _local_entities.push_back(id);
     }
 
@@ -150,8 +153,8 @@ class Instance : public EventSubscriber, public FPSRunnable
     private:
         TileMap _tile_map;
         std::list<int> _local_entities;
-        bool _loaded;
-        bool _open;
+        bool _loaded = false;
+        bool _open = false;
         
 };
 #endif

@@ -80,6 +80,11 @@ class Stage : public EventSubscriber, public FPSRunnable
         AddInstance(LuaInstanceFactory::Inst()->GetInstance(id));
     }
 
+    void AddInstance(std::string name)
+    {
+        AddInstance(LuaInstanceFactory::Inst()->GetInstance(name));
+    }
+
     void SetRootInstance(Instance *instance)
     {
         _root_instance = instance;

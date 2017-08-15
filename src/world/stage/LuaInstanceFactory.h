@@ -16,12 +16,12 @@ class LuaInstanceFactory : public ScriptFactory<std::string>
   Instance* GetInstance(std::string name);
   Instance* GetInstance(int id);
   void AddScript(Preamble &pre, std::string script_path) override;
-
+  void AddScript(std::string& name, int& id, std::string& script_path);
   void Reset() override;
 
-   static LuaInstanceFactory* Inst() //can't name this Instance
+   static LuaInstanceFactory* Inst() //can't name this Instance :(
   {
-    static LuaInstanceFactory instance("/home/pabu/Desktop/LifeSim/lua_scripts/world/instances", "Instance");
+    static LuaInstanceFactory instance("/home/pabu/Desktop/LifeSim/res/lua_scripts/world/instances", "Instance");
 
     return &instance;
   }

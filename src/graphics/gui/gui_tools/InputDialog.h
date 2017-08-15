@@ -4,18 +4,18 @@
 #include "imgui.h"
 #include <string>
 
-class SaveDialog
+class InputDialog
 {
     public:
     std::string Draw()
     {
         
-        ImGui::InputText("Name##SaveDialog", buf, 256);
+        ImGui::InputText("Name##InputDialog", buf, 256);
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
         ImGui::SameLine();
 
 
-        if(ImGui::Button("Save##SaveDialog"))
+        if(ImGui::Button("Done##InputDialog"))
         {
             return std::string(buf);
         }

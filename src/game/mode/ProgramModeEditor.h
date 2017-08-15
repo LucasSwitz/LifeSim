@@ -15,6 +15,7 @@
 #include "src/utils/sfml/SFMLUtils.h"
 #include "src/system/SystemController.h"
 #include "src/game/PMIDGGameRunner.h"
+#include "src/utils/lua/InstanceFileBuilder.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
@@ -36,6 +37,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _game_state = new GameState();
 
         LuaTileFactory::Instance()->PopulateFactory();
+        LuaInstanceFactory::Inst()->PopulateFactory();
         EngineEventManager::Instance()->RegisterSubscriber(this);
 
         _dev_tools.Init(&_window);
@@ -84,13 +86,15 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     //######################### DEV TOOL CALLBACKS ########################
 
-    void OnCreateBlankInstance(int rows, int columns) override
+    void OnCreateBlankInstance(std::string& instance_name, int rows, int columns) override
     {
-        Instance *i = new Instance();
+        Instance *i = new Instance(-1,instance_name);
 
         i->GetTileMap().Blank(rows, columns);
 
         _game_state->GetStage()->AddInstance(i);
+
+        SaveInstance(i);
 
         /*_window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
                                      _game_state->GetInstance()->GetTileMap().HeightPx());*/
@@ -169,19 +173,31 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         if (_game_state && _game_state->GetStage())
         {
             _game_state->GetStage()->SetName(file_name);
-            
-            const std::unordered_map<int,Instance*>& instances = _game_state->GetStage()->GetInstances();
-            for(auto it = instances.begin(); it != instances.end(); it++)
+
+            const std::unordered_map<int, Instance *> &instances = _game_state->GetStage()->GetInstances();
+            for (auto it = instances.begin(); it != instances.end(); it++)
             {
-                Instance* instance = it->second; 
-                instance->GetTileMap().SaveToFile(tile_maps_path + "/" +
-                                        _game_state->GetStage()->GetName() + "#"+ std::to_string(instance->GetID()) 
-                                        + ".pmidgM");
+                SaveInstance(it->second);
             }
-            
+
             GameLoader loader;
             loader.Save(file_path, file_name, *_game_state);
         }
+    }
+
+    void SaveInstance(Instance *instance)
+    {
+        std::string tile_map_path = tile_maps_path + "/" + instance->GetName() + ".pmidgM";
+        instance->GetTileMap().SaveToFile(tile_map_path);
+
+        InstanceFileBuilder instance_builder(instance->GetName(), instance->GetID());
+
+        instance_builder.SetTilemapFile(tile_map_path);
+
+        std::string instance_path = instances_path + "/" + instance->GetName() + ".pmidgI";
+        instance_builder.Output(instance_path);
+
+        LuaInstanceFactory::Inst()->AddScript(instance->GetName(), instance->GetID(), instance_path);
     }
 
     bool OnWindowEvent(sf::Event &e)
@@ -351,6 +367,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     PMIDGEditorWindow _window;
     std::string file_path = "/home/pabu/Desktop/LifeSim/build/stages";
     std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
+    std::string instances_path  = "/home/pabu/Desktop/LifeSim/res/lua_scripts/world/instances";
 };
 
 #endif

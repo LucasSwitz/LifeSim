@@ -42,11 +42,11 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
     ImGui::SFML::Render(window->SFWindow());
 }
 
-void DevelopmentOverlay::NewInstancePressed()
+void DevelopmentOverlay::NewInstancePressed(std::string& instance_name)
 {
     if (_listener)
     {
-        _listener->OnCreateBlankInstance(30, 30);
+        _listener->OnCreateBlankInstance(instance_name, 30, 30);
     }
 }
 

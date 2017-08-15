@@ -29,7 +29,7 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         bool IsFocused();
 
         // Inhertited from MainMenuListener
-        void NewInstancePressed();
+        void NewInstancePressed(std::string& name);
         void LoadInstancePressed(std::string& file_name);
         void SaveInstancePressed(std::string& file_name);
         void LoadStagePressed(std::string& file_name);
@@ -53,6 +53,6 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         DevelopmentOverlayListener* _listener = nullptr;
         bool _focused = false;
 
-        SaveDialog _save_dialog;
+        InputDialog _save_dialog;
 };
 #endif

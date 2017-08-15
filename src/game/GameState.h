@@ -43,10 +43,12 @@ class GameState : public FPSRunnable
 
     void Tick(float seconds_elapsed)
     {
-        _system_controller.Update(seconds_elapsed);
 
-        if (_current_stage)
+        if (_current_stage && _current_stage->GetCurrentInstance())
+        {
+            _system_controller.Update(seconds_elapsed);
             _current_stage->Tick(seconds_elapsed);
+        }
 
         _entity_manager.Clean();
 

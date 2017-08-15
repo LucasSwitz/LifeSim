@@ -1,7 +1,7 @@
 --PREAMBLE_START
 ScriptType = "Instance"
 Name = "TestInstance"
-ID = 0
+ID = -1
 --PREAMBLE_END
 
 TestInstance = 

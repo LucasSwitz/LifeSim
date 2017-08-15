@@ -75,9 +75,9 @@ public:
             LuaRef _instance_table = getGlobal(lua_state, instance_name.c_str());
             if ((_instance_table).isTable())
             {
-                if ((_instance_table)["tilemap"])
+                if ((_instance_table)["tile_map"])
                 {
-                    _tile_map_name = (_instance_table)["tilemap"].cast<std::string>();
+                    _tile_map_name = (_instance_table)["tile_map"].cast<std::string>();
                 }
 
                 if ((_instance_table)["Open"])
