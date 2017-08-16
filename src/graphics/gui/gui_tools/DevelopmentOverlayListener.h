@@ -10,8 +10,8 @@ class DevelopmentOverlayListener
     virtual void OnCreateBlankStage(){};
     virtual void OnLoadStageFile(const std::string &file_name){};
     virtual void OnSaveStageFile(const std::string &file_name){};
-    virtual void OnLaunchGameRunner(){};
-    virtual void OnStopGameRunner(){};
+    virtual void OnLaunchInstance(){};
+    virtual void OnLaunchStage(){};
 };
 
 #endif

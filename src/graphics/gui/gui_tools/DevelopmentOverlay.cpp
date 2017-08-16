@@ -34,7 +34,9 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
     log.Draw("Log");
     entity_table.Draw("Entities");
     instance_editor.Draw(texture_cache, brush);
-    stage_editor.Draw(game_state->GetStage());
+    if(game_state)
+        stage_editor.Draw(game_state->GetStage());
+        
     system_monitor.Draw("System Monitor");
     edit_mode_controls.Draw("Edit Mode Controls", *window);
     // #### RENDER GUI HERE
@@ -90,13 +92,13 @@ void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
     _listener = listener;
 }
 
-void DevelopmentOverlay::OnLaunchGameRunner()
+void DevelopmentOverlay::OnLaunchStage()
 {
     if (_listener)
-        _listener->OnLaunchGameRunner();
+        _listener->OnLaunchStage();
 }
-void DevelopmentOverlay::OnStopGameRunner()
+void DevelopmentOverlay::OnLaunchInstance()
 {
     if (_listener)
-        _listener->OnStopGameRunner();
+        _listener->OnLaunchInstance();
 }

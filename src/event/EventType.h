@@ -35,6 +35,8 @@ class EventType
     static int ENTITY_SPAWNED_EVENT;
     static int START_SYSTEM_EVENT;
     static int STOP_SYSTEM_EVENT;
+    static int STAGE_INSTANCE_CHANGING;
+    static int STAGE_INSTANCE_CHANGED;
 
 };
 #endif

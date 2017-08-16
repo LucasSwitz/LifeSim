@@ -8,8 +8,8 @@
 class EditModeControlsListener
 {
   public:
-    virtual void OnLaunchGameRunner() {}
-    virtual void OnStopGameRunner() {}
+    virtual void OnLaunchStage() {}
+    virtual void OnLaunchInstance() {}
 };
 
 class EditModeControls
@@ -50,10 +50,16 @@ class EditModeControls
                 }
             }
         }
-        if (ImGui::Button("Play##NotStarted"))
+        if (ImGui::Button("Play Stage##NotStarted"))
         {
             if (_listener)
-                _listener->OnLaunchGameRunner();
+                _listener->OnLaunchStage();
+        }
+
+        if (ImGui::Button("Play Instance##NotStarted"))
+        {
+            if (_listener)
+                _listener->OnLaunchInstance();
         }
         ImGui::End();
     }

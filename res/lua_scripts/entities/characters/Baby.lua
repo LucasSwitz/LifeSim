@@ -1,17 +1,17 @@
 --PREAMBLE_START
 ScriptType = "Entity"
-Name = "TestEntity"
-PrototypeID = 1000
+Name = "Baby"
+PrototypeID = 2000
 --PREAMBLE_END
 
-TestEntity = 
+Baby = 
 {
         id = 0,
         Components = 
         {
             Player = 
             {   
-                id = 1
+                id = 2
             },
             Position = 
             {
@@ -21,7 +21,7 @@ TestEntity =
             },
             Graphics = 
             {
-                sprite = Res("mario_1.png"),
+                sprite = Res("baby_1.png"),
                 layer = 1,
                 width = 32,
                 height = 32
@@ -73,45 +73,21 @@ TestEntity =
                             Frame1 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                sprite= Res("baby_1.png"),
                                 next = "Frame2"
                             },
                             Frame2 = 
                             {
                                 duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_2.png",
+                                sprite = Res("baby_2.png"),
                                 next = "Frame3"
                             },
                             Frame3 = 
                             {
                                 duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_3.png",
-                                next = "Frame4"
-                            },
-                            Frame4 = 
-                            {
-                                duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_4.png",
-                                next = "Frame5"
-                            },
-                            Frame5 = 
-                            {
-                                duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_5.png",
-                                next = "Frame6"
-                            },
-                            Frame6 = 
-                            {
-                                duration = 0.1,
-                                sprite= "/home/pabu/Desktop/LifeSim/res/sprites/mario_6.png",
-                                next = "Frame7"
-                            },
-                            Frame7 = 
-                            {
-                                duration = 0.1,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_7.png",
+                                sprite= Res("baby_3.png"),
                                 next = "Frame1"
-                            }
+                            },
                         }
                     },
                     Idle = 
@@ -122,7 +98,7 @@ TestEntity =
                             Still =
                             {
                                 duration = 0,
-                                sprite = "/home/pabu/Desktop/LifeSim/res/sprites/mario_1.png",
+                                sprite = Res("baby_1.png"),
                                 next = "Still"
                             }
                         }

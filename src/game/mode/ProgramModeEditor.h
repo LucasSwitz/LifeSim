@@ -47,6 +47,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _game_state->Setup();
         _game_runner.SetRunnable(_game_state);
         _editor_runner.SetRunnable(this);
+        MessageDispatch::Instance()->RegisterSubscriber(this);
     }
 
     void Load()
@@ -86,18 +87,15 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     //######################### DEV TOOL CALLBACKS ########################
 
-    void OnCreateBlankInstance(std::string& instance_name, int rows, int columns) override
+    void OnCreateBlankInstance(std::string &instance_name, int rows, int columns) override
     {
-        Instance *i = new Instance(-1,instance_name);
+        Instance *i = new Instance(-1, instance_name);
 
         i->GetTileMap().Blank(rows, columns);
 
         _game_state->GetStage()->AddInstance(i);
 
         GenerateInstanceTemplate(i);
-
-        /*_window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
-                                     _game_state->GetInstance()->GetTileMap().HeightPx());*/
     }
 
     void OnCreateBlankStage()
@@ -113,7 +111,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _window.SetName("New Stage Name");
     }
 
-    void OnLaunchGameRunner() override
+    void OnLaunchInstance() override
     {
         _external_game_runner = new PMIDGGameRunner();
         _external_game_runner->SetListener(this);
@@ -121,7 +119,11 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         _editor_runner.SetRunnable(_external_game_runner);
     }
 
-    void OnStopGameRunner() override
+    void OnLaunchStage() override
+    {
+    }
+
+    void OnStopGameRunner()
     {
         _game_state->Setup();
         _external_game_runner = nullptr;
@@ -145,11 +147,25 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
                 EngineEventManager::Instance()->LaunchEvent(e);
             }
         }
+        if (e.id == EventType::STAGE_INSTANCE_CHANGED)
+        {
+            /*Instance* current_instance = _game_state->GetStage()->GetCurrentInstance();
+            _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
+                                         current_instance->GetTileMap().HeightPx());*/
+        }
+        if (e.id == EventType::STAGE_INSTANCE_CHANGING)
+        {
+            Instance *current_instance = _game_state->GetStage()->GetCurrentInstance();
+            if (current_instance)
+                SaveInstanceTilemap(current_instance);
+        }
     }
 
     std::list<Subscription> GetSubscriptions()
     {
-        std::list<Subscription> subs = {EventType::CLOSE_WINDOW_EVENT};
+        std::list<Subscription> subs = {Subscription(EventType::CLOSE_WINDOW_EVENT),
+                                        Subscription(EventType::STAGE_INSTANCE_CHANGING),
+                                        Subscription(EventType::STAGE_INSTANCE_CHANGED)};
         return subs;
     }
 
@@ -172,21 +188,29 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     {
         if (_game_state && _game_state->GetStage())
         {
-            _game_state->GetStage()->SetName(file_name);
+            Stage *stage = _game_state->GetStage();
+            if (stage->GetCurrentInstance())
+                SaveInstanceTilemap(stage->GetCurrentInstance());
+            stage->SetName(file_name);
 
             GameLoader loader;
             loader.Save(file_path, file_name, *_game_state);
         }
     }
 
-    void GenerateInstanceTemplate(Instance *instance)
+    void SaveInstanceTilemap(Instance *instance)
     {
         std::string tile_map_path = tile_maps_path + "/" + instance->GetName() + ".pmidgM";
         instance->GetTileMap().SaveToFile(tile_map_path);
+    }
+
+    void GenerateInstanceTemplate(Instance *instance)
+    {
+        SaveInstanceTilemap(instance);
 
         InstanceFileBuilder instance_builder(instance->GetName(), instance->GetID());
 
-        instance_builder.SetTilemapFile(tile_map_path);
+        instance_builder.SetTilemapFile(instance->GetTileMap().GetFile());
 
         std::string instance_path = instances_path + "/" + instance->GetName() + ".pmidgI";
         instance_builder.Output(instance_path);
@@ -361,7 +385,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     PMIDGEditorWindow _window;
     std::string file_path = "/home/pabu/Desktop/LifeSim/build/stages";
     std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
-    std::string instances_path  = "/home/pabu/Desktop/LifeSim/res/lua_scripts/world/instances";
+    std::string instances_path = "/home/pabu/Desktop/LifeSim/res/lua_scripts/world/instances";
 };
 
 #endif

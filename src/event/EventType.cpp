@@ -28,3 +28,5 @@ int EventType::ENTITY_SPAWNED_EVENT = 22;
 int EventType::SPAWN_ENTITY_EVENT = 23;
 int EventType::START_SYSTEM_EVENT = 24;
 int EventType::STOP_SYSTEM_EVENT = 25;
+int EventType::STAGE_INSTANCE_CHANGING = 26;
+int EventType::STAGE_INSTANCE_CHANGED = 27;

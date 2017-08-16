@@ -63,6 +63,16 @@ Entity* Entity::DowncastFromComponentUser(ComponentUser* caster)
     return nullptr;
 }
 
+void Entity::SetInstance(int instance_id)
+{
+    _instance = instance_id;
+}
+
+int Entity::GetInstance() const
+{
+    return _instance;
+}
+
 
 Entity::~Entity()
 {

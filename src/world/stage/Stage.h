@@ -101,11 +101,16 @@ class Stage : public EventSubscriber, public FPSRunnable
         if(!HasInstance(name))
             return;
 
+        Event e = Event(EventType::STAGE_INSTANCE_CHANGING,-1,-1);
+        MessageDispatch::Instance()->LaunchEvent(e);
+
         _current_instance = GetInstance(name);
 
         if (do_load && !_current_instance->IsLoaded())
             _current_instance->Load();
 
+        e = Event(EventType::STAGE_INSTANCE_CHANGED,-1,-1);
+        MessageDispatch::Instance()->LaunchEvent(e);
         _current_instance->Open();
     }
 
@@ -184,8 +189,14 @@ class Stage : public EventSubscriber, public FPSRunnable
         {
             Entity* entity = e.InfoToType<Entity*>();
             int instance_id = e.target_id;
-            Instance* instance = GetInstance(instance_id);
-            instance->AddLocalEntity(entity->ID());
+            if(HasInstance(instance_id))
+            {
+                entity->SetInstance(instance_id);
+                Instance* instance = GetInstance(instance_id);
+                instance->AddLocalEntity(entity->ID());
+            }
+            else
+                std::cout << "Invalid instance id: " << instance_id << std::endl;
         }
     }
 

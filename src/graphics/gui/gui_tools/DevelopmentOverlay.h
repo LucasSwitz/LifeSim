@@ -37,8 +37,8 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         void NewStagePressed();
 
         //Inherited from EditModeControlListener
-        void OnLaunchGameRunner();
-        void OnStopGameRunner();
+        void OnLaunchStage();
+        void OnLaunchInstance();
 
         Log log;
         EntityTable entity_table;

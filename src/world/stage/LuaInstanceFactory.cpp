@@ -52,6 +52,10 @@ bool LuaInstanceFactory::InstancePrototypeExists(std::string name)
 int LuaInstanceFactory::LowestUnassignedKey()
 {
     int size = _instance_directory.size();
+
+    if(size == 0)
+        return 0;
+        
     std::vector<int> ids(size);
 
     for(auto it = _instance_directory.begin(); it != _instance_directory.end(); it++)

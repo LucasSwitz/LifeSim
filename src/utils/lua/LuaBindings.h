@@ -54,6 +54,7 @@ class LuaBindings
                 .addStaticData("CPP_DEFINED_ENTITY", &Entity::CPP_DEFINED_ENTITY)
                 .addStaticData("LUA_DEFINED_ENTITY", &Entity::LUA_DEFINED_ENTITY)
                 .addStaticFunction("Downcast",&Entity::DowncastFromComponentUser)
+                .addProperty("instance",&Entity::GetInstance,&Entity::SetInstance)
             .endClass()
             .deriveClass<LuaEntity, Entity>("LuaEntity")
                 .addStaticFunction("Downcast",&LuaEntity::DownCastFromEntity)
