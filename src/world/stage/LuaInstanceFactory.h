@@ -18,6 +18,7 @@ class LuaInstanceFactory : public ScriptFactory<std::string>
   void AddScript(Preamble &pre, std::string script_path) override;
   void AddScript(std::string& name, int& id, std::string& script_path);
   void Reset() override;
+  int LowestUnassignedKey();
 
    static LuaInstanceFactory* Inst() //can't name this Instance :(
   {

@@ -18,19 +18,22 @@
 class GameState : public FPSRunnable
 {
   public:
+    GameState()
+    {
+        _message_dispatch.RegisterSubscriber(&_system_controller);
+    };
 
-    GameState(){};
-    GameState(const GameState& game_state) : _message_dispatch(), 
+    GameState(const GameState &game_state) : _message_dispatch(),
                                              _entity_manager(game_state._entity_manager, _component_users),
                                              _system_controller(game_state._system_controller),
                                              _current_stage(game_state._current_stage)
     {
+        _message_dispatch.RegisterSubscriber(&_system_controller);
         //all the things need to add themselves to the component user base
     }
-    
+
     void Load()
     {
-        
     }
 
     void Setup()
@@ -58,19 +61,18 @@ class GameState : public FPSRunnable
 
     void Unload()
     {
-
     }
 
-    void SetStage(Stage* stage)
+    void SetStage(Stage *stage)
     {
         _current_stage = stage;
         _current_stage->Load();
         _current_stage->Enter();
     }
 
-    void ChangeState(Stage* new_stage)
+    void ChangeState(Stage *new_stage)
     {
-        if(_current_stage)
+        if (_current_stage)
         {
             _current_stage->Exit();
             _current_stage->Unload();
@@ -80,7 +82,7 @@ class GameState : public FPSRunnable
     }
 
     void AddSystem(std::string system_name)
-    {            
+    {
         _system_controller.AddToSystemExecutionSequence(system_name);
     }
 
@@ -92,9 +94,9 @@ class GameState : public FPSRunnable
     void AddEntity(Entity *e)
     {
         _entity_manager.RegisterEntity(e);
-     }
+    }
 
-    Stage* GetStage()
+    Stage *GetStage()
     {
         return _current_stage;
     }
@@ -114,12 +116,11 @@ class GameState : public FPSRunnable
         return _system_controller;
     }
 
-
   private:
     ComponentUserBase _component_users;
     SystemController _system_controller;
     MessageDispatch _message_dispatch;
     EntityManager _entity_manager;
-    Stage* _current_stage = nullptr;
+    Stage *_current_stage = nullptr;
 };
 #endif

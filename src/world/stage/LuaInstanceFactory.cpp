@@ -49,6 +49,30 @@ bool LuaInstanceFactory::InstancePrototypeExists(std::string name)
     return _instance_name_to_id_directory.find(name) != _instance_name_to_id_directory.end();
 }
 
+int LuaInstanceFactory::LowestUnassignedKey()
+{
+    int size = _instance_directory.size();
+    std::vector<int> ids(size);
+
+    for(auto it = _instance_directory.begin(); it != _instance_directory.end(); it++)
+    {
+        int id = it->first;
+
+        if(id >= size || id < 0)
+            continue;
+        
+        ids[id] = 1;
+    }
+
+    for(int i = 0; i < size; i++)
+    {
+        if(ids[i] == 0)
+        {
+            return i;
+        }
+    }
+}
+
 void LuaInstanceFactory::Reset()
 {
     _instance_directory.clear();

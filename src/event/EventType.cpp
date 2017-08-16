@@ -26,3 +26,5 @@ int EventType::STOP_PROGRAM_EVENT = 20;
 int EventType::RECENTER_VIEW_EVENT = 21;
 int EventType::ENTITY_SPAWNED_EVENT = 22;
 int EventType::SPAWN_ENTITY_EVENT = 23;
+int EventType::START_SYSTEM_EVENT = 24;
+int EventType::STOP_SYSTEM_EVENT = 25;

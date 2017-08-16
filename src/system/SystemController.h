@@ -7,12 +7,15 @@
 
 #include "src/system/SystemFactory.h"
 #include "src/utils/logging/Logging.h"
+#include "src/event/EventSubscriber.h"
+#include "src/event/EventType.h"
+
 /**
   Factory that loads all systems and orders their execution accordingly. 
   This factory should be seperated from the controller.
 **/
 
-class SystemController
+class SystemController : public EventSubscriber
 {
   friend class GameState;
 
@@ -25,6 +28,7 @@ public:
     {
       AddToSystemExecutionSequence((*it)->GetName());
     }
+    MessageDispatch::Instance()->RegisterSubscriber(this);
   }
 
   void AddToSystemExecutionSequence(const std::string &system_name);
@@ -65,8 +69,15 @@ public:
   std::list<System *> &GetExecutionSequenceMutable();
   std::list<System *> &GetPassiveSystemsMutable();
 
+  //Inherited from EventSubscriber
+  void OnEvent(Event &e);
+  std::list<Subscription> GetSubscriptions();
+
 protected:
-  SystemController(){};
+  SystemController()
+  {
+    
+  }
 
   std::list<System *> _systems_execution_sequence;
   std::list<System *> _passive_systems;
@@ -75,8 +86,8 @@ private:
   class SystemNameComparator
   {
   public:
-    explicit SystemNameComparator(std::string name) : _name(name){}
-    inline bool operator()(System*& s)
+    explicit SystemNameComparator(std::string name) : _name(name) {}
+    inline bool operator()(System *&s)
     {
       return s->GetName().compare(_name) == 0;
     }

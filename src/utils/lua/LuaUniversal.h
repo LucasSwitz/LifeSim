@@ -117,6 +117,21 @@ class LuaUniversal
         }
     }
 
+    static void StringVectorFromLuaTable(std::vector<std::string>& list,lua_State *L)
+    {
+        int length = get_length(L, -1);
+        for (int i = 0; i < length; i++)
+        {
+            lua_pushinteger(L, i + 1);
+            lua_gettable(L, -2);
+            if (lua_isstring(L, -1))
+            {
+                list.push_back(lua_tostring(L, -1));
+            }
+            lua_pop(L, 1);
+        }
+    }
+
     template <typename T>
     static void ListFromTable(const LuaRef &table, std::list<T> &list)
     {

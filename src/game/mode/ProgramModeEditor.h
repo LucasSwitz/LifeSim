@@ -94,7 +94,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
         _game_state->GetStage()->AddInstance(i);
 
-        SaveInstance(i);
+        GenerateInstanceTemplate(i);
 
         /*_window.OnInstanceSizeChange(_game_state->GetInstance()->GetTileMap().WidthPx(),
                                      _game_state->GetInstance()->GetTileMap().HeightPx());*/
@@ -174,18 +174,12 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         {
             _game_state->GetStage()->SetName(file_name);
 
-            const std::unordered_map<int, Instance *> &instances = _game_state->GetStage()->GetInstances();
-            for (auto it = instances.begin(); it != instances.end(); it++)
-            {
-                SaveInstance(it->second);
-            }
-
             GameLoader loader;
             loader.Save(file_path, file_name, *_game_state);
         }
     }
 
-    void SaveInstance(Instance *instance)
+    void GenerateInstanceTemplate(Instance *instance)
     {
         std::string tile_map_path = tile_maps_path + "/" + instance->GetName() + ".pmidgM";
         instance->GetTileMap().SaveToFile(tile_map_path);

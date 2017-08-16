@@ -109,11 +109,6 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map = map;
     }   
 
-    int& GetID()
-    {
-        return _id;
-    }
-
     bool IsOpen()
     {
         return _open;
@@ -122,11 +117,6 @@ class Instance : public EventSubscriber, public FPSRunnable
     bool IsLoaded()
     {
         return _loaded;
-    }
-
-    void SetID(int id)
-    {
-        _id = id;
     }
 
     void SetName(const std::string& name)
@@ -144,12 +134,15 @@ class Instance : public EventSubscriber, public FPSRunnable
         _local_entities.push_back(id);
     }
 
+    int& GetID()
+    {
+        return _id;
+    }
 
     protected:
         std::string _name;
         std::string _tile_map_name = "";
-        int _id = -1;
-        static int last_id;
+        int _id;
     private:
         TileMap _tile_map;
         std::list<int> _local_entities;

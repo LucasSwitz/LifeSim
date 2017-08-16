@@ -122,7 +122,7 @@ class GameStateProtoBufWrapper
         std::string file = lua_stage->GetFile();
         std::string name = lua_stage->GetName();
 
-        const std::unordered_map<int, Instance*>& instances = lua_stage->GetInstances();
+        const std::unordered_map<int, std::string>& instances = lua_stage->GetInstanceNames();
 
         for(auto it = instances.begin(); it != instances.end(); it++)
         {

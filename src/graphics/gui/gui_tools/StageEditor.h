@@ -15,27 +15,31 @@ class StageEditor
     {
         if (!stage)
             return;
+
         ImGui::Begin("Stage Editor");
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
-        _instance_ids.clear();
-        const std::unordered_map<int, Instance *> instance_map = stage->GetInstances();
+        _instance_names.clear();
+        const std::unordered_map<std::string, Instance *> &instance_map = stage->GetInstances();
         for (auto it = instance_map.begin(); it != instance_map.end(); it++)
         {
-            _instance_ids.push_back(std::to_string(it->first));
+            _instance_names.push_back(it->first);
         }
 
-        ImGui::ListBoxVector("", &_selected_instance, _instance_ids);
+        if (_last_stage != stage)
+            _selected_instance = -1;
+            
+        ImGui::ListBoxVector("", &_selected_instance, _instance_names);
 
-        if (_selected_instance != -1 && _last_selection != _selected_instance)
+        if (_selected_instance != -1 && (_last_selection != _selected_instance))
         {
             _last_selection = _selected_instance;
-            stage->ChangeInstance(std::stoi(_instance_ids[_selected_instance])); //fix this to accept ints
+            stage->ChangeInstance(_instance_names[_selected_instance]);
         }
 
+        _last_stage = stage;
         ImGui::End();
     }
-
 
     bool IsFocused()
     {
@@ -43,9 +47,10 @@ class StageEditor
     }
 
   private:
-    std::vector<std::string> _instance_ids;
+    std::vector<std::string> _instance_names;
     int _selected_instance = -1;
     int _last_selection = -1;
     bool _focused = false;
+    Stage *_last_stage = 0;
 };
 #endif

@@ -51,7 +51,7 @@ class Stage : public EventSubscriber, public FPSRunnable
     //Unload all loaded instances
     virtual void Exit()
     {
-        for (auto it = _instances.begin(); it != _instances.end(); it++)
+        for (auto it = _instances_names.begin(); it != _instances_names.end(); it++)
         {
             Instance *inst = it->second;
 
@@ -72,7 +72,8 @@ class Stage : public EventSubscriber, public FPSRunnable
 
     void AddInstance(Instance *instance)
     {
-        _instances.insert(std::make_pair(instance->GetID(), instance));
+        _instances_names.insert(std::make_pair(instance->GetName(), instance));
+        _instances_id_to_name.insert(std::make_pair(instance->GetID(),instance->GetName()));
     }
 
     void AddInstance(int id)
@@ -95,33 +96,61 @@ class Stage : public EventSubscriber, public FPSRunnable
         SetRootInstance(LuaInstanceFactory::Inst()->GetInstance(id));
     }
 
-    void SetCurrentInstance(int id, bool do_load = true)
+    void SetCurrentInstance(std::string name, bool do_load = true)
     {
-        if(!HasInstance(id))
+        if(!HasInstance(name))
             return;
 
-        _current_instance = GetInstance(id);
+        _current_instance = GetInstance(name);
 
         if (do_load && !_current_instance->IsLoaded())
             _current_instance->Load();
 
         _current_instance->Open();
     }
-    
-    void ChangeInstance(int id)
+
+    void SetCurrentInstance(int id, bool do_load = false)
     {
-        if(!HasInstance(id))
+        SetCurrentInstance(GetName(id),do_load);
+    }
+    
+    void ChangeInstance(const std::string& name)
+    {
+        if(!HasInstance(name))
             return;
 
         if (_current_instance)
             _current_instance->Close();
 
-        SetCurrentInstance(id);
+        SetCurrentInstance(name);
+    }
+
+    void ChangeInstance(int id)
+    {
+        ChangeInstance(GetName(id));
     }
     
+    
+    bool HasInstance(const std::string& name)
+    {
+        return _instances_names.find(name) != _instances_names.end();
+    }
+
     bool HasInstance(int id)
     {
-        return _instances.find(id) != _instances.end();
+        return HasInstance(GetName(id));
+    }
+
+    std::string GetName(int id)
+    {
+        if(HasName(id))
+            return _instances_id_to_name.at(id);
+        return "";
+    }
+
+    bool HasName(int id)
+    {
+        return _instances_id_to_name.find(id) != _instances_id_to_name.end();
     }
 
     Instance* GetCurrentInstance()
@@ -129,14 +158,19 @@ class Stage : public EventSubscriber, public FPSRunnable
         return _current_instance;
     }
 
-    Instance* GetInstance(int id)
+    Instance* GetInstance(const std::string& name)
     {
-        if(!HasInstance(id))
+        if(!HasInstance(name))
             return nullptr;
         else
         {
-            return _instances.at(id);
+            return _instances_names.at(name);
         }
+    }
+
+    Instance* GetInstance(const int id)
+    {
+        return GetInstance(GetName(id));
     }
 
     virtual void OnEvent(Event &e)
@@ -173,10 +207,15 @@ class Stage : public EventSubscriber, public FPSRunnable
         _name = name;
     }
 
-    const std::unordered_map<int, Instance*>& GetInstances() const
+    const std::unordered_map<std::string, Instance*>& GetInstances() const
     {
-        return _instances;
+        return _instances_names;
     } 
+
+    const std::unordered_map<int, std::string>& GetInstanceNames() const
+    {
+        return _instances_id_to_name;
+    }
 
     Instance* GetRootInstance()
     {
@@ -188,7 +227,8 @@ class Stage : public EventSubscriber, public FPSRunnable
     Instance *_root_instance = nullptr;
 
   private:
-    std::unordered_map<int, Instance *> _instances;
+    std::unordered_map<int, std::string> _instances_id_to_name;
+    std::unordered_map<std::string, Instance *> _instances_names;
     std::string _name;
 };
 

@@ -33,6 +33,8 @@ class EventType
     static int RECENTER_VIEW_EVENT;
     static int SPAWN_ENTITY_EVENT;
     static int ENTITY_SPAWNED_EVENT;
+    static int START_SYSTEM_EVENT;
+    static int STOP_SYSTEM_EVENT;
 
 };
 #endif

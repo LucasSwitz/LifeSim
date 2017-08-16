@@ -1,6 +1,6 @@
 #include "SystemController.h"
 
-SystemController* SystemController::_instance = nullptr;
+SystemController *SystemController::_instance = nullptr;
 
 void SystemController::AddPassiveSystem(const std::string &system_name)
 {
@@ -8,13 +8,13 @@ void SystemController::AddPassiveSystem(const std::string &system_name)
     AddPassiveSystem(system);
 }
 
-std::list<System*>::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string& system_name)
+std::list<System *>::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string &system_name)
 {
     auto it = _systems_execution_sequence.begin();
 
-    for(; it != _systems_execution_sequence.end(); it++)
+    for (; it != _systems_execution_sequence.end(); it++)
     {
-        if((*it)->GetName().compare(system_name) == 0)
+        if ((*it)->GetName().compare(system_name) == 0)
         {
             it = _systems_execution_sequence.erase(it);
             break;
@@ -42,8 +42,8 @@ void SystemController::AddToSystemExecutionSequence(System *system)
 
     //Make sure system isn't already added
     auto it = std::find_if(_systems_execution_sequence.begin(),
-                        _systems_execution_sequence.end(),
-                        SystemNameComparator(system->GetName()));
+                           _systems_execution_sequence.end(),
+                           SystemNameComparator(system->GetName()));
 
     if (it == _systems_execution_sequence.end())
     {
@@ -58,8 +58,8 @@ void SystemController::AddToSystemExecutionSequence(System *system)
             if (before_system)
             {
                 auto it = std::find_if(_systems_execution_sequence.begin(),
-                                    _systems_execution_sequence.end(),
-                                    SystemNameComparator(system_before_name));
+                                       _systems_execution_sequence.end(),
+                                       SystemNameComparator(system_before_name));
 
                 //previous system is already in Sequence
                 if (it != _systems_execution_sequence.end())
@@ -104,7 +104,7 @@ void SystemController::Update(float seconds_since_last_update)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
-        if((*it)->IsPaused())
+        if ((*it)->IsPaused())
             continue;
 
         auto start_time = std::chrono::high_resolution_clock::now();
@@ -122,7 +122,7 @@ const std::list<System *> &SystemController::GetExecutionSequence() const
     return _systems_execution_sequence;
 }
 
-std::list<System*> &SystemController::GetExecutionSequenceMutable()
+std::list<System *> &SystemController::GetExecutionSequenceMutable()
 {
     return _systems_execution_sequence;
 }
@@ -132,7 +132,7 @@ const std::list<System *> &SystemController::GetPassiveSystems() const
     return _passive_systems;
 }
 
-std::list<System*> &SystemController::GetPassiveSystemsMutable()
+std::list<System *> &SystemController::GetPassiveSystemsMutable()
 {
     return _passive_systems;
 }
@@ -199,4 +199,38 @@ void SystemController::Lock()
 void SystemController::Unlock()
 {
     _system_lock.unlock();
+}
+
+void SystemController::OnEvent(Event &e)
+{
+    if (e.id == EventType::START_SYSTEM_EVENT)
+    {
+        std::vector<std::string> *system_names = e.InfoToType<std::vector<std::string> *>();
+
+        for (std::string system_name : *system_names)
+        {
+            AddToSystemExecutionSequence(system_name);
+        }
+
+        delete system_names;
+    }
+    else if (e.id == EventType::STOP_SYSTEM_EVENT)
+    {
+        std::vector<std::string> *system_names = e.InfoToType<std::vector<std::string> *>();
+
+        for (std::string system_name : *system_names)
+        {
+            RemoveFromSystemExecutionSequence(system_name);
+        }
+
+        delete system_names;
+    }
+}
+
+std::list<Subscription> SystemController::GetSubscriptions()
+{
+    std::list<Subscription> subs = {Subscription(EventType::START_SYSTEM_EVENT),
+                                    Subscription(EventType::STOP_SYSTEM_EVENT)};
+
+    return subs;
 }

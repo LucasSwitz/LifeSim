@@ -47,7 +47,6 @@ public:
     {
         if(_unload_function)
             (*_unload_function)(this);
-
         Instance::Unload();
     }
 
@@ -73,6 +72,7 @@ public:
         if (luaL_dofile(lua_state, script_path.c_str()) == 0)
         {
             LuaRef _instance_table = getGlobal(lua_state, instance_name.c_str());
+            SetName(instance_name);
             if ((_instance_table).isTable())
             {
                 if ((_instance_table)["tile_map"])
