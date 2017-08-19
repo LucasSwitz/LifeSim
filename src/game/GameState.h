@@ -56,7 +56,7 @@ class GameState : public FPSRunnable
         _entity_manager.Clean();
 
         //if using lua
-        //LuaUniversal::Instance()->CollectGarbage();
+        LuaUniversal::Instance()->CollectGarbage();
     }
 
     void Unload()

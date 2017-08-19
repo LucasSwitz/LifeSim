@@ -170,10 +170,10 @@ class TileMap
 
     void TilesInRange(int first_x, int first_y, int last_x, int last_y, std::list<Tile*>& tiles)
     {
-        int first_row = CoordToRow(first_y);
-        int last_row = CoordToRow(last_y);
-        int first_column = CoordToColumn(first_x);
-        int last_column = CoordToColumn(last_x);
+        int first_row = std::min((int)_tiles.size()-1,CoordToRow(first_y));
+        int last_row = std::min((int)_tiles.size()-1,CoordToRow(last_y));
+        int first_column = std::min((int)_tiles[0].size() - 1,CoordToColumn(first_x));
+        int last_column = std::min((int)_tiles[0].size() - 1,CoordToColumn(last_x));
 
         if(first_row > last_row)
             std::swap(first_row, last_row);

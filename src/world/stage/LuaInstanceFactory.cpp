@@ -51,6 +51,7 @@ bool LuaInstanceFactory::InstancePrototypeExists(std::string name)
 
 int LuaInstanceFactory::LowestUnassignedKey()
 {
+    //TODO: Change this to an std::map and just start counting
     int size = _instance_directory.size();
 
     if(size == 0)

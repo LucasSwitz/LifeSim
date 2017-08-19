@@ -1,11 +1,13 @@
-#ifndef IODEVICE_H
-#define IODEVICE_H
+#ifndef Controller_H
+#define Controller_H
 
 #include <map>
 
-class IODevice
+class Controller
 {
     public:
+        Controller(int id) : _id(id){};
+
         virtual void Poll() = 0;
 
         bool Get(int id)
@@ -20,6 +22,9 @@ class IODevice
             return _triggers.find(id) != _triggers.end();
         }
 
+        int ID(){return _id;}
+
+
     protected:
         void Set(int id, bool val)
         {
@@ -30,6 +35,7 @@ class IODevice
         }
     private:
         std::map<int, bool> _triggers;
+        int _id = -1;
 };
 
 #endif 

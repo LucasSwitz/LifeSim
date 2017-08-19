@@ -5,7 +5,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EngineEventManager.h"
 #include "src/event/EventType.h"
-#include "src/controllers/IODevice.h"
+#include "src/controllers/Controller.h"
 
 /*
     The Keyboard controller is a convient global reference for all keyboard inputs. This class
@@ -19,7 +19,7 @@
 #define D_KEY_TRIGGER 3
 #define E_KEY_TRIGGER 4
 
-class KeyboardController : public IODevice, public EventSubscriber
+class KeyboardController : public Controller, public EventSubscriber
 {
     public:
 
@@ -31,11 +31,6 @@ class KeyboardController : public IODevice, public EventSubscriber
 
     void Poll(){};
 
-    static KeyboardController* Instance()
-    {
-        static KeyboardController instance;
-        return &instance;
-    }
 
     void OnEvent(Event& e)
     {
@@ -77,7 +72,7 @@ class KeyboardController : public IODevice, public EventSubscriber
         return subs;
     }
     
-    KeyboardController()
+    KeyboardController(int id) : Controller(id)
     {
         EngineEventManager::Instance()->RegisterSubscriber(this);
     }

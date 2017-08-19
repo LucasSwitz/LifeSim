@@ -383,9 +383,9 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     GameState *_game_state;
     WindowTransformState _window_transform_state = DORMANT;
     PMIDGEditorWindow _window;
-    std::string file_path = "/home/pabu/Desktop/LifeSim/build/stages";
-    std::string tile_maps_path = "/home/pabu/Desktop/LifeSim/res/tile_maps";
-    std::string instances_path = "/home/pabu/Desktop/LifeSim/res/lua_scripts/world/instances";
+    std::string file_path = "/home/lucas/Desktop/LifeSim/build/stages";
+    std::string tile_maps_path = "/home/lucas/Desktop/LifeSim/res/tile_maps";
+    std::string instances_path = "/home/lucas/Desktop/LifeSim/res/lua_scripts/world/instances";
 };
 
 #endif

@@ -13,6 +13,7 @@ void ComponentUserBase::Register(std::string component_name,ComponentUser& user)
     std::list<ComponentUser*>* list = _component_users_directory.at(component_name);
     list->push_back(&user);
 
+    UpdateSubscribers(ComponentUserBaseEvent::ADD,component_name,&user);
 }
 
 void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& user)
@@ -29,6 +30,8 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser& us
         else
             it++;
     }
+
+    UpdateSubscribers(ComponentUserBaseEvent::REMOVE,component_name,&user);
 }
 
 bool ComponentUserBase::ComponentExists(std::string component_name)
@@ -124,4 +127,26 @@ void ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string& component
 {
     std::list<ComponentUser*>* list = GetAllUsersWithComponent(component_name);
     LuaList<ComponentUser*>::FromListToLuaList<ComponentUser*>(*list, lua_list);
+}
+
+void ComponentUserBase::AddSubscriber(ComponentUserBaseSubscriber* subscriber, std::string component_name)
+{
+    if(_subscribers.find(component_name) == _subscribers.end())
+        _subscribers.emplace(component_name, new std::list<ComponentUserBaseSubscriber*>());
+    _subscribers.at(component_name)->push_back(subscriber);
+}
+
+void ComponentUserBase::UpdateSubscribers(ComponentUserBaseEvent::Type _type, std::string component_name,
+        ComponentUser* user)
+{
+    if(_subscribers.find(component_name) != _subscribers.end())
+        return;
+    auto subs = _subscribers.at(component_name);
+
+    ComponentUserBaseEvent e(_type,user,component_name);
+
+    for(auto it = subs->begin(); it != subs->end(); it++)
+    {
+        (*it)->OnEvent(e);
+    }
 }

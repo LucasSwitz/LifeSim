@@ -23,7 +23,7 @@ public:
 
   static SystemFactory *Instance()
   {
-    static SystemFactory instance("/home/pabu/Desktop/LifeSim/res/lua_scripts/systems", "System");
+    static SystemFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/systems", "System");
 
     return &instance;
   }

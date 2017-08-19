@@ -25,7 +25,7 @@ class LuaTileFactory : public ScriptFactory<std::string>
 
   static LuaTileFactory* Instance()
   {
-    static LuaTileFactory instance("/home/pabu/Desktop/LifeSim/res/lua_scripts/world/tiles", "Tile");
+    static LuaTileFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/world/tiles", "Tile");
 
     return &instance;
   }

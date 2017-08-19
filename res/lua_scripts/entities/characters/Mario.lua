@@ -11,7 +11,8 @@ Mario =
         {
             Player = 
             {   
-                id = 1
+                id = 1,
+                controller = 0
             },
             Position = 
             {

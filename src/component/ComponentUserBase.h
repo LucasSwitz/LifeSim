@@ -4,10 +4,12 @@
 #include <unordered_map>
 #include <list>
 #include <initializer_list>
+#include <iostream>
 #include "src/utils/lua/LuaList.h"
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/game_objects/Entity.h"
-#include <iostream>
+#include "src/component/ComponentUserBaseEvent.h"
+#include "src/component/ComponentUserBaseSubscriber.h"
 
 /**
     ComponentUserBase stores all component users and indexes them by the components they own.
@@ -48,6 +50,9 @@ class ComponentUserBase
     void GetAllUsersWithComponents(std::list<std::string> &list, std::list<ComponentUser *> &matches);
     void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);
 
+    void AddSubscriber(ComponentUserBaseSubscriber* sub, std::string comp_name);
+    
+
     ~ComponentUserBase()
     {
         
@@ -55,9 +60,12 @@ class ComponentUserBase
 
   private:
     ComponentUserBase(){};
+    void UpdateSubscribers(ComponentUserBaseEvent::Type _type, std::string component_name,
+        ComponentUser* user);
 
   private:
     std::unordered_map<std::string, std::list<ComponentUser *> *> _component_users_directory;
+    std::unordered_map<std::string, std::list<ComponentUserBaseSubscriber*>* > _subscribers;
     static ComponentUserBase *_instance;
 };
 

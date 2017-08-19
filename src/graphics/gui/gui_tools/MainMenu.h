@@ -42,7 +42,7 @@ class MainMenu
                 /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
                 {
                     _focused = true;
-                    FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
+                    FolderContents instance_files("/home/lucas/Desktop/LifeSim/build/instances");
                     ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
                     std::string file_name = instance_files.Draw();
                     if (!file_name.empty())
@@ -93,7 +93,7 @@ class MainMenu
                 {
                     _focused = true;
                     ImGui::BeginChild("Stage Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                    FolderContents stage_files("/home/pabu/Desktop/LifeSim/build/stages");
+                    FolderContents stage_files("/home/lucas/Desktop/LifeSim/build/stages");
                     std::string file_name = stage_files.Draw();
                     if (!file_name.empty())
                     {
