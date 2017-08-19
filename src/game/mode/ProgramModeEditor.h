@@ -16,6 +16,7 @@
 #include "src/system/SystemController.h"
 #include "src/game/PMIDGGameRunner.h"
 #include "src/utils/lua/InstanceFileBuilder.h"
+#include "src/controllers/ControllersSystem.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
@@ -69,6 +70,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void Tick(float seconds_elapsed)
     {
+        _controllers_system.Update(seconds_elapsed);
         _window.Clear();
         _window.PollEvents();
         _window.Render();
@@ -376,6 +378,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     FPSRunner _game_runner;
     FPSRunner _editor_runner;
     PMIDGGameRunner *_external_game_runner = nullptr;
+    ControllersSystem _controllers_system;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     int _abs_scroll_ticks = 50;

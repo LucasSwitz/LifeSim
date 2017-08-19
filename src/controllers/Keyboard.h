@@ -1,59 +1,47 @@
-#ifndef KEYBOARDCONTROLLER_H
-#define KEYBOARDCONTROLLER_H
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include  <unordered_map>
 #include "src/event/EventSubscriber.h"
 #include "src/event/EngineEventManager.h"
 #include "src/event/EventType.h"
-#include "src/controllers/Controller.h"
 
 /*
-    The Keyboard controller is a convient global reference for all keyboard inputs. This class
+    The Keyboard is a convient global reference for all keyboard inputs. This class
     is not bound to any specific input handler, but is rather configured by input handlers launching
     key Events. 
 */
 
-#define W_KEY_TRIGGER 0
-#define A_KEY_TRIGGER 1
-#define S_KEY_TRIGGER 2
-#define D_KEY_TRIGGER 3
-#define E_KEY_TRIGGER 4
-
-class KeyboardController : public Controller, public EventSubscriber
+class Keyboard : public EventSubscriber
 {
     public:
-
-    static int W_S_TRIGGER;
-    static int A_S_TRIGGER;
-    static int S_S_TRIGGER;
-    static int D_S_TRIGGER;
-    static int E_S_TRIGGER;
-
-    void Poll(){};
-
+    Keyboard()
+    {
+        EngineEventManager::Instance()->RegisterSubscriber(this);
+    }
 
     void OnEvent(Event& e)
     {
             if(e.id == EventType::W_DOWN_EVENT)
-                Set(W_KEY_TRIGGER,true);
+                SetKey('W',true);
             else if (e.id == EventType::A_DOWN_EVENT)
-                Set(A_KEY_TRIGGER,true);
+                SetKey('A',true);
             else if (e.id == EventType::S_DOWN_EVENT)
-                Set(S_KEY_TRIGGER,true);
+                SetKey('S',true);
             else if (e.id == EventType::D_DOWN_EVENT)
-                Set(D_KEY_TRIGGER,true);
+                SetKey('D',true);
             else if (e.id == EventType::E_DOWN_EVENT)
-                Set(E_KEY_TRIGGER,true);
+                SetKey('E',true);
             else if (e.id == EventType::W_UP_EVENT)
-                Set(W_KEY_TRIGGER,false);
+                SetKey('W',false);
             else if (e.id == EventType::A_UP_EVENT)
-                Set(A_KEY_TRIGGER,false);
+                SetKey('A',false);
             else if (e.id == EventType::S_UP_EVENT)
-                Set(S_KEY_TRIGGER,false);
+                SetKey('S',false);
             else if (e.id == EventType::D_UP_EVENT)
-                Set(D_KEY_TRIGGER,false);
+                SetKey('D',false);
             else if (e.id == EventType::E_UP_EVENT)
-                Set(E_KEY_TRIGGER,false);
+                SetKey('E',false);
     }
 
     std::list<Subscription> GetSubscriptions()
@@ -72,10 +60,32 @@ class KeyboardController : public Controller, public EventSubscriber
         return subs;
     }
     
-    KeyboardController(int id) : Controller(id)
+
+
+    bool GetKey(char key)
     {
-        EngineEventManager::Instance()->RegisterSubscriber(this);
+        if(ListeningToKey(key))
+            return _keys.at(key);
+        return false;
     }
+
+    protected:
+    
+    void SetKey(char key, bool down)
+    {
+        if(!ListeningToKey(key))
+            _keys.insert(std::make_pair(key,down));
+        else
+            _keys.find(key)->second = down;
+    }
+
+    bool ListeningToKey(char key)
+    {
+        return _keys.find(key) != _keys.end();
+    }
+
+    private:
+        std::map<char, bool> _keys;
 
 };                                                                      
 #endif

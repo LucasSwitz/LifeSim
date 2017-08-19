@@ -13,11 +13,14 @@ Stages =
         character:SetNumber("Velocity","y",-300)
     end,
     Execute = function(character)
-        if Keyboard.Instance():Get(Keyboard.A) then
+        controller_id = character:GetNumber("Player","controller_id")
+        controller = SSPIDowncast((GetController(controller_id)))
+
+        if controller:Left() then
             character:SetNumber("Position","heading",180)
             character:SetNumber("Velocity","x", -100)   
             character:SetBool("Graphics","invert",true)
-        elseif Keyboard.Instance():Get(Keyboard.D) then
+        elseif controller:Right() then
             character:SetNumber("Position","heading",0)
             character:SetNumber("Velocity","x", 100)
             character:SetBool("Graphics","invert",false)

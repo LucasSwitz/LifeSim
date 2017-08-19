@@ -139,8 +139,9 @@ void ComponentUserBase::AddSubscriber(ComponentUserBaseSubscriber* subscriber, s
 void ComponentUserBase::UpdateSubscribers(ComponentUserBaseEvent::Type _type, std::string component_name,
         ComponentUser* user)
 {
-    if(_subscribers.find(component_name) != _subscribers.end())
+    if(_subscribers.find(component_name) == _subscribers.end())
         return;
+
     auto subs = _subscribers.at(component_name);
 
     ComponentUserBaseEvent e(_type,user,component_name);

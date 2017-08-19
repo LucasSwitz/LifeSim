@@ -12,7 +12,8 @@ Mario =
             Player = 
             {   
                 id = 1,
-                controller = 0
+                controller_id = 1,
+                controller_type = 0
             },
             Position = 
             {

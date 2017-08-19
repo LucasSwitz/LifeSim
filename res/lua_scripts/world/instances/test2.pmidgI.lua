@@ -1,12 +1,12 @@
 --PREAMBLE_START 
 ScriptType = "Instance" 
-Name = "test" 
-ID = 6
+Name = "test2" 
+ID = 1
 --PREAMBLE_END
 
-test = 
+test2 = 
  { 
-tile_map = "/home/lucas/Desktop/LifeSim/res/tile_maps/test.pmidgM", 
+tile_map = "/home/lucas/Desktop/LifeSim/res/tile_maps/test2.pmidgM", 
 Load = function(instance)
 	
 end, 

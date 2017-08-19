@@ -11,8 +11,9 @@ Baby =
         {
             Player = 
             {   
-                id = 2,
-                controller = 1
+                id = 1,
+                controller_id = 2,
+                controller_type = 0
             },
             Position = 
             {

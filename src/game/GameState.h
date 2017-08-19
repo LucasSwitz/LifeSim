@@ -5,10 +5,10 @@
 #include "src/game_objects/EntityManager.h"
 #include "src/event/messaging/MessageDispatch.h"
 #include "src/system/SystemController.h"
+#include "src/game/player/PlayerBase.h"
 
 #include "src/game/FPSRunnable.h"
 #include "src/world/stage/Stage.h"
-
 /**
     Purpose: GameState describes all game operating specific details. This includes 
              information about active entities, running systems, loaded instances, etc.
@@ -21,6 +21,8 @@ class GameState : public FPSRunnable
     GameState()
     {
         _message_dispatch.RegisterSubscriber(&_system_controller);
+        _component_users.AddSubscriber(&_player_base, "Player");
+
     };
 
     GameState(const GameState &game_state) : _message_dispatch(),
@@ -29,11 +31,13 @@ class GameState : public FPSRunnable
                                              _current_stage(game_state._current_stage)
     {
         _message_dispatch.RegisterSubscriber(&_system_controller);
+        _component_users.AddSubscriber(&_player_base, "Player");
         //all the things need to add themselves to the component user base
     }
 
     void Load()
     {
+        
     }
 
     void Setup()
@@ -121,6 +125,7 @@ class GameState : public FPSRunnable
     SystemController _system_controller;
     MessageDispatch _message_dispatch;
     EntityManager _entity_manager;
+    PlayerBase _player_base;
     Stage *_current_stage = nullptr;
 };
 #endif
