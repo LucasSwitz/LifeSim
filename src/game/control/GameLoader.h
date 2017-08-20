@@ -51,6 +51,7 @@ class GameLoader
         protobuf.GetSystems(systems);
 
         protobuf.GetStage(stage);
+        game_state.SetStage(stage);
 
         for (Entity *e : entities)
         {
@@ -62,7 +63,6 @@ class GameLoader
             game_state.AddSystem(system);
         }
 
-        game_state.SetStage(stage);
     }
 };
 #endif

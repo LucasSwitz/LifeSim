@@ -97,7 +97,16 @@ class GameState : public FPSRunnable
 
     void AddEntity(Entity *e)
     {
-        _entity_manager.RegisterEntity(e);
+        if(e->GetInstance() != -1)
+        {
+            Instance* i = _current_stage->GetInstance(e->GetInstance());
+            i->AddLocalEntity(e->ID());
+            _entity_manager.RegisterEntity(e);
+        }
+        else
+        {
+            std::cout << "Entity has no instance...can't add" << std::endl;
+        }
     }
 
     Stage *GetStage()
