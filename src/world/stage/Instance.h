@@ -7,21 +7,21 @@
 #include "src/event/Event.h"
 #include "src/game/FPSRunnable.h"
 #include "src/game_objects/EntityManager.h"
+#include "src/utils/math/Point.h"
 
 /*
     Purpose: Instances describe the currently rendering tile map, and handles the transition to
              other instances. When an instance goes out of scope it may allow all live entities
              contained to remain operating, but must disable their graphics componenets. 
 */
+class SpacialPartitioningGrid;
 
 class Instance : public EventSubscriber, public FPSRunnable
 {
  public:
-
     Instance(int id = -1, std::string name = "");
 
-    Instance(const Instance& instance)
-    {}
+    Instance(const Instance& instance): _anchor_point(0,0){}
 
     ~Instance()
     {
@@ -146,6 +146,8 @@ class Instance : public EventSubscriber, public FPSRunnable
     private:
         TileMap _tile_map;
         std::list<int> _local_entities;
+        SpacialPartitioningGrid* _grid; // should look for greater abstraction "GridableInterface?"
+        Point _anchor_point;
         bool _loaded = false;
         bool _open = false;
         

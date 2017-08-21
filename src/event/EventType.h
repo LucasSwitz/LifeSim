@@ -37,6 +37,7 @@ class EventType
     static int STOP_SYSTEM_EVENT;
     static int STAGE_INSTANCE_CHANGING;
     static int STAGE_INSTANCE_CHANGED;
+    static int COMPONENT_USER_MOVE_EVENT;
 
 };
 #endif

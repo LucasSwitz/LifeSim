@@ -18,116 +18,35 @@
 class GameState : public FPSRunnable
 {
   public:
-    GameState()
-    {
-        _message_dispatch.RegisterSubscriber(&_system_controller);
-        _component_users.AddSubscriber(&_player_base, "Player");
+    GameState();
 
-    };
+    GameState(const GameState &game_state);
 
-    GameState(const GameState &game_state) : _message_dispatch(),
-                                             _entity_manager(game_state._entity_manager, _component_users),
-                                             _system_controller(game_state._system_controller),
-                                             _current_stage(game_state._current_stage)
-    {
-        _message_dispatch.RegisterSubscriber(&_system_controller);
-        _component_users.AddSubscriber(&_player_base, "Player");
-        //all the things need to add themselves to the component user base
-    }
+    void Load();
 
-    void Load()
-    {
-        
-    }
+    void Setup();
 
-    void Setup()
-    {
-        MessageDispatch::GiveOwnership(&_message_dispatch);
-        ComponentUserBase::GiveOwnership(&_component_users);
-        EntityManager::GiveOwnership(&_entity_manager);
-        SystemController::GiveOwnership(&_system_controller);
-    }
+    void Tick(float seconds_elapsed);
 
-    void Tick(float seconds_elapsed)
-    {
+    void Unload();
 
-        if (_current_stage && _current_stage->GetCurrentInstance())
-        {
-            _system_controller.Update(seconds_elapsed);
-            _current_stage->Tick(seconds_elapsed);
-        }
+    void SetStage(Stage *stage);
 
-        _entity_manager.Clean();
+    void ChangeState(Stage *new_stage);
 
-        //if using lua
-        LuaUniversal::Instance()->CollectGarbage();
-    }
+    void AddSystem(std::string system_name);
 
-    void Unload()
-    {
-    }
+    void AddSystem(System *system);
 
-    void SetStage(Stage *stage)
-    {
-        _current_stage = stage;
-        _current_stage->Load();
-        _current_stage->Enter();
-    }
+    void AddEntity(Entity *e);
 
-    void ChangeState(Stage *new_stage)
-    {
-        if (_current_stage)
-        {
-            _current_stage->Exit();
-            _current_stage->Unload();
-        }
+    Stage *GetStage();
 
-        SetStage(new_stage);
-    }
+    EntityManager &GetEntityManager();
 
-    void AddSystem(std::string system_name)
-    {
-        _system_controller.AddToSystemExecutionSequence(system_name);
-    }
+    ComponentUserBase &GetComponentUserBase();
 
-    void AddSystem(System *system)
-    {
-        _system_controller.AddToSystemExecutionSequence(system);
-    }
-
-    void AddEntity(Entity *e)
-    {
-        if(e->GetInstance() != -1)
-        {
-            Instance* i = _current_stage->GetInstance(e->GetInstance());
-            i->AddLocalEntity(e->ID());
-            _entity_manager.RegisterEntity(e);
-        }
-        else
-        {
-            std::cout << "Entity has no instance...can't add" << std::endl;
-        }
-    }
-
-    Stage *GetStage()
-    {
-        return _current_stage;
-    }
-
-    EntityManager &GetEntityManager()
-    {
-        return _entity_manager;
-    }
-
-    ComponentUserBase &GetComponentUserBase()
-    {
-        return _component_users;
-    }
-
-    SystemController &GetSystemController()
-    {
-        return _system_controller;
-    }
+    SystemController &GetSystemController();
 
   private:
     ComponentUserBase _component_users;

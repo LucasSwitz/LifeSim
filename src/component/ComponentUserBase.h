@@ -51,12 +51,15 @@ class ComponentUserBase
     void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);
 
     void AddSubscriber(ComponentUserBaseSubscriber* sub, std::string comp_name);
-    
 
-    ~ComponentUserBase()
-    {
-        
-    }
+    ComponentUser* GetComponentUser(int id);
+    bool HasComponentUser(int id);
+    void AddComponentUser(ComponentUser* user);
+    void RemoveComponentUser(ComponentUser* user);
+    int GetRegistrationCount(int id);
+    bool IsRegistered(int id);
+    
+    ~ComponentUserBase(){};
 
   private:
     ComponentUserBase(){};
@@ -66,6 +69,8 @@ class ComponentUserBase
   private:
     std::unordered_map<std::string, std::list<ComponentUser *> *> _component_users_directory;
     std::unordered_map<std::string, std::list<ComponentUserBaseSubscriber*>* > _subscribers;
+    std::map<int,ComponentUser*> _all_users;
+    std::map<int, int> _registration_count;
     static ComponentUserBase *_instance;
 };
 

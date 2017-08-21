@@ -1,7 +1,7 @@
 --PREAMBLE_START 
 ScriptType = "Instance" 
 Name = "arena" 
-ID = -1356660656
+ID = 0
 --PREAMBLE_END
 
 arena = 

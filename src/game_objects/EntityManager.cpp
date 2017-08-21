@@ -71,7 +71,7 @@ void EntityManager::OnEvent(Event &e)
 {
     if (e.id == EventType::SPAWN_ENTITY_EVENT_PROTOTYPE)
     {
-        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.target_id);
+        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.sender_id);
         RegisterEntity(entity);
         Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
         MessageDispatch::Instance()->LaunchEvent(event);

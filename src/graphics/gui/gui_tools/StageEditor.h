@@ -25,17 +25,18 @@ class StageEditor
         {
             _instance_names.push_back(it->first);
         }
-
-        if (_last_stage != stage)
-            _selected_instance = -1;
             
         ImGui::ListBoxVector("", &_selected_instance, _instance_names);
+
+        if (_last_stage != stage)
+        _selected_instance = -1;
 
         if (_selected_instance != -1 && (_last_selection != _selected_instance))
         {
             _last_selection = _selected_instance;
             stage->ChangeInstance(_instance_names[_selected_instance]);
         }
+
 
         _last_stage = stage;
         ImGui::End();
