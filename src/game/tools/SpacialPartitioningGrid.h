@@ -38,6 +38,8 @@ public:
     //GetAllInSameCellLuaList(ComponentUser* c);
 private:
     std::vector<std::vector<std::unordered_set<ComponentUser*>>> _grid;
+    int GetColumn(int x_pos);
+    int GetRow(int y_pos);
 };
 
 #endif
