@@ -59,9 +59,11 @@ void ProgramModeEditor::Exit()
 
 void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int rows, int columns)
 {
+    
+    TileMap map;
+    TileMap::Blank(map,rows,columns);
     Instance *i = new Instance(-1, instance_name);
-
-    i->GetTileMap().Blank(rows, columns);
+    i->SetTileMap(map);
 
     _game_state->GetStage()->AddInstance(i);
 
@@ -75,6 +77,8 @@ void ProgramModeEditor::OnCreateBlankStage()
 {
     _game_state = new GameState();
     _game_state->Setup();
+    MessageDispatch::Instance()->RegisterSubscriber(this);
+    
     _game_runner.SetRunnable(_game_state);
 
     Stage *s = new LuaStage();
@@ -123,8 +127,9 @@ void ProgramModeEditor::OnEvent(Event &e)
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
     {
      Instance* current_instance = _game_state->GetStage()->GetCurrentInstance();
-            _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
-                                         current_instance->GetTileMap().HeightPx());
+
+    _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
+                                 current_instance->GetTileMap().HeightPx());
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGING)
     {
@@ -150,6 +155,7 @@ void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 
     _game_state = new GameState();
     _game_state->Setup();
+    MessageDispatch::Instance()->RegisterSubscriber(this);
 
     GameLoader loader;
     loader.Load(file_path, file_name, *_game_state);

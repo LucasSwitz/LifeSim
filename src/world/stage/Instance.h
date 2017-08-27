@@ -19,7 +19,7 @@ class SpacialPartitioningGrid;
 class Instance : public EventSubscriber, public FPSRunnable
 {
  public:
-    Instance(int id = -1, std::string name = "");
+    Instance(int id = -1,std::string name = "");
 
     Instance(const Instance& instance): _anchor_point(0,0){}
 
@@ -98,16 +98,16 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map.LoadFromFile(file_name);
     }
 
+    void SetTileMap(TileMap& map)
+    {   
+        _tile_map.Erase();
+        _tile_map.Copy(map);
+    }   
+
     TileMap& GetTileMap()
     {
         return _tile_map;
     }
-
-    void SetTileMap(TileMap map)
-    {   
-        _tile_map.Erase();
-        _tile_map = map;
-    }   
 
     bool IsOpen()
     {
@@ -139,6 +139,11 @@ class Instance : public EventSubscriber, public FPSRunnable
         return _id;
     }
 
+    const Point& GetAnchor()
+    {
+        return _anchor_point;
+    }
+
     protected:
         std::string _name;
         std::string _tile_map_name = "";
@@ -146,7 +151,7 @@ class Instance : public EventSubscriber, public FPSRunnable
     private:
         TileMap _tile_map;
         std::list<int> _local_entities;
-        SpacialPartitioningGrid* _grid; // should look for greater abstraction "GridableInterface?"
+        //SpacialPartitioningGrid* _grid; // should look for greater abstraction "GridableInterface?"
         Point _anchor_point;
         bool _loaded = false;
         bool _open = false;

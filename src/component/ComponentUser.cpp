@@ -175,7 +175,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 
 ComponentUser::~ComponentUser()
 {
-    for (auto it = _components.begin(); it != _components.end();)
+    /*for (auto it = _components.begin(); it != _components.end();)
     {
         if (ComponentUserBase::Instance())
         {
@@ -186,5 +186,5 @@ ComponentUser::~ComponentUser()
         it = _components.erase(it);
 
         delete to_delete;
-    }
+    }*/
 }

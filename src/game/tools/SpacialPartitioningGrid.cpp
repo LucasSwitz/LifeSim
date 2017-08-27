@@ -1,7 +1,7 @@
 #include "src/game/tools/SpacialPartitioningGrid.h"
 #include "src/world/stage/Instance.h"
 
-SpacialPartitioningGrid::SpacialPartitioningGrid(Instance *i)
+SpacialPartitioningGrid::SpacialPartitioningGrid(Instance *i) : _anchor_point(i->GetAnchor())
 {
     int row_count = i->GetTileMap().WidthPx() / CELL_SIZE;
     int column_count = i->GetTileMap().HeightPx() / CELL_SIZE;
@@ -102,12 +102,12 @@ std::unordered_set<ComponentUser *> &SpacialPartitioningGrid::GetAllInSameCell(C
     return GetAllInCell(row, column);
 }
 
-int SpacialPartitioningGrid::GetColumn(int x_pos)
+int SpacialPartitioningGrid::GetColumn(int y_pos)
 {
     return (y_pos - _anchor_point.x) / CELL_SIZE;
 }
 
-int SpacialPartitioningGrid::GetRow(int y_pos)
+int SpacialPartitioningGrid::GetRow(int x_pos)
 {
     return (x_pos - _anchor_point.y) / CELL_SIZE;
 }

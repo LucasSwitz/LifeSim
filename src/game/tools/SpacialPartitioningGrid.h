@@ -7,6 +7,7 @@
 #include "src/event/EventType.h"
 #include "src/component/ComponentUser.h"
 #include "src/component/ComponentUserBase.h"
+#include "src/utils/math/Point.h"
 
 #define CELL_SIZE 30
 
@@ -40,6 +41,8 @@ private:
     std::vector<std::vector<std::unordered_set<ComponentUser*>>> _grid;
     int GetColumn(int x_pos);
     int GetRow(int y_pos);
+    Point _anchor_point;
+
 };
 
 #endif

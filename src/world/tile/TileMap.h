@@ -53,7 +53,7 @@ public:
 
     static int CoordToRow(int y);
 
-    void Blank(int width, int height);
+    static void Blank(TileMap&,int width, int height);
 
     std::string& GetFile();
 
@@ -63,6 +63,19 @@ public:
 
     void Erase();
 
+    void Copy(TileMap& map)
+    {
+        for(int i = 0; i < map._tiles.size(); i++)
+        {
+            auto row = map._tiles[i];
+            for(Tile* tile : row)
+            {
+                if(_tiles.size() < i + 1)
+                    _tiles.push_back(std::vector<Tile*>());
+                _tiles[i].push_back(tile->Clone());
+            }
+        }
+    }
 
  private:
     std::vector<std::vector<Tile*>> _tiles;

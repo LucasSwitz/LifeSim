@@ -180,7 +180,7 @@ int TileMap::CoordToRow(int y)
     return y / TILE_HEIGHT;
 }
 
-void TileMap::Blank(int width, int height)
+void TileMap::Blank(TileMap& map, int width, int height)
 {
     for (int i = 0; i < width; i++)
     {
@@ -192,7 +192,7 @@ void TileMap::Blank(int width, int height)
             tile->SetComponentValueFloat("Position", "y", i * TILE_HEIGHT + (TILE_HEIGHT / 2));
             row.push_back(tile);
         }
-        _tiles.push_back(row);
+        map._tiles.push_back(row);
     }
 }
 
@@ -213,12 +213,14 @@ int TileMap::WidthPx()
 
 void TileMap::Erase()
 {
-    for (auto it = _tiles.begin(); it != _tiles.end(); it++)
+    for (auto it = _tiles.begin(); it != _tiles.end();)
     {
         for (auto tile_it = (*it).begin(); tile_it != (*it).end(); tile_it++)
         {
             delete *tile_it;
         }
+
+        it = _tiles.erase(it);
     }
 }
 

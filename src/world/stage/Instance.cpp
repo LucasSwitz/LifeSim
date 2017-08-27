@@ -4,7 +4,7 @@
 
 Instance::Instance(int id, std::string name) : _id(id), _name(name), _anchor_point(-1,-1) //fixme
 {
-    _grid = new SpacialPartitioningGrid(this);
+    //_grid = new SpacialPartitioningGrid(this);
 
     if(_id == -1)
     {
