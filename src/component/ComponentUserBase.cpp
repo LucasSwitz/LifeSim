@@ -1,7 +1,6 @@
 #include "ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
 
-ComponentUserBase *ComponentUserBase::_instance = nullptr;
 
 void ComponentUserBase::Register(std::string component_name, ComponentUser &user)
 {
@@ -24,7 +23,7 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser &us
     if (!ComponentExists(component_name))
         return;
 
-    std::list<ComponentUser *> *list = GetAllUsersWithComponent(component_name);
+    std::list<ComponentUser *> *list = GetAllUsersWithComponentMutable(component_name);
 
     for (auto it = list->begin(); it != list->end();)
     {
@@ -44,14 +43,14 @@ void ComponentUserBase::DeRegister(std::string component_name, ComponentUser &us
 
 }
 
-bool ComponentUserBase::ComponentExists(std::string component_name)
+bool ComponentUserBase::ComponentExists(std::string component_name) const
 {
     return _component_users_directory.find(component_name) != _component_users_directory.end();
 }
 
 void ComponentUserBase::GetAllEntitesWithComponentAsLuaList(LuaList<Entity *> *lua_list, std::string component_name)
 {
-    std::list<ComponentUser *> *list = GetAllUsersWithComponent(component_name);
+    const std::list<ComponentUser *> *list = GetAllUsersWithComponent(component_name);
     std::list<Entity *> entities;
 
     if (!list)
@@ -83,11 +82,13 @@ void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string> &list, 
     std::list<std::string>::iterator comp_name = list.begin();
 
     if (!ComponentExists(*comp_name) || list.empty())
-    {
+    {    void OnEnableComponent(ComponentUser* user, const std::string component_name);
+        void OnDisableComponent(ComponentUser* user, const std::string component_name);
+    
         return;
     }
 
-    std::list<ComponentUser *> *first_matches = GetAllUsersWithComponent(*comp_name);
+    const std::list<ComponentUser *> *first_matches = GetAllUsersWithComponent(*comp_name);
 
     for (ComponentUser *user : *first_matches)
     {
@@ -111,7 +112,19 @@ void ComponentUserBase::GetAllUsersWithComponents(std::list<std::string> &list, 
     }
 }
 
-std::list<ComponentUser *> *ComponentUserBase::GetAllUsersWithComponent(std::string component_name)
+const std::list<ComponentUser *> *ComponentUserBase::
+    GetAllUsersWithComponent(std::string component_name) const
+{
+    if (ComponentExists(component_name))
+    {
+        return _component_users_directory.at(component_name);
+    }
+    else
+        return nullptr;
+}
+
+std::list<ComponentUser *> *ComponentUserBase::
+    GetAllUsersWithComponentMutable(std::string component_name)
 {
     if (ComponentExists(component_name))
     {
@@ -133,7 +146,7 @@ void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser
 
 void ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list)
 {
-    std::list<ComponentUser *> *list = GetAllUsersWithComponent(component_name);
+    const std::list<ComponentUser *> *list = GetAllUsersWithComponent(component_name);
     LuaList<ComponentUser *>::FromListToLuaList<ComponentUser *>(*list, lua_list);
 }
 
@@ -170,7 +183,8 @@ ComponentUser *ComponentUserBase::GetComponentUser(int id)
 void ComponentUserBase::AddComponentUser(ComponentUser *user)
 {
     _all_users.insert(std::make_pair(user->ID(), user));
-    _registration_count.insert(std::make_pair(user->ID(), 1));
+    _registration_count.insert(std::make_pair(user->ID(), 0));
+    user->SetListener(this);
 }
 
 void ComponentUserBase::RemoveComponentUser(ComponentUser *user)
@@ -194,4 +208,14 @@ int ComponentUserBase::GetRegistrationCount(int id)
 bool ComponentUserBase::IsRegistered(int id)
 {
     return _registration_count.find(id) != _registration_count.end();
+}
+
+void ComponentUserBase::OnEnableComponent(ComponentUser* user, const std::string component_name)
+{
+    Register(component_name, *user);
+}
+
+void ComponentUserBase::OnDisableComponent(ComponentUser* user, const std::string component_name)
+{
+    DeRegister(component_name, *user);
 }

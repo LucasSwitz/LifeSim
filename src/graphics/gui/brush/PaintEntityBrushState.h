@@ -14,7 +14,7 @@ class PaintEntityBrushState : public BrushState
 
     }
 
-    bool OnInstanceMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, Instance* instance, 
+    bool OnGameStateMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, GameState* gs,
         ComponentUser* c = nullptr) override
     {
         if (e.type == sf::Event::MouseButtonPressed)
@@ -24,8 +24,8 @@ class PaintEntityBrushState : public BrushState
                 Entity *e = _prototype->Clone();
                 e->SetComponentValueFloat("Position", "x", event_world_position.x);
                 e->SetComponentValueFloat("Position", "y", event_world_position.y);
-                Event event(EventType::SPAWN_ENTITY_EVENT,-1,instance->GetID(),e);
-                MessageDispatch::Instance()->LaunchEvent(event);
+                Event event(EventType::SPAWN_ENTITY_EVENT,-1,gs->GetStage()->GetCurrentInstance()->GetID(),e);
+                gs->GetMessageDispatch().LaunchEvent(event);
             }
             return true;
         }

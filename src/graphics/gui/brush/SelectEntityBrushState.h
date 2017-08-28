@@ -46,7 +46,7 @@ class SelectEntityBrushState : public BrushState
         
     }
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState *gs, 
         ComponentUser* c = nullptr) override
     {
         if (c == _selected)
@@ -66,14 +66,14 @@ class SelectEntityBrushState : public BrushState
         return false;
     }
 
-    bool OnKeyboardEvent(sf::Event &e, Instance *instance) override
+    bool OnKeyboardEvent(sf::Event &e, GameState* gs) override
     {
         if (_selected)
         {
             if (e.key.code == sf::Keyboard::Delete)
             {
                 Event e(EventType::DELETE_ENTITY_EVENT, -1, _selected->ID());
-                MessageDispatch::Instance()->LaunchEvent(e);
+                gs->GetMessageDispatch().LaunchEvent(e);
                 _selected = nullptr;
             }
         }

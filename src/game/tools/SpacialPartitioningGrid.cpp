@@ -18,7 +18,7 @@ SpacialPartitioningGrid::SpacialPartitioningGrid(Instance *i) : _anchor_point(i-
 
 void SpacialPartitioningGrid::OnEvent(Event &e)
 {
-    if (e.id == EventType::COMPONENT_USER_MOVE_EVENT)
+    /*if (e.id == EventType::COMPONENT_USER_MOVE_EVENT)
     {
         std::vector<float> *data = e.InfoToType<std::vector<float> *>();
         int component_user_id = e.target_id;
@@ -35,7 +35,7 @@ void SpacialPartitioningGrid::OnEvent(Event &e)
         }
 
         delete data;
-    }
+    }*/
 }
 
 void SpacialPartitioningGrid::AddCollider(ComponentUser *c)

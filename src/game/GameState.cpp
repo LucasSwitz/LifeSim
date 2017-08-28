@@ -3,16 +3,15 @@
 GameState::GameState()
 {
     _message_dispatch.RegisterSubscriber(&_system_controller);
-    _component_users.AddSubscriber(&_player_base, "Player");
+    _system_controller.AssignToDispatch(&_message_dispatch);
 }
 
 GameState::GameState(const GameState &game_state) : _message_dispatch(),
-                                                    _entity_manager(game_state._entity_manager, _component_users),
                                                     _system_controller(game_state._system_controller),
                                                     _current_stage(game_state._current_stage)
 {
     _message_dispatch.RegisterSubscriber(&_system_controller);
-    _component_users.AddSubscriber(&_player_base, "Player");
+    _system_controller.AssignToDispatch(&_message_dispatch);
     //all the things need to add themselves to the component user base
 }
 
@@ -22,10 +21,7 @@ void GameState::Load()
 
 void GameState::Setup()
 {
-    MessageDispatch::GiveOwnership(&_message_dispatch);
-    ComponentUserBase::GiveOwnership(&_component_users);
-    EntityManager::GiveOwnership(&_entity_manager);
-    SystemController::GiveOwnership(&_system_controller);
+
 }
 
 void GameState::Tick(float seconds_elapsed)
@@ -33,12 +29,9 @@ void GameState::Tick(float seconds_elapsed)
 
     if (_current_stage && _current_stage->GetCurrentInstance())
     {
-        _system_controller.Update(seconds_elapsed);
+        _system_controller.Update(seconds_elapsed, this);
         _current_stage->Tick(seconds_elapsed);
     }
-
-    _entity_manager.Clean();
-
     //if using lua
     LuaUniversal::Instance()->CollectGarbage();
 }
@@ -50,6 +43,8 @@ void GameState::Unload()
 void GameState::SetStage(Stage *stage)
 {
     _current_stage = stage;
+    _current_stage->AssignToDispatch(&_message_dispatch);
+    _current_stage->GetComponentUserBaseMutable().AddSubscriber(&_player_base, "Player");
     _current_stage->Load();
     _current_stage->Enter();
 }
@@ -80,8 +75,8 @@ void GameState::AddEntity(Entity *e)
     if (e->GetInstance() != -1)
     {
         Instance *i = _current_stage->GetInstance(e->GetInstance());
+        _current_stage->AddEntity(e);
         i->AddLocalEntity(e->ID());
-        _entity_manager.RegisterEntity(e);
     }
     else
     {
@@ -94,17 +89,31 @@ Stage *GameState::GetStage()
     return _current_stage;
 }
 
-EntityManager &GameState::GetEntityManager()
+EntityManager* GameState::GetEntityManager()
 {
-    return _entity_manager;
+    if(_current_stage)
+        return &_current_stage->GetEntityManager();
+    return nullptr;
 }
 
-ComponentUserBase &GameState::GetComponentUserBase()
+ComponentUserBase* GameState::GetComponentUserBase()
 {
-    return _component_users;
+    if(_current_stage)
+        return &_current_stage->GetComponentUserBaseMutable();
+    return nullptr;
 }
 
-SystemController &GameState::GetSystemController()
+SystemController& GameState::GetSystemController()
 {
     return _system_controller;
 }
+
+MessageDispatch &GameState::GetMessageDispatch()
+{
+    return _message_dispatch;
+}
+
+ PlayerBase& GameState::GetPlayerBase()
+ {
+     return _player_base;
+ }

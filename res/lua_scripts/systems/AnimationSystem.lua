@@ -5,7 +5,7 @@ Name = "AnimationSystem"
 
 AnimationSystem = 
 {   
-    Update = function(graphics_system,time)
+    Update = function(graphics_system,time, g)
         local animated = LuaListComponentUser()
         ComponentUsers.Instance():GetAll(animated,{"Animation","Graphics"})
         local it = animated:Iterator()

@@ -9,17 +9,24 @@
 #include "src/utils/logging/Logging.h"
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
+#include "src/event/messaging/MessageDispatcher.h"
 
 /**
   Factory that loads all systems and orders their execution accordingly. 
   This factory should be seperated from the controller.
 **/
+class GameState;
 
-class SystemController : public EventSubscriber
+class SystemController : public EventSubscriber, public MessageDispatcher
 {
   friend class GameState;
 
 public:
+  SystemController(MessageDispatch& msgd)
+  {
+    msgd.RegisterSubscriber(this);
+  }
+
   SystemController(const SystemController &system_controller)
   {
     const std::list<System *> &systems = system_controller.GetExecutionSequence();
@@ -28,7 +35,6 @@ public:
     {
       AddToSystemExecutionSequence((*it)->GetName());
     }
-    MessageDispatch::Instance()->RegisterSubscriber(this);
   }
 
   void AddToSystemExecutionSequence(const std::string &system_name);
@@ -45,23 +51,13 @@ public:
 
   int GetSequenceSize();
 
-  void Update(float seconds_since_last_update);
+  void Update(float seconds_since_last_update, GameState* g);
 
   void Reset()
   {
     LOG->LogInfo(1, "Systems Reset.");
     _systems_execution_sequence.clear();
     _passive_systems.clear();
-  }
-
-  static SystemController *Instance()
-  {
-    return _instance;
-  }
-
-  static void GiveOwnership(SystemController *instance)
-  {
-    _instance = instance;
   }
 
   const std::list<System *> &GetExecutionSequence() const;
@@ -96,10 +92,8 @@ private:
     std::string _name;
   };
 
-  void
-  MoveUp(System *system_name);
+  void MoveUp(System *system_name);
   void MoveDown(System *system_down);
-  static SystemController *_instance;
   std::mutex _system_lock;
 };
 

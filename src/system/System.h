@@ -9,6 +9,8 @@
 /**
     System are upated every game frame. They can also listen to events.
 **/
+class GameState;
+
 class System : public EventSubscriber
 {
   public:
@@ -47,7 +49,8 @@ class System : public EventSubscriber
         return _paused;
     }
 
-   virtual void Update(float seconds_since_last_update) = 0;
+   virtual void Update(float seconds_since_last_update, GameState* g) = 0;
+   
    void OnEvent(Event& e) override{};
     std::list<Subscription> GetSubscriptions() override{
         std::list<Subscription> empty;

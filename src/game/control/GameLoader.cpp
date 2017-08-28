@@ -23,7 +23,7 @@ void GameLoader::Save(std::string file_name, GameState &game_state)
     std::cout << "Saving game to file: " << file_name << std::endl;
     GameStateProtoBufWrapper gameStateProtoBuf;
     gameStateProtoBuf.SetStage(*game_state.GetStage());
-    gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());
+    gameStateProtoBuf.SetEntities(game_state.GetEntityManager()->GetAllEntities());
     gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetExecutionSequence());
     gameStateProtoBuf.ToFile(file_name);
 }

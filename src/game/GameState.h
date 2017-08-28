@@ -17,43 +17,45 @@
 
 class GameState : public FPSRunnable
 {
-  public:
-    GameState();
+public:
+  GameState();
 
-    GameState(const GameState &game_state);
+  GameState(const GameState &game_state);
 
-    void Load();
+  void Load();
 
-    void Setup();
+  void Setup();
 
-    void Tick(float seconds_elapsed);
+  void Tick(float seconds_elapsed);
 
-    void Unload();
+  void Unload();
 
-    void SetStage(Stage *stage);
+  void SetStage(Stage *stage);
 
-    void ChangeState(Stage *new_stage);
+  void ChangeState(Stage *new_stage);
 
-    void AddSystem(std::string system_name);
+  void AddSystem(std::string system_name);
 
-    void AddSystem(System *system);
+  void AddSystem(System *system);
 
-    void AddEntity(Entity *e);
+  void AddEntity(Entity *e);
 
-    Stage *GetStage();
+  Stage *GetStage();
 
-    EntityManager &GetEntityManager();
+  ComponentUserBase *GetComponentUserBase();
 
-    ComponentUserBase &GetComponentUserBase();
+  EntityManager *GetEntityManager();
 
-    SystemController &GetSystemController();
+  SystemController &GetSystemController();
 
-  private:
-    ComponentUserBase _component_users;
-    SystemController _system_controller;
-    MessageDispatch _message_dispatch;
-    EntityManager _entity_manager;
-    PlayerBase _player_base;
-    Stage *_current_stage = nullptr;
+  MessageDispatch &GetMessageDispatch();
+
+  PlayerBase &GetPlayerBase();
+
+private:
+  SystemController _system_controller;
+  MessageDispatch _message_dispatch;
+  PlayerBase _player_base;
+  Stage *_current_stage = nullptr;
 };
 #endif

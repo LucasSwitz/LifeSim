@@ -16,7 +16,7 @@ ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
     _game_state->Setup();
     _game_runner.SetRunnable(_game_state);
     _editor_runner.SetRunnable(this);
-    MessageDispatch::Instance()->RegisterSubscriber(this);
+    _game_state->GetMessageDispatch().RegisterSubscriber(this);
 }
 
 void ProgramModeEditor::Load()
@@ -38,7 +38,7 @@ void ProgramModeEditor::Update(std::chrono::time_point<std::chrono::high_resolut
 
 void ProgramModeEditor::Tick(float seconds_elapsed)
 {
-    _controllers_system.Update(seconds_elapsed);
+    _controllers_system.Update(seconds_elapsed, _game_state);
     _window.Clear();
     _window.PollEvents();
     _window.Render();
@@ -77,7 +77,7 @@ void ProgramModeEditor::OnCreateBlankStage()
 {
     _game_state = new GameState();
     _game_state->Setup();
-    MessageDispatch::Instance()->RegisterSubscriber(this);
+    _game_state->GetMessageDispatch().RegisterSubscriber(this);
     
     _game_runner.SetRunnable(_game_state);
 
@@ -155,7 +155,7 @@ void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 
     _game_state = new GameState();
     _game_state->Setup();
-    MessageDispatch::Instance()->RegisterSubscriber(this);
+    _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
     GameLoader loader;
     loader.Load(file_path, file_name, *_game_state);
@@ -229,11 +229,11 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
                     {
                         _brush.SetState(new SelectEntityBrushState(entity));
                     }
-                    _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetStage()->GetCurrentInstance(), entity);
+                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
                 }
                 else
                 {
-                    _brush.OnInstanceMouseEvent(e, world_pos, _game_state->GetStage()->GetCurrentInstance());
+                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state);
                 }
             }
         }
@@ -246,7 +246,7 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
         }
         else if (e.type == sf::Event::KeyPressed)
         {
-            _brush.OnKeyboardEvent(e, _game_state->GetStage()->GetCurrentInstance());
+            _brush.OnKeyboardEvent(e, _game_state);
         }
     }
 }
@@ -295,7 +295,7 @@ Entity *ProgramModeEditor::ClickOnEntity(int x, int y)
 
     sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
-    const std::map<int, Entity *> &entities = EntityManager::Instance()->GetAllEntities();
+    const std::map<int, Entity *> &entities = _game_state->GetEntityManager()->GetAllEntities();
 
     for (auto it = entities.begin(); it != entities.end(); it++)
     {

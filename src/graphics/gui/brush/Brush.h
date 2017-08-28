@@ -3,7 +3,7 @@
 
 #include "src/graphics/gui/brush/BrushState.h"
 #include "src/graphics/gui/PMIDGWindow.h"
-#include "src/world/stage/Instance.h"
+#include "src/game/GameState.h"
 
 class Brush
 {
@@ -19,18 +19,18 @@ class Brush
     }
 
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState *gs, 
         ComponentUser* c = nullptr)
     {
         if (_state)
-            return _state->OnInstanceMouseEvent(e, event_world_position, instance, c);
+            return _state->OnGameStateMouseEvent(e, event_world_position, gs, c);
         return false;
     }
 
-    bool OnKeyboardEvent(sf::Event &e, Instance *instance)
+    bool OnKeyboardEvent(sf::Event &e, GameState* gs)
     {
         if (_state)
-            return _state->OnKeyboardEvent(e, instance);
+            return _state->OnKeyboardEvent(e, gs);
         return false;
     }
 

@@ -57,9 +57,9 @@ public:
 
     std::string& GetFile();
 
-    int HeightPx();
+    int HeightPx() const;
 
-    int WidthPx();
+    int WidthPx() const;
 
     void Erase();
 
@@ -77,6 +77,11 @@ public:
         }
     }
 
+    std::vector<std::vector<Tile*>>& GetTiles()
+    {
+        return _tiles;
+    }
+ 
  private:
     std::vector<std::vector<Tile*>> _tiles;
     std::string _file_name;

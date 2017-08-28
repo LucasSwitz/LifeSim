@@ -28,7 +28,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         _tile_map.Erase();
     }
 
-    virtual void Load() override
+    void Load(ComponentUserBase& component_user_base)
     {
         std::cout << "Loading: " << _tile_map_name << std::endl;
         //load all local entites, do a cutscene, whatevs
@@ -40,7 +40,22 @@ class Instance : public EventSubscriber, public FPSRunnable
         {
             std::cout << "TileMap already loaded or no file given!" << std::endl;
         }
+
+        // make component user base aware of these tiles
+        for(auto row : _tile_map.GetTiles())
+        {
+            for(Tile* tile : row)
+                component_user_base.AddComponentUser(tile);
+        }
+        
+        _Load();
+
         _loaded = true;
+    }
+
+    virtual void Load()
+    {
+        
     }
 
     virtual void Unload() override
@@ -48,38 +63,70 @@ class Instance : public EventSubscriber, public FPSRunnable
         //delete all local entities
         _tile_map.Unload();
         _loaded = false;
+
+        _Unload();
     }
 
-    virtual void Open()
+    virtual void Open(EntityManager& em)
     {
         if(!_loaded)
-            Load();
+        { 
+            
+            std::cout << "Instance Must be Loaded Before Opened!" << std::endl;
+            return;
+        }
 
         _tile_map.Show();
 
         for(int& i: _local_entities)
         {
-            Entity* e = EntityManager::Instance()->GetEntityByID(i);
+            Entity* e = em.GetEntityByID(i);
             e->EnableComponent("Graphics");
         }
+
+        _Open();
+
         _open = true;   
     }
 
     virtual void Tick(float seconds_elapsed) override
     {
-        
+        _Tick(seconds_elapsed);
     }
 
-    virtual void Close()
+    int GetWidth() const
+    {
+        return _tile_map.WidthPx();
+    }
+
+    int GetHeight() const
+    {
+        return _tile_map.HeightPx();
+    }
+
+    int GetX() const
+    {
+        return _anchor_point.y;
+    }
+
+    int GetY() const
+    {
+        return _anchor_point.x;
+    }
+
+    virtual void Close(EntityManager& em)
     {
         _tile_map.Hide();
 
         //should have different options for what components to remove at different levels of closing.
         for(int& i: _local_entities)
         {
-            Entity* e = EntityManager::Instance()->GetEntityByID(i);
+            Entity* e = em.GetEntityByID(i);
             e->DisableComponent("Graphics");
         }      
+
+        _Close();
+
         _open = false;
     }
 
@@ -143,6 +190,14 @@ class Instance : public EventSubscriber, public FPSRunnable
     {
         return _anchor_point;
     }
+
+    // These will be called after Instance has finished doing the basics. 
+    // These can be used to add implementation specific logic.
+    virtual void _Load(){};
+    virtual void _Unload(){};
+    virtual void _Open(){};
+    virtual void _Close(){};
+    virtual void _Tick(float seconds_elapsed){};
 
     protected:
         std::string _name;

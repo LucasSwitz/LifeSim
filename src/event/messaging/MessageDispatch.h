@@ -10,17 +10,6 @@
 **/
 class MessageDispatch : public EventManager
 {
-    public:
-        static void GiveOwnership(MessageDispatch* dispatch)
-        {
-            _instance = dispatch;
-        }
-
-        static MessageDispatch* Instance()
-        {
-            return _instance;
-        }
-
     private:
         static MessageDispatch* _instance;
 };

@@ -6,7 +6,6 @@ PMIDGRunner::PMIDGRunner()
     LuaBindings::Bind(LUA_STATE);
     LuaEntityFactory::Instance()->PopulateFactory();
     SystemFactory::Instance()->PopulateFactory();
-    EngineEventManager::GiveOwnership(&_event_manager);
     EngineEventManager::Instance()->RegisterSubscriber(this);
 }
 

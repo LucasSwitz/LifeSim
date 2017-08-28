@@ -32,11 +32,6 @@ void EntityManager::RegisterEntity(Entity *entity)
     entity->EnableAll();
 }
 
-EntityManager *EntityManager::Instance()
-{
-    return _instance;
-}
-
 const std::map<int, Entity *> &EntityManager::GetAllEntities() const
 {
     return _entity_map;
@@ -73,15 +68,16 @@ void EntityManager::OnEvent(Event &e)
     {
         Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.sender_id);
         RegisterEntity(entity);
+
         Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
-        MessageDispatch::Instance()->LaunchEvent(event);
+        DispatchMessage(event);
     }
     else if (e.id == EventType::SPAWN_ENTITY_EVENT)
     {
         Entity *entity = e.InfoToType<Entity *>();
         RegisterEntity(entity);
         Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
-        MessageDispatch::Instance()->LaunchEvent(event);
+        DispatchMessage(event);
     }
     else if (e.id == EventType::DELETE_ENTITY_EVENT)
     {

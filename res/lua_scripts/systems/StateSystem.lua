@@ -13,7 +13,7 @@ STAGE_END = "End"
 
 StateSystem = 
 {
-    Update = function(state_system, time)
+    Update = function(state_system, time, g)
     
         local entities = LuaListComponentUser()
         ComponentUsers.Instance():GetAll(entities,{"State"})

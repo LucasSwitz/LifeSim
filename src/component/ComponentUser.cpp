@@ -18,42 +18,44 @@ void ComponentUser::SetID(int id)
 
 void ComponentUser::RemoveComponent(std::string name)
 {
+    DisableComponent(name);
+
     if (HasComponent(name))
         _components.erase(_components.find(name));
-    ComponentUserBase::Instance()->DeRegister(name, *this);
 }
 
 void ComponentUser::EnableComponent(std::string name)
 {
-    if (HasComponent(name))
-        ComponentUserBase::Instance()->Register(name, *this);
+    if (HasComponent(name) && _listener)
+        _listener->OnEnableComponent(this,name);
 }
 
 void ComponentUser::EnableAll()
 {
-    EnableAll(*ComponentUserBase::Instance());
-}
-
-void ComponentUser::EnableAll(ComponentUserBase &user_base)
-{
-    for (auto it = _components.begin(); it != _components.end(); it++)
+    if(_listener)
     {
-        user_base.Register(it->first, *this);
+        for (auto it = _components.begin(); it != _components.end(); it++)
+        {
+            _listener->OnEnableComponent(this,it->first);
+        }
     }
 }
 
 void ComponentUser::DisableAll()
 {
-    for (auto it = _components.begin(); it != _components.end(); it++)
+    if(_listener)
     {
-        ComponentUserBase::Instance()->DeRegister(it->first, *this);
+        for (auto it = _components.begin(); it != _components.end(); it++)
+        {
+            _listener->OnDisableComponent(this,it->first);        
+        }
     }
 }
 
 void ComponentUser::DisableComponent(std::string name)
 {
-    if (HasComponent(name))
-        ComponentUserBase::Instance()->DeRegister(name, *this);
+    if (HasComponent(name) && _listener)
+        _listener->OnDisableComponent(this,name);
 }
 
 bool ComponentUser::HasComponent(std::string name) const
@@ -171,6 +173,12 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
     }
 
     GetComponent(component_name)->SetFloatValue(value_name, value);
+}
+
+
+void ComponentUser::SetListener(ComponentUserListener* listener)
+{
+    _listener = listener;
 }
 
 ComponentUser::~ComponentUser()

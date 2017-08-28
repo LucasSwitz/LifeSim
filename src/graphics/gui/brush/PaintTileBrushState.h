@@ -24,14 +24,14 @@ class PaintTileBrushState : public BrushState
         return false;
     }
 
-    bool OnInstanceMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, Instance *instance, 
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState * gs, 
         ComponentUser* c = nullptr) override
     {
         if (e.type == sf::Event::MouseButtonPressed)
         {
             if (e.mouseButton.button == sf::Mouse::Left)
             {
-                _instance = instance;
+                _instance = gs->GetStage()->GetCurrentInstance(); //TODO: Move this to constructor
                 _mouse_history.x1 = event_world_position.x;
                 _mouse_history.y1 = event_world_position.y;
                 _painting_state = PAINTING;

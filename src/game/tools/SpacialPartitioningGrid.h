@@ -42,7 +42,6 @@ private:
     int GetColumn(int x_pos);
     int GetRow(int y_pos);
     Point _anchor_point;
-
 };
 
 #endif

@@ -10,19 +10,17 @@
 #include "src/event/messaging/MessageDispatch.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
-
-#define Entity_Manager EntityManager::Instance()
+#include "src/event/messaging/MessageDispatcher.h"
 /**
   Contains all entities. Entities can be accessed by the assigned ID.
 **/
 class Entity;
 
-class EntityManager : public EventSubscriber
+class EntityManager : public EventSubscriber, public MessageDispatcher
 {
   friend class GameState;
 
 public:
-  static EntityManager *Instance();
   ~EntityManager();
   EntityManager();
 
@@ -60,12 +58,6 @@ public:
 
   void MarkForDelete(Entity* e);
   void Clean();
-
-  static void GiveOwnership(EntityManager *instance)
-  {
-    _instance = instance;
-    MessageDispatch::Instance()->RegisterSubscriber(_instance);
-  }
 
 private:
   std::map<int, Entity *> _entity_map;

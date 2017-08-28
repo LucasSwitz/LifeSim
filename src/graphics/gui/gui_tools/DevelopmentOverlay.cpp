@@ -32,13 +32,15 @@ void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
     // #### DESIGN GUI HERE_selcected_file
     main_menu.Draw(game_state);
     log.Draw("Log");
-    entity_table.Draw("Entities");
-    instance_editor.Draw(texture_cache, brush);
-    if(game_state)
+    system_monitor.Draw("System Monitor", game_state->GetSystemController());
+    edit_mode_controls.Draw("Edit Mode Controls", *window,*game_state);
+
+    if(game_state->GetStage())
+    {
         stage_editor.Draw(game_state->GetStage());
-        
-    system_monitor.Draw("System Monitor");
-    edit_mode_controls.Draw("Edit Mode Controls", *window);
+        entity_table.Draw("Entities", *(game_state->GetEntityManager())); 
+        instance_editor.Draw(texture_cache, brush);        
+    }
     // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());

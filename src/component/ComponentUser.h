@@ -4,6 +4,7 @@
 #include <iostream>
 #include "src/component/Component.h"
 #include "src/component/ComponentUserType.h"
+#include "src/component/ComponentUserListener.h"
 
 /**
   Component User's simply maintain a list of active components, and also register themselves
@@ -18,6 +19,7 @@ class ComponentUser
   friend class GameState;
   public:
     ComponentUser(int type, int id = -1) : _id(id){};
+
     int ID() const;
     int Type() const;
 
@@ -34,6 +36,7 @@ class ComponentUser
     void EnableAll();
     void EnableAll(ComponentUserBase& component_user_base);
 
+    void SetListener(ComponentUserListener* listener);
 
     Component* GetComponent(std::string name);
 
@@ -53,6 +56,7 @@ class ComponentUser
     
   protected:
       std::unordered_map<std::string, Component*> _components;
+      ComponentUserListener* _listener = nullptr;
       bool _is_hidden;
       void SetID(int id);
       int _id;

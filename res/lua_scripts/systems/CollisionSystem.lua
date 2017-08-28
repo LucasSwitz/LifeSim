@@ -7,7 +7,7 @@ CollisionSystem =
 {
     --shitty O(m*n) collision detection 
     after = "GravitySystem",
-    Update = function(self,time)
+    Update = function(self,time, g)
         local entities = LuaListEntity()
         local colliders = LuaListComponentUser()
 

@@ -8,13 +8,10 @@ int Entity::LUA_DEFINED_ENTITY = 1;
 Entity::Entity(int type, std::string prototype_name, int id) : ComponentUser(CU_TYPE_ENTITY), 
         _type(type), _prototype_name(prototype_name)
 {
-    if (_id == -1)
+    if(id == -1)
     {
-        _lastId++;
-        _id = _lastId;
-
-        while (!EntityManager::Instance()->IDAvailable(_id))
-            _id++;
+        id = _lastId++;
+        SetID(id);
     }
 }
 
@@ -31,15 +28,6 @@ std::string &Entity::GetPrototypeName()
 void Entity::SetPrototypeName(std::string &name)
 {
     _prototype_name = name;
-}
-
-void Entity::SetID(int id)
-{
-    if (id < 0)
-        return;
-
-    EntityManager::Instance()->DeregisterEntity(_id);
-    _id = id;
 }
 
 Entity *Entity::Clone()
@@ -73,6 +61,10 @@ int Entity::GetInstance() const
     return _instance;
 }
 
+void Entity::SetID(int id)
+{
+    _id = id;
+}
 
 Entity::~Entity()
 {

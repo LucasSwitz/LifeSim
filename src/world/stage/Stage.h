@@ -7,6 +7,10 @@
 #include "src/event/EventType.h"
 #include "src/game/FPSRunnable.h"
 #include "src/world/stage/LuaInstanceFactory.h"
+#include "src/event/messaging/MessageDispatch.h"
+#include "src/game_objects/EntityManager.h"
+#include "src/component/ComponentUserBase.h"
+#include "src/event/messaging/MessageDispatcher.h"
 
 /**
     Purpose: Stages are purely logical containers for handling asset loading,
@@ -16,12 +20,23 @@
     players can interact with).
 **/
 
-class Stage : public EventSubscriber, public FPSRunnable
+class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnable
 {
   public:
+    Stage()
+    {
+
+    }
+
+    Stage(Stage& stage) : _entity_manager(stage._entity_manager)
+    {
+
+    }
+
     void Load() override
     {
-        MessageDispatch::Instance()->RegisterSubscriber(this);
+        if(_root_instance)
+            _root_instance->Load();
     }
 
     void Unload() override
@@ -33,6 +48,7 @@ class Stage : public EventSubscriber, public FPSRunnable
     {
         if(_current_instance)
             _current_instance->Tick(seconds_elapsed);
+        _entity_manager.Clean();            
     }
 
     //load first instance;
@@ -40,8 +56,7 @@ class Stage : public EventSubscriber, public FPSRunnable
     {
         if (_root_instance)
         {
-            _root_instance->Load();
-            _root_instance->Open();
+            _root_instance->Open(_entity_manager);
         }
         else
         {
@@ -56,7 +71,7 @@ class Stage : public EventSubscriber, public FPSRunnable
             Instance *inst = it->second;
 
             if (inst->IsOpen())
-                inst->Close();
+                inst->Close(_entity_manager);
             if (inst->IsLoaded())
                 inst->Unload();
         }
@@ -64,7 +79,7 @@ class Stage : public EventSubscriber, public FPSRunnable
         if (_root_instance)
         {
             if (_root_instance->IsOpen())
-                _root_instance->Close();
+                _root_instance->Close(_entity_manager);
 
             _root_instance->Unload();
         }
@@ -92,6 +107,7 @@ class Stage : public EventSubscriber, public FPSRunnable
     }
 
     void SetRootInstance(int id)
+    
     {
         SetRootInstance(LuaInstanceFactory::Inst()->GetInstance(id));
     }
@@ -100,18 +116,20 @@ class Stage : public EventSubscriber, public FPSRunnable
     {
         if(!HasInstance(name))
             return;
+            
 
         Event e = Event(EventType::STAGE_INSTANCE_CHANGING,-1,-1);
-        MessageDispatch::Instance()->LaunchEvent(e);
+        DispatchMessage(e);
 
         _current_instance = GetInstance(name);
 
         if (do_load && !_current_instance->IsLoaded())
-            _current_instance->Load();
+            _current_instance->Load(_component_users);
 
         e = Event(EventType::STAGE_INSTANCE_CHANGED,-1,-1);
-        MessageDispatch::Instance()->LaunchEvent(e);
-        _current_instance->Open();
+        DispatchMessage(e);
+        
+        _current_instance->Open(_entity_manager);
     }
 
     void SetCurrentInstance(int id, bool do_load = false)
@@ -125,7 +143,7 @@ class Stage : public EventSubscriber, public FPSRunnable
             return;
 
         if (_current_instance)
-            _current_instance->Close();
+            _current_instance->Close(_entity_manager);
 
         SetCurrentInstance(name);
     }
@@ -233,6 +251,36 @@ class Stage : public EventSubscriber, public FPSRunnable
         return _root_instance;
     }
 
+    void AssignToDispatch(MessageDispatch* dispatch)
+    {
+        dispatch->RegisterSubscriber(&_entity_manager);
+        MessageDispatcher::AssignToDispatch(dispatch);
+    }
+
+    void AddEntity(Entity* e)
+    {
+        _component_users.AddComponentUser(e);
+        _entity_manager.RegisterEntity(e);
+        Instance *i = GetInstance(e->GetInstance());
+        i->AddLocalEntity(e->ID());
+    }
+
+    const ComponentUserBase& GetComponentUserBase() const
+    {
+        return _component_users;
+    }
+
+    ComponentUserBase& GetComponentUserBaseMutable()
+    {
+        return _component_users;
+    }
+
+    EntityManager& GetEntityManager()
+    {
+        return _entity_manager;
+    }
+    
+
   protected:
     Instance *_current_instance = nullptr;
     Instance *_root_instance = nullptr;
@@ -241,6 +289,8 @@ class Stage : public EventSubscriber, public FPSRunnable
     std::unordered_map<int, std::string> _instances_id_to_name;
     std::unordered_map<std::string, Instance *> _instances_names;
     std::string _name;
+    EntityManager _entity_manager;
+    ComponentUserBase _component_users;    
 };
 
 #endif

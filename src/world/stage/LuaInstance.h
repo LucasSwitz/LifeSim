@@ -14,40 +14,35 @@ public:
 
     LuaInstance(int id) : Instance(id){};
 
-    void Load() override 
+    void _Load() override 
     {
         if(_load_function)
             (*_load_function)(this);
-        Instance::Load();
     }
 
-    void Open() override
+    void _Open() override
     {
         if(_open_function)
             (*_open_function)(this);
-        Instance::Open();
     }
 
-    void Tick(float seconds_elapsed) override
+    void _Tick(float seconds_elapsed) override
     {   
         if(_update_function)
             (*_update_function)(this,seconds_elapsed);
-        Instance::Tick(seconds_elapsed);
     }
 
-    void Close() override 
+    void _Close() override 
     {
         if(_close_function)
             (*_close_function)(this);
-        Instance::Close();
         //Launch Instance Ended event with information about what to do next
     }
 
-    void Unload() override
+    void _Unload() override
     {
         if(_unload_function)
             (*_unload_function)(this);
-        Instance::Unload();
     }
 
     void OnEvent(Event& e) override

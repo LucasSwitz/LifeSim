@@ -10,6 +10,7 @@
 #include "src/game_objects/Entity.h"
 #include "src/component/ComponentUserBaseEvent.h"
 #include "src/component/ComponentUserBaseSubscriber.h"
+#include "src/component/ComponentUserListener.h"
 
 /**
     ComponentUserBase stores all component users and indexes them by the components they own.
@@ -18,35 +19,26 @@
 **/
 class ComponentUser;
 
-class ComponentUserBase
+class ComponentUserBase : public ComponentUserListener
 {
     friend class GameState;
 
   public:
-    static ComponentUserBase *Instance()
-    {
-        return _instance;
-    }
-
-    static void GiveOwnership(ComponentUserBase *instance)
-    {
-        _instance = instance;
-    }
-
     void Register(std::string component_name, ComponentUser &user);
     void DeRegister(std::string component_name, ComponentUser &user);
-    bool ComponentExists(std::string component_name);
+    bool ComponentExists(std::string component_name) const;
 
     void Reset()
     {
         _component_users_directory.clear();
     }
 
-    std::list<ComponentUser *> *GetAllUsersWithComponent(std::string component_name);
+    const std::list<ComponentUser *> *GetAllUsersWithComponent(std::string component_name) const;
+    std::list<ComponentUser *> *GetAllUsersWithComponentMutable(std::string component_name);
     void GetAllUsersWithComponents(std::initializer_list<std::string> list,
                                    std::list<ComponentUser *> &user_list);
     void GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser *>* lua_list, lua_State *L);
-    void GetAllEntitesWithComponentAsLuaList(LuaList<Entity *> *lua_list, std::string component_name);
+    void GetAllEntitesWithComponentAsLuaList(LuaList<Entity *> *lua_list, std::string component_name); 
     void GetAllUsersWithComponents(std::list<std::string> &list, std::list<ComponentUser *> &matches);
     void GetAllUsersWithComponentAsLuaList(std::string &component_name, LuaList<ComponentUser *> &lua_list);
 
@@ -59,10 +51,14 @@ class ComponentUserBase
     int GetRegistrationCount(int id);
     bool IsRegistered(int id);
     
+    //Inherited from ComponentUserListener
+    void OnEnableComponent(ComponentUser* user, const std::string component_name);
+    void OnDisableComponent(ComponentUser* user, const std::string component_name);
+    
     ~ComponentUserBase(){};
+    ComponentUserBase(){};
 
   private:
-    ComponentUserBase(){};
     void UpdateSubscribers(ComponentUserBaseEvent::Type _type, std::string component_name,
         ComponentUser* user);
 

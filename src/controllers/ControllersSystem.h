@@ -7,7 +7,7 @@
 class ControllersSystem : public System
 {
     public:
-    virtual void Update(float seconds_since_last_update)
+    virtual void Update(float seconds_since_last_update, GameState* game_state)
     {
         auto& controllers = ControllerBase::Instance()->GetAll();
 

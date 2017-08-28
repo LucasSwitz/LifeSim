@@ -9,6 +9,7 @@
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
 #include "src/game/EngineGlobals.h"
+#include "src/game/GameState.h"
 #include "src/game_objects/LuaEntity.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
@@ -88,7 +89,6 @@ class LuaBindings
                 .addFunction("Size",&LuaList<Entity*>::Size)
             .endClass()
             .beginClass<EntityManager>("EntityManager")
-                .addStaticFunction("Instance", &EntityManager::Instance)
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
@@ -136,13 +136,11 @@ class LuaBindings
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
             .endClass()
             .deriveClass<MessageDispatch,EventManager>("MessageDispatch")
-                .addStaticFunction("Instance",&MessageDispatch::Instance)
             .endClass()
             .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
                 .addStaticFunction("Instance",&EngineEventManager::Instance)
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
-                .addStaticFunction("Instance",&ComponentUserBase::Instance)
                 .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentsAsLuaList)
                 .addFunction("GetAllEntities",&ComponentUserBase::GetAllEntitesWithComponentAsLuaList)
             .endClass()
@@ -158,6 +156,10 @@ class LuaBindings
                 .addFunction("Action",&SideScrollerPlayerInterface::Action)
             .endClass()
             .beginClass<Instance>("Instance")
+                .addProperty("y", &Instance::GetY)
+                .addProperty("x", &Instance::GetX)
+                .addProperty("height",&Instance::GetHeight)
+                .addProperty("width",&Instance::GetWidth)
             .endClass()
             .deriveClass<LuaInstance,Instance>("LuaInstance")
             .endClass()
@@ -170,6 +172,12 @@ class LuaBindings
             .beginClass<DebugFlags>("DebugFlags")
                 .addStaticFunction("Instance", &DebugFlags::Instance)
                 .addFunction("Set", &DebugFlags::Set)
+            .endClass()
+            .beginClass<GameState>("GameState")
+                .addFunction("Msg", &GameState::GetMessageDispatch)
+                .addFunction("SystemController",&GameState::GetSystemController)
+                .addFunction("EntityManager", &GameState::GetEntityManager)
+                .addFunction("ComponentUsers",&GameState::GetComponentUserBase)
             .endClass();
     } 
  };

@@ -38,7 +38,6 @@ class PMIDGRunner : public EventSubscriber
 
   private:
     ProgramMode *_mode = nullptr;
-    EngineEventManager _event_manager;
     bool _program_stopped = false;
 };
 

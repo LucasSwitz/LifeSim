@@ -77,7 +77,7 @@ class LuaList
     }
 
     template <typename LT>
-    static void FromListToLuaList(std::list<LT> &list, LuaList &lua_list)
+    static void FromListToLuaList(const std::list<LT> &list, LuaList &lua_list)
     {
         for (auto it = list.begin(); it != list.end(); it++)
         {

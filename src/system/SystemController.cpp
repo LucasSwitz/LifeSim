@@ -1,6 +1,5 @@
 #include "SystemController.h"
-
-SystemController *SystemController::_instance = nullptr;
+#include "src/game/GameState.h"
 
 void SystemController::AddPassiveSystem(const std::string &system_name)
 {
@@ -85,6 +84,10 @@ void SystemController::AddToSystemExecutionSequence(System *system)
         {
             LOG->LogInfo(1, "Adding System to Execution: %s \n", system->GetName().c_str());
             _systems_execution_sequence.insert(insert_position, system);
+
+            //Assign all systems to the message dispatch
+            if(IsAssignedToDispatch())
+                GetAssignedDispatch()->RegisterSubscriber(system);           
         }
     }
 }
@@ -100,7 +103,7 @@ int SystemController::GetSequenceSize()
     return _systems_execution_sequence.size();
 }
 
-void SystemController::Update(float seconds_since_last_update)
+void SystemController::Update(float seconds_since_last_update, GameState* g)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
@@ -109,7 +112,7 @@ void SystemController::Update(float seconds_since_last_update)
 
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        (*it)->Update(seconds_since_last_update);
+        (*it)->Update(seconds_since_last_update, g);
 
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);

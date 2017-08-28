@@ -201,12 +201,12 @@ std::string &TileMap::GetFile()
     return _file_name;
 }
 
-int TileMap::HeightPx()
+int TileMap::HeightPx() const
 {
     return _tiles.size() * TILE_HEIGHT;
 }
 
-int TileMap::WidthPx()
+int TileMap::WidthPx() const
 {
     return _tiles[0].size() * TILE_WIDTH;
 }
