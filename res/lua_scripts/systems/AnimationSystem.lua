@@ -7,7 +7,7 @@ AnimationSystem =
 {   
     Update = function(graphics_system,time, g)
         local animated = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(animated,{"Animation","Graphics"})
+        g:ComponentUsers():GetAll(animated,{"Animation","Graphics"})
         local it = animated:Iterator()
 
         --Forward All Animations

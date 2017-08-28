@@ -30,7 +30,6 @@ class Instance : public EventSubscriber, public FPSRunnable
 
     void Load(ComponentUserBase& component_user_base)
     {
-        std::cout << "Loading: " << _tile_map_name << std::endl;
         //load all local entites, do a cutscene, whatevs
         if(!_tile_map_name.empty() && !_loaded)
         {
@@ -45,7 +44,9 @@ class Instance : public EventSubscriber, public FPSRunnable
         for(auto row : _tile_map.GetTiles())
         {
             for(Tile* tile : row)
+            {
                 component_user_base.AddComponentUser(tile);
+            }
         }
         
         _Load();

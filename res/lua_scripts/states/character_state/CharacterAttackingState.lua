@@ -10,8 +10,8 @@ Stages =
         character:SetBool("Animation","started",false)
         character:SetString("State","stage","Execute")
     end,
-    Execute = function(character)
-        loadfile(Res("ActionShootFireball.lua"))(character)
+    Execute = function(character,gs)
+        loadfile(Res("ActionShootFireball.lua"))(gs,character)
         return Res("CharacterIdleState.lua")
     end,
     End = function(character)
@@ -19,9 +19,9 @@ Stages =
     end
 }
 
-character = ...
+gs,character = ...
 
-if character ~= nil then
+if character ~= nil and gs ~= nil then
     local stage = character:GetString("State","stage")
-    return Stages[stage](character)
+    return Stages[stage](character,gs)
 end

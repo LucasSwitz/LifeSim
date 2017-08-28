@@ -44,6 +44,7 @@ void GameState::SetStage(Stage *stage)
 {
     _current_stage = stage;
     _current_stage->AssignToDispatch(&_message_dispatch);
+    _message_dispatch.RegisterSubscriber(_current_stage);
     _current_stage->GetComponentUserBaseMutable().AddSubscriber(&_player_base, "Player");
     _current_stage->Load();
     _current_stage->Enter();

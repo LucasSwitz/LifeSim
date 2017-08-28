@@ -8,11 +8,7 @@ int Entity::LUA_DEFINED_ENTITY = 1;
 Entity::Entity(int type, std::string prototype_name, int id) : ComponentUser(CU_TYPE_ENTITY), 
         _type(type), _prototype_name(prototype_name)
 {
-    if(id == -1)
-    {
-        id = _lastId++;
-        SetID(id);
-    }
+    
 }
 
 bool Entity::IsType(int type) const

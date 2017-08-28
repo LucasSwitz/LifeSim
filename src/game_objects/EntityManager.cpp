@@ -64,18 +64,15 @@ void EntityManager::Clear()
 
 void EntityManager::OnEvent(Event &e)
 {
-    if (e.id == EventType::SPAWN_ENTITY_EVENT_PROTOTYPE)
+    if (e.id == EventType::SPAWN_ENTITY_EVENT_PROTOTYPE) //maybe seperate this into a new class? "Spawnner"
     {
         Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.sender_id);
-        RegisterEntity(entity);
-
         Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
         DispatchMessage(event);
     }
     else if (e.id == EventType::SPAWN_ENTITY_EVENT)
     {
         Entity *entity = e.InfoToType<Entity *>();
-        RegisterEntity(entity);
         Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
         DispatchMessage(event);
     }

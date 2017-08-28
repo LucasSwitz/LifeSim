@@ -1,6 +1,7 @@
 #include "ComponentUser.h"
 #include "src/component/ComponentUserBase.h"
 
+int ComponentUser::last_id = -1;
 int ComponentUser::ID() const
 {
     return _id;

@@ -60,10 +60,12 @@ class PaintTileBrushState : public BrushState
                         float y = replaced->GetComponentValueFloat("Position", "y");
 
                         it = _boxed_tiles.erase(it);
-                            
+                        ComponentUserListener* listener = replaced->GetComponentListener();
+
                         *replaced = *_selected_tile->Clone();
                         replaced->SetComponentValueFloat("Position", "x", x);
                         replaced->SetComponentValueFloat("Position", "y", y);
+                        replaced->SetListener(listener);
                         replaced->EnableAll();
                     }
                 }

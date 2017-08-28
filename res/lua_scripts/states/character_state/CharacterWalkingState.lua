@@ -47,9 +47,9 @@ Stages =
     end
 }
 
-character = ...
+gs,character = ...
 
-if character ~= nil then
-    local current_stage = character:GetString("State","stage")
-    return Stages[current_stage](character)
+if character ~= nil and gs ~= nil then
+    local stage = character:GetString("State","stage")
+    return Stages[stage](character,gs)
 end

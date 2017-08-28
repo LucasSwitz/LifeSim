@@ -11,9 +11,8 @@ CollisionSystem =
         local entities = LuaListEntity()
         local colliders = LuaListComponentUser()
 
-        ComponentUsers.Instance():GetAllEntities(entities,"Collision")
-        ComponentUsers.Instance():GetAll(colliders, {"Collision"})
-
+        g:ComponentUsers():GetAllEntities(entities,"Collision")
+        g:ComponentUsers():GetAll(colliders, {"Collision"})
         local entity_it = entities:Iterator()
         while entity_it ~= nil do
             entity = entity_it.data

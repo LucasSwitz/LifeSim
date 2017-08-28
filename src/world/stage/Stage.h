@@ -205,10 +205,14 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         } 
         else if (e.id == EventType::ENTITY_SPAWNED_EVENT)
         {
+            std::cout << "Entity Spawned!" << std::endl;
             Entity* entity = e.InfoToType<Entity*>();
             int instance_id = e.target_id;
+
             if(HasInstance(instance_id))
             {
+                _component_users.AddComponentUser(entity);
+                _entity_manager.RegisterEntity(entity);
                 entity->SetInstance(instance_id);
                 Instance* instance = GetInstance(instance_id);
                 instance->AddLocalEntity(entity->ID());
@@ -254,6 +258,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     void AssignToDispatch(MessageDispatch* dispatch)
     {
         dispatch->RegisterSubscriber(&_entity_manager);
+        _entity_manager.AssignToDispatch(dispatch);
         MessageDispatcher::AssignToDispatch(dispatch);
     }
 

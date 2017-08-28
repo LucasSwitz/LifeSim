@@ -7,7 +7,7 @@ FollowCharacterCamera =
 {
     Update = function(follower_camera,time)
         players = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(players,{"Player","Position"})
+        g:ComponentUsers():GetAll(players,{"Player","Position"})
         players_it = players:Iterator()
         player = players_it.data
 

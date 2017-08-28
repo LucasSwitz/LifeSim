@@ -8,7 +8,7 @@ LifetimeSystem =
     Update = function(state_system, time, g)
     
         local entities = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(entities,{"Lifetime"})
+        g:ComponentUsers():GetAll(entities,{"Lifetime"})
         local it = entities:Iterator()
         while it ~= nil do
             local current = it.data
