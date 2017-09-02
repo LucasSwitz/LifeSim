@@ -2,6 +2,7 @@
 
 DevelopmentOverlay::DevelopmentOverlay()
 {
+    
 }
 
 void DevelopmentOverlay::Init(PMIDGWindow *window)
@@ -19,55 +20,71 @@ Log &DevelopmentOverlay::GetLog()
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow *window, TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
+void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
+                                TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
+
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window->SFWindow(), deltaTime);
 
     brush.DrawExtras();
-    
+
     if (!IsFocused())
         brush.PaintWindow(*window);
     // #### DESIGN GUI HERE_selcected_file
-    main_menu.Draw();
+    main_menu.Draw(game_state);
     log.Draw("Log");
-    entity_table.Draw("Entities");
-    instance_editor.Draw(texture_cache, brush);
-    system_monitor.Draw("System Monitor");
-    edit_mode_controls.Draw("Edit Mode Controls", *window);
+    system_monitor.Draw("System Monitor", game_state->GetSystemController());
+    edit_mode_controls.Draw("Edit Mode Controls", *window,*game_state);
+
+    if(game_state->GetStage())
+    {
+        stage_editor.Draw(game_state->GetStage());
+        entity_table.Draw("Entities", *(game_state->GetEntityManager())); 
+        instance_editor.Draw(texture_cache, brush);        
+    }
     // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window->SFWindow());
 }
 
-void DevelopmentOverlay::LoadInstancePressed(std::string &file_name)
+void DevelopmentOverlay::NewInstancePressed(std::string& instance_name)
 {
     if (_listener)
     {
-        _listener->OnLoadGameStateFile(file_name);
+        _listener->OnCreateBlankInstance(instance_name, 30, 30);
     }
 }
 
-void DevelopmentOverlay::SaveInstancePressed(std::string &file_name)
+void DevelopmentOverlay::NewStagePressed()
 {
     if (_listener)
     {
-        _listener->OnSaveGameStateFile(file_name);
+        _listener->OnCreateBlankStage();
     }
 }
 
-void DevelopmentOverlay::NewInstancePressed()
+void DevelopmentOverlay::LoadStagePressed(std::string &file_name)
 {
     if (_listener)
     {
-        _listener->OnCreateBlankInstance(30, 30);
+        _listener->OnLoadStageFile(file_name);
+    }
+}
+
+void DevelopmentOverlay::SaveStagePressed(std::string &file_name)
+{
+    if (_listener)
+    {
+        _listener->OnSaveStageFile(file_name);
     }
 }
 
 bool DevelopmentOverlay::IsFocused()
 {
     return log.IsFocused() || entity_table.IsFocused() ||
-           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() || main_menu.IsFocused();
+           instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() ||
+           main_menu.IsFocused() || stage_editor.IsFocused();
 }
 void DevelopmentOverlay::Shutdown()
 {
@@ -79,13 +96,13 @@ void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
     _listener = listener;
 }
 
-void DevelopmentOverlay::OnLaunchGameRunner()
+void DevelopmentOverlay::OnLaunchStage()
 {
-    if(_listener)
-        _listener->OnLaunchGameRunner();
+    if (_listener)
+        _listener->OnLaunchStage();
 }
-void DevelopmentOverlay::OnStopGameRunner()
+void DevelopmentOverlay::OnLaunchInstance()
 {
-    if(_listener)
-        _listener->OnStopGameRunner();
+    if (_listener)
+        _listener->OnLaunchInstance();
 }

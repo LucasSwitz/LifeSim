@@ -14,42 +14,15 @@
 class FPSRunner
 {
   public:
-    FPSRunner(int FPS) : _fps(FPS)
-    {
+    FPSRunner(int FPS);
 
-    }
+    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time);
 
-    virtual void Update(std::chrono::time_point<std::chrono::high_resolution_clock>& current_time)
-    {
-        if (_last_time == std::chrono::time_point<std::chrono::high_resolution_clock>::min())
-            _last_time = std::chrono::high_resolution_clock::now();
+    void TickRunnable(float seconds_elapsed);
 
-        std::chrono::duration<double> diff = std::chrono::duration_cast<std::chrono::duration<double>>(current_time - _last_time);
+    void SetRunnable(FPSRunnable *runnable);
 
-        double seconds_elapsed_since_last_update = std::abs(diff.count());
-        if (seconds_elapsed_since_last_update > (1.0 / (_fps)))
-        {
-            TickRunnable(seconds_elapsed_since_last_update);
-            _last_time = current_time;
-        }
-    }
-
-    void TickRunnable(float seconds_elapsed)
-    {
-        if (_runnable)
-            _runnable->Tick(seconds_elapsed);
-    }
-
-    void SetRunnable(FPSRunnable *runnable)
-    {
-        _runnable = runnable;
-    }
-
-    void CleanRunnable()
-    {
-        _runnable->Unload();
-        delete _runnable;
-    }
+    void CleanRunnable();
 
   protected:
     FPSRunnable *_runnable = nullptr;

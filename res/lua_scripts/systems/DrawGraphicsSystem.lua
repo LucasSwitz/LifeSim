@@ -5,14 +5,13 @@ Name = "DrawGraphicsSystem"
 
 DrawGraphicsSystem = 
 {   
-    Update = function(graphics_system,time)
+    Update = function(graphics_system,time, g)
         local drawables = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(drawables,{"Graphics","Position"})
+        g:ComponentUsers():GetAll(drawables,{"Graphics","Position"})
         local it = drawables:Iterator()
-        --Draw all objects with 'Graphics' component
         while it ~= nil do
             local drawable = it.data
-            e = Event.ComponentUserEvent(EventType.DRAW_REQUEST_EVENT,0,TARGET_WINDOW(),drawable)
+            local e = Event.ComponentUserEvent(EventType.DRAW_REQUEST_EVENT,0,TARGET_WINDOW(),drawable)
             EngineEventManager.Instance():LaunchEvent(e)
             it = it.next
         end

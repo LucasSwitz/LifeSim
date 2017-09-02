@@ -14,17 +14,19 @@ Stages =
     Execute = function(character)
         -- check which direction the key press is and apply force accordingly
         -- look for keypress up or attack button, call end, set new state
-
-        if Keyboard.Instance():Get(Keyboard.W) then
+        controller_id = character:GetNumber("Player","controller_id")
+        controller = SSPIDowncast((GetController(controller_id)))
+        
+        if controller:Jump() then
             return Res("CharacterJumpState.lua")
         end
 
         x = true
-        if Keyboard.Instance():Get(Keyboard.A) then
+        if controller:Left() then
             character:SetNumber("Position","heading",180)
             character:SetBool("Graphics","invert",true)
             character:SetNumber("Velocity","x", -100)   
-        elseif Keyboard.Instance():Get(Keyboard.D) then
+        elseif controller:Right() then
             character:SetNumber("Position","heading",0)
             character:SetBool("Graphics","invert",false)
             character:SetNumber("Velocity","x", 100)
@@ -33,7 +35,7 @@ Stages =
             character:SetNumber("Velocity","x", 0)
         end
         
-        if Keyboard.Instance():Get(Keyboard.E) then
+        if controller:Action() then
             return Res("CharacterAttackingState.lua") 
         elseif not x then
             return Res("CharacterIdleState.lua")   
@@ -45,9 +47,9 @@ Stages =
     end
 }
 
-character = ...
+character,gs = ...
 
-if character ~= nil then
-    local current_stage = character:GetString("State","stage")
-    return Stages[current_stage](character)
+if character ~= nil and gs ~= nil then
+    local stage = character:GetString("State","stage")
+    return Stages[stage](character,gs)
 end

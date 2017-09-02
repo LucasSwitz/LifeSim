@@ -8,15 +8,15 @@
 class SystemMonitor
 {
   public:
-    void Draw(const char *title, bool *opened = NULL)
+    void Draw(const char *title, SystemController& system_controller, bool *opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         std::unordered_map<std::string, std::string> available_systems = SystemFactory::Instance()->GetAllSystems();
-        std::list<System *> &active_systems = SystemController::Instance()->GetExecutionSequenceMutable();
-        std::list<System *> &passive_systems = SystemController::Instance()->GetPassiveSystemsMutable();
+        std::list<System *> &active_systems = system_controller.GetExecutionSequenceMutable();
+        std::list<System *> &passive_systems = system_controller.GetPassiveSystemsMutable();
 
         for (auto it = active_systems.begin(); it != active_systems.end(); it++)
         {
@@ -37,8 +37,8 @@ class SystemMonitor
 
         ImGui::BeginChild("Available Systems", ImVec2(500, 200));
 
-        DrawSystemList(active_systems, "Active");
-        DrawSystemList(passive_systems, "Passive");
+        DrawSystemList(active_systems, system_controller, "Active");
+        DrawSystemList(passive_systems, system_controller, "Passive");
 
         ImGui::EndChild();
 
@@ -50,7 +50,7 @@ class SystemMonitor
         {
             if (selected_system != -1)
             {
-                SystemController::Instance()->AddToSystemExecutionSequence(available_systems_vect[selected_system]);
+               system_controller.AddToSystemExecutionSequence(available_systems_vect[selected_system]);
             }
         }
         ImGui::End();
@@ -61,7 +61,7 @@ class SystemMonitor
         ImGui::ListBoxVector("", &selected_system, systems);
     }
 
-    void DrawSystemList(std::list<System *> &list, std::string type)
+    void DrawSystemList(std::list<System *> &list, SystemController& system_controller, std::string type)
     {
         int i = 0;
         for (auto it = list.begin(); it != list.end();)
@@ -84,14 +84,14 @@ class SystemMonitor
             if (ImGui::SmallButton(button_name_up.c_str()))
             {
                 std::cout << "Moving Up: " << name << std::endl;
-                SystemController::Instance()->MoveUp(name);
+                system_controller.MoveUp(name);
             }
 
             ImGui::SameLine(420);
 
             if (ImGui::SmallButton(button_name_down.c_str()))
             {
-                SystemController::Instance()->MoveDown(name);
+                system_controller.MoveDown(name);
             }
             ImGui::SameLine(440);
 
@@ -114,7 +114,7 @@ class SystemMonitor
             ImGui::SameLine(460);
             if (ImGui::SmallButton(button_name_kill.c_str()))
             {
-                it = SystemController::Instance()->RemoveFromSystemExecutionSequence(name);
+                it = system_controller.RemoveFromSystemExecutionSequence(name);
                 continue;
             }
 

@@ -38,6 +38,9 @@ class Entity : public ComponentUser
 
     static Entity *DowncastFromComponentUser(ComponentUser *caster);
 
+    void SetInstance(int instance_id);
+    int GetInstance() const;
+
     static int CPP_DEFINED_ENTITY;
     static int LUA_DEFINED_ENTITY;
 
@@ -48,5 +51,6 @@ class Entity : public ComponentUser
   private:
     int _type;
     std::string _prototype_name;
+    int _instance = -1;
 };
 #endif

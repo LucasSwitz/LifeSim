@@ -37,12 +37,19 @@ struct Event
 
         return e;
     }
-
-    static Event CreateT(int event_id,int sender, int target, lua_State* L)
+    
+    static Event CreateTFloats(int event_id,int sender, int target, lua_State* L)
     {
         std::vector<float>* floats = new std::vector<float>();
         LuaUniversal::FloatVectorFromLuaTable(*floats, L);
         return Event::Create<std::vector<float>>(event_id, sender, target, floats);
+    }
+
+    static Event CreateTStrings(int event_id, int sender, int target, lua_State* L)
+    {
+        std::vector<std::string>* strings = new std::vector<std::string>();
+        LuaUniversal::StringVectorFromLuaTable(*strings, L);
+        return Event::Create<std::vector<std::string>>(event_id, sender, target, strings);
     }
 
     template<typename T> 

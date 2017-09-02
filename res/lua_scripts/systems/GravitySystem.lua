@@ -7,9 +7,9 @@ Name = "GravitySystem"
 GravitySystem = 
 {
     after = "StateSystem",
-    Update = function(movement_system, time)
+    Update = function(movement_system, time, g)
         local physicals = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(physicals,{"Mass","Position","Velocity","Acceleration"})
+        g:ComponentUsers():GetAll(physicals,{"Mass","Position","Velocity","Acceleration"})
         local it = physicals:Iterator()
         while it ~= nil do
             user = it.data 

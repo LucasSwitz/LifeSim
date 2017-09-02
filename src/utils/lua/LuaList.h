@@ -16,18 +16,18 @@ struct LuaListNode
 
     ~LuaListNode()
     {
+        delete next;
     }
 };
 
 template <typename T>
 class LuaList
 {
-
   public:
     void Add(T data)
     {
         _size++;
-        LuaListNode<T> *new_LuaListNode = new LuaListNode<T>(data);
+        LuaListNode<T>* new_LuaListNode = new LuaListNode<T>(data);
 
         if (!_tail)
         {
@@ -53,16 +53,9 @@ class LuaList
         return _head;
     }
 
-    ~LuaList()
+    virtual ~LuaList()
     {
-        LuaListNode<T> *it = Iterator();
-
-        while (it != nullptr)
-        {
-            LuaListNode<T> *next = it->next;
-            delete it;
-            it = next;
-        }
+        delete _head;
     }
 
     int Size()
@@ -83,13 +76,28 @@ class LuaList
         return list;
     }
 
-    template <typename value>
-    static void FromListToLuaList(std::list<value> &map, LuaList &list)
+    template <typename LT>
+    static void FromListToLuaList(const std::list<LT> &list, LuaList &lua_list)
     {
-        for (auto it = map.begin(); it != map.end(); it++)
+        for (auto it = list.begin(); it != list.end(); it++)
         {
-            list.Add(*it);
+            lua_list.Add(*it);
         }
+    }
+
+    void Free()
+    {
+         LuaListNode<T> *it = Iterator();
+
+        while (it != nullptr)
+        {
+            LuaListNode<T> *next = it->next;
+            delete it;
+            it = next;
+        }
+        
+        _head = nullptr;
+        _tail = nullptr;
     }
   
   int _size = 0;

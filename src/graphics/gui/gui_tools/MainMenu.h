@@ -3,13 +3,14 @@
 
 #include "imgui.h"
 #include "src/graphics/gui/gui_tools/FolderContents.h"
-#include "src/graphics/gui/gui_tools/SaveDialog.h"
+#include "src/graphics/gui/gui_tools/InputDialog.h"
 #include "src/graphics/gui/gui_tools/MainMenuListener.h"
+#include "src/game/GameState.h"
 
 class MainMenu
 {
   public:
-    void Draw()
+    void Draw(GameState *game_state)
     {
         if (ImGui::BeginMainMenuBar())
         {
@@ -19,20 +20,29 @@ class MainMenu
             {
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Instance"))
+            if (ImGui::BeginMenu("Instance", game_state->GetStage()))
             {
-                if (ImGui::MenuItem("New Instance", "CTRL+I"))
+                if (ImGui::BeginMenu("New Instance", "CTRL+I"))
                 {
-                    if (_listener)
+                    ImGui::BeginChild("Instance Name##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                    std::string instance_name = _new_instance_dialog.Draw();
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
+
+                    if (!instance_name.empty())
                     {
-                        _listener->NewInstancePressed();
+                        if (_listener)
+                        {
+                            _listener->NewInstancePressed(instance_name);
+                        }
                     }
+
                 }
 
-                if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
+                /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
                 {
                     _focused = true;
-                    FolderContents instance_files("/home/pabu/Desktop/LifeSim/build/instances");
+                    FolderContents instance_files("/home/lucas/Desktop/LifeSim/build/instances");
                     ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
                     std::string file_name = instance_files.Draw();
                     if (!file_name.empty())
@@ -67,16 +77,49 @@ class MainMenu
 
                     ImGui::EndChild();
                     ImGui::EndMenu();
-                }
+                }*/
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Stage"))
             {
                 if (ImGui::MenuItem("New Stage", "CTRL+S"))
                 {
+                    if (_listener)
+                    {
+                        _listener->NewStagePressed();
+                    }
                 }
-                if (ImGui::MenuItem("Load Stage", "CTRL+SHIFT+S"))
+                if (ImGui::BeginMenu("Load Stage", "CTRL+SHIFT+S"))
                 {
+                    _focused = true;
+                    ImGui::BeginChild("Stage Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                    FolderContents stage_files("/home/lucas/Desktop/LifeSim/build/stages");
+                    std::string file_name = stage_files.Draw();
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->LoadStagePressed(file_name);
+                        }
+                    }
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
+                }
+                if (ImGui::BeginMenu("Save as Stage..."))
+                {
+                    ImGui::BeginChild("Save Stage##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
+                    std::string file_name = _save_dialog.Draw();
+
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->SaveStagePressed(file_name);
+                        }
+                    }
+
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }
@@ -116,7 +159,8 @@ class MainMenu
 
   private:
     MainMenuListener *_listener;
-    SaveDialog _save_dialog;
+    InputDialog _save_dialog;
+    InputDialog _new_instance_dialog;
     bool _focused = false;
 };
 #endif

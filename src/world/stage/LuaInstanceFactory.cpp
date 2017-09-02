@@ -2,9 +2,14 @@
 
 void LuaInstanceFactory::AddScript(Preamble &pre, std::string script_path)
 {
-    int prototype_id = std::stoi(pre.GetFlag("ID"));
     std::string prototype_name = pre.GetFlag("Name");
+    int prototype_id = std::stoi(pre.GetFlag("ID"));
 
+    AddScript(prototype_name, prototype_id,script_path);
+}
+
+void LuaInstanceFactory::AddScript(std::string& prototype_name, int& prototype_id, std::string& script_path)
+{
     _instance_directory.insert(std::make_pair(prototype_id, script_path));
     _instance_id_to_name_directory.insert(std::make_pair(prototype_id, prototype_name));
     _instance_name_to_id_directory.insert(std::make_pair(prototype_name, prototype_id));
@@ -42,6 +47,35 @@ bool LuaInstanceFactory::InstancePrototypeExists(int id)
 bool LuaInstanceFactory::InstancePrototypeExists(std::string name)
 {
     return _instance_name_to_id_directory.find(name) != _instance_name_to_id_directory.end();
+}
+
+int LuaInstanceFactory::LowestUnassignedKey()
+{
+    //TODO: Change this to an std::map and just start counting
+    int size = _instance_directory.size();
+
+    if(size == 0)
+        return 0;
+        
+    std::vector<int> ids(size);
+
+    for(auto it = _instance_directory.begin(); it != _instance_directory.end(); it++)
+    {
+        int id = it->first;
+
+        if(id >= size || id < 0)
+            continue;
+        
+        ids[id] = 1;
+    }
+
+    for(int i = 0; i < size; i++)
+    {
+        if(ids[i] == 0)
+        {
+            return i;
+        }
+    }
 }
 
 void LuaInstanceFactory::Reset()

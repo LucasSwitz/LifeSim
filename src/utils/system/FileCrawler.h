@@ -10,9 +10,9 @@ class FileCrawler
     template <typename T>
     void Crawl(std::string file_crawl_root, T &map)
     {
-        for (auto &full_file_path : directory_iterator(file_crawl_root))
+        for (auto &full_file_path : std::experimental::filesystem::directory_iterator(file_crawl_root))
         {
-            path current_path = full_file_path.path();
+            std::experimental::filesystem::path current_path = full_file_path.path();
 
             if (is_regular_file(current_path))
             {

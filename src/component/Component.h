@@ -47,7 +47,6 @@ class Component
 
         Component(std::string name = "") : _name(name){};
 
-
     //STRING ----------------------------
 
     bool HasStringValue(std::string name) const

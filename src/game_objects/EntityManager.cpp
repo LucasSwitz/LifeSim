@@ -5,7 +5,6 @@ EntityManager *EntityManager::_instance = nullptr;
 
 EntityManager::EntityManager()
 {
-    
 }
 
 Entity *EntityManager::GetEntityByID(int id)
@@ -33,12 +32,7 @@ void EntityManager::RegisterEntity(Entity *entity)
     entity->EnableAll();
 }
 
-EntityManager *EntityManager::Instance()
-{
-    return _instance;
-}
-
-const std::map<int, Entity *>& EntityManager::GetAllEntities() const
+const std::map<int, Entity *> &EntityManager::GetAllEntities() const
 {
     return _entity_map;
 }
@@ -70,10 +64,17 @@ void EntityManager::Clear()
 
 void EntityManager::OnEvent(Event &e)
 {
-    if (e.id == EventType::SPAWN_ENTITY_EVENT)
+    if (e.id == EventType::SPAWN_ENTITY_EVENT_PROTOTYPE) //maybe seperate this into a new class? "Spawnner"
     {
-        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.target_id);
-        RegisterEntity(entity);
+        Entity *entity = LuaEntityFactory::Instance()->GetEntity(e.sender_id);
+        Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
+        DispatchMessage(event);
+    }
+    else if (e.id == EventType::SPAWN_ENTITY_EVENT)
+    {
+        Entity *entity = e.InfoToType<Entity *>();
+        Event event(EventType::ENTITY_SPAWNED_EVENT, -1, e.target_id, entity);
+        DispatchMessage(event);
     }
     else if (e.id == EventType::DELETE_ENTITY_EVENT)
     {
@@ -88,8 +89,9 @@ std::list<Subscription> EntityManager::GetSubscriptions()
 {
     std::list<Subscription> subs =
         {
-            Subscription(EventType::SPAWN_ENTITY_EVENT),
-            Subscription(EventType::DELETE_ENTITY_EVENT)};
+            Subscription(EventType::SPAWN_ENTITY_EVENT_PROTOTYPE),
+            Subscription(EventType::DELETE_ENTITY_EVENT),
+            Subscription(EventType::SPAWN_ENTITY_EVENT)};
 
     return subs;
 }

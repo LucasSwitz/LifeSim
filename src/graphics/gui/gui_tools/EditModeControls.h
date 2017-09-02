@@ -8,14 +8,14 @@
 class EditModeControlsListener
 {
   public:
-    virtual void OnLaunchGameRunner() {}
-    virtual void OnStopGameRunner() {}
+    virtual void OnLaunchStage() {}
+    virtual void OnLaunchInstance() {}
 };
 
 class EditModeControls
 {
   public:
-    void Draw(const char *title, PMIDGWindow &window, bool *opened = NULL)
+    void Draw(const char *title, PMIDGWindow &window, GameState& gs, bool *opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);
@@ -25,7 +25,7 @@ class EditModeControls
 
         if (_show_collision_boxes)
         {
-            std::list<ComponentUser *> *users = ComponentUserBase::Instance()->GetAllUsersWithComponent("Collision");
+            const std::list<ComponentUser *> *users = gs.GetComponentUserBase()->GetAllUsersWithComponent("Collision");
 
             if (users)
             {
@@ -50,10 +50,16 @@ class EditModeControls
                 }
             }
         }
-        if (ImGui::Button("Play##NotStarted"))
+        if (ImGui::Button("Play Stage##NotStarted"))
         {
             if (_listener)
-                _listener->OnLaunchGameRunner();
+                _listener->OnLaunchStage();
+        }
+
+        if (ImGui::Button("Play Instance##NotStarted"))
+        {
+            if (_listener)
+                _listener->OnLaunchInstance();
         }
         ImGui::End();
     }

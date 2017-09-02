@@ -1,11 +1,12 @@
 
-SpawnFireball = function(user)
+SpawnFireball = function(user,gs)
     FIREBALL_ENTITY_ID = 111
+    user_entity = Entity.Downcast(user)
+    print(type(gs))
+    e = Event(EventType.SPAWN_ENTITY_EVENT_PROTOTYPE,FIREBALL_ENTITY_ID,user_entity.instance)
+    gs:Msg():LaunchEvent(e)
 
-    e = Event.EntityEvent(EventType.SPAWN_ENTITY_EVENT,-1,FIREBALL_ENTITY_ID,fireball)
-    MessageDispatch.Instance():LaunchEvent(e)
-
-    fireball = EntityManager.Instance():Last() --has to be done like this because of LuaBridge
+    fireball = gs:EntityManager():Last() --has to be done like this because of LuaBridge
     user_position = 
     {
         x = user:GetNumber("Position","x"),
@@ -32,8 +33,8 @@ SpawnFireball = function(user)
 
 end
 
-user = ...
+user,gs = ...
 
-if user~=nil then
-    SpawnFireball(user)
+if user~=nil and gs ~= nil then
+    SpawnFireball(user,gs)
 end

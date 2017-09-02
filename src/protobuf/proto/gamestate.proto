@@ -6,7 +6,7 @@ message GameState
 {
     repeated Entity entities = 1;
     repeated System active_systems = 2;
-    required Instance instance = 3;
+    required Stage stage = 3;
 }
 
 message Entity
@@ -14,6 +14,7 @@ message Entity
     required int32 id = 1;
     repeated Component components = 2;
     required string name = 3;
+    required int32 instance = 4;
 }
 
 message System
@@ -21,11 +22,12 @@ message System
     required string name = 1;
 }
 
-message Instance
+message Stage
 {
-    required string tilemap = 1;
-    required int32 id = 2;
-    required string name = 3;
+    required string file = 1;
+    required string name = 2;
+    repeated int32 instances = 3;
+    optional int32 root_instance = 4;
 }
 
 message Component

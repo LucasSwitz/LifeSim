@@ -35,7 +35,6 @@ class Tile : public ComponentUser
             Component *c = new Component(*(it->second));
             t->AddComponent(c);
         }
-
         return t;
     }
 

@@ -24,7 +24,7 @@ class ResourceManager
 
     static ResourceManager* Instance()
     {
-        static ResourceManager instance("/home/pabu/Desktop/LifeSim/res");
+        static ResourceManager instance("/home/lucas/Desktop/LifeSim/res");
         return &instance;
     }
 

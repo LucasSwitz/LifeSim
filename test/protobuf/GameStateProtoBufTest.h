@@ -29,7 +29,7 @@ TEST_F(GameStateProBufTest, TestAddEntities)
 
     Instance i;
     game_state_proto_buf.SetEntities(entities);
-    game_state_proto_buf.SetInstance(i);
+    //game_state_proto_buf.SetInstance(i);
     game_state_proto_buf.ToFile("proto_buf_entity_output.pmidg");
 }
 

@@ -7,16 +7,26 @@
 
 #include "src/system/SystemFactory.h"
 #include "src/utils/logging/Logging.h"
+#include "src/event/EventSubscriber.h"
+#include "src/event/EventType.h"
+#include "src/event/messaging/MessageDispatcher.h"
+
 /**
   Factory that loads all systems and orders their execution accordingly. 
   This factory should be seperated from the controller.
 **/
+class GameState;
 
-class SystemController
+class SystemController : public EventSubscriber, public MessageDispatcher
 {
   friend class GameState;
 
 public:
+  SystemController(MessageDispatch& msgd)
+  {
+    msgd.RegisterSubscriber(this);
+  }
+
   SystemController(const SystemController &system_controller)
   {
     const std::list<System *> &systems = system_controller.GetExecutionSequence();
@@ -41,7 +51,7 @@ public:
 
   int GetSequenceSize();
 
-  void Update(float seconds_since_last_update);
+  void Update(float seconds_since_last_update, GameState* g);
 
   void Reset()
   {
@@ -50,23 +60,20 @@ public:
     _passive_systems.clear();
   }
 
-  static SystemController *Instance()
-  {
-    return _instance;
-  }
-
-  static void GiveOwnership(SystemController *instance)
-  {
-    _instance = instance;
-  }
-
   const std::list<System *> &GetExecutionSequence() const;
   const std::list<System *> &GetPassiveSystems() const;
   std::list<System *> &GetExecutionSequenceMutable();
   std::list<System *> &GetPassiveSystemsMutable();
 
+  //Inherited from EventSubscriber
+  void OnEvent(Event &e);
+  std::list<Subscription> GetSubscriptions();
+
 protected:
-  SystemController(){};
+  SystemController()
+  {
+    
+  }
 
   std::list<System *> _systems_execution_sequence;
   std::list<System *> _passive_systems;
@@ -75,8 +82,8 @@ private:
   class SystemNameComparator
   {
   public:
-    explicit SystemNameComparator(std::string name) : _name(name){}
-    inline bool operator()(System*& s)
+    explicit SystemNameComparator(std::string name) : _name(name) {}
+    inline bool operator()(System *&s)
     {
       return s->GetName().compare(_name) == 0;
     }
@@ -85,10 +92,8 @@ private:
     std::string _name;
   };
 
-  void
-  MoveUp(System *system_name);
+  void MoveUp(System *system_name);
   void MoveDown(System *system_down);
-  static SystemController *_instance;
   std::mutex _system_lock;
 };
 

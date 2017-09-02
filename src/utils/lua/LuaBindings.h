@@ -9,11 +9,11 @@
 #include "src/event/EventType.h"
 #include "src/event/Event.h"
 #include "src/game/EngineGlobals.h"
+#include "src/game/GameState.h"
 #include "src/game_objects/LuaEntity.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/component/ComponentUser.h"
-#include "src/controllers/KeyboardController.h"
 #include "src/world/tile/Tile.h"
 #include "src/world/stage/Stage.h"
 #include "src/world/stage/Instance.h"
@@ -23,7 +23,10 @@
 #include "src/graphics/gui/PMIDGWindow.h"
 #include "src/event/messaging/MessageDispatch.h"
 #include "src/event/EngineEventManager.h"
-#include "src/controllers/PlayerController.h"
+#include "src/controllers/Controller.h"
+#include "src/controllers/KeyboardSideScrollerPlayerController.h"
+#include "src/controllers/ControllerBase.h"
+#include "src/controllers/SideScrollerPlayerInterface.h"
 #include "src/controllers/ControllerBase.h"
 #include "src/game/resources/ResourceManager.h"
 
@@ -36,6 +39,8 @@ class LuaBindings
             getGlobalNamespace(L)
             .addFunction("Res",&ResourceManager::GetResource)
             .addFunction("TARGET_WINDOW",&EngineGlobals::GetTargetWindow)
+            .addFunction("GetController",&ControllerBase::GetController)
+            .addFunction("SSPIDowncast",&SideScrollerPlayerInterface::Downcast)
             .beginClass<ComponentUser>("ComponentUser")
                 .addFunction("GetNumber", &ComponentUser::GetComponentValueFloat)
                 .addFunction("SetNumber", &ComponentUser::SetComponentValueFloat)
@@ -54,6 +59,7 @@ class LuaBindings
                 .addStaticData("CPP_DEFINED_ENTITY", &Entity::CPP_DEFINED_ENTITY)
                 .addStaticData("LUA_DEFINED_ENTITY", &Entity::LUA_DEFINED_ENTITY)
                 .addStaticFunction("Downcast",&Entity::DowncastFromComponentUser)
+                .addProperty("instance",&Entity::GetInstance,&Entity::SetInstance)
             .endClass()
             .deriveClass<LuaEntity, Entity>("LuaEntity")
                 .addStaticFunction("Downcast",&LuaEntity::DownCastFromEntity)
@@ -75,6 +81,7 @@ class LuaBindings
                 .addConstructor<void (*)(void)>()
                 .addFunction("Iterator", &LuaList<ComponentUser*>::Iterator)
                 .addFunction("Size",&LuaList<ComponentUser*>::Size)
+                .addFunction("Free",&LuaList<ComponentUser*>::Free)
             .endClass()
             .beginClass<LuaList<Entity*>>("LuaListEntity")
                 .addConstructor<void (*)(void)>()
@@ -82,7 +89,6 @@ class LuaBindings
                 .addFunction("Size",&LuaList<Entity*>::Size)
             .endClass()
             .beginClass<EntityManager>("EntityManager")
-                .addStaticFunction("Instance", &EntityManager::Instance)
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
@@ -111,14 +117,17 @@ class LuaBindings
                 .addStaticData("S_DOWN_EVENT", &EventType::S_DOWN_EVENT, false)
                 .addStaticData("S_UP_EVENT", &EventType::S_UP_EVENT, false)
                 .addStaticData("DRAW_REQUEST_EVENT",&EventType::DRAW_REQUEST_EVENT,false)
-                .addStaticData("SPAWN_ENTITY_EVENT",&EventType::SPAWN_ENTITY_EVENT,false)
+                .addStaticData("SPAWN_ENTITY_EVENT_PROTOTYPE",&EventType::SPAWN_ENTITY_EVENT_PROTOTYPE,false)
                 .addStaticData("RECENTER_VIEW_EVENT",&EventType::RECENTER_VIEW_EVENT,false)
+                .addStaticData("START_SYSTEM_EVENT",&EventType::START_SYSTEM_EVENT,false)
+                .addStaticData("STOP_SYSTEM_EVENT",&EventType::STOP_SYSTEM_EVENT,false)
             .endClass()
             .beginClass<Event>("Event")
                 .addConstructor<void (*)(int,int,int)>()
                 .addStaticFunction("ComponentUserEvent",&Event::Create<ComponentUser>)
                 .addStaticFunction("EntityEvent",&Event::Create<Entity>)
-                .addStaticFunction("FloatsEvent",&Event::CreateT)
+                .addStaticFunction("FloatsEvent",&Event::CreateTFloats)
+                .addStaticFunction("StringsEvent",&Event::CreateTStrings)
                 .addData("id", &Event::id)
                 .addData("sender", &Event::sender_id)
                 .addData("target", &Event::target_id)
@@ -127,30 +136,30 @@ class LuaBindings
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
             .endClass()
             .deriveClass<MessageDispatch,EventManager>("MessageDispatch")
-                .addStaticFunction("Instance",&MessageDispatch::Instance)
             .endClass()
             .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
                 .addStaticFunction("Instance",&EngineEventManager::Instance)
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
-                .addStaticFunction("Instance",&ComponentUserBase::Instance)
                 .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentsAsLuaList)
                 .addFunction("GetAllEntities",&ComponentUserBase::GetAllEntitesWithComponentAsLuaList)
             .endClass()
             .beginClass<LuaRef>("LuaRef")
             .endClass()
-            .beginClass<IODevice>("IODevice")
-                .addFunction("Get",&IODevice::Get)
+            .beginClass<Controller>("Controller")
             .endClass()
-            .deriveClass<KeyboardController, IODevice>("Keyboard")
-                .addStaticFunction("Instance", &KeyboardController::Instance)
-                .addStaticData("W",&KeyboardController::W_S_TRIGGER)
-                .addStaticData("A",&KeyboardController::A_S_TRIGGER)
-                .addStaticData("S",&KeyboardController::S_S_TRIGGER)
-                .addStaticData("D",&KeyboardController::D_S_TRIGGER)
-                .addStaticData("E",&KeyboardController::E_S_TRIGGER)
+            .beginClass<SideScrollerPlayerInterface>("SSPI")
+                .addStaticFunction("Downcast",&SideScrollerPlayerInterface::Downcast)
+                .addFunction("Jump",&SideScrollerPlayerInterface::Jump)
+                .addFunction("Left",&SideScrollerPlayerInterface::Left)
+                .addFunction("Right",&SideScrollerPlayerInterface::Right)
+                .addFunction("Action",&SideScrollerPlayerInterface::Action)
             .endClass()
             .beginClass<Instance>("Instance")
+                .addProperty("y", &Instance::GetY)
+                .addProperty("x", &Instance::GetX)
+                .addProperty("height",&Instance::GetHeight)
+                .addProperty("width",&Instance::GetWidth)
             .endClass()
             .deriveClass<LuaInstance,Instance>("LuaInstance")
             .endClass()
@@ -163,6 +172,12 @@ class LuaBindings
             .beginClass<DebugFlags>("DebugFlags")
                 .addStaticFunction("Instance", &DebugFlags::Instance)
                 .addFunction("Set", &DebugFlags::Set)
+            .endClass()
+            .beginClass<GameState>("GameState")
+                .addFunction("Msg", &GameState::GetMessageDispatch)
+                .addFunction("SystemController",&GameState::GetSystemController)
+                .addFunction("EntityManager", &GameState::GetEntityManager)
+                .addFunction("ComponentUsers",&GameState::GetComponentUserBase)
             .endClass();
     } 
  };

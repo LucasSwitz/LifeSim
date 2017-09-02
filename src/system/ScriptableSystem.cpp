@@ -1,9 +1,9 @@
 #include "ScriptableSystem.h"
 
-void ScriptableSystem::Update(float seconds_elapsed)
+void ScriptableSystem::Update(float seconds_elapsed, GameState* g)
 {
     if (_update_function)
-        (*_update_function)(*_system_table, seconds_elapsed);
+        (*_update_function)(*_system_table, seconds_elapsed, g);
 }
 
 
@@ -58,8 +58,6 @@ void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &sc
                 {
                     _get_subscriptions_function = std::make_unique<LuaRef>(event_table["GetSubscriptions"]);
                 }
-
-                MessageDispatch::Instance()->RegisterSubscriber(this);
             }
         }
     }

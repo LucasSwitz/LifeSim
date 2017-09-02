@@ -11,12 +11,15 @@ Stages =
         character:SetString("State","stage","Execute")
     end,
     Execute = function(character)
-        if Keyboard.Instance():Get(Keyboard.W) then
+        controller_id = character:GetNumber("Player","controller_id")
+        controller = SSPIDowncast((GetController(controller_id)))
+
+        if controller:Jump() then
             return Res("CharacterJumpState.lua")
-        elseif Keyboard.Instance():Get(Keyboard.A) or
-               Keyboard.Instance():Get(Keyboard.D) then
+        elseif controller:Left() or
+               controller:Right() then
             return Res("CharacterWalkingState.lua")
-        elseif Keyboard.Instance():Get(Keyboard.E) then
+        elseif controller:Action() then
             return Res("CharacterAttackingState.lua")
         end
     end,
@@ -24,9 +27,9 @@ Stages =
     end
 }
 
-character = ...
+character,gs = ...
 
-if character ~= nil then
+if character ~= nil and gs ~= nil then
     local stage = character:GetString("State","stage")
-    return Stages[stage](character)
+    return Stages[stage](character,gs)
 end

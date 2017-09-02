@@ -5,9 +5,9 @@ Name = "FollowCharacterCamera"
 
 FollowCharacterCamera =
 {
-    Update = function(follower_camera,time)
+    Update = function(follower_camera,time,g)
         players = LuaListComponentUser()
-        ComponentUsers.Instance():GetAll(players,{"Player","Position"})
+        g:ComponentUsers():GetAll(players,{"Player","Position"})
         players_it = players:Iterator()
         player = players_it.data
 
