@@ -13,7 +13,7 @@ STAGE_END = "End"
 
 StateSystem = 
 {
-    Update = function(state_system, time, gs)
+    Update = function(state_system, time, g)
     
         local entities = LuaListComponentUser()
         g:ComponentUsers():GetAll(entities,{"State"})
@@ -23,10 +23,10 @@ StateSystem =
             local current_state_time = current:GetNumber("State","time")
             current:SetNumber("State","time",current_state_time+time)
             state_file_name = current:GetString("State","state")
-            local new_state = loadfile(state_file_name)(current,gs,time)
-            -- manages transition between state
+            local new_state = loadfile(state_file_name)(current,g,time) --TODO: potentially pass time here
+             -- manages transition between state
             if new_state ~= nil then
-                helpers.Switch(current,new_state)
+                helpers.Switch(current,new_state,g)
             end
             it = it.next
         end

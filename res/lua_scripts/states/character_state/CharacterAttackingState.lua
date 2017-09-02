@@ -11,7 +11,7 @@ Stages =
         character:SetString("State","stage","Execute")
     end,
     Execute = function(character,gs)
-        loadfile(Res("ActionShootFireball.lua"))(gs,character)
+        loadfile(Res("ActionShootFireball.lua"))(character,gs)
         return Res("CharacterIdleState.lua")
     end,
     End = function(character)
@@ -19,7 +19,7 @@ Stages =
     end
 }
 
-gs,character = ...
+character,gs = ...
 
 if character ~= nil and gs ~= nil then
     local stage = character:GetString("State","stage")

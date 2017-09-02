@@ -33,7 +33,7 @@ Stages =
     end
 }
 
-gs,character = ...
+character,gs = ...
 
 if character ~= nil and gs ~= nil then
     local stage = character:GetString("State","stage")
