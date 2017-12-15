@@ -5,8 +5,8 @@ ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
 {
     _game_state = new GameState();
 
-    LuaTileFactory::Instance()->PopulateFactory();
-    LuaInstanceFactory::Inst()->PopulateFactory();
+    LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+    LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
     EngineEventManager::Instance()->RegisterSubscriber(this);
 
     _dev_tools.Init(&_window);

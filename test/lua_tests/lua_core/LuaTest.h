@@ -25,6 +25,7 @@ class LuaTest : public ::testing::Test
         LuaUniversal::Instance()->Init();
         DebugFlags::Instance()->Clear();
         LuaBindings::Bind(LUA_STATE);
+        Globals::SetResourceRoot("/home/lucas/Desktop/LifeSim/res");
     }   
 
     void SetUp()

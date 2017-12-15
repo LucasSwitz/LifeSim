@@ -10,7 +10,7 @@ BlankTile =
     {
         Graphics = 
         {
-            sprite = "/home/lucas/Desktop/LifeSim/res/textures/blank.jpg",
+            sprite = Res("blank.jpg"),
             layer = 0,
             width = 32,
             height = 32

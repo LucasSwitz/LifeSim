@@ -19,12 +19,12 @@ public:
 
   static StateScriptFactory *Instance()
   {
-    static StateScriptFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/states", "State");
+    static StateScriptFactory instance("State");
     return &instance;
   };
 
 private:
-  StateScriptFactory(std::string script_path, std::string state_name) : ScriptFactory<ScriptableState>(script_path, state_name, true){};
+  StateScriptFactory(std::string state_name) : ScriptFactory<ScriptableState>(state_name, true){};
 
   std::unordered_map<std::string, std::unordered_map<std::string, ScriptableState *>> _scripts_map;
 };

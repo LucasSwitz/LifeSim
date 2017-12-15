@@ -13,7 +13,7 @@ public:
 
     StageTest()
     {
-        LuaStageFactory::Instance()->PopulateFactory();
+        LuaStageFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
         stage = LuaStageFactory::Instance()->GetStage("TestStage");   
     }
 

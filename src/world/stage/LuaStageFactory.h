@@ -23,14 +23,14 @@ class LuaStageFactory : public ScriptFactory<std::string>
 
    static LuaStageFactory* Instance()
   {
-    static LuaStageFactory instance("/home/lucas/Desktop/LifeSim/lua_scripts/world/stages", "Stage");
+    static LuaStageFactory instance("Stage");
 
     return &instance;
   }
 
 protected:
-  LuaStageFactory(std::string stage_scripts_path, std::string script_type) 
-                        : ScriptFactory<std::string>(stage_scripts_path, script_type){};
+  LuaStageFactory(std::string script_type) 
+                        : ScriptFactory<std::string>(script_type){};
     
 private:    
     std::unordered_map<int, std::string> _stage_directory;

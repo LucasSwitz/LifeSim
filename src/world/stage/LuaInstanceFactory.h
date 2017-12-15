@@ -22,14 +22,14 @@ class LuaInstanceFactory : public ScriptFactory<std::string>
 
    static LuaInstanceFactory* Inst() //can't name this Instance :(
   {
-    static LuaInstanceFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/world/instances", "Instance");
+    static LuaInstanceFactory instance("Instance");
 
     return &instance;
   }
 
 protected:
-  LuaInstanceFactory(std::string instance_scripts_path, std::string script_type) 
-                        : ScriptFactory<std::string>(instance_scripts_path, script_type){};
+  LuaInstanceFactory(std::string script_type) 
+                        : ScriptFactory<std::string>(script_type){};
     
 private:    
     std::unordered_map<int, std::string> _instance_directory;

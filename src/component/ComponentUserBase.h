@@ -33,7 +33,7 @@ class ComponentUserBase : public ComponentUserListener
         _component_users_directory.clear();
     }
 
-    const std::list<ComponentUser *> *GetAllUsersWithComponent(std::string component_name) const;
+    const std::list<ComponentUser*> *GetAllUsersWithComponent(std::string component_name) const;
     std::list<ComponentUser *> *GetAllUsersWithComponentMutable(std::string component_name);
     void GetAllUsersWithComponents(std::initializer_list<std::string> list,
                                    std::list<ComponentUser *> &user_list);

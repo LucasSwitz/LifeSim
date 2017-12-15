@@ -1,12 +1,12 @@
 #ifndef MESSAGE_DISPATCHER_H
 #define MESSAGE_DISPATCHER_H
 
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 
 class MessageDispatcher
 {
 public:
-    virtual void AssignToDispatch(MessageDispatch* dispatch)
+    virtual void AssignToDispatch(EventManager* dispatch)
     {
         _dispatch = dispatch;
     }
@@ -19,7 +19,7 @@ public:
             std::cout << "Dispatch not assigned!" << std::endl;
     }
 
-    MessageDispatch* GetAssignedDispatch()
+    EventManager* GetAssignedDispatch()
     {
         return _dispatch;
     }
@@ -30,7 +30,7 @@ public:
     }
 
 private:
-    MessageDispatch* _dispatch;
+    EventManager* _dispatch;
 
 };
 #endif

@@ -7,12 +7,12 @@ CollisionSystem =
 {
     --shitty O(m*n) collision detection 
     after = "GravitySystem",
-    Update = function(self,time, g)
+    Update = function(self,time, gs)
         local entities = LuaListEntity()
         local colliders = LuaListComponentUser()
 
-        g:ComponentUsers():GetAllEntities(entities,"Collision")
-        g:ComponentUsers():GetAll(colliders, {"Collision"})
+        gs:ComponentUsers():GetAllEntities(entities,"Collision")
+        gs:ComponentUsers():GetAll(colliders, {"Collision"})
         local entity_it = entities:Iterator()
         while entity_it ~= nil do
             entity = entity_it.data
@@ -22,8 +22,7 @@ CollisionSystem =
                 if collider.id ~= entity.id then
                     collision_data = self.GetCollision(collider,entity,time)
                     if collision_data ~= nil then
-                        --e = Event(EventType.COLLISION_EVENT, entity.id, compare.id)
-                        --EventManager.Instance():LaunchEvent(e)
+                        collision_data.gs = gs                        
                         script_1 = entity:GetString(   "Collision", "collision_script")
                         script_2 = collider:GetString( "Collision", "collision_script" )
 
@@ -39,6 +38,8 @@ CollisionSystem =
                             loadfile(script_2)(collision_data)
                         end
 
+                        e = Event(EventType.COLLISION_EVENT, entity.id, collider.id)
+                        gs:Msg():LaunchEvent(e)
                     end
                 end
                 collider_it = collider_it.next

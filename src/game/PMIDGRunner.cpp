@@ -4,8 +4,8 @@ PMIDGRunner::PMIDGRunner()
 {
     LuaUniversal::Instance()->Init();
     LuaBindings::Bind(LUA_STATE);
-    LuaEntityFactory::Instance()->PopulateFactory();
-    SystemFactory::Instance()->PopulateFactory();
+    LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+    SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     EngineEventManager::Instance()->RegisterSubscriber(this);
 }
 

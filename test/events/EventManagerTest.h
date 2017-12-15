@@ -9,9 +9,10 @@ class EventManagerTest : public EventSubscriber, public ::testing::Test
 {
     public:
         bool event_recieved = false;
+        EventManager em;
         EventManagerTest()
         {
-            EventManager::Instance()->RegisterSubscriber(this);
+            em.RegisterSubscriber(this);
         }
 
         void OnEvent(Event& e)
@@ -30,14 +31,14 @@ class EventManagerTest : public EventSubscriber, public ::testing::Test
 
 TEST_F(EventManagerTest, EventLoadNewEvent)
 {
-    ASSERT_FALSE(EventManager::Instance()->EventExists(EventType::NEVER_MAKE_THIS_EVENT));
-    ASSERT_TRUE(EventManager::Instance()->EventExists(EventType::MAKE_THIS_EVENT_DURING_TEST));
+    ASSERT_FALSE(em.EventExists(EventType::NEVER_MAKE_THIS_EVENT));
+    ASSERT_TRUE(em.EventExists(EventType::MAKE_THIS_EVENT_DURING_TEST));
 }
 
 TEST_F(EventManagerTest, TestEventLaunch)
 {
     Event e(EventType::MAKE_THIS_EVENT_DURING_TEST,0,1);
-    ASSERT_NO_FATAL_FAILURE(EventManager::Instance()->LaunchEvent(e));
+    ASSERT_NO_FATAL_FAILURE(em.LaunchEvent(e));
     ASSERT_TRUE(event_recieved);
 }
 

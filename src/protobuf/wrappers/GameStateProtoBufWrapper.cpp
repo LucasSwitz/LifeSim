@@ -28,31 +28,27 @@ void GameStateProtoBufWrapper::ConfigureSerializedComponent(pmidgserialized::Com
     std::unordered_map<std::string, Component *> &sub_components =
         component->GetSubcomponents();
 
-    for (auto it_vals = float_values.begin(); it_vals != float_values.end(); it_vals++)
-    {
+    for (auto it_vals = float_values.begin(); it_vals != float_values.end(); it_vals++){
         pmidgserialized::ComponentValueFloat *serialized_component_value =
             serialized_component->add_float_values();
 
         ConfigureSerializedComponentValue<pmidgserialized::ComponentValueFloat, float>(it_vals->second, serialized_component_value);
     }
 
-    for (auto it_vals = string_values.begin(); it_vals != string_values.end(); it_vals++)
-    {
+    for (auto it_vals = string_values.begin(); it_vals != string_values.end(); it_vals++){
         pmidgserialized::ComponentValueString *serialized_component_value =
             serialized_component->add_string_values();
         ConfigureSerializedComponentValue<pmidgserialized::ComponentValueString, std::string>(it_vals->second, serialized_component_value);
     }
 
-    for (auto it_vals = bool_values.begin(); it_vals != bool_values.end(); it_vals++)
-    {
+    for (auto it_vals = bool_values.begin(); it_vals != bool_values.end(); it_vals++){
         pmidgserialized::ComponentValueBool *serialized_component_value =
             serialized_component->add_bool_values();
 
         ConfigureSerializedComponentValue<pmidgserialized::ComponentValueBool, bool>(it_vals->second, serialized_component_value);
     }
 
-    for (auto it_vals = sub_components.begin(); it_vals != sub_components.end(); it_vals++)
-    {
+    for (auto it_vals = sub_components.begin(); it_vals != sub_components.end(); it_vals++){
         pmidgserialized::Component *serialized_sub_component =
             serialized_component->add_subcomponents();
         ConfigureSerializedComponent(serialized_sub_component, it_vals->second);
@@ -69,8 +65,7 @@ void GameStateProtoBufWrapper::SetStage(Stage &stage)
 
     const std::unordered_map<int, std::string> &instances = lua_stage->GetInstanceNames();
 
-    for (auto it = instances.begin(); it != instances.end(); it++)
-    {
+    for (auto it = instances.begin(); it != instances.end(); it++){
         int instance_id = it->first;
         serialzied_stage->add_instances(instance_id);
     }
@@ -94,29 +89,25 @@ Component *GameStateProtoBufWrapper::GenerateComponent(pmidgserialized::Componen
     int num_of_subcomponents = component.subcomponents_size();
 
     // iterate over component values
-    for (int j = 0; j < num_of_bool_values; j++)
-    {
+    for (int j = 0; j < num_of_bool_values; j++){
         pmidgserialized::ComponentValueBool current_value =
             component.bool_values(j);
         ConfigureComponent<pmidgserialized::ComponentValueBool, bool>(component_to_add, current_value);
     }
 
-    for (int j = 0; j < num_of_string_values; j++)
-    {
+    for (int j = 0; j < num_of_string_values; j++){
         pmidgserialized::ComponentValueString current_value =
             component.string_values(j);
         ConfigureComponent<pmidgserialized::ComponentValueString, std::string>(component_to_add, current_value);
     }
 
-    for (int j = 0; j < num_of_float_values; j++)
-    {
+    for (int j = 0; j < num_of_float_values; j++){
         pmidgserialized::ComponentValueFloat current_value =
             component.float_values(j);
         ConfigureComponent<pmidgserialized::ComponentValueFloat, float>(component_to_add, current_value);
     }
 
-    for (int j = 0; j < num_of_subcomponents; j++)
-    {
+    for (int j = 0; j < num_of_subcomponents; j++){
         Component *sub = GenerateComponent(component.subcomponents(j));
         component_to_add->AddSubcomponent(sub);
     }
@@ -133,14 +124,12 @@ void GameStateProtoBufWrapper::GetStage(LuaStage *stage)
 
     int num_of_instances = serialized_stage.instances_size();
 
-    for (int i = 0; i < num_of_instances; i++)
-    {
+    for (int i = 0; i < num_of_instances; i++){
         int instance_id = serialized_stage.instances(i);
         stage->AddInstance(instance_id);
     }
 
-    if (serialized_stage.has_root_instance())
-    {
+    if (serialized_stage.has_root_instance()){
         int root_instance_id = serialized_stage.root_instance();
         stage->SetRootInstance(root_instance_id);
     }

@@ -14,7 +14,7 @@ extern "C" {
 #include "lualib.h"
 }
 
-#include "src/game/resources/ResourceManager.h"
+#include "src/utils/Globals.h"
 
 #define LUA_STATE LuaUniversal::Instance()->GetLuaState()
 

@@ -5,26 +5,42 @@
 #include "src/event/EventSubscriber.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/system/SystemController.h"
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 
 class CollisionSystemTest : public LuaTest, public EventSubscriber
 {
     public:
-        Entity* e_1;
-        Entity* e_2;
-
         bool _detected_collision = false;
+        GameState g;
+        Entity* e1;
+        Entity* e2;
+
         CollisionSystemTest()
         {
-            ComponentUserBase::Instance()->Reset();
+            SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+            LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+            LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
 
-            SystemFactory::Instance()->PopulateFactory();
-            LuaEntityFactory::Instance()->PopulateFactory();
+            TileMap t;
+            t.LoadFromFile(Res(".pmidgM"));
 
-            e_1 = LuaEntityFactory::Instance()->GetEntity("CollisionTestEntity1");
-            e_2 = LuaEntityFactory::Instance()->GetEntity("CollisionTestEntity2");
+            Instance* i = new Instance(-2,"TestCollisionInstance");
+            i->SetTileMap(t);
+            Stage* s = new Stage();
+            s->AddInstance(i);
+            s->SetCurrentInstance(i->GetID(),true);
 
-            MessageDispatch::Instance()->RegisterSubscriber(this);
+            e1 = LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity1");
+            e2 = LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity2");
+            
+            e1->SetInstance(i->GetID());
+            e2->SetInstance(i->GetID());
+
+            g.SetStage(s);
+            g.AddEntity(e1);
+            g.AddEntity(e2);
+
+            g.GetMessageDispatch().RegisterSubscriber(this);
         }
 
         void OnEvent(Event& e)
@@ -35,15 +51,15 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
         std::list<Subscription> GetSubscriptions()
         {
             std::list<Subscription> subs;
-            subs.push_back(Subscription(EventType::COLLISION_EVENT, {e_1->ID(), e_2->ID()}));
+            subs.push_back(Subscription(EventType::COLLISION_EVENT, {e1->ID(), e2->ID()}));
             return subs;
         }
 };
 
 TEST_F(CollisionSystemTest, TestCollisionDetection)
 {
-    SystemController::Instance()->AddToSystemExecutionSequence("CollisionSystem");
-    SystemController::Instance()->Update(0);
+    g.AddSystem("CollisionSystem");
+    g.Tick(1.0);
     ASSERT_TRUE(_detected_collision);
 }
 

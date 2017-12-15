@@ -54,13 +54,12 @@ class Instance : public EventSubscriber, public FPSRunnable
         _loaded = true;
     }
 
-    virtual void Load()
-    {
-        
+    virtual void Load(){
+        _Load();
+        _loaded = true;
     }
 
-    virtual void Unload() override
-    {
+    virtual void Unload() override{
         //delete all local entities
         _tile_map.Unload();
         _loaded = false;
@@ -68,13 +67,10 @@ class Instance : public EventSubscriber, public FPSRunnable
         _Unload();
     }
 
-    virtual void Open(EntityManager& em)
-    {
+    virtual void Open(EntityManager& em){
         if(!_loaded)
         { 
-            
-            std::cout << "Instance Must be Loaded Before Opened!" << std::endl;
-            return;
+            Load();
         }
 
         _tile_map.Show();
@@ -90,33 +86,27 @@ class Instance : public EventSubscriber, public FPSRunnable
         _open = true;   
     }
 
-    virtual void Tick(float seconds_elapsed) override
-    {
+    virtual void Tick(float seconds_elapsed) override{
         _Tick(seconds_elapsed);
     }
 
-    int GetWidth() const
-    {
+    int GetWidth() const{
         return _tile_map.WidthPx();
     }
 
-    int GetHeight() const
-    {
+    int GetHeight() const{
         return _tile_map.HeightPx();
     }
 
-    int GetX() const
-    {
+    int GetX() const{
         return _anchor_point.y;
     }
 
-    int GetY() const
-    {
+    int GetY() const{
         return _anchor_point.x;
     }
 
-    virtual void Close(EntityManager& em)
-    {
+    virtual void Close(EntityManager& em){
         _tile_map.Hide();
 
         //should have different options for what components to remove at different levels of closing.
@@ -131,64 +121,51 @@ class Instance : public EventSubscriber, public FPSRunnable
         _open = false;
     }
 
-    virtual void OnEvent(Event& e)
-    {
+    virtual void OnEvent(Event& e){
         //Listen for stage end condition -owner of stage needs to listen for stage end requests
     }
 
-    std::list<Subscription> GetSubscriptions()
-    {
-
+    std::list<Subscription> GetSubscriptions(){
     }
 
-    void SetTileMap(std::string file_name)
-    {
+    void SetTileMap(std::string file_name){
         _tile_map.LoadFromFile(file_name);
     }
 
-    void SetTileMap(TileMap& map)
-    {   
+    void SetTileMap(TileMap& map){   
         _tile_map.Erase();
         _tile_map.Copy(map);
     }   
 
-    TileMap& GetTileMap()
-    {
+    TileMap& GetTileMap(){
         return _tile_map;
     }
 
-    bool IsOpen()
-    {
+    bool IsOpen(){
         return _open;
     }
 
-    bool IsLoaded()
-    {
+    bool IsLoaded(){
         return _loaded;
     }
 
-    void SetName(const std::string& name)
-    {
+    void SetName(const std::string& name){
         _name = name;
     }
 
-    std::string& GetName()
-    {
+    std::string& GetName(){
         return _name;
     }
 
-    void AddLocalEntity(int id)
-    {
+    void AddLocalEntity(int id) {
         _local_entities.push_back(id);
     }
 
-    int& GetID()
-    {
+    int& GetID(){
         return _id;
     }
 
-    const Point& GetAnchor()
-    {
+    const Point& GetAnchor(){
         return _anchor_point;
     }
 

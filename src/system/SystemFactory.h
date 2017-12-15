@@ -23,7 +23,7 @@ public:
 
   static SystemFactory *Instance()
   {
-    static SystemFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/systems", "System");
+    static SystemFactory instance("System");
 
     return &instance;
   }
@@ -31,8 +31,8 @@ public:
   std::unordered_map<std::string, std::string> &GetAllSystems();
 
 protected:
-  SystemFactory(std::string system_scripts_path, std::string script_type)
-      : ScriptFactory<std::string>(system_scripts_path, script_type){};
+  SystemFactory(std::string script_type)
+      : ScriptFactory<std::string>(script_type){};
 
 private:
   std::unordered_map<std::string, std::string> _system_directory;

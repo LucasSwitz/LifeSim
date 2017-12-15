@@ -25,14 +25,14 @@ class LuaTileFactory : public ScriptFactory<std::string>
 
   static LuaTileFactory* Instance()
   {
-    static LuaTileFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/world/tiles", "Tile");
+    static LuaTileFactory instance("Tile");
 
     return &instance;
   }
 
 protected:
-  LuaTileFactory(std::string tile_scripts_path, std::string script_type) 
-                        : ScriptFactory<std::string>(tile_scripts_path, script_type){};
+  LuaTileFactory(std::string script_type) 
+                        : ScriptFactory<std::string>(script_type){};
     
 private:    
     std::unordered_map<int, std::string> _tile_directory;

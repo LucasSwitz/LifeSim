@@ -8,9 +8,11 @@
 class ScriptableSystemTest : public LuaTest
 {
   public:
+
+    GameState g;
     ScriptableSystemTest()
     {
-        SystemFactory::Instance()->PopulateFactory();
+        SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     }
 
     void SetUp()
@@ -21,12 +23,16 @@ class ScriptableSystemTest : public LuaTest
 
 TEST_F(ScriptableSystemTest, TestOrderingMechanics)
 {
-    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem1");
-    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem2");
-    SystemController::Instance()->AddToSystemExecutionSequence("TestSystem3");
+    System* first = SystemFactory::Instance()->GetSystem("TestSystem1");
+    System* second = SystemFactory::Instance()->GetSystem("TestSystem2");
+    System* third = SystemFactory::Instance()->GetSystem("TestSystem3");
 
-    EXPECT_TRUE(first == SystemController::Instance()->GetExecutionSequenceAt(0));
-    EXPECT_TRUE(second == SystemController::Instance()->GetExecutionSequenceAt(1));
-    EXPECT_TRUE(third == SystemController::Instance()->GetExecutionSequenceAt(2));
+    g.AddSystem(first);
+    g.AddSystem(second);
+    g.AddSystem(third);
+
+    EXPECT_TRUE(first == g.GetSystemController().GetExecutionSequenceAt(0));
+    EXPECT_TRUE(second == g.GetSystemController().GetExecutionSequenceAt(1));
+    EXPECT_TRUE(third == g.GetSystemController().GetExecutionSequenceAt(2));
 }
 #endif

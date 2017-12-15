@@ -32,6 +32,10 @@ void GameState::Tick(float seconds_elapsed)
         _system_controller.Update(seconds_elapsed, this);
         _current_stage->Tick(seconds_elapsed);
     }
+    else
+    {
+        std::cout << "No Stage or No Instance, can't tick" << std::endl;
+    }
     //if using lua
     LuaUniversal::Instance()->CollectGarbage();
 }
@@ -109,7 +113,7 @@ SystemController& GameState::GetSystemController()
     return _system_controller;
 }
 
-MessageDispatch &GameState::GetMessageDispatch()
+EventManager &GameState::GetMessageDispatch()
 {
     return _message_dispatch;
 }

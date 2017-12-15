@@ -9,11 +9,12 @@ class InstanceTest : public LuaTest
 {
 public:
 
-    Instance*  instance;
+    Instance* instance;
+    EntityManager em;
 
     InstanceTest()
     {
-        LuaInstanceFactory::Inst()->PopulateFactory();
+        LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
         instance = LuaInstanceFactory::Inst()->GetInstance("TestInstance");   
     }
 
@@ -43,13 +44,14 @@ TEST_F(InstanceTest, TestInstanceUnload)
 
 TEST_F(InstanceTest, TestInstanceOpen)
 {
-    instance->Open();
+    instance->Load();
+    instance->Open(em);
     ASSERT_EQ(DebugFlags::Instance()->Get("TestInstanceOpen"),"yes");
 }
 
 TEST_F(InstanceTest, TestInstanceClose)
 {
-    instance->Close();
+    instance->Close(em);
     ASSERT_EQ(DebugFlags::Instance()->Get("TestInstanceClose"),"yes");
 }
 #endif

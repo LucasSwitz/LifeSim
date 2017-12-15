@@ -7,7 +7,7 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/Event.h"
 #include "src/event/EventType.h"
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 #include "src/game_objects/LuaEntityFactory.h"
 #include "src/component/ComponentUserBase.h"
 #include "src/event/messaging/MessageDispatcher.h"

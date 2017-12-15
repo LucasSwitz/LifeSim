@@ -81,15 +81,12 @@ class ScriptFactory
         std::unordered_map<std::string, std::string> preamble_flags;
     };
 
-    ScriptFactory(std::string search_directory, std::string script_type, bool configurable = false) : _search_directory(search_directory), _script_type(script_type), _configurable(configurable) {}
+    ScriptFactory(std::string script_type, bool configurable = false) : _script_type(script_type), _configurable(configurable) {}
 
-    void PopulateFactory(std::string search_directory = "", bool reset = false)
+    void PopulateFactory(std::string search_directory, bool reset = false)
     {
         if (reset)
             Reset();
-
-        if (search_directory.empty())
-            search_directory = _search_directory;
 
         for (auto &full_file_path : directory_iterator(search_directory))
         {
@@ -107,7 +104,6 @@ class ScriptFactory
                     if (preamble.IsValid() && preamble.IsType(_script_type))
                     {
 
-                        //std::cout << "Adding Script: " << preamble.GetFlag("Name") << std::endl;
                         if (_configurable)
                         {
                             AddScript(preamble, Configure(current_path_string, preamble.GetFlag("Name")));
@@ -142,7 +138,6 @@ class ScriptFactory
     virtual void Reset() {}
 
   private:
-    std::string _search_directory;
     std::string _script_type;
     bool _configurable;
 };

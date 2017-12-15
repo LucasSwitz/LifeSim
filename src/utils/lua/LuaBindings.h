@@ -21,14 +21,14 @@
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
 #include "src/graphics/gui/PMIDGWindow.h"
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 #include "src/event/EngineEventManager.h"
 #include "src/controllers/Controller.h"
 #include "src/controllers/KeyboardSideScrollerPlayerController.h"
 #include "src/controllers/ControllerBase.h"
 #include "src/controllers/SideScrollerPlayerInterface.h"
 #include "src/controllers/ControllerBase.h"
-#include "src/game/resources/ResourceManager.h"
+#include "src/utils/Globals.h"
 
 using namespace luabridge;
 class LuaBindings
@@ -37,7 +37,7 @@ class LuaBindings
         static void Bind(lua_State *L)
         { 
             getGlobalNamespace(L)
-            .addFunction("Res",&ResourceManager::GetResource)
+            .addFunction("Res",&Globals::GetResource)
             .addFunction("TARGET_WINDOW",&EngineGlobals::GetTargetWindow)
             .addFunction("GetController",&ControllerBase::GetController)
             .addFunction("SSPIDowncast",&SideScrollerPlayerInterface::Downcast)
@@ -134,8 +134,6 @@ class LuaBindings
             .endClass()
             .beginClass<EventManager>("EventManager")
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
-            .endClass()
-            .deriveClass<MessageDispatch,EventManager>("MessageDispatch")
             .endClass()
             .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
                 .addStaticFunction("Instance",&EngineEventManager::Instance)

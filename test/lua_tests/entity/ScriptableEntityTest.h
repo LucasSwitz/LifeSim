@@ -4,12 +4,12 @@
 class ScriptableEntityTest : public LuaTest
 {
   public:
-    LuaEntity* entity;
+    Entity* entity;
 
     ScriptableEntityTest()
     {
-        LuaEntityFactory::Instance()->PopulateFactory();
-        entity = LuaEntityFactory::Instance()->GetEntity("TestEntity");
+        LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+        entity = LuaEntityFactory::Instance()->GetEntityByName("ScriptableTestEntity");
     }
 };
 
@@ -24,10 +24,10 @@ TEST_F(ScriptableEntityTest, ComponentValueTest)
     EXPECT_EQ(90,entity->GetComponentValueFloat("Position","x"));
     EXPECT_EQ(90,entity->GetComponentValueFloat("Position","y"));
 
-    EXPECT_EQ("/home/lucas/Desktop/LifeSim/res/sprites/8_Bit_Mario.png", entity->GetComponentValueString("Graphics","sprite"));
+    EXPECT_EQ(Res("mario_1.png"), entity->GetComponentValueString("Graphics","sprite"));
 }
 
-TEST_F(ScriptableEntityTest, ManualIdSet)
+TEST_F(ScriptableEntityTest, ID)
 {
-    EXPECT_EQ(0, entity->ID());
+    EXPECT_EQ(1, entity->ID());
 }

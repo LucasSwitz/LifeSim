@@ -1,7 +1,7 @@
 #ifndef PAINTENTITYBRUSHSTATE_H
 #define PAINTENTITYBRUSHSTATE_H
 
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 #include "src/graphics/gui/brush/BrushState.h"
 #include "src/game_objects/Entity.h"
 

@@ -14,13 +14,9 @@ CollisionTestEntity2 =
         },
         Collision = 
         {
-            width = 10,
-            height = 10,
-            collider = -1,
-            collision_script = "/home/lucas/Desktop/LifeSim/lua_scripts/entities/test/CollisionTestScript.lua",
-            OnCollision = function(self)
-                print("Collided with: " .. tostring(self:GetNumber("Collision","collider")))
-            end
+            width = 32,
+            height = 32,
+            collision_script = Res("CharacterCollision.lua")
         }
     }
 }

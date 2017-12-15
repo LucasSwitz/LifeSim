@@ -3,7 +3,7 @@
 
 #include "src/component/ComponentUserBase.h"
 #include "src/game_objects/EntityManager.h"
-#include "src/event/messaging/MessageDispatch.h"
+#include "src/event/EventManager.h"
 #include "src/system/SystemController.h"
 #include "src/game/player/PlayerBase.h"
 
@@ -48,13 +48,13 @@ public:
 
   SystemController &GetSystemController();
 
-  MessageDispatch &GetMessageDispatch();
+  EventManager &GetMessageDispatch();
 
   PlayerBase &GetPlayerBase();
 
 private:
   SystemController _system_controller;
-  MessageDispatch _message_dispatch;
+  EventManager _message_dispatch;
   PlayerBase _player_base;
   Stage *_current_stage = nullptr;
 };

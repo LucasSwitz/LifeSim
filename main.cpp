@@ -2,28 +2,16 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
-//#include "test/lua_tests/actors/ActionScriptTest.h"
-//#include "test/lua_tests/actors/ScriptableStateMachineTest.h"
-//#include "test/lua_tests/actors/ScriptableStateMachineTest.h"
-//#include "test/lua_tests/systems/ScriptableSystemTest.h"
-//#include "test/lua_tests/systems/ScriptableSystemTest.h"
+#include "src/game/PMIDGRunner.h"
+#include "src/game/mode/ProgramModeEditor.h"
 
-/*#include "test/game/game_systems/RegenerationSystemTest.h"
+#include "test/lua_tests/systems/ScriptableSystemTest.h"
 #include "test/events/EventManagerTest.h"
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
 #include "test/game/game_systems/CollisionSystemTest.h"
 #include "test/game/game_components/ComponentUserBaseTest.h"
-//#include "test/game/GameRunnerTest.h"
-//#include "test/game/game_systems/GraphicsSystemTest.h"
-//#include "test/game/game_systems/MoveableGraphicsSystemTest.h"
-//#include "test/game/game_systems/KeyboardInputSystemTest.h"
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
-#include "test/world/TileMapTest.h"*/
-
-
-#include "src/game/PMIDGRunner.h"
-#include "src/game/mode/ProgramModeEditor.h"
 #include "test/protobuf/GameStateProtoBufTest.h"
 
 int RunGUI();

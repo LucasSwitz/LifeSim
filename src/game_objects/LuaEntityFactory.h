@@ -47,7 +47,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
 
     static LuaEntityFactory *Instance()
     {
-        static LuaEntityFactory instance("/home/lucas/Desktop/LifeSim/res/lua_scripts/entities", "Entity");
+        static LuaEntityFactory instance("Entity");
         return &instance;
     }
 
@@ -75,7 +75,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
     }
 
   private:
-    LuaEntityFactory(std::string path_to_scripts, std::string type) : ScriptFactory<std::string>(path_to_scripts, type){};
+    LuaEntityFactory(std::string type) : ScriptFactory<std::string>(type){};
 
     std::map<int, std::string> _entity_scripts;
     std::unordered_map<std::string, int> _entity_name_to_id;

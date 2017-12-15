@@ -1,0 +1,3 @@
+use python as a build system rather than cmake
+write all of the tests
+move gui tools out of graphics and into its own "editor"

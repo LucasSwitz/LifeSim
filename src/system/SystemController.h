@@ -9,6 +9,7 @@
 #include "src/utils/logging/Logging.h"
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
+#include "src/event/EventManager.h"
 #include "src/event/messaging/MessageDispatcher.h"
 
 /**
@@ -22,7 +23,7 @@ class SystemController : public EventSubscriber, public MessageDispatcher
   friend class GameState;
 
 public:
-  SystemController(MessageDispatch& msgd)
+  SystemController(EventManager& msgd)
   {
     msgd.RegisterSubscriber(this);
   }
