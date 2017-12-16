@@ -14,42 +14,18 @@
 #include "test/world/StageTest.h"
 #include "test/protobuf/GameStateProtoBufTest.h"
 
-int RunGUI();
-int RunTests(int argc, char** argv);
+int RunEditor();
 
 int main(int argc, char **argv)
 {
-  if(argc > 1)
-  {
-    if(*argv[1] == 't')
-    {
-        return RunTests(argc,argv);
-    }
-    else if(*argv[1] == 'g')
-    {
-        return RunGUI();
-    }
-    else
-    {
-
-    }
-  }
-  else
-  {
-      return RunGUI();
-  }
+    Globals::SetResourceRoot("/home/lucas/Desktop/LifeSim/res");
+    return RunEditor();
 }
 
-int RunGUI()
+int RunEditor()
 {
     PMIDGRunner runner;
     runner.Init(PMIDGRunner::EDITOR);
     runner.Run();
     return 0;
-}
-
-int RunTests(int argc, char** argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }
