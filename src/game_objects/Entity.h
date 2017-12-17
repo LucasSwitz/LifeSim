@@ -19,10 +19,10 @@ class Entity : public ComponentUser
     Entity(int type = 0, std::string _prototype_name = "", int id = -1);
     Entity(Entity &e) : ComponentUser(CU_TYPE_ENTITY)
     {
-        std::unordered_map<std::string, Component *>& components = e.GetAllComponents();
+        auto components = e.GetAllComponents();
         for (auto it = components.begin(); it != components.end(); it++)
         {
-            Component *c = new Component(*(it->second));
+            ptr<Component> c (new Component(*(it->second)));
             AddComponent(c);
         }
         _id = e._id;

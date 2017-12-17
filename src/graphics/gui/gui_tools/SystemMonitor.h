@@ -15,8 +15,8 @@ class SystemMonitor
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         std::unordered_map<std::string, std::string> available_systems = SystemFactory::Instance()->GetAllSystems();
-        std::list<System *> &active_systems = system_controller.GetExecutionSequenceMutable();
-        std::list<System *> &passive_systems = system_controller.GetPassiveSystemsMutable();
+        auto &active_systems = system_controller.GetExecutionSequenceMutable();
+        auto &passive_systems = system_controller.GetPassiveSystemsMutable();
 
         for (auto it = active_systems.begin(); it != active_systems.end(); it++)
         {
@@ -61,7 +61,7 @@ class SystemMonitor
         ImGui::ListBoxVector("", &selected_system, systems);
     }
 
-    void DrawSystemList(std::list<System *> &list, SystemController& system_controller, std::string type)
+    void DrawSystemList(system_list &list, SystemController& system_controller, std::string type)
     {
         int i = 0;
         for (auto it = list.begin(); it != list.end();)

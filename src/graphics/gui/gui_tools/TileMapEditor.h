@@ -43,14 +43,14 @@ class TileMapEditor
         {
             if(!selected_tile_prototype || selected_tile_prototype->GetName() != tile_scripts.at(selected_tile))
             {
-                delete selected_tile_prototype;
-                selected_tile_prototype = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
-                brush.SetState(new PaintTileBrushState(selected_tile_prototype));
+                Tile* tile = LuaTileFactory::Instance()->GetTile(tile_scripts.at(selected_tile));
+                selected_tile_prototype = ptr<Tile>(tile);
+                brush.SetState(ptr<BrushState>(new PaintTileBrushState(selected_tile_prototype)));
             }
 
             std::string texture_path = selected_tile_prototype->GetComponentValueString("Graphics", "sprite");
 
-            sf::Texture *texture = texture_cache.GetTexture(texture_path);
+            ptr<sf::Texture> texture = texture_cache.GetTexture(texture_path);
             ImGui::Image(*texture, sf::Vector2f(2 * TILE_WIDTH, 2 * TILE_HEIGHT));
 
             ImGui::SameLine();
@@ -69,7 +69,7 @@ class TileMapEditor
   private:
     ComponentUserEditor _component_editor;
     std::vector<std::string> tile_scripts;
-    Tile *selected_tile_prototype = nullptr;
+    ptr<Tile> selected_tile_prototype = nullptr;
     int selected_tile = -1;
 };
 #endif

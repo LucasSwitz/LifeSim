@@ -1,13 +1,15 @@
 #include "SystemController.h"
 #include "src/game/GameState.h"
 
+typedef std::list<ptr<System>> system_list;
+
 void SystemController::AddPassiveSystem(const std::string &system_name)
 {
     System *system = SystemFactory::Instance()->GetSystem(system_name);
-    AddPassiveSystem(system);
+    AddPassiveSystem(ptr<System>(system));
 }
 
-std::list<System *>::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string &system_name)
+system_list::iterator SystemController::RemoveFromSystemExecutionSequence(const std::string &system_name)
 {
     auto it = _systems_execution_sequence.begin();
 
@@ -23,7 +25,7 @@ std::list<System *>::iterator SystemController::RemoveFromSystemExecutionSequenc
     return it;
 }
 
-void SystemController::AddPassiveSystem(System *system)
+void SystemController::AddPassiveSystem(ptr<System> system)
 {
     LOG->LogInfo(1, "Adding Passive System: %s \n", system->GetName().c_str());
     _passive_systems.push_back(system);
@@ -31,13 +33,13 @@ void SystemController::AddPassiveSystem(System *system)
 
 void SystemController::AddToSystemExecutionSequence(const std::string &system_name)
 {
-    System *system = SystemFactory::Instance()->GetSystem(system_name);
+    ptr<System> system = ptr<System>(SystemFactory::Instance()->GetSystem(system_name));
     AddToSystemExecutionSequence(system);
 }
 
-void SystemController::AddToSystemExecutionSequence(System *system)
+void SystemController::AddToSystemExecutionSequence(ptr<System> system)
 {
-    std::list<System *>::iterator insert_position = _systems_execution_sequence.end();
+    system_list::iterator insert_position = _systems_execution_sequence.end();
 
     //Make sure system isn't already added
     auto it = std::find_if(_systems_execution_sequence.begin(),
@@ -51,7 +53,8 @@ void SystemController::AddToSystemExecutionSequence(System *system)
         //After is defined
         if (!system_before_name.empty())
         {
-            System *before_system = SystemFactory::Instance()->GetSystem(system_before_name);
+            ptr<System> before_system = ptr<System> 
+                (SystemFactory::Instance()->GetSystem(system_before_name));
 
             //previous system is a real system
             if (before_system)
@@ -69,7 +72,7 @@ void SystemController::AddToSystemExecutionSequence(System *system)
                 //previous system is not in sequence
                 else
                 {
-                    AddToSystemExecutionSequence(before_system);
+                    AddToSystemExecutionSequence(ptr<System>(before_system));
 
                     auto it = std::find(_systems_execution_sequence.begin(),
                                         _systems_execution_sequence.end(),
@@ -87,14 +90,15 @@ void SystemController::AddToSystemExecutionSequence(System *system)
 
             //Assign all systems to the message dispatch
             if(IsAssignedToDispatch())
-                GetAssignedDispatch()->RegisterSubscriber(system);           
+                GetAssignedDispatch()->RegisterSubscriber(system.get());           
         }
     }
 }
 
-const System *SystemController::GetExecutionSequenceAt(int index)
+const ptr<System> SystemController::GetExecutionSequenceAt(int index)
 {
-    std::list<System *>::iterator it = std::next(_systems_execution_sequence.begin(), index);
+    system_list::iterator it = 
+        std::next(_systems_execution_sequence.begin(), index);
     return *it;
 }
 
@@ -103,7 +107,7 @@ int SystemController::GetSequenceSize()
     return _systems_execution_sequence.size();
 }
 
-void SystemController::Update(float seconds_since_last_update, GameState* g)
+void SystemController::Update(float seconds_since_last_update, ptr<GameState> g)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
@@ -115,27 +119,28 @@ void SystemController::Update(float seconds_since_last_update, GameState* g)
         (*it)->Update(seconds_since_last_update, g);
 
         auto end_time = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+        std::chrono::duration<double> elapsed = 
+            std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
         (*it)->SetLastRuntime(elapsed.count() * 1000);
     }
 }
 
-const std::list<System *> &SystemController::GetExecutionSequence() const
+const system_list &SystemController::GetExecutionSequence() const
 {
     return _systems_execution_sequence;
 }
 
-std::list<System *> &SystemController::GetExecutionSequenceMutable()
+system_list &SystemController::GetExecutionSequenceMutable()
 {
     return _systems_execution_sequence;
 }
 
-const std::list<System *> &SystemController::GetPassiveSystems() const
+const system_list &SystemController::GetPassiveSystems() const
 {
     return _passive_systems;
 }
 
-std::list<System *> &SystemController::GetPassiveSystemsMutable()
+system_list &SystemController::GetPassiveSystemsMutable()
 {
     return _passive_systems;
 }
@@ -145,7 +150,7 @@ void SystemController::MoveUp(std::string system_name)
     if (SystemFactory::Instance()->SystemExists(system_name))
     {
         System *system = SystemFactory::Instance()->GetSystem(system_name);
-        MoveUp(system);
+        MoveUp(ptr<System>(system));
     }
     else
     {
@@ -153,7 +158,7 @@ void SystemController::MoveUp(std::string system_name)
     }
 }
 
-void SystemController::MoveUp(System *system)
+void SystemController::MoveUp(ptr<System> system)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {
@@ -174,11 +179,11 @@ void SystemController::MoveDown(std::string system_name)
     if (SystemFactory::Instance()->SystemExists(system_name))
     {
         System *system = SystemFactory::Instance()->GetSystem(system_name);
-        MoveDown(system);
+        MoveDown(ptr<System>(system));
     }
 }
 
-void SystemController::MoveDown(System *system)
+void SystemController::MoveDown(ptr<System> system)
 {
     for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
     {

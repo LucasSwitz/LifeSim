@@ -5,7 +5,6 @@ class ScriptableEntityTest : public LuaTest
 {
   public:
     Entity* entity;
-
     ScriptableEntityTest()
     {
         LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);

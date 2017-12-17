@@ -19,26 +19,23 @@ class Brush
     }
 
 
-    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState *gs, 
-        ComponentUser* c = nullptr)
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<GameState> gs, 
+        ptr<ComponentUser> c = nullptr)
     {
         if (_state)
             return _state->OnGameStateMouseEvent(e, event_world_position, gs, c);
         return false;
     }
 
-    bool OnKeyboardEvent(sf::Event &e, GameState* gs)
+    bool OnKeyboardEvent(sf::Event &e, ptr<GameState> gs)
     {
         if (_state)
             return _state->OnKeyboardEvent(e, gs);
         return false;
     }
 
-    void SetState(BrushState *state)
+    void SetState(ptr<BrushState> state)
     {
-        if (_state)
-            delete _state;
-
         _state = state;
     }
 
@@ -49,7 +46,7 @@ class Brush
     }
 
   private:
-    BrushState *_state = nullptr;
+    ptr<BrushState> _state = nullptr;
 };
 
 #endif

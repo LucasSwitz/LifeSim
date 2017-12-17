@@ -9,59 +9,64 @@
 
 class CollisionSystemTest : public LuaTest, public EventSubscriber
 {
-    public:
-        bool _detected_collision = false;
-        GameState g;
-        Entity* e1;
-        Entity* e2;
+  public:
+    bool _detected_collision = false;
+    ptr<GameState> g;
+    ptr<Entity> e1;
+    ptr<Entity> e2;
 
-        CollisionSystemTest()
-        {
-            SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
-            LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
-            LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+    CollisionSystemTest()
+    {
+        g = std::make_shared<GameState>();
 
-            TileMap t;
-            t.LoadFromFile(Res(".pmidgM"));
+        SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+        LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+        LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
 
-            Instance* i = new Instance(-2,"TestCollisionInstance");
-            i->SetTileMap(t);
-            Stage* s = new Stage();
-            s->AddInstance(i);
-            s->SetCurrentInstance(i->GetID(),true);
+        TileMap t;
+        t.LoadFromFile(Res(".pmidgM"));
 
-            e1 = LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity1");
-            e2 = LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity2");
-            
-            e1->SetInstance(i->GetID());
-            e2->SetInstance(i->GetID());
+        ptr<Instance> i = ptr<Instance>(new Instance(-2, "TestCollisionInstance"));
+        
+        i->SetTileMap(t);
+        ptr<Stage> s = ptr<Stage>(new Stage());
 
-            g.SetStage(s);
-            g.AddEntity(e1);
-            g.AddEntity(e2);
+        s->AddInstance(i);
+        s->SetRootInstance(i);
+        s->SetCurrentInstance(i->GetID(), true);
 
-            g.GetMessageDispatch().RegisterSubscriber(this);
-        }
+        e1 = ptr<Entity>(LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity1"));
+        e2 = ptr<Entity>(LuaEntityFactory::Instance()->GetEntityByName("CollisionTestEntity2"));
 
-        void OnEvent(Event& e)
-        {
-            _detected_collision = true;
-        }
+        e1->SetInstance(i->GetID());
+        e2->SetInstance(i->GetID());
 
-        std::list<Subscription> GetSubscriptions()
-        {
-            std::list<Subscription> subs;
-            subs.push_back(Subscription(EventType::COLLISION_EVENT, {e1->ID(), e2->ID()}));
-            return subs;
-        }
+        g->SetStage(s);
+
+        g->AddEntity(e1);
+        g->AddEntity(e2);
+
+        g->GetMessageDispatch().RegisterSubscriber(this);
+    }
+
+    void OnEvent(Event &e)
+    {
+        _detected_collision = true;
+    }
+
+    std::list<Subscription> GetSubscriptions()
+    {
+        std::list<Subscription> subs;
+        subs.push_back(Subscription(EventType::COLLISION_EVENT, {e1->ID(), e2->ID()}));
+        return subs;
+    }
 };
 
 TEST_F(CollisionSystemTest, TestCollisionDetection)
 {
-    g.AddSystem("CollisionSystem");
-    g.Tick(1.0);
+    g->AddSystem("CollisionSystem");
+    g->Tick(1.0);
     ASSERT_TRUE(_detected_collision);
 }
-
 
 #endif

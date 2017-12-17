@@ -6,46 +6,53 @@
     loading (from Lua objects for example). ComponentUsers can be indenfified by their id field. This id
     should be consitent across all child classes that require unique identification (i.e Entity).
 **/
-
+#include "src/utils/Globals.h"
 #include <unordered_map>
 #include <iostream>
 
+template <typename T>
+struct ComponentValue
+{
+    ComponentValue(std::string name_, T value_) : name(name_), value(value_)
+    {
+    }
+
+    void SetValue(T new_value)
+    {
+        value = new_value;
+    }
+
+    T GetValue()
+    {
+        return value;
+    }
+
+    T *GetValuePtr()
+    {
+        return &value;
+    }
+
+    std::string GetName()
+    {
+        return name;
+    }
+
+    std::string name;
+    T value;
+};
+
 class Component
 {
-
   public:
     template <typename T>
-    struct ComponentValue
-    {
-        ComponentValue(std::string name_, T value_) : name(name_), value(value_)
-        {
-        }
+    using component_value_map =
+        std::unordered_map<std::string, ComponentValue<T>>;
 
-        void SetValue(T new_value)
-        {
-            value = new_value;
-        }
+    template <typename T>
+    using subcomponent_map =
+        std::unordered_map<std::string, ptr<Component>>;
 
-        T GetValue()
-        {
-            return value;
-        }
-
-        T* GetValuePtr()
-        {
-            return &value;
-        }
-
-        std::string GetName()
-        {
-            return name;
-        }
-
-        std::string name;
-        T value;
-    };
-
-        Component(std::string name = "") : _name(name){};
+    Component(std::string name = "") : _name(name){};
 
     //STRING ----------------------------
 
@@ -66,13 +73,12 @@ class Component
     {
         if (!HasStringValue(name))
         {
-            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return "";
         }
         return _string_components.at(name).GetValue();
     }
 
-    std::unordered_map<std::string, ComponentValue<std::string>> &GetAllStringValues()
+    component_value_map<std::string> &GetAllStringValues()
     {
         return _string_components;
     }
@@ -95,13 +101,12 @@ class Component
     {
         if (!HasFloatValue(name))
         {
-            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return -1;
         }
         return _float_components.at(name).GetValue();
     }
 
-    std::unordered_map<std::string, ComponentValue<float>> &GetAllFloatValues()
+    component_value_map<float> &GetAllFloatValues()
     {
         return _float_components;
     }
@@ -116,7 +121,6 @@ class Component
     {
         if (!HasBoolValue(name))
         {
-            //std::cout << "Component [" << GetName() << "] does not have value: " << name << std::endl;
             return false;
         }
         return _bool_components.at(name).GetValue();
@@ -134,7 +138,7 @@ class Component
         }
     }
 
-    std::unordered_map<std::string, ComponentValue<bool>> &GetAllBoolValues()
+    component_value_map<bool> &GetAllBoolValues()
     {
         return _bool_components;
     }
@@ -150,12 +154,12 @@ class Component
         return _name;
     }
 
-    Component *GetSubcomponent(std::string name)
+    ptr<Component> GetSubcomponent(std::string name)
     {
         return _sub_components.at(name);
     }
 
-    std::unordered_map<std::string, Component *> &GetSubcomponents()
+    subcomponent_map<Component *> &GetSubcomponents()
     {
         return _sub_components;
     }
@@ -175,21 +179,20 @@ class Component
         _bool_components.insert(std::make_pair(name, ComponentValue<bool>(name, value)));
     }
 
-    void AddSubcomponent(Component *sub_component)
+    void AddSubcomponent(ptr<Component> sub_component)
     {
         _sub_components.insert(std::make_pair(sub_component->_name, sub_component));
     }
 
   protected:
-  protected:
     std::string _name;
 
   private:
-    std::unordered_map<std::string, ComponentValue<std::string>> _string_components;
-    std::unordered_map<std::string, ComponentValue<float>> _float_components;
-    std::unordered_map<std::string, ComponentValue<void *>> _functional_components;
-    std::unordered_map<std::string, ComponentValue<bool>> _bool_components;
-    std::unordered_map<std::string, Component *> _sub_components;
+    component_value_map<std::string> _string_components;
+    component_value_map<float> _float_components;
+    component_value_map<void *> _functional_components;
+    component_value_map<bool> _bool_components;
+    subcomponent_map<Component *> _sub_components;
 };
 
 #endif

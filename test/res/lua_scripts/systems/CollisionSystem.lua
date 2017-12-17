@@ -14,7 +14,7 @@ CollisionSystem =
         gs:ComponentUsers():GetAllEntities(entities,"Collision")
         gs:ComponentUsers():GetAll(colliders, {"Collision"})
         local entity_it = entities:Iterator()
-        while entity_it ~= nil do
+        while entity_it ~= nil do            
             entity = entity_it.data
             collider_it = colliders:Iterator()
             while collider_it ~= nil do

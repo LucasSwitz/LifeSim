@@ -17,6 +17,7 @@ GameState::GameState(const GameState &game_state) : _message_dispatch(),
 
 void GameState::Load()
 {
+
 }
 
 void GameState::Setup()
@@ -29,14 +30,14 @@ void GameState::Tick(float seconds_elapsed)
 
     if (_current_stage && _current_stage->GetCurrentInstance())
     {
-        _system_controller.Update(seconds_elapsed, this);
+        _system_controller.Update(seconds_elapsed, shared_from_this());
         _current_stage->Tick(seconds_elapsed);
     }
     else
     {
         std::cout << "No Stage or No Instance, can't tick" << std::endl;
     }
-    //if using lua
+
     LuaUniversal::Instance()->CollectGarbage();
 }
 
@@ -44,17 +45,17 @@ void GameState::Unload()
 {
 }
 
-void GameState::SetStage(Stage *stage)
+void GameState::SetStage(ptr<Stage> stage)
 {
     _current_stage = stage;
     _current_stage->AssignToDispatch(&_message_dispatch);
-    _message_dispatch.RegisterSubscriber(_current_stage);
+    _message_dispatch.RegisterSubscriber(_current_stage.get());
     _current_stage->GetComponentUserBaseMutable().AddSubscriber(&_player_base, "Player");
     _current_stage->Load();
     _current_stage->Enter();
 }
 
-void GameState::ChangeState(Stage *new_stage)
+void GameState::ChangeState(ptr<Stage> new_stage)
 {
     if (_current_stage)
     {
@@ -70,16 +71,16 @@ void GameState::AddSystem(std::string system_name)
     _system_controller.AddToSystemExecutionSequence(system_name);
 }
 
-void GameState::AddSystem(System *system)
+void GameState::AddSystem(ptr<System> system)
 {
     _system_controller.AddToSystemExecutionSequence(system);
 }
 
-void GameState::AddEntity(Entity *e)
+void GameState::AddEntity(ptr<Entity> e)
 {
     if (e->GetInstance() != -1)
     {
-        Instance *i = _current_stage->GetInstance(e->GetInstance());
+        ptr<Instance> i = _current_stage->GetInstance(e->GetInstance());
         _current_stage->AddEntity(e);
         i->AddLocalEntity(e->ID());
     }
@@ -89,26 +90,26 @@ void GameState::AddEntity(Entity *e)
     }
 }
 
-Stage *GameState::GetStage()
+ptr<Stage> GameState::GetStage()
 {
     return _current_stage;
 }
 
-EntityManager* GameState::GetEntityManager()
+ptr<EntityManager> GameState::GetEntityManager()
 {
-    if(_current_stage)
-        return &_current_stage->GetEntityManager();
+    if (_current_stage)
+        return ptr<EntityManager>(&_current_stage->GetEntityManager());
     return nullptr;
 }
 
 ComponentUserBase* GameState::GetComponentUserBase()
 {
-    if(_current_stage)
+    if (_current_stage)
         return &_current_stage->GetComponentUserBaseMutable();
     return nullptr;
 }
 
-SystemController& GameState::GetSystemController()
+SystemController &GameState::GetSystemController()
 {
     return _system_controller;
 }
@@ -118,7 +119,7 @@ EventManager &GameState::GetMessageDispatch()
     return _message_dispatch;
 }
 
- PlayerBase& GameState::GetPlayerBase()
- {
-     return _player_base;
- }
+PlayerBase &GameState::GetPlayerBase()
+{
+    return _player_base;
+}

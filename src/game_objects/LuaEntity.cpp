@@ -40,7 +40,7 @@ void LuaEntity::ConfigureAllComponentsFromLua(const LuaRef &ref)
         auto key = it.first;
         LuaRef component_ref = it.second;
 
-        LuaComponent* new_component = new LuaComponent(key);
+        ptr<LuaComponent> new_component (new LuaComponent(key));
         new_component->FromLuaRef(component_ref);
         ComponentUser::AddComponent(new_component);
     }

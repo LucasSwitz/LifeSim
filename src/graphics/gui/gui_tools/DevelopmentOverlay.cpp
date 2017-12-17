@@ -5,10 +5,10 @@ DevelopmentOverlay::DevelopmentOverlay()
     
 }
 
-void DevelopmentOverlay::Init(PMIDGWindow *window)
+void DevelopmentOverlay::Init(ptr<PMIDGWindow> window)
 {
     ImGui::SFML::Init(window->SFWindow());
-    window->AddWindowListener(&instance_editor);
+    window->AddWindowListener(ptr<SFMLWindowListener> (&instance_editor));
     instance_editor.Init();
     log.Clear();
     main_menu.SetListener(this);
@@ -20,7 +20,7 @@ Log &DevelopmentOverlay::GetLog()
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow *window, GameState *game_state,
+void DevelopmentOverlay::Render(ptr<PMIDGWindow> window, ptr<GameState> game_state,
                                 TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
 
@@ -91,7 +91,7 @@ void DevelopmentOverlay::Shutdown()
     ImGui::SFML::Shutdown();
 }
 
-void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
+void DevelopmentOverlay::SetListener(ptr<DevelopmentOverlayListener> listener)
 {
     _listener = listener;
 }

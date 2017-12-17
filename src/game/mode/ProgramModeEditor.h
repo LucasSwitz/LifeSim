@@ -69,9 +69,9 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnSaveStageFile(const std::string &file_name) override;
 
-    void SaveInstanceTilemap(Instance *instance);
+    void SaveInstanceTilemap(ptr<Instance> instance);
 
-    void GenerateInstanceTemplate(Instance *instance);
+    void GenerateInstanceTemplate(ptr<Instance> instance);
 
     bool OnWindowEvent(sf::Event &e);
 
@@ -83,25 +83,25 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     bool ClickOnActiveTileMap(int x, int y);
 
-    Entity *ClickOnEntity(int x, int y);
+    ptr<Entity> ClickOnEntity(int x, int y);
 
     bool CanEdit();
 
   private:
     FPSRunner _game_runner;
     FPSRunner _editor_runner;
-    PMIDGGameRunner *_external_game_runner = nullptr;
+    ptr<PMIDGGameRunner> _external_game_runner = nullptr;
     ControllersSystem _controllers_system;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     int _abs_scroll_ticks = 50;
     Brush _brush;
-    GameState *_game_state;
+    ptr<GameState> _game_state;
     WindowTransformState _window_transform_state = DORMANT;
     PMIDGEditorWindow _window;
-    std::string file_path = "/home/lucas/Desktop/LifeSim/build/stages";
-    std::string tile_maps_path = "/home/lucas/Desktop/LifeSim/res/tile_maps";
-    std::string instances_path = "/home/lucas/Desktop/LifeSim/res/lua_scripts/world/instances";
+    std::string file_path;
+    std::string tile_maps_path;
+    std::string instances_path;
 };
 
 #endif

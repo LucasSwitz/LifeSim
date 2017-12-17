@@ -29,10 +29,10 @@ void Entity::SetPrototypeName(std::string &name)
 Entity *Entity::Clone()
 {
     Entity *e = new Entity(0, _prototype_name);
-    std::unordered_map<std::string, Component *> components = GetAllComponents();
+    auto components = GetAllComponents();
     for (auto it = components.begin(); it != components.end(); it++)
     {
-        Component *c = new Component(*(it->second));
+        ptr<Component> c (new Component(*(it->second)));
         e->AddComponent(c);
     }
 

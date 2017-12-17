@@ -1,9 +1,9 @@
 #include "ScriptableSystem.h"
 
-void ScriptableSystem::Update(float seconds_elapsed, GameState* g)
+void ScriptableSystem::Update(float seconds_elapsed, ptr<GameState> g)
 {
     if (_update_function)
-        (*_update_function)(*_system_table, seconds_elapsed, g);
+        (*_update_function)(*_system_table, seconds_elapsed, g.get());
 }
 
 

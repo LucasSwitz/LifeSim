@@ -5,28 +5,29 @@
 #include "src/event/EventType.h"
 #include <gtest/gtest.h>
 
-class EventManagerTest : public EventSubscriber, public ::testing::Test
+class EventManagerTest : public EventSubscriber, 
+    public ::testing::Test
 {
-    public:
-        bool event_recieved = false;
-        EventManager em;
-        EventManagerTest()
-        {
-            em.RegisterSubscriber(this);
-        }
+  public:
+    bool event_recieved = false;
+    EventManager em;
+    EventManagerTest()
+    {
+        em.RegisterSubscriber(this);
+    }
 
-        void OnEvent(Event& e)
-        {
-            if(e.id == EventType::MAKE_THIS_EVENT_DURING_TEST)
-                event_recieved = true;
-        }
+    void OnEvent(Event &e)
+    {
+        if (e.id == EventType::MAKE_THIS_EVENT_DURING_TEST)
+            event_recieved = true;
+    }
 
-        std::list<Subscription> GetSubscriptions()
-        {
-            std::list<Subscription> subs;
-            subs.push_back(Subscription(EventType::MAKE_THIS_EVENT_DURING_TEST));
-            return subs;
-        }
+    std::list<Subscription> GetSubscriptions()
+    {
+        std::list<Subscription> subs;
+        subs.push_back(Subscription(EventType::MAKE_THIS_EVENT_DURING_TEST));
+        return subs;
+    }
 };
 
 TEST_F(EventManagerTest, EventLoadNewEvent)
@@ -37,7 +38,7 @@ TEST_F(EventManagerTest, EventLoadNewEvent)
 
 TEST_F(EventManagerTest, TestEventLaunch)
 {
-    Event e(EventType::MAKE_THIS_EVENT_DURING_TEST,0,1);
+    Event e(EventType::MAKE_THIS_EVENT_DURING_TEST, 0, 1);
     ASSERT_NO_FATAL_FAILURE(em.LaunchEvent(e));
     ASSERT_TRUE(event_recieved);
 }

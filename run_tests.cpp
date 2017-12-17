@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
+#include "src/utils/Globals.h"
 
 #include "test/lua_tests/systems/ScriptableSystemTest.h"
 #include "test/events/EventManagerTest.h"
@@ -15,7 +16,7 @@ int RunTests(int argc, char** argv);
 
 int main(int argc, char **argv)
 {
-    Globals::SetResourceRoot("/home/lucas/Desktop/LifeSim/test/res");
+    Globals::SetResourceRoot("/home/lucas/Desktop/ThunderBiscuit/test/res");
     return RunTests(argc,argv);
 }
 

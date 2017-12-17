@@ -28,19 +28,19 @@ class ComponentUserEditor : public SFMLWindowListener
 
     void DrawComponentControllers(ComponentUser &user)
     {
-        std::unordered_map<std::string, Component*> components = user.GetAllComponents();
+        auto components = user.GetAllComponents();
 
         for (auto it = components.begin(); it != components.end(); it++)
         {
-            Component *current_component = it->second;
+            ptr<Component> current_component = it->second;
             std::string component_name = it->first;
 
             if (ImGui::TreeNode(component_name.c_str()))
             {
                
-               std::unordered_map<std::string, Component::ComponentValue<std::string>>& string_values = current_component->GetAllStringValues();
-               std::unordered_map<std::string, Component::ComponentValue<float>>& float_values = current_component->GetAllFloatValues();
-               std::unordered_map<std::string, Component::ComponentValue<bool>>& bool_values = current_component->GetAllBoolValues();
+               auto& string_values = current_component->GetAllStringValues();
+               auto& float_values = current_component->GetAllFloatValues();
+               auto& bool_values = current_component->GetAllBoolValues();
 
                 for (auto it = string_values.begin(); it != string_values.end(); it++)
                 {

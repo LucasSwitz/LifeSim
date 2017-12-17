@@ -6,7 +6,6 @@ find_package(GLUT REQUIRED)
 set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2 REQUIRED network audio graphics window system)
 
-                    
 include_directories($ENV{LUA_INCLUDE_DIR} ".")
 include_directories($ENV{LUA_BRIDGE_INCLUDE} ".")
 include_directories($ENV{IMGUI_INCLUDE_DIR} ".")
@@ -21,23 +20,21 @@ file(GLOB_RECURSE SOURCES
 
 add_library(tb_lib ${SOURCES})
 set_target_properties(tb_lib PROPERTIES CXX_STANDARD 14)
-add_executable(run_editor run_editor.cpp)
-target_link_libraries(run_editor tb_lib)
+add_executable(editor run_editor.cpp)
+target_link_libraries(editor tb_lib)
 
 if(SFML_FOUND)
-  include_directories(SFML_INCLUDE_DIR)
-  target_link_libraries(run_editor ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+  target_link_libraries(editor ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 endif()
 
-target_link_libraries(run_editor $ENV{GTEST_LIB_DIR}/libgtest.a)
-target_link_libraries(run_editor $ENV{LUA_LIB_DIR}/liblua5.3.a)
-target_link_libraries(run_editor $ENV{PROTOBUF_LIB_DIR}/libprotobuf.a)
-target_link_libraries(run_editor $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
-target_link_libraries(run_editor ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
-target_link_libraries(run_editor ${CMAKE_DL_LIBS})
-target_link_libraries(run_editor ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(editor $ENV{LUA_LIB_DIR}/liblua5.3.a)
+target_link_libraries(editor $ENV{PROTOBUF_LIB_DIR}/libprotobuf.a)
+target_link_libraries(editor $ENV{STD_EXPERIMENTAL_LIB}/libstdc++fs.a)
+target_link_libraries(editor ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+target_link_libraries(editor ${CMAKE_DL_LIBS})
+target_link_libraries(editor ${CMAKE_THREAD_LIBS_INIT})
 
-set_property(TARGET run_editor PROPERTY CXX_STANDARD 14)
+set_property(TARGET editor PROPERTY CXX_STANDARD 14)
 
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
     

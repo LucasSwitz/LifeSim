@@ -10,9 +10,9 @@
 class BrushState
 {
   public:
-    virtual bool OnKeyboardEvent(sf::Event& e, GameState* gs){};
-    virtual bool OnGameStateMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, GameState* gs, 
-        ComponentUser* c = nullptr){};
+    virtual bool OnKeyboardEvent(sf::Event& e, ptr<GameState> gs){};
+    virtual bool OnGameStateMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, ptr<GameState> gs, 
+        ptr<ComponentUser> c = nullptr){};
     virtual bool PaintWindow(PMIDGWindow& window) {return false;};
     virtual void DrawExtras(){};
 };

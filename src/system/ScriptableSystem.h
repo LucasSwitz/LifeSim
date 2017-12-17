@@ -17,7 +17,7 @@ class ScriptableSystem : public System
     public:
     ScriptableSystem(){};
 
-    void Update(float seconds_elapsed, GameState* g) override;
+    void Update(float seconds_elapsed, ptr<GameState> g) override;
     void LoadScript(lua_State *L, const std::string &script_path, const std::string &system_name);
     void OnEvent(Event& e) override;
     std::list<Subscription> GetSubscriptions() override;

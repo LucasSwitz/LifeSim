@@ -30,15 +30,11 @@ class PMIDGWindow : public EventSubscriber
   public:
     struct LayeredGraphic
     {
-        LayeredGraphic(sf::Drawable *draw, sf::Texture* texture, int lay) : drawable(draw), layer(lay){};
-        ~LayeredGraphic()
-        {
-            delete drawable;
-            delete texture;
-        }
+        LayeredGraphic(ptr<sf::Drawable> draw, ptr<sf::Texture> texture, int lay) : drawable(draw), layer(lay){};
+        ~LayeredGraphic(){}
         int layer = 0;
-        sf::Drawable* drawable = nullptr;
-        sf::Texture* texture = nullptr;
+        ptr<sf::Drawable> drawable = nullptr;
+        ptr<sf::Texture> texture = nullptr;
     };
 
     PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "PMIDG")
@@ -70,10 +66,9 @@ class PMIDGWindow : public EventSubscriber
     {
         while (!_drawables_queue.empty())
         {
-            LayeredGraphic *to_draw = _drawables_queue.top();
+            ptr<LayeredGraphic> to_draw = _drawables_queue.top();
             _window.draw(*(to_draw->drawable));
             _drawables_queue.pop();
-            delete to_draw;
         }
     }
 
@@ -87,12 +82,12 @@ class PMIDGWindow : public EventSubscriber
         EngineGlobals::TargetWindow = _id;
     }
 
-    void Draw(sf::Drawable *drawable)
+    void Draw(ptr<sf::Drawable> drawable)
     {
-        LayeredGraphic *lg = new LayeredGraphic(drawable, nullptr, INT_MAX);
+        ptr<LayeredGraphic> lg(new LayeredGraphic(drawable, nullptr, INT_MAX));
     }
 
-    void Draw(LayeredGraphic *lg)
+    void Draw(ptr<LayeredGraphic> lg)
     {
         _drawables_queue.push(lg);
     }
@@ -102,7 +97,7 @@ class PMIDGWindow : public EventSubscriber
         _window.draw(drawable);
     }
 
-    void DrawComponentUser(ComponentUser *user)
+    void DrawComponentUser(ptr<ComponentUser> user)
     {
         if (!user->HasComponent("Position") || !user->HasComponent("Graphics"))
         {
@@ -113,14 +108,14 @@ class PMIDGWindow : public EventSubscriber
         std::string sprite_path = user->GetComponentValueString("Graphics", "sprite");
         int layer = user->GetComponentValueFloat("Graphics", "layer");
 
-        sf::Texture *texture = nullptr;
+        ptr<sf::Texture> texture = nullptr;
 
         if (texture = _texture_cache.GetTexture(sprite_path))
         {
-            sf::Sprite *sprite = new sf::Sprite();
+            ptr<sf::Sprite> sprite (new sf::Sprite());
             _preprocesser.ProcessComponentUser(user, texture, sprite);
 
-            LayeredGraphic *lg = new LayeredGraphic(sprite, texture, layer);
+            ptr<LayeredGraphic> lg(new LayeredGraphic(sprite, texture, layer));
             Draw(lg);
         }
         else
@@ -144,14 +139,14 @@ class PMIDGWindow : public EventSubscriber
     {
         if (e.id == EventType::DRAW_REQUEST_EVENT && e.target_id == _id)
         {
-            ComponentUser *user = e.InfoToType<ComponentUser *>();
+            ptr<ComponentUser> user (e.InfoToType<ComponentUser *>());
             DrawComponentUser(user);
         }
         else if (e.id == EventType::RECENTER_VIEW_EVENT && e.target_id == _id)
         {
-           std::vector<float>* center_coords = 
-                e.InfoToType<std::vector<float>*>();
-            SetViewCenter((*center_coords)[0],(*center_coords)[1]);
+            std::vector<float> *center_coords =
+                e.InfoToType<std::vector<float> *>();
+            SetViewCenter((*center_coords)[0], (*center_coords)[1]);
             delete center_coords;
         }
     }
@@ -159,7 +154,7 @@ class PMIDGWindow : public EventSubscriber
     std::list<Subscription> GetSubscriptions() override
     {
         std::list<Subscription> subs = {Subscription(EventType::DRAW_REQUEST_EVENT, {_id}),
-                                        Subscription(EventType::RECENTER_VIEW_EVENT,{_id})};
+                                        Subscription(EventType::RECENTER_VIEW_EVENT, {_id})};
         return subs;
     }
 
@@ -226,14 +221,14 @@ class PMIDGWindow : public EventSubscriber
                 EngineEventManager::Instance()->LaunchEvent(new_event);
             }
         }
-        for (SFMLWindowListener *listener : _window_listeners)
+        for (ptr<SFMLWindowListener> listener : _window_listeners)
         {
             if (listener->OnWindowEvent(e))
                 break;
         }
     }
 
-    void AddWindowListener(SFMLWindowListener *listener)
+    void AddWindowListener(ptr<SFMLWindowListener> listener)
     {
         _window_listeners.push_back(listener);
     }
@@ -245,18 +240,17 @@ class PMIDGWindow : public EventSubscriber
 
     ~PMIDGWindow()
     {
-        
-        while (!_drawables_queue.empty())
+        /*while (!_drawables_queue.empty())
         {
             delete _drawables_queue.top();
             _drawables_queue.pop();
-        }
+        }*/
     }
 
     void SetViewCenter(float x, float y)
     {
         sf::View view = _window.getView();
-        view.setCenter(x,y);
+        view.setCenter(x, y);
         _window.setView(view);
     }
 
@@ -272,15 +266,15 @@ class PMIDGWindow : public EventSubscriber
     class GraphicsComparator
     {
       public:
-        bool operator()(LayeredGraphic *g1, LayeredGraphic *g2)
+        bool operator()(ptr<LayeredGraphic> g1, ptr<LayeredGraphic> g2)
         {
             return g1->layer > g2->layer;
         }
     };
 
     TextureCache _texture_cache;
-    std::priority_queue<LayeredGraphic *, std::vector<LayeredGraphic *>, GraphicsComparator> _drawables_queue;
-    std::list<SFMLWindowListener *> _window_listeners;
+    std::priority_queue<ptr<LayeredGraphic>, std::vector<ptr<LayeredGraphic>>, GraphicsComparator> _drawables_queue;
+    std::list<ptr<SFMLWindowListener>> _window_listeners;
     GraphicsPreprocessor _preprocesser;
     int _id;
     static int last_id;

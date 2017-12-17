@@ -32,7 +32,8 @@ class LuaEntity : public Entity
     void AddComponent(std::string name, const LuaRef& new_component) //only this gets exposed to lua
     {
         (*_entity_table)["Components"][name] = new_component; //i guess keep this updated for good measure.
-        LuaComponent* c = new LuaComponent();
+
+        ptr<LuaComponent> c (new LuaComponent());
         c->FromLuaRef(new_component);
 
         ComponentUser::AddComponent(c);

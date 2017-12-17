@@ -14,7 +14,7 @@ class SelectEntityBrushState : public BrushState
         MOVING
     };
 
-    SelectEntityBrushState(Entity *selected) : _selected(selected)
+    SelectEntityBrushState(ptr<Entity> selected) : _selected(selected)
     {
 
     }
@@ -46,8 +46,8 @@ class SelectEntityBrushState : public BrushState
         
     }
 
-    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState *gs, 
-        ComponentUser* c = nullptr) override
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<GameState> gs, 
+        ptr<ComponentUser> c = nullptr) override
     {
         if (c == _selected)
         {
@@ -66,7 +66,7 @@ class SelectEntityBrushState : public BrushState
         return false;
     }
 
-    bool OnKeyboardEvent(sf::Event &e, GameState* gs) override
+    bool OnKeyboardEvent(sf::Event &e, ptr<GameState> gs) override
     {
         if (_selected)
         {
@@ -87,7 +87,7 @@ class SelectEntityBrushState : public BrushState
     }
 
   private:
-    Entity *_selected = nullptr;
+    ptr<Entity> _selected = nullptr;
     SelectionState _selection_state;
     CurrentSelectionWindow selection_window;
 };

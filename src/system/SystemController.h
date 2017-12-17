@@ -18,6 +18,8 @@
 **/
 class GameState;
 
+typedef std::list<ptr<System>> system_list;
+
 class SystemController : public EventSubscriber, public MessageDispatcher
 {
   friend class GameState;
@@ -30,7 +32,7 @@ public:
 
   SystemController(const SystemController &system_controller)
   {
-    const std::list<System *> &systems = system_controller.GetExecutionSequence();
+    const system_list &systems = system_controller.GetExecutionSequence();
 
     for (auto it = systems.begin(); it != systems.end(); it++)
     {
@@ -40,19 +42,19 @@ public:
 
   void AddToSystemExecutionSequence(const std::string &system_name);
   void AddPassiveSystem(const std::string &system_name);
-  void AddPassiveSystem(System *system);
-  void AddToSystemExecutionSequence(System *system);
-  std::list<System *>::iterator RemoveFromSystemExecutionSequence(const std::string &system_name);
+  void AddPassiveSystem(ptr<System> system);
+  void AddToSystemExecutionSequence(ptr<System> system);
+  system_list::iterator RemoveFromSystemExecutionSequence(const std::string &system_name);
   void MoveUp(std::string system_name);
   void MoveDown(std::string system_down);
   void Lock();
   void Unlock();
 
-  const System *GetExecutionSequenceAt(int index);
+  const ptr<System> GetExecutionSequenceAt(int index);
 
   int GetSequenceSize();
 
-  void Update(float seconds_since_last_update, GameState* g);
+  void Update(float seconds_since_last_update, ptr<GameState> g);
 
   void Reset()
   {
@@ -61,10 +63,10 @@ public:
     _passive_systems.clear();
   }
 
-  const std::list<System *> &GetExecutionSequence() const;
-  const std::list<System *> &GetPassiveSystems() const;
-  std::list<System *> &GetExecutionSequenceMutable();
-  std::list<System *> &GetPassiveSystemsMutable();
+  const system_list &GetExecutionSequence() const;
+  const system_list &GetPassiveSystems() const;
+  system_list &GetExecutionSequenceMutable();
+  system_list &GetPassiveSystemsMutable();
 
   //Inherited from EventSubscriber
   void OnEvent(Event &e);
@@ -76,15 +78,15 @@ protected:
     
   }
 
-  std::list<System *> _systems_execution_sequence;
-  std::list<System *> _passive_systems;
+  system_list _systems_execution_sequence;
+  system_list _passive_systems;
 
 private:
   class SystemNameComparator
   {
   public:
     explicit SystemNameComparator(std::string name) : _name(name) {}
-    inline bool operator()(System *&s)
+    inline bool operator()(ptr<System> s)
     {
       return s->GetName().compare(_name) == 0;
     }
@@ -93,8 +95,9 @@ private:
     std::string _name;
   };
 
-  void MoveUp(System *system_name);
-  void MoveDown(System *system_down);
+  void MoveUp(ptr<System> system_name);
+  void MoveDown(ptr<System> system_down);
+  
   std::mutex _system_lock;
 };
 

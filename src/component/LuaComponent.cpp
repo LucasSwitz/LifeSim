@@ -22,7 +22,7 @@ void LuaComponent::FromLuaRef(const LuaRef &ref)
         }
         else if (value.isTable())
         {
-            LuaComponent* component = new LuaComponent(key);
+            ptr<LuaComponent> component (new LuaComponent(key));
             component->FromLuaRef(value);
             AddSubcomponent(component);
         }

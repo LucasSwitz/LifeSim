@@ -57,7 +57,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         }
         else
         {
-            std::cout << "Root Instancen not Specified";
+            std::cout << "Root Instance not Specified";
         }
     }
     //Unload all loaded instances
@@ -65,7 +65,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     {
         for (auto it = _instances_names.begin(); it != _instances_names.end(); it++)
         {
-            Instance *inst = it->second;
+            ptr<Instance> inst = it->second;
 
             if (inst->IsOpen())
                 inst->Close(_entity_manager);
@@ -82,7 +82,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         }
     }
 
-    void AddInstance(Instance *instance)
+    void AddInstance(ptr<Instance> instance)
     {
         _instances_names.insert(std::make_pair(instance->GetName(), instance));
         _instances_id_to_name.insert(std::make_pair(instance->GetID(), instance->GetName()));
@@ -90,23 +90,25 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
 
     void AddInstance(int id)
     {
-        AddInstance(LuaInstanceFactory::Inst()->GetInstance(id));
+        ptr<Instance> inst = ptr<Instance>(LuaInstanceFactory::Inst()->GetInstance(id));
+        SetRootInstance(inst);
     }
 
     void AddInstance(std::string name)
     {
-        AddInstance(LuaInstanceFactory::Inst()->GetInstance(name));
+        ptr<Instance> inst = ptr<Instance>(LuaInstanceFactory::Inst()->GetInstance(name));
+        SetRootInstance(inst);
     }
 
-    void SetRootInstance(Instance *instance)
+    void SetRootInstance(ptr<Instance> instance)
     {
         _root_instance = instance;
     }
 
     void SetRootInstance(int id)
-
     {
-        SetRootInstance(LuaInstanceFactory::Inst()->GetInstance(id));
+        ptr<Instance> inst = ptr<Instance>(LuaInstanceFactory::Inst()->GetInstance(id));
+        SetRootInstance(inst);
     }
 
     void SetCurrentInstance(std::string name, bool do_load = true)
@@ -171,12 +173,12 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         return _instances_id_to_name.find(id) != _instances_id_to_name.end();
     }
 
-    Instance *GetCurrentInstance()
+    ptr<Instance> GetCurrentInstance()
     {
         return _current_instance;
     }
 
-    Instance *GetInstance(const std::string &name)
+    ptr<Instance> GetInstance(const std::string &name)
     {
         if (!HasInstance(name))
             return nullptr;
@@ -186,7 +188,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         }
     }
 
-    Instance *GetInstance(const int id)
+    ptr<Instance> GetInstance(const int id)
     {
         return GetInstance(GetName(id));
     }
@@ -201,7 +203,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         else if (e.id == EventType::ENTITY_SPAWNED_EVENT)
         {
             std::cout << "Entity Spawned!" << std::endl;
-            Entity *entity = e.InfoToType<Entity *>();
+            ptr<Entity> entity (e.InfoToType<Entity *>());
             int instance_id = e.target_id;
 
             if (HasInstance(instance_id))
@@ -209,7 +211,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
                 _component_users.AddComponentUser(entity);
                 _entity_manager.RegisterEntity(entity);
                 entity->SetInstance(instance_id);
-                Instance *instance = GetInstance(instance_id);
+                ptr<Instance> instance = GetInstance(instance_id);
                 instance->AddLocalEntity(entity->ID());
             }
             else
@@ -234,7 +236,7 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         _name = name;
     }
 
-    const std::unordered_map<std::string, Instance *> &GetInstances() const
+    const std::unordered_map<std::string, ptr<Instance>> &GetInstances() const
     {
         return _instances_names;
     }
@@ -244,23 +246,23 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         return _instances_id_to_name;
     }
 
-    Instance *GetRootInstance()
+    ptr<Instance> GetRootInstance()
     {
         return _root_instance;
     }
 
-    void AssignToDispatch(EventManager *dispatch)
+    void AssignToDispatch(EventManager* dispatch)
     {
         dispatch->RegisterSubscriber(&_entity_manager);
         _entity_manager.AssignToDispatch(dispatch);
         MessageDispatcher::AssignToDispatch(dispatch);
     }
 
-    void AddEntity(Entity *e)
-    {
+    void AddEntity(ptr<Entity> e)
+    {        
         _component_users.AddComponentUser(e);
         _entity_manager.RegisterEntity(e);
-        Instance *i = GetInstance(e->GetInstance());
+        ptr<Instance> i = GetInstance(e->GetInstance());
         i->AddLocalEntity(e->ID());
     }
 
@@ -280,12 +282,12 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     }
 
   protected:
-    Instance *_current_instance = nullptr;
-    Instance *_root_instance = nullptr;
+    ptr<Instance> _current_instance = nullptr;
+    ptr<Instance> _root_instance = nullptr;
 
   private:
     std::unordered_map<int, std::string> _instances_id_to_name;
-    std::unordered_map<std::string, Instance *> _instances_names;
+    std::unordered_map<std::string, ptr<Instance>> _instances_names;
     std::string _name;
     EntityManager _entity_manager;
     ComponentUserBase _component_users;

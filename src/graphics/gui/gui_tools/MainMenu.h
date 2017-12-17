@@ -10,7 +10,7 @@
 class MainMenu
 {
   public:
-    void Draw(GameState *game_state)
+    void Draw(ptr<GameState> game_state)
     {
         if (ImGui::BeginMainMenuBar())
         {
@@ -20,7 +20,7 @@ class MainMenu
             {
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Instance", game_state->GetStage()))
+            if (ImGui::BeginMenu("Instance", game_state->GetStage().get()))
             {
                 if (ImGui::BeginMenu("New Instance", "CTRL+I"))
                 {
@@ -36,7 +36,6 @@ class MainMenu
                             _listener->NewInstancePressed(instance_name);
                         }
                     }
-
                 }
 
                 /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
@@ -93,7 +92,7 @@ class MainMenu
                 {
                     _focused = true;
                     ImGui::BeginChild("Stage Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                    FolderContents stage_files("/home/lucas/Desktop/LifeSim/build/stages");
+                    FolderContents stage_files(Globals::RESOURCE_ROOT + "/world/stages");
                     std::string file_name = stage_files.Draw();
                     if (!file_name.empty())
                     {

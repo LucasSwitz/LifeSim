@@ -8,12 +8,12 @@
     Purpose: Tile defined by a Lua file.
 **/
 class LuaTile : public Tile
-{   
+{
 
-    public:
-    LuaTile(int id, std::string name) : Tile(id, name){}
+  public:
+    LuaTile(int id, std::string name) : Tile(id, name) {}
     virtual ~LuaTile(){};
-    void LoadFromFile(lua_State* lua_state, const std::string& script_path, const std::string& tile_name)
+    void LoadFromFile(lua_State *lua_state, const std::string &script_path, const std::string &tile_name)
     {
         if (luaL_dofile(lua_state, script_path.c_str()) == 0)
         {
@@ -34,10 +34,10 @@ class LuaTile : public Tile
         {
             auto key = it.first;
             LuaRef component_ref = it.second;
-            LuaComponent* new_component = new LuaComponent(key);
+            ptr<LuaComponent> new_component(new LuaComponent(key));
             new_component->FromLuaRef(component_ref);
             ComponentUser::AddComponent(new_component); // Tile will not immediately be added to CUB.
-                                                               // TileMap will have to enable them
+                                                        // TileMap will have to enable them
         }
     }
 };

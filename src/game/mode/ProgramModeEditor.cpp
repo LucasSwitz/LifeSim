@@ -1,21 +1,25 @@
 #include "src/game/mode/ProgramModeEditor.h"
 
 ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
-                                         _editor_runner(EDITOR_MODE_FPS), _game_runner(GAME_RUNNER_FPS)
+                                         _editor_runner(EDITOR_MODE_FPS), 
+                                         _game_runner(GAME_RUNNER_FPS),
+                                         file_path(Globals::RESOURCE_ROOT+"/world/stages"),
+                                         tile_maps_path(Globals::RESOURCE_ROOT+"/world/tile_maps"),
+                                         instances_path(Globals::RESOURCE_ROOT+"/world/instances")
 {
-    _game_state = new GameState();
+    _game_state = ptr<GameState> (new GameState());
 
     LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
     EngineEventManager::Instance()->RegisterSubscriber(this);
 
-    _dev_tools.Init(&_window);
-    _dev_tools.SetListener(this);
-    _window.AddWindowListener(this);
+    _dev_tools.Init(ptr<PMIDGWindow> (&_window));
+    _dev_tools.SetListener(ptr<DevelopmentOverlayListener>(this));
+    _window.AddWindowListener(ptr<SFMLWindowListener>(this));
 
     _game_state->Setup();
     _game_runner.SetRunnable(_game_state);
-    _editor_runner.SetRunnable(this);
+    _editor_runner.SetRunnable(ptr<FPSRunnable>(this));
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 }
 
@@ -62,7 +66,7 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
     
     TileMap map;
     TileMap::Blank(map,rows,columns);
-    Instance *i = new Instance(-1, instance_name);
+    ptr<Instance> i (new Instance(-1, instance_name));
     i->SetTileMap(map);
 
     _game_state->GetStage()->AddInstance(i);
@@ -75,13 +79,13 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
 
 void ProgramModeEditor::OnCreateBlankStage()
 {
-    _game_state = new GameState();
+    _game_state = ptr<GameState>(new GameState());
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
     
     _game_runner.SetRunnable(_game_state);
 
-    Stage *s = new LuaStage();
+    ptr<Stage> s (new LuaStage());
 
     _game_state->SetStage(s);
 
@@ -90,8 +94,8 @@ void ProgramModeEditor::OnCreateBlankStage()
 
 void ProgramModeEditor::OnLaunchInstance()
 {
-    _external_game_runner = new PMIDGGameRunner();
-    _external_game_runner->SetListener(this);
+    _external_game_runner = ptr<PMIDGGameRunner>  (new PMIDGGameRunner());
+    _external_game_runner->SetListener(ptr<PMIDGGameRunnerListener>(this));
     _external_game_runner->RunGameState(*_game_state);
     _editor_runner.SetRunnable(_external_game_runner);
 }
@@ -104,7 +108,7 @@ void ProgramModeEditor::OnStopGameRunner()
 {
     _game_state->Setup();
     _external_game_runner = nullptr;
-    _editor_runner.SetRunnable(this);
+    _editor_runner.SetRunnable(ptr<FPSRunnable>(this));
     _window.Focus();
 }
 
@@ -126,14 +130,14 @@ void ProgramModeEditor::OnEvent(Event &e)
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
     {
-     Instance* current_instance = _game_state->GetStage()->GetCurrentInstance();
+     ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
 
     _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
                                  current_instance->GetTileMap().HeightPx());
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGING)
     {
-        Instance *current_instance = _game_state->GetStage()->GetCurrentInstance();
+        ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
         if (current_instance)
             SaveInstanceTilemap(current_instance);
     }
@@ -150,10 +154,7 @@ std::list<Subscription> ProgramModeEditor::GetSubscriptions()
 // ######################## LOADING / SAVING #################################
 void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 {
-    if (_game_state)
-        delete _game_state;
-
-    _game_state = new GameState();
+    _game_state = ptr<GameState> (new GameState());
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
@@ -167,7 +168,8 @@ void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)
 {
     if (_game_state && _game_state->GetStage())
     {
-        Stage *stage = _game_state->GetStage();
+        ptr<Stage> stage = _game_state->GetStage();
+
         if (stage->GetCurrentInstance())
             SaveInstanceTilemap(stage->GetCurrentInstance());
         stage->SetName(file_name);
@@ -177,13 +179,13 @@ void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)
     }
 }
 
-void ProgramModeEditor::SaveInstanceTilemap(Instance *instance)
+void ProgramModeEditor::SaveInstanceTilemap(ptr<Instance> instance)
 {
     std::string tile_map_path = tile_maps_path + "/" + instance->GetName() + ".pmidgM";
     instance->GetTileMap().SaveToFile(tile_map_path);
 }
 
-void ProgramModeEditor::GenerateInstanceTemplate(Instance *instance)
+void ProgramModeEditor::GenerateInstanceTemplate(ptr<Instance> instance)
 {
     SaveInstanceTilemap(instance);
 
@@ -223,11 +225,11 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
             }
             else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
             {
-                if (Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                if (ptr<Entity> entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
                 {
                     if (e.type == sf::Event::MouseButtonPressed)
                     {
-                        _brush.SetState(new SelectEntityBrushState(entity));
+                        _brush.SetState(ptr<BrushState> (new SelectEntityBrushState(entity)));
                     }
                     _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
                 }
@@ -263,7 +265,7 @@ void ProgramModeEditor::Render(float seconds_elapsed)
             PanView();
         }
     }
-    _dev_tools.Render(&_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
+    _dev_tools.Render(ptr<PMIDGEditorWindow>(&_window), _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
 }
 
 void ProgramModeEditor::PanView()
@@ -283,23 +285,23 @@ bool ProgramModeEditor::ClickOnActiveTileMap(int x, int y)
     if (!CanEdit())
         return false;
 
-    Instance *instance = _game_state->GetStage()->GetCurrentInstance();
+    ptr<Instance> instance = _game_state->GetStage()->GetCurrentInstance();
     sf::Vector2f world_cords = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
-    return instance->GetTileMap().TileAt(world_cords.x, world_cords.y);
+    return (instance->GetTileMap().TileAt(world_cords.x, world_cords.y)) != nullptr;
 }
 
-Entity *ProgramModeEditor::ClickOnEntity(int x, int y)
+ptr<Entity> ProgramModeEditor::ClickOnEntity(int x, int y)
 {
     if (!CanEdit())
         return nullptr;
 
     sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
-    const std::map<int, Entity *> &entities = _game_state->GetEntityManager()->GetAllEntities();
+    auto &entities = _game_state->GetEntityManager()->GetAllEntities();
 
     for (auto it = entities.begin(); it != entities.end(); it++)
     {
-        Entity *e = it->second;
+        ptr<Entity> e = it->second;
 
         int pos_x = e->GetComponentValueFloat("Position", "x");
         int pos_y = e->GetComponentValueFloat("Position", "y");

@@ -11,19 +11,13 @@ void PMIDGGameRunner::RunGameState(const std::string &file_path)
 
 void PMIDGGameRunner::RunGameState(GameState &game_state)
 {
-    if (_game_state)
-        delete _game_state;
-
-    _game_state = new GameState(game_state);
+   _game_state = ptr<GameState> (new GameState(game_state));
     Run();
 }
 
 void PMIDGGameRunner::RunGameState(GameState &game_state, int instance_id)
 {
-    if (_game_state)
-        delete _game_state;
-
-    _game_state = new GameState(game_state);
+    _game_state = ptr<GameState> (new GameState(game_state));
     _game_state->GetStage()->SetCurrentInstance(instance_id);
     Run();
 }
@@ -37,10 +31,8 @@ void PMIDGGameRunner::Run()
 
 void PMIDGGameRunner::CreateGameState()
 {
-    if (_game_state)
-        delete _game_state;
 
-    _game_state = new GameState();
+    _game_state = ptr<GameState> (new GameState());
     SetRunnable(_game_state);
 }
 
@@ -60,7 +52,7 @@ void PMIDGGameRunner::Unload()
 {
 }
 
-void PMIDGGameRunner::SetListener(PMIDGGameRunnerListener *listener)
+void PMIDGGameRunner::SetListener(ptr<PMIDGGameRunnerListener> listener)
 {
     _listener = listener;
 }
@@ -92,5 +84,5 @@ std::list<Subscription> PMIDGGameRunner::GetSubscriptions()
 
 PMIDGGameRunner::~PMIDGGameRunner()
 {
-    delete _game_state;
+    
 }

@@ -19,6 +19,8 @@ class ComponentUser
   friend class GameState;
 
 public:
+  typedef std::unordered_map<std::string, ptr<Component>> component_map;
+
   ComponentUser(int type, int id = -1) : _id(id)
   {
     if (_id == -1)
@@ -30,7 +32,7 @@ public:
   int ID() const;
   int Type() const;
 
-  void AddComponent(Component *component);
+  void AddComponent(ptr<Component> component);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, bool value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, float value);
@@ -42,9 +44,9 @@ public:
   void EnableAll();
   void EnableAll(ComponentUserBase &component_user_base);
 
-  void SetListener(ComponentUserListener *listener);
+  void SetListener(ComponentUserListener* listener);
 
-  Component *GetComponent(std::string name);
+  ptr<Component> GetComponent(std::string name);
 
   std::string GetComponentValueString(std::string component_name, std::string component_name_value) const;
   void SetComponentValueString(std::string component_name, std::string component_name_value, std::string value);
@@ -56,7 +58,7 @@ public:
   void SetComponentValueBool(std::string component_name, std::string component_name_value, bool value);
   void CallFunction(std::string component_name, std::string value_name);
 
-  std::unordered_map<std::string, Component *> &GetAllComponents();
+  std::unordered_map<std::string, ptr<Component>> &GetAllComponents();
   virtual ~ComponentUser();
   static int last_id;
 
@@ -66,8 +68,8 @@ public:
   }
 
 protected:
-  std::unordered_map<std::string, Component *> _components;
-  ComponentUserListener *_listener = nullptr;
+  component_map _components;
+  ComponentUserListener* _listener = nullptr;
   bool _is_hidden;
   void SetID(int id);
   int _id;

@@ -49,7 +49,7 @@ class System : public EventSubscriber
         return _paused;
     }
 
-   virtual void Update(float seconds_since_last_update, GameState* g) = 0;
+   virtual void Update(float seconds_since_last_update, ptr<GameState> g) = 0;
    
    void OnEvent(Event& e) override{};
     std::list<Subscription> GetSubscriptions() override{

@@ -24,15 +24,16 @@ class Tile : public ComponentUser
     {
         return _name;
     }
-    virtual ~Tile(){};
+    virtual ~Tile(){
+    };
 
     Tile *Clone()
     {
         Tile *t = new Tile(_id, _name);
-        std::unordered_map<std::string, Component *> components = GetAllComponents();
+        auto components = GetAllComponents();
         for (auto it = components.begin(); it != components.end(); it++)
         {
-            Component *c = new Component(*(it->second));
+            ptr<Component> c (new Component(*(it->second)));
             t->AddComponent(c);
         }
         return t;

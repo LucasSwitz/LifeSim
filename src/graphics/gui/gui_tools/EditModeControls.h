@@ -25,11 +25,11 @@ class EditModeControls
 
         if (_show_collision_boxes)
         {
-            const std::list<ComponentUser *> *users = gs.GetComponentUserBase()->GetAllUsersWithComponent("Collision");
+            auto users = gs.GetComponentUserBase()->GetAllUsersWithComponent("Collision");
 
             if (users)
             {
-                for (ComponentUser *user : *users)
+                for (ptr<ComponentUser> user : *users)
                 {
                     int width = user->GetComponentValueFloat("Collision", "width");
                     int height = user->GetComponentValueFloat("Collision", "height");

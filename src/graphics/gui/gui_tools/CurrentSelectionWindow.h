@@ -7,7 +7,7 @@
 
 struct CurrentSelectionWindow
 {
-    void Draw(ComponentUser* current_selection)
+    void Draw(ptr<ComponentUser> current_selection)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin("Selected");

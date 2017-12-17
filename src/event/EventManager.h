@@ -16,8 +16,9 @@
 **/
 
 
-typedef std::unordered_map<int, std::list<EventSubscriber*>*> event_tag_map;
+typedef std::unordered_map<int, ptr<std::list<EventSubscriber*>>> event_tag_map;
 typedef std::list<EventSubscriber*> tag_sub_list;
+typedef std::unordered_map<int, ptr<event_tag_map>> subscription_registry;
 
 class EventSubscriber;
 
@@ -29,8 +30,8 @@ public:
     void LaunchEvent(Event& e);
 
     void RegisterSubscriber(EventSubscriber* sub);
-    void Deregister(EventSubscriber *sub);
-    void Deregister(EventSubscriber *sub, int event_id, int event_tag);
+    void Deregister(EventSubscriber* sub);
+    void Deregister(EventSubscriber* sub, int event_id, int event_tag);
 
     bool EventExists(int event_id);
     bool TagExists(int event_id, int tag_id);
@@ -41,7 +42,7 @@ protected:
     void AddSubscriberToSubscription(EventSubscriber* sub, int event_id, int event_tag);
 
 private:
-    std::unordered_map<int, event_tag_map*> _subscription_registry;
+    subscription_registry _subscription_registry;
 
 };
 #endif

@@ -15,7 +15,7 @@
              A GameState can be operated by an FPSRunnable.
 **/
 
-class GameState : public FPSRunnable
+class GameState : public FPSRunnable, public std::enable_shared_from_this<GameState> 
 {
 public:
   GameState();
@@ -30,21 +30,21 @@ public:
 
   void Unload();
 
-  void SetStage(Stage *stage);
+  void SetStage(ptr<Stage> stage);
 
-  void ChangeState(Stage *new_stage);
+  void ChangeState(ptr<Stage> new_stage);
 
   void AddSystem(std::string system_name);
 
-  void AddSystem(System *system);
+  void AddSystem(ptr<System> system);
 
-  void AddEntity(Entity *e);
+  void AddEntity(ptr<Entity> e);
 
-  Stage *GetStage();
+  ptr<Stage> GetStage();
 
-  ComponentUserBase *GetComponentUserBase();
+  ComponentUserBase* GetComponentUserBase();
 
-  EntityManager *GetEntityManager();
+  ptr<EntityManager> GetEntityManager();
 
   SystemController &GetSystemController();
 
@@ -56,6 +56,6 @@ private:
   SystemController _system_controller;
   EventManager _message_dispatch;
   PlayerBase _player_base;
-  Stage *_current_stage = nullptr;
+  ptr<Stage> _current_stage = nullptr;
 };
 #endif

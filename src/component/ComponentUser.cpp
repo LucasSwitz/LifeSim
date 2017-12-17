@@ -2,6 +2,8 @@
 #include "src/component/ComponentUserBase.h"
 
 int ComponentUser::last_id = -1;
+typedef std::unordered_map<std::string, ptr<Component>> component_map;
+
 int ComponentUser::ID() const
 {
     return _id;
@@ -28,27 +30,31 @@ void ComponentUser::RemoveComponent(std::string name)
 void ComponentUser::EnableComponent(std::string name)
 {
     if (HasComponent(name) && _listener)
-        _listener->OnEnableComponent(this,name);
+        _listener->OnEnableComponent(this, name);
 }
 
 void ComponentUser::EnableAll()
 {
-    if(_listener)
+    if (_listener)
     {
         for (auto it = _components.begin(); it != _components.end(); it++)
         {
-            _listener->OnEnableComponent(this,it->first);
+            _listener->OnEnableComponent(this, it->first);
         }
+    }
+    else
+    {
+        std::cout << "No Listener" << std::endl;
     }
 }
 
 void ComponentUser::DisableAll()
 {
-    if(_listener)
+    if (_listener)
     {
         for (auto it = _components.begin(); it != _components.end(); it++)
         {
-            _listener->OnDisableComponent(this,it->first);        
+            _listener->OnDisableComponent(this, it->first);
         }
     }
 }
@@ -56,7 +62,7 @@ void ComponentUser::DisableAll()
 void ComponentUser::DisableComponent(std::string name)
 {
     if (HasComponent(name) && _listener)
-        _listener->OnDisableComponent(this,name);
+        _listener->OnDisableComponent(this, name);
 }
 
 bool ComponentUser::HasComponent(std::string name) const
@@ -64,7 +70,7 @@ bool ComponentUser::HasComponent(std::string name) const
     return _components.find(name) != _components.end();
 }
 
-void ComponentUser::AddComponent(Component *component)
+void ComponentUser::AddComponent(ptr<Component> component)
 {
     std::string component_name = component->GetName();
 
@@ -136,12 +142,12 @@ void ComponentUser::CallFunction(std::string component_name, std::string functio
     _components.at(component_name)->GetFunctionValue(function_name);
 }
 
-Component *ComponentUser::GetComponent(std::string name)
+ptr<Component> ComponentUser::GetComponent(std::string name)
 {
     return _components.at(name);
 }
 
-std::unordered_map<std::string, Component *> &ComponentUser::GetAllComponents()
+component_map& ComponentUser::GetAllComponents()
 {
     return _components;
 }
@@ -150,7 +156,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(new Component(component_name));
+        AddComponent(ptr<Component> (new Component(component_name)));
     }
 
     GetComponent(component_name)->SetStringValue(value_name, value);
@@ -160,7 +166,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(new Component(component_name));
+        AddComponent(ptr<Component>(new Component(component_name)));
     }
 
     GetComponent(component_name)->SetBoolValue(value_name, value);
@@ -170,12 +176,11 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(new Component(component_name));
+        AddComponent(ptr<Component>(new Component(component_name)));
     }
 
     GetComponent(component_name)->SetFloatValue(value_name, value);
 }
-
 
 void ComponentUser::SetListener(ComponentUserListener* listener)
 {

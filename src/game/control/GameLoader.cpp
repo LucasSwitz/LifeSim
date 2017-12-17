@@ -32,17 +32,17 @@ void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameS
 {
     std::list<Entity *> entities;
     std::list<std::string> systems;
-    LuaStage *stage = new LuaStage();
+    LuaStage* stage = new LuaStage();
 
     protobuf.GetEntities(entities);
     protobuf.GetSystems(systems);
 
-    protobuf.GetStage(stage);
-    game_state.SetStage(stage);
+    protobuf.GetStage(ptr<LuaStage>(stage));
+    game_state.SetStage(ptr<Stage>(stage));
 
     for (Entity *e : entities)
     {
-        game_state.AddEntity(e);
+        game_state.AddEntity(ptr<Entity>(e));
     }
 
     for (std::string &system : systems)

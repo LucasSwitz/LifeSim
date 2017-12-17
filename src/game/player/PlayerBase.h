@@ -15,7 +15,7 @@ class PlayerBase : public ComponentUserBaseSubscriber
         void OnEvent(ComponentUserBaseEvent& e)
         {
             ComponentUser* player = e.user;
-            Component* player_component = player->GetComponent("Player");
+            ptr<Component> player_component = player->GetComponent("Player");
             int controller_id = player_component->GetFloatValue("controller_id");
             
             //Create controller for player if controller doesn't already exist

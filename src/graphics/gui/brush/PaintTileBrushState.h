@@ -13,7 +13,7 @@ class PaintTileBrushState : public BrushState
         PAINTING,
     };
 
-    PaintTileBrushState(Tile *selected) : _selected_tile(selected){};
+    PaintTileBrushState(ptr<Tile> selected) : _selected_tile(selected){};
 
     bool PaintWindow(PMIDGWindow &window) override
     {
@@ -24,8 +24,8 @@ class PaintTileBrushState : public BrushState
         return false;
     }
 
-    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, GameState * gs, 
-        ComponentUser* c = nullptr) override
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<GameState>  gs, 
+        ptr<ComponentUser> c = nullptr) override
     {
         if (e.type == sf::Event::MouseButtonPressed)
         {
@@ -54,7 +54,7 @@ class PaintTileBrushState : public BrushState
                 {
                     for (auto it = _boxed_tiles.begin(); it != _boxed_tiles.end();)
                     {
-                        Tile* replaced =  *it;
+                        ptr<Tile> replaced =  *it;
 
                         float x = replaced->GetComponentValueFloat("Position", "x");
                         float y = replaced->GetComponentValueFloat("Position", "y");
@@ -107,7 +107,7 @@ class PaintTileBrushState : public BrushState
     {
         if (_instance)
         {
-            for (Tile *tile : _boxed_tiles)
+            for (auto tile : _boxed_tiles)
             {
                 tile->SetComponentValueFloat("Graphics", "opacity", 1.0);
             }
@@ -116,7 +116,7 @@ class PaintTileBrushState : public BrushState
 
             _instance->GetTileMap().TilesInRange(x1, y1, x2, y2, _boxed_tiles);
 
-            for (Tile *tile : _boxed_tiles)
+            for (auto tile : _boxed_tiles)
             {
                 tile->SetComponentValueFloat("Graphics", "opacity", .9);
             }
@@ -125,8 +125,8 @@ class PaintTileBrushState : public BrushState
 
     MouseHistory _mouse_history;
     PaintingState _painting_state = DORMANT;
-    Tile *_selected_tile = nullptr;
-    Instance *_instance = nullptr;
-    std::list<Tile *> _boxed_tiles;
+    ptr<Tile> _selected_tile = nullptr;
+    ptr<Instance> _instance = nullptr;
+    std::list<ptr<Tile>> _boxed_tiles;
 };
 #endif

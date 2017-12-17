@@ -21,11 +21,11 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
 {
     public:
         DevelopmentOverlay();
-        void Render(PMIDGWindow* render_window, GameState* game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
-        void Init(PMIDGWindow* render_window);
+        void Render(ptr<PMIDGWindow> render_window, ptr<GameState> game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
+        void Init(ptr<PMIDGWindow> render_window);
         void Shutdown();
         Log& GetLog();
-        void SetListener(DevelopmentOverlayListener* listener);
+        void SetListener(ptr<DevelopmentOverlayListener> listener);
         bool IsFocused();
 
         // Inhertited from MainMenuListener
@@ -50,7 +50,7 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
 
     private:
         void DrawMenuBar();
-        DevelopmentOverlayListener* _listener = nullptr;
+        ptr<DevelopmentOverlayListener> _listener = nullptr;
         bool _focused = false;
 
         InputDialog _save_dialog;
