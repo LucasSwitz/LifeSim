@@ -36,7 +36,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     void Unload();
 
-    void SetListener(ptr<PMIDGGameRunnerListener> listener);
+    void SetListener(PMIDGGameRunnerListener* listener);
 
     void OnEvent(Event &e);
 
@@ -47,7 +47,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
   private:
     PMIDGWindow _window;
     ptr<GameState> _game_state = nullptr;
-    ptr<PMIDGGameRunnerListener> _listener = nullptr;
+    PMIDGGameRunnerListener* _listener = nullptr;
     bool _shutdown = false;
 };
 #endif

@@ -159,6 +159,11 @@ class Component
         return _sub_components.at(name);
     }
 
+    Component* GetSubcomponentUnshared(std::string name)
+    {
+        return (GetSubcomponent(name)).get();
+    }
+
     subcomponent_map<Component *> &GetSubcomponents()
     {
         return _sub_components;

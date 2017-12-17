@@ -1,26 +1,30 @@
 #include "src/game/mode/ProgramModeEditor.h"
 
 ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
-                                         _editor_runner(EDITOR_MODE_FPS), 
+                                         _editor_runner(EDITOR_MODE_FPS),
                                          _game_runner(GAME_RUNNER_FPS),
-                                         file_path(Globals::RESOURCE_ROOT+"/world/stages"),
-                                         tile_maps_path(Globals::RESOURCE_ROOT+"/world/tile_maps"),
-                                         instances_path(Globals::RESOURCE_ROOT+"/world/instances")
+                                         file_path(Globals::RESOURCE_ROOT + "/world/stages"),
+                                         tile_maps_path(Globals::RESOURCE_ROOT + "/world/tile_maps"),
+                                         instances_path(Globals::RESOURCE_ROOT + "/world/instances")
 {
-    _game_state = ptr<GameState> (new GameState());
+    _game_state = ptr<GameState>(new GameState());
 
     LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
     EngineEventManager::Instance()->RegisterSubscriber(this);
 
-    _dev_tools.Init(ptr<PMIDGWindow> (&_window));
-    _dev_tools.SetListener(ptr<DevelopmentOverlayListener>(this));
-    _window.AddWindowListener(ptr<SFMLWindowListener>(this));
+    _dev_tools.Init(_window);
+    _dev_tools.SetListener(this);
+    _window.AddWindowListener(this);
 
     _game_state->Setup();
     _game_runner.SetRunnable(_game_state);
-    _editor_runner.SetRunnable(ptr<FPSRunnable>(this));
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
+}
+
+void ProgramModeEditor::Init()
+{
+    _editor_runner.SetRunnable(shared_from_this());
 }
 
 void ProgramModeEditor::Load()
@@ -63,10 +67,10 @@ void ProgramModeEditor::Exit()
 
 void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int rows, int columns)
 {
-    
+
     TileMap map;
-    TileMap::Blank(map,rows,columns);
-    ptr<Instance> i (new Instance(-1, instance_name));
+    TileMap::Blank(map, rows, columns);
+    ptr<Instance> i(new Instance(-1, instance_name));
     i->SetTileMap(map);
 
     _game_state->GetStage()->AddInstance(i);
@@ -79,23 +83,21 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
 
 void ProgramModeEditor::OnCreateBlankStage()
 {
-    _game_state = ptr<GameState>(new GameState());
+    _game_state = std::make_shared<GameState>();
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
-    
+
     _game_runner.SetRunnable(_game_state);
 
-    ptr<Stage> s (new LuaStage());
-
-    _game_state->SetStage(s);
+    _game_state->SetStage(std::make_shared<LuaStage>());
 
     _window.SetName("New Stage Name");
 }
 
 void ProgramModeEditor::OnLaunchInstance()
 {
-    _external_game_runner = ptr<PMIDGGameRunner>  (new PMIDGGameRunner());
-    _external_game_runner->SetListener(ptr<PMIDGGameRunnerListener>(this));
+    _external_game_runner = ptr<PMIDGGameRunner>(new PMIDGGameRunner());
+    _external_game_runner->SetListener(this);
     _external_game_runner->RunGameState(*_game_state);
     _editor_runner.SetRunnable(_external_game_runner);
 }
@@ -130,10 +132,10 @@ void ProgramModeEditor::OnEvent(Event &e)
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
     {
-     ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
+        ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
 
-    _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
-                                 current_instance->GetTileMap().HeightPx());
+        _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
+                                     current_instance->GetTileMap().HeightPx());
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGING)
     {
@@ -154,7 +156,7 @@ std::list<Subscription> ProgramModeEditor::GetSubscriptions()
 // ######################## LOADING / SAVING #################################
 void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 {
-    _game_state = ptr<GameState> (new GameState());
+    _game_state = ptr<GameState>(new GameState());
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
@@ -229,7 +231,7 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
                 {
                     if (e.type == sf::Event::MouseButtonPressed)
                     {
-                        _brush.SetState(ptr<BrushState> (new SelectEntityBrushState(entity)));
+                        _brush.SetState(ptr<BrushState>(new SelectEntityBrushState(entity)));
                     }
                     _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
                 }
@@ -265,7 +267,7 @@ void ProgramModeEditor::Render(float seconds_elapsed)
             PanView();
         }
     }
-    _dev_tools.Render(ptr<PMIDGEditorWindow>(&_window), _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
+    _dev_tools.Render(_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
 }
 
 void ProgramModeEditor::PanView()
@@ -297,7 +299,7 @@ ptr<Entity> ProgramModeEditor::ClickOnEntity(int x, int y)
 
     sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
-    auto &entities = _game_state->GetEntityManager()->GetAllEntities();
+    auto entities = _game_state->GetEntityManager().GetAllEntities();
 
     for (auto it = entities.begin(); it != entities.end(); it++)
     {

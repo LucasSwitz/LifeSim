@@ -25,7 +25,7 @@ class EditModeControls
 
         if (_show_collision_boxes)
         {
-            auto users = gs.GetComponentUserBase()->GetAllUsersWithComponent("Collision");
+            auto users = gs.GetComponentUserBase().GetAllUsersWithComponent("Collision");
 
             if (users)
             {

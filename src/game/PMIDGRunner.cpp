@@ -14,7 +14,8 @@ void PMIDGRunner::Init(Type type)
     switch (type)
     {
     case EDITOR:
-        _mode = new ProgramModeEditor();
+        _mode = std::make_shared<ProgramModeEditor>();
+        _mode->Init();
         break;
     case GAME:
         break;

@@ -17,12 +17,10 @@ GameState::GameState(const GameState &game_state) : _message_dispatch(),
 
 void GameState::Load()
 {
-
 }
 
 void GameState::Setup()
 {
-
 }
 
 void GameState::Tick(float seconds_elapsed)
@@ -35,7 +33,7 @@ void GameState::Tick(float seconds_elapsed)
     }
     else
     {
-        std::cout << "No Stage or No Instance, can't tick" << std::endl;
+        //std::cout << "No Stage or No Instance, can't tick" << std::endl;
     }
 
     LuaUniversal::Instance()->CollectGarbage();
@@ -95,18 +93,20 @@ ptr<Stage> GameState::GetStage()
     return _current_stage;
 }
 
-ptr<EntityManager> GameState::GetEntityManager()
+EntityManager &GameState::GetEntityManager()
 {
     if (_current_stage)
-        return ptr<EntityManager>(&_current_stage->GetEntityManager());
-    return nullptr;
+        _current_stage->GetEntityManager();
+    else
+        throw no_stage_exn;
 }
 
-ComponentUserBase* GameState::GetComponentUserBase()
+ComponentUserBase &GameState::GetComponentUserBase()
 {
     if (_current_stage)
-        return &_current_stage->GetComponentUserBaseMutable();
-    return nullptr;
+        return _current_stage->GetComponentUserBaseMutable();
+    else
+        throw no_stage_exn;
 }
 
 SystemController &GameState::GetSystemController()

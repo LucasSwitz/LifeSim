@@ -23,9 +23,10 @@
 #define EDITOR_MODE_FPS 30
 #define GAME_RUNNER_FPS 30
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable, public EventSubscriber, public PMIDGGameRunnerListener
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, 
+  public FPSRunner, public FPSRunnable, public EventSubscriber, public PMIDGGameRunnerListener,
+  public std::enable_shared_from_this<ProgramModeEditor>
 {
-
   public:
     enum WindowTransformState
     {
@@ -34,6 +35,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     };
 
     ProgramModeEditor();
+
+    void Init();
 
     void Load();
 

@@ -44,9 +44,10 @@ public:
   void EnableAll();
   void EnableAll(ComponentUserBase &component_user_base);
 
-  void SetListener(ComponentUserListener* listener);
+  void SetListener(ComponentUserListener *listener);
 
   ptr<Component> GetComponent(std::string name);
+  Component *GetComponentUnshared(std::string name);
 
   std::string GetComponentValueString(std::string component_name, std::string component_name_value) const;
   void SetComponentValueString(std::string component_name, std::string component_name_value, std::string value);
@@ -62,14 +63,14 @@ public:
   virtual ~ComponentUser();
   static int last_id;
 
-  ComponentUserListener* const GetComponentListener() const
+  ComponentUserListener *const GetComponentListener() const
   {
     return _listener;
   }
 
 protected:
   component_map _components;
-  ComponentUserListener* _listener = nullptr;
+  ComponentUserListener *_listener = nullptr;
   bool _is_hidden;
   void SetID(int id);
   int _id;

@@ -9,15 +9,25 @@
 
 #include "src/game/FPSRunnable.h"
 #include "src/world/stage/Stage.h"
+
+#include <exception>
 /**
     Purpose: GameState describes all game operating specific details. This includes 
              information about active entities, running systems, loaded instances, etc.
              A GameState can be operated by an FPSRunnable.
 **/
 
-class GameState : public FPSRunnable, public std::enable_shared_from_this<GameState> 
+class GameState : public FPSRunnable, public std::enable_shared_from_this<GameState>
 {
 public:
+  class stage_not_loaded_exn : public std::exception
+  {
+    virtual const char *what() const throw()
+    {
+      return "No stage loaded in GameState.";
+    }
+  } no_stage_exn;
+
   GameState();
 
   GameState(const GameState &game_state);
@@ -42,9 +52,9 @@ public:
 
   ptr<Stage> GetStage();
 
-  ComponentUserBase* GetComponentUserBase();
+  ComponentUserBase &GetComponentUserBase();
 
-  ptr<EntityManager> GetEntityManager();
+  EntityManager &GetEntityManager();
 
   SystemController &GetSystemController();
 

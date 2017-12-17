@@ -147,6 +147,11 @@ ptr<Component> ComponentUser::GetComponent(std::string name)
     return _components.at(name);
 }
 
+Component* ComponentUser::GetComponentUnshared(std::string name)
+{
+    return (GetComponent(name)).get();
+}
+
 component_map& ComponentUser::GetAllComponents()
 {
     return _components;
@@ -156,7 +161,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(ptr<Component> (new Component(component_name)));
+        AddComponent(std::make_shared<Component>(component_name));
     }
 
     GetComponent(component_name)->SetStringValue(value_name, value);
@@ -166,7 +171,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(ptr<Component>(new Component(component_name)));
+        AddComponent(std::make_shared<Component>(component_name));
     }
 
     GetComponent(component_name)->SetBoolValue(value_name, value);
@@ -176,7 +181,7 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
 {
     if (!HasComponent(component_name))
     {
-        AddComponent(ptr<Component>(new Component(component_name)));
+        AddComponent(std::make_shared<Component>(component_name));
     }
 
     GetComponent(component_name)->SetFloatValue(value_name, value);

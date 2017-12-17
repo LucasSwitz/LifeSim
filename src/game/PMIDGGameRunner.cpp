@@ -52,7 +52,7 @@ void PMIDGGameRunner::Unload()
 {
 }
 
-void PMIDGGameRunner::SetListener(ptr<PMIDGGameRunnerListener> listener)
+void PMIDGGameRunner::SetListener(PMIDGGameRunnerListener* listener)
 {
     _listener = listener;
 }

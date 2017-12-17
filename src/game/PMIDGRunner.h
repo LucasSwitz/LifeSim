@@ -37,7 +37,7 @@ class PMIDGRunner : public EventSubscriber
     std::list<Subscription> GetSubscriptions();
 
   private:
-    ProgramMode *_mode = nullptr;
+    ptr<ProgramMode> _mode = nullptr;
     bool _program_stopped = false;
 };
 

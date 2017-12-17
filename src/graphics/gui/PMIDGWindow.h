@@ -97,7 +97,7 @@ class PMIDGWindow : public EventSubscriber
         _window.draw(drawable);
     }
 
-    void DrawComponentUser(ptr<ComponentUser> user)
+    void DrawComponentUser(ComponentUser* user)
     {
         if (!user->HasComponent("Position") || !user->HasComponent("Graphics"))
         {
@@ -139,7 +139,7 @@ class PMIDGWindow : public EventSubscriber
     {
         if (e.id == EventType::DRAW_REQUEST_EVENT && e.target_id == _id)
         {
-            ptr<ComponentUser> user (e.InfoToType<ComponentUser *>());
+            ComponentUser* user =  (e.InfoToType<ComponentUser *>());
             DrawComponentUser(user);
         }
         else if (e.id == EventType::RECENTER_VIEW_EVENT && e.target_id == _id)
@@ -221,14 +221,14 @@ class PMIDGWindow : public EventSubscriber
                 EngineEventManager::Instance()->LaunchEvent(new_event);
             }
         }
-        for (ptr<SFMLWindowListener> listener : _window_listeners)
+        for (SFMLWindowListener* listener : _window_listeners)
         {
             if (listener->OnWindowEvent(e))
                 break;
         }
     }
 
-    void AddWindowListener(ptr<SFMLWindowListener> listener)
+    void AddWindowListener(SFMLWindowListener* listener)
     {
         _window_listeners.push_back(listener);
     }
@@ -274,7 +274,7 @@ class PMIDGWindow : public EventSubscriber
 
     TextureCache _texture_cache;
     std::priority_queue<ptr<LayeredGraphic>, std::vector<ptr<LayeredGraphic>>, GraphicsComparator> _drawables_queue;
-    std::list<ptr<SFMLWindowListener>> _window_listeners;
+    std::list<SFMLWindowListener*> _window_listeners;
     GraphicsPreprocessor _preprocesser;
     int _id;
     static int last_id;

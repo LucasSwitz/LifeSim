@@ -9,7 +9,7 @@
 class GraphicsPreprocessor
 {
   public:
-    void ProcessComponentUser(ptr<ComponentUser> user, ptr<sf::Texture> texture, ptr<sf::Sprite> sprite)
+    void ProcessComponentUser(ComponentUser* user, ptr<sf::Texture> texture, ptr<sf::Sprite> sprite)
     {
         float width = user->GetComponentValueFloat("Graphics", "width");
         float height = user->GetComponentValueFloat("Graphics", "height");
