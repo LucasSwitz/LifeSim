@@ -21,12 +21,11 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_id_to_name.insert(std::make_pair(prototype_id, prototype_name));
     };
 
-    Entity* GetEntity(int id)
+    Entity *GetEntity(int id)
     {
-        if(!EntityPrototypeExists(id))
+        if (!EntityPrototypeExists(id))
         {
-            std::cout << "Entity Does Not Exists: " << id << std::endl;
-            return nullptr;
+            throw AssetNotFoundException("Entity: " + std::to_string(id));
         }
 
         LuaEntity *new_entity = new LuaEntity();
@@ -34,14 +33,13 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         return new_entity;
     }
 
-    Entity* GetEntityByName(std::string name)
+    Entity *GetEntityByName(std::string name)
     {
-        if(!EntityPrototypeExists(name))
-        {   
-            std::cout << "Entity Does Not Exists: " << name << std::endl;
-            return nullptr;
+        if (!EntityPrototypeExists(name))
+        {
+            throw AssetNotFoundException("Entity: " + name);
         }
-        
+
         return this->GetEntity(_entity_name_to_id.at(name));
     }
 
@@ -56,7 +54,6 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         return _entity_scripts.find(id) != _entity_scripts.end();
     }
 
-
     bool EntityPrototypeExists(std::string name)
     {
         return _entity_name_to_id.find(name) != _entity_name_to_id.end();
@@ -69,7 +66,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
         _entity_name_to_id.clear();
     }
 
-    std::unordered_map<int, std::string>& GetAllEntityIdentifiers()
+    std::unordered_map<int, std::string> &GetAllEntityIdentifiers()
     {
         return _entity_id_to_name;
     }

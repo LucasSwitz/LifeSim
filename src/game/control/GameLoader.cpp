@@ -32,13 +32,13 @@ void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameS
 {
     std::list<Entity *> entities;
     std::list<std::string> systems;
-    LuaStage* stage = new LuaStage();
+    ptr<LuaStage> stage = std::make_shared<LuaStage>();
 
     protobuf.GetEntities(entities);
     protobuf.GetSystems(systems);
 
-    protobuf.GetStage(ptr<LuaStage>(stage));
-    game_state.SetStage(ptr<Stage>(stage));
+    protobuf.GetStage(stage);
+    game_state.SetStage(stage);
 
     for (Entity *e : entities)
     {

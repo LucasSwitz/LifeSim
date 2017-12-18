@@ -11,6 +11,7 @@
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
 #include "test/protobuf/GameStateProtoBufTest.h"
+#include "test/game/game_systems/GameSystemsLoadTest.h"
 
 int RunTests(int argc, char** argv);
 

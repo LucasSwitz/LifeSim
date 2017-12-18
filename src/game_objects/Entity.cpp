@@ -21,7 +21,7 @@ std::string &Entity::GetPrototypeName()
     return _prototype_name;
 }
 
-void Entity::SetPrototypeName(std::string &name)
+void Entity::SetPrototypeName(const std::string &name)
 {
     _prototype_name = name;
 }

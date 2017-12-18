@@ -158,7 +158,7 @@ void ComponentUserBase::GetAllUsersWithComponentsAsLuaList(LuaList<ComponentUser
     GetAllUsersWithComponents(comp_list, matches);
 
     std::list<ComponentUser *> raw_lst;
-    Globals::expose_ptrs(matches, raw_lst);
+    expose_ptrs(matches, raw_lst);
 
     LuaList<ComponentUser *>::FromListToLuaList(raw_lst, *lua_list);
 }
@@ -168,7 +168,7 @@ void ComponentUserBase::GetAllUsersWithComponentAsLuaList(std::string &component
     const component_user_list_ptr list = GetAllUsersWithComponent(component_name);
 
     std::list<ComponentUser *> raw_lst;
-    Globals::expose_ptrs(*list, raw_lst);
+    expose_ptrs(*list, raw_lst);
     LuaList<ComponentUser *>::FromListToLuaList<ComponentUser *>(raw_lst, lua_list);
 }
 

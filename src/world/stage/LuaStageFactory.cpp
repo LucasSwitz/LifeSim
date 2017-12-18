@@ -10,12 +10,11 @@ void LuaStageFactory::AddScript(Preamble &pre, std::string script_path)
     _stage_name_to_id_directory.insert(std::make_pair(prototype_name, prototype_id));
 }
 
-Stage* LuaStageFactory::GetStage(int id)
+Stage *LuaStageFactory::GetStage(int id)
 {
-    if(!StagePrototypeExists(id))
+    if (!StagePrototypeExists(id))
     {
-        std::cout << "Stage Does Not Exists: " << id << std::endl;
-        return nullptr;
+        throw AssetNotFoundException("Stage: " + std::to_string(id));
     }
 
     LuaStage *new_stage = new LuaStage();
@@ -23,14 +22,13 @@ Stage* LuaStageFactory::GetStage(int id)
     return new_stage;
 }
 
-Stage* LuaStageFactory::GetStage(std::string name)
+Stage *LuaStageFactory::GetStage(std::string name)
 {
-    if(!StagePrototypeExists(name))
-    {   
-        std::cout << "Stage Does Not Exists: " << name << std::endl;
-        return nullptr;
+    if (!StagePrototypeExists(name))
+    {
+        throw AssetNotFoundException("Stage: " + name);
     }
-    
+
     return this->GetStage(_stage_name_to_id_directory.at(name));
 }
 

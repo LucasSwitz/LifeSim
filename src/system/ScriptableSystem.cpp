@@ -6,11 +6,10 @@ void ScriptableSystem::Update(float seconds_elapsed, ptr<GameState> g)
         (*_update_function)(*_system_table, seconds_elapsed, g.get());
 }
 
-
-void ScriptableSystem::OnEvent(Event& e)
+void ScriptableSystem::OnEvent(Event &e)
 {
-    if(_on_event_function)
-        (*_on_event_function)(*_system_table,e);
+    if (_on_event_function)
+        (*_on_event_function)(*_system_table, e);
 }
 
 std::list<Subscription> ScriptableSystem::GetSubscriptions()
@@ -28,41 +27,34 @@ std::list<Subscription> ScriptableSystem::GetSubscriptions()
     return subscriptions;
 }
 
-void ScriptableSystem::LoadScript(luabridge::lua_State *L, const std::string &script_path, const std::string &system_name)
+void ScriptableSystem::_LoadScript(luabridge::lua_State *L, const std::string &system_name)
 {
     using namespace luabridge;
     _name = system_name;
-    if (luaL_dofile(L, script_path.c_str()) == 0)
+    _system_table = std::make_shared<LuaRef>(getGlobal(L, system_name.c_str()));
+    if (_system_table->isTable())
     {
-        _system_table = std::make_shared<LuaRef>(getGlobal(L, system_name.c_str()));
-        if (_system_table->isTable())
+        if ((*_system_table)["Update"].isFunction())
         {
-            if ((*_system_table)["Update"].isFunction())
-            {
-                _update_function = std::make_unique<LuaRef>((*_system_table)["Update"]);
-            }
+            _update_function = std::make_unique<LuaRef>((*_system_table)["Update"]);
+        }
 
-            if ((*_system_table)["after"].isString())
-            {
-                _after = (*_system_table)["after"].cast<std::string>();
-            }
+        if ((*_system_table)["after"].isString())
+        {
+            _after = (*_system_table)["after"].cast<std::string>();
+        }
 
-            if((*_system_table)["EventHandler"])
+        if ((*_system_table)["EventHandler"])
+        {
+            LuaRef event_table = (*_system_table)["EventHandler"];
+            if (event_table["OnEvent"])
             {
-                LuaRef event_table = (*_system_table)["EventHandler"];
-                if(event_table["OnEvent"])
-                {
-                    _on_event_function = std::make_unique<LuaRef>(event_table["OnEvent"]);
-                }
-                if(event_table["GetSubscriptions"])
-                {
-                    _get_subscriptions_function = std::make_unique<LuaRef>(event_table["GetSubscriptions"]);
-                }
+                _on_event_function = std::make_unique<LuaRef>(event_table["OnEvent"]);
+            }
+            if (event_table["GetSubscriptions"])
+            {
+                _get_subscriptions_function = std::make_unique<LuaRef>(event_table["GetSubscriptions"]);
             }
         }
-    }
-    else
-    {
-        std::cout << "Error, can't open script: " << script_path << std::endl;
     }
 }

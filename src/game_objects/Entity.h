@@ -46,7 +46,7 @@ class Entity : public ComponentUser
 
   protected:
     void SetID(int id);
-    void SetPrototypeName(std::string &name);
+    void SetPrototypeName(const std::string &name);
 
   private:
     int _type;

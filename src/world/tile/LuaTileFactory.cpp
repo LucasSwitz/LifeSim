@@ -9,28 +9,26 @@ void LuaTileFactory::AddScript(Preamble &pre, std::string script_path)
     _tile_name_to_id_directory.insert(std::make_pair(prototype_name, prototype_id));
 };
 
-Tile* LuaTileFactory::GetTile(int id)
+Tile *LuaTileFactory::GetTile(int id)
 {
-    if(!TilePrototypeExists(id))
+    if (!TilePrototypeExists(id))
     {
-        std::cout << "Tile Does Not Exists: " << id << std::endl;
-        return nullptr;
+        throw AssetNotFoundException("Tile: " + std::to_string(id));
     }
 
-    LuaTile *new_tile = new LuaTile(id,_tile_id_to_name_directory.at(id));
+    LuaTile *new_tile = new LuaTile(id, _tile_id_to_name_directory.at(id));
 
-    new_tile->LoadFromFile(LUA_STATE, _tile_directory.at(id), _tile_id_to_name_directory.at(id));
+    new_tile->LoadScript(LUA_STATE, _tile_directory.at(id), _tile_id_to_name_directory.at(id));
     return new_tile;
 }
 
-Tile* LuaTileFactory::GetTile(std::string name)
+Tile *LuaTileFactory::GetTile(std::string name)
 {
-    if(!TilePrototypeExists(name))
-    {   
-        std::cout << "Tile Does Not Exists: " << name << std::endl;
-        return nullptr;
+    if (!TilePrototypeExists(name))
+    {
+        throw AssetNotFoundException("Tile: " + name);
     }
-    
+
     return this->GetTile(_tile_name_to_id_directory.at(name));
 }
 
@@ -51,12 +49,12 @@ void LuaTileFactory::Reset()
     _tile_id_to_name_directory.clear();
 }
 
-const std::unordered_map<int,std::string>& LuaTileFactory::GetAllTileIndentifiers()
+const std::unordered_map<int, std::string> &LuaTileFactory::GetAllTileIndentifiers()
 {
     return _tile_id_to_name_directory;
 }
 
-const std::unordered_map<int,std::string>& LuaTileFactory::GetAllTiles()
+const std::unordered_map<int, std::string> &LuaTileFactory::GetAllTiles()
 {
     return _tile_directory;
 }

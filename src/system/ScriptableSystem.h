@@ -6,26 +6,29 @@
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/system/System.h"
 #include "src/event/Event.h"
+#include "src/utils/lua/LuaDefinedAsset.h"
 
 /**
     Lua defined System. When event or Update is called, the LuaRef of the 
     instance ScriptableSystem is passed to lua.
 **/
 
-class ScriptableSystem : public System
+class ScriptableSystem : public System, public LuaDefinedAsset
 {
-    public:
+  public:
     ScriptableSystem(){};
 
     void Update(float seconds_elapsed, ptr<GameState> g) override;
-    void LoadScript(lua_State *L, const std::string &script_path, const std::string &system_name);
-    void OnEvent(Event& e) override;
+    void OnEvent(Event &e) override;
     std::list<Subscription> GetSubscriptions() override;
 
-private:
-        std::unique_ptr<LuaRef> _update_function;
-        std::shared_ptr<LuaRef> _system_table;
-        std::shared_ptr<LuaRef> _on_event_function;
-        std::shared_ptr<LuaRef> _get_subscriptions_function;
+  protected:
+    void _LoadScript(lua_State *L, const std::string &system_name);
+
+  private:
+    std::unique_ptr<LuaRef> _update_function;
+    std::shared_ptr<LuaRef> _system_table;
+    std::shared_ptr<LuaRef> _on_event_function;
+    std::shared_ptr<LuaRef> _get_subscriptions_function;
 };
 #endif

@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "src/system/ScriptableSystem.h"
 #include "src/utils/ScriptFactory.h"
+#include "src/utils/Globals.h"
+
 
 /**
     Factory for all System classes. Systems can be retrieved by supplying a valid name.

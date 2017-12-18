@@ -4,8 +4,7 @@ System *SystemFactory::GetSystem(std::string name)
 {
     if (!SystemExists(name))
     {
-        std::cout << "System does not exists: " << name << std::endl;
-        return nullptr;
+        throw AssetNotFoundException(name);
     }
 
     ScriptableSystem *new_system = new ScriptableSystem();

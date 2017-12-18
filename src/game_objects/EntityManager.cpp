@@ -51,7 +51,7 @@ bool EntityManager::HasEntity(int id)
 LuaList<Entity *> *EntityManager::AsLuaList()
 {
     std::map<int,Entity*> raw_entity_ptrs;
-    Globals::expose_ptrs(_entity_map, raw_entity_ptrs);
+    expose_ptrs(_entity_map, raw_entity_ptrs);
 
     return LuaList<Entity *>::FromMapToLuaList<int, Entity *>(raw_entity_ptrs);
 }
