@@ -14,7 +14,6 @@ STAGE_END = "End"
 StateSystem = 
 {
     Update = function(state_system, time, g)
-    
         local entities = LuaListComponentUser()
         g:ComponentUsers():GetAll(entities,{"State"})
         local it = entities:Iterator()

@@ -17,7 +17,7 @@ bool SystemFactory::SystemExists(std::string name)
     return _system_directory.find(name) != _system_directory.end();
 }
 
-void SystemFactory::AddScript(Preamble &pre, std::string scriptable_object)
+void SystemFactory::AddResource(Preamble &pre, std::string scriptable_object)
 {
     _system_directory.insert(std::make_pair(pre.GetFlag("Name"), scriptable_object));
 }

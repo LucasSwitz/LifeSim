@@ -43,6 +43,8 @@ void DevelopmentOverlay::Render(PMIDGWindow& window, ptr<GameState> game_state,
         entity_table.Draw("Entities", game_state->GetEntityManager()); 
         instance_editor.Draw(texture_cache, brush);        
     }
+
+    ui_editor.Draw(texture_cache,brush);
     // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window.SFWindow());
@@ -80,6 +82,16 @@ void DevelopmentOverlay::SaveStagePressed(std::string &file_name)
     }
 }
 
+void DevelopmentOverlay::NewUIPressed()
+{
+    
+}
+
+void DevelopmentOverlay::AttachUIPressed(std::string& file_name)
+{
+    
+}
+
 bool DevelopmentOverlay::IsFocused()
 {
     return log.IsFocused() || entity_table.IsFocused() ||
@@ -101,6 +113,7 @@ void DevelopmentOverlay::OnLaunchStage()
     if (_listener)
         _listener->OnLaunchStage();
 }
+
 void DevelopmentOverlay::OnLaunchInstance()
 {
     if (_listener)

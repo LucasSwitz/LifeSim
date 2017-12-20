@@ -25,7 +25,6 @@ Stages =
             character:SetNumber("Velocity","x", 100)
             character:SetBool("Graphics","invert",false)
         else
-            x = false
             character:SetNumber("Velocity","x", 0)
         end
     end,

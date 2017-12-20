@@ -198,7 +198,7 @@ void ProgramModeEditor::GenerateInstanceTemplate(ptr<Instance> instance)
     std::string instance_path = instances_path + "/" + instance->GetName() + ".pmidgI";
     instance_builder.Output(instance_path);
 
-    LuaInstanceFactory::Inst()->AddScript(instance->GetName(), instance->GetID(), instance_path);
+    LuaInstanceFactory::Inst()->AddResource(instance->GetName(), instance->GetID(), instance_path);
 }
 
 bool ProgramModeEditor::OnWindowEvent(sf::Event &e)

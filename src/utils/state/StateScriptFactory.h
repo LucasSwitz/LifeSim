@@ -1,13 +1,13 @@
-#ifndef STATESCRIPTFACTORY_H
-#define STATESCRIPTFACTORY_H
+#ifndef STATEResourceFactory_H
+#define STATEResourceFactory_H
 
 #include <unordered_map>
 #include <iostream>
 #include "src/utils/state/ScriptableState.h"
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
 #include "src/utils/lua/LuaUniversal.h"
 
-class StateScriptFactory : public ScriptFactory<ScriptableState>
+class StateResourceFactory : public ResourceFactory<ScriptableState>
 {
 
 public:
@@ -15,16 +15,16 @@ public:
 
   ScriptableState *Configure(std::string full_script_path, std::string scriptable_name);
 
-  void AddScript(Preamble &pre, ScriptableState *scriptable_object);
+  void AddResource(Preamble &pre, ScriptableState *scriptable_object);
 
-  static StateScriptFactory *Instance()
+  static StateResourceFactory *Instance()
   {
-    static StateScriptFactory instance("State");
+    static StateResourceFactory instance("State");
     return &instance;
   };
 
 private:
-  StateScriptFactory(std::string state_name) : ScriptFactory<ScriptableState>(state_name, true){};
+  StateResourceFactory(std::string state_name) : ResourceFactory<ScriptableState>(state_name, true){};
 
   std::unordered_map<std::string, std::unordered_map<std::string, ScriptableState *>> _scripts_map;
 };

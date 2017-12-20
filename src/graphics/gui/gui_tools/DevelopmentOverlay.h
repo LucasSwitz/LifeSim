@@ -15,6 +15,7 @@
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
 #include "src/graphics/gui/gui_tools/MainMenu.h"
 #include "src/graphics/gui/gui_tools/StageEditor.h"
+#include "src/graphics/gui/gui_tools/UIEditor.h"
 #include "src/game/GameState.h"
 
 class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListener
@@ -35,6 +36,8 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         void LoadStagePressed(std::string& file_name);
         void SaveStagePressed(std::string& file_name);
         void NewStagePressed();
+        void NewUIPressed();
+        void AttachUIPressed(std::string& file_name);
 
         //Inherited from EditModeControlListener
         void OnLaunchStage();
@@ -47,6 +50,7 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         EditModeControls edit_mode_controls;
         MainMenu main_menu;
         StageEditor stage_editor;
+        UIEditor ui_editor;
 
     private:
         void DrawMenuBar();

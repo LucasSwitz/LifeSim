@@ -17,7 +17,7 @@ class Entity : public ComponentUser
   public:
     virtual ~Entity();
     Entity(int type = 0, std::string _prototype_name = "", int id = -1);
-    Entity(Entity &e) : ComponentUser(CU_TYPE_ENTITY)
+    Entity(Entity &e) : ComponentUser(ComponentUserType::CU_TYPE_ENTITY)
     {
         auto components = e.GetAllComponents();
         for (auto it = components.begin(); it != components.end(); it++)

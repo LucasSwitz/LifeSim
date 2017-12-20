@@ -1,17 +1,17 @@
 #ifndef LUAENTITYFACTORY_H
 #define LUAENTITYFACTORY_H
 
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
 #include "src/game_objects/LuaEntity.h"
 
 /**
     Factory for creating entity instances from their Lua prototypes.
 **/
 
-class LuaEntityFactory : public ScriptFactory<std::string>
+class LuaEntityFactory : public ResourceFactory<std::string>
 {
   public:
-    virtual void AddScript(Preamble &pre, std::string script_path) override
+    virtual void AddResource(Preamble &pre, std::string script_path) override
     {
         int prototype_id = std::stoi(pre.GetFlag("PrototypeID"));
         std::string prototype_name = pre.GetFlag("Name");
@@ -72,7 +72,7 @@ class LuaEntityFactory : public ScriptFactory<std::string>
     }
 
   private:
-    LuaEntityFactory(std::string type) : ScriptFactory<std::string>(type){};
+    LuaEntityFactory(std::string type) : ResourceFactory<std::string>(type){};
 
     std::map<int, std::string> _entity_scripts;
     std::unordered_map<std::string, int> _entity_name_to_id;

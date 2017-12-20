@@ -3,7 +3,7 @@
 
 #include <unordered_map>
 #include "src/system/ScriptableSystem.h"
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
 #include "src/utils/Globals.h"
 
 
@@ -11,12 +11,12 @@
     Factory for all System classes. Systems can be retrieved by supplying a valid name.
 **/
 
-class SystemFactory : public ScriptFactory<std::string>
+class SystemFactory : public ResourceFactory<std::string>
 {
 public:
   bool SystemExists(std::string name);
   System *GetSystem(std::string name);
-  void AddScript(Preamble &pre, std::string scriptable_object) override;
+  void AddResource(Preamble &pre, std::string scriptable_object) override;
 
   void Reset() override
   {
@@ -34,7 +34,7 @@ public:
 
 protected:
   SystemFactory(std::string script_type)
-      : ScriptFactory<std::string>(script_type){};
+      : ResourceFactory<std::string>(script_type){};
 
 private:
   std::unordered_map<std::string, std::string> _system_directory;

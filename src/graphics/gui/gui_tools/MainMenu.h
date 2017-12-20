@@ -37,47 +37,6 @@ class MainMenu
                         }
                     }
                 }
-
-                /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
-                {
-                    _focused = true;
-                    FolderContents instance_files("/home/lucas/Desktop/LifeSim/build/instances");
-                    ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                    std::string file_name = instance_files.Draw();
-                    if (!file_name.empty())
-                    {
-                        if (_listener)
-                        {
-                            _listener->LoadInstancePressed(file_name);
-                        }
-                    }
-
-                    ImGui::EndChild();
-                    ImGui::EndMenu();
-                }
-                if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I"))
-                {
-                    ImGui::BeginChild("Select Instance");
-
-                    ImGui::EndChild();
-                }
-                if (ImGui::BeginMenu("Save As Instance....", "CTRL+SHIFT+I"))
-                {
-                    ImGui::BeginChild("Save Instance##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
-                    std::string file_name = _save_dialog.Draw();
-
-                    if (!file_name.empty())
-                    {
-                        if (_listener)
-                        {
-                            _listener->SaveInstancePressed(file_name);
-                        }
-                    }
-
-                    ImGui::EndChild();
-                    ImGui::EndMenu();
-                }*/
-                ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Stage"))
             {
@@ -139,6 +98,18 @@ class MainMenu
                 }
                 if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E"))
                 {
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("UI"))
+            {
+                if (ImGui::MenuItem("New UI", "CTRL+W"))
+                {
+                    
+                }
+                if (ImGui::MenuItem("Attach UI", "CTRL+SHIFT+W"))
+                {
+
                 }
                 ImGui::EndMenu();
             }

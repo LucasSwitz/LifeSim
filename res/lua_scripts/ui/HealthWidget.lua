@@ -12,14 +12,12 @@ HealthWidget =
         Graphics
         {
             sprite_path = "path/to/heart_image"
-        }
-    },
-    Subscriptions
-    {
-        subscriptions = {"Player1Health"}
-        onEvent(widget, event)
+        },
+        State = 
         {
-            --change number of hearts
+            state = Res("HealthWidgetAliveState.lua"),
+            stage = "Start",
+            time = 0
         }
     }
 

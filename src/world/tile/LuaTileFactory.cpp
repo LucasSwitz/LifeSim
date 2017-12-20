@@ -1,6 +1,6 @@
 #include "src/world/tile/LuaTileFactory.h"
 
-void LuaTileFactory::AddScript(Preamble &pre, std::string script_path)
+void LuaTileFactory::AddResource(Preamble &pre, std::string script_path)
 {
     int prototype_id = std::stoi(pre.GetFlag("ID"));
     std::string prototype_name = pre.GetFlag("Name");

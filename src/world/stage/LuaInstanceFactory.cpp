@@ -1,14 +1,14 @@
 #include "src/world/stage/LuaInstanceFactory.h"
 
-void LuaInstanceFactory::AddScript(Preamble &pre, std::string script_path)
+void LuaInstanceFactory::AddResource(Preamble &pre, std::string script_path)
 {
     std::string prototype_name = pre.GetFlag("Name");
     int prototype_id = std::stoi(pre.GetFlag("ID"));
 
-    AddScript(prototype_name, prototype_id, script_path);
+    AddResource(prototype_name, prototype_id, script_path);
 }
 
-void LuaInstanceFactory::AddScript(std::string &prototype_name, int &prototype_id, std::string &script_path)
+void LuaInstanceFactory::AddResource(std::string &prototype_name, int &prototype_id, std::string &script_path)
 {
     _instance_directory.insert(std::make_pair(prototype_id, script_path));
     _instance_id_to_name_directory.insert(std::make_pair(prototype_id, prototype_name));
