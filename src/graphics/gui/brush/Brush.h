@@ -12,15 +12,20 @@ class Brush
     {
         if (_state)
         {
-            if(_state->PaintWindow(window))
+            if (_state->PaintWindow(window))
                 _state = nullptr;
         }
-
     }
 
+    virtual bool OnUIMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<UIElement> con = nullptr,
+                                ptr<ComponentUser> c = nullptr){
+        if(_state)
+            return _state->OnUIMouseEvent(e,event_world_position,con,c);
+        return false;
+    };
 
-    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<GameState> gs, 
-        ptr<ComponentUser> c = nullptr)
+    bool OnGameStateMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<GameState> gs,
+                               ptr<ComponentUser> c = nullptr)
     {
         if (_state)
             return _state->OnGameStateMouseEvent(e, event_world_position, gs, c);
@@ -41,7 +46,7 @@ class Brush
 
     void DrawExtras()
     {
-        if(_state)
+        if (_state)
             _state->DrawExtras();
     }
 

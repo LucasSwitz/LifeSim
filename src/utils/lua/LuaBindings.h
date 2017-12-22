@@ -92,7 +92,7 @@ class LuaBindings
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
-                .addFunction("Last",&EntityManager::GetNewest)
+                .addFunction("Last",&EntityManager::GetNewestUnshared)
             .endClass()
             .beginClass<Component>("Component")
                 .addFunction("GetNumber", &Component::GetFloatValue)

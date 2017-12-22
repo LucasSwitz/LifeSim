@@ -1,0 +1,6 @@
+#ifndef UIELEMENTTYPES_H
+#define UIELEMENTTYPES_H
+
+const int UIELEMENT_CONTAINER = 0;
+
+#endif

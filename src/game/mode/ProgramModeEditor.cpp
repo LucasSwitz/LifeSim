@@ -64,7 +64,6 @@ void ProgramModeEditor::Exit()
 }
 
 //######################### DEV TOOL CALLBACKS ########################
-
 void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int rows, int columns)
 {
 
@@ -209,48 +208,76 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
     {
         sf::Vector2i pixel_pos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
         sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(pixel_pos);
-
-        if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
+        switch (_edit_mode)
         {
-            if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle)
+        case GAME_STATE_MODE:
+        {
+            if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
             {
-                sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
+                if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle)
+                {
+                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
 
-                _mouse_history.x1 = pixelPos.x;
-                _mouse_history.y1 = pixelPos.y;
+                    _mouse_history.x1 = pixelPos.x;
+                    _mouse_history.y1 = pixelPos.y;
 
-                _window_transform_state = PANNING;
+                    _window_transform_state = PANNING;
+                }
+                else if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Middle)
+                {
+                    _window_transform_state = DORMANT;
+                }
+                else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+                {
+                    if (ptr<Entity> entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                    {
+                        if (e.type == sf::Event::MouseButtonPressed)
+                        {
+                            _brush.SetState(ptr<BrushState>(new SelectMoveableBrushState(entity)));
+                        }
+                        _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
+                    }
+                    else
+                    {
+                        _brush.OnGameStateMouseEvent(e, world_pos, _game_state);
+                    }
+                }
             }
-            else if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Middle)
+            else if (e.type == sf::Event::MouseWheelMoved)
             {
-                _window_transform_state = DORMANT;
+                _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
+                _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
+
+                _window.Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
             }
-            else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+            else if (e.type == sf::Event::KeyPressed)
             {
-                if (ptr<Entity> entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                _brush.OnKeyboardEvent(e, _game_state);
+            }
+        }
+        break;
+        case UI_MODE:
+        {
+            if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
+            {
+                if (ptr<UIElement> ui_element = ClickOnUIElement(pixel_pos.x, pixel_pos.y))
                 {
                     if (e.type == sf::Event::MouseButtonPressed)
                     {
-                        _brush.SetState(ptr<BrushState>(new SelectEntityBrushState(entity)));
+                        _brush.SetState(ptr<BrushState>(new SelectMoveableBrushState(ui_element)));
                     }
-                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
+
+                    _brush.OnUIMouseEvent(e, world_pos, ui_element, nullptr); //container does not matter for now
                 }
                 else
                 {
-                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state);
+                    _brush.OnUIMouseEvent(e, world_pos, nullptr);
                 }
             }
         }
-        else if (e.type == sf::Event::MouseWheelMoved)
-        {
-            _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
-            _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
-
-            _window.Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
-        }
-        else if (e.type == sf::Event::KeyPressed)
-        {
-            _brush.OnKeyboardEvent(e, _game_state);
+        break;
+        default:
+            std::cout << "Should not get here" << std::endl;
         }
     }
 }
@@ -266,6 +293,22 @@ void ProgramModeEditor::Render(float seconds_elapsed)
         {
             PanView();
         }
+    }
+
+    switch (_edit_mode)
+    {
+    case GAME_STATE_MODE:
+
+        break;
+    case UI_MODE:
+        if (ui)
+        {
+            ui->Draw(_window);
+            UIVisualizer ui_visualizer(ui);
+            ui_visualizer.Draw(_window);
+        }
+
+        break;
     }
     _dev_tools.Render(_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
 }
@@ -326,23 +369,7 @@ ptr<Entity> ProgramModeEditor::ClickOnEntity(int x, int y)
             continue;
         }
 
-        sf::Vector2f corner_top_left(pos_x - width / 2.0, pos_y - height / 2.0);
-        sf::Vector2f corner_top_right(pos_x + width / 2.0, pos_y - height / 2.0);
-        sf::Vector2f corner_bot_right(pos_x + width / 2.0, pos_y + height / 2.0);
-
-        sf::Vector2f top_edge = corner_top_right - corner_top_left;    //AB
-        sf::Vector2f right_edge = corner_bot_right - corner_top_right; //BC
-
-        sf::Vector2f top_left_to_click = world_pos - corner_top_left;   //AM
-        sf::Vector2f top_right_to_click = world_pos - corner_top_right; //BM
-
-        float dot_top_click = sf::Dot(top_edge, top_left_to_click);
-        float dot_top_top = sf::Dot(top_edge, top_edge);
-        float dot_right_click = sf::Dot(right_edge, top_right_to_click);
-        float dot_right_right = sf::Dot(right_edge, right_edge);
-
-        if (0 <= dot_top_click && dot_top_click <= dot_top_top &&
-            0 <= dot_right_click && dot_right_click <= dot_right_right)
+        if (ClickInBoundingBox(world_pos.x, world_pos.y, pos_x, pos_y, width, height))
         {
             return e;
         }
@@ -353,4 +380,47 @@ ptr<Entity> ProgramModeEditor::ClickOnEntity(int x, int y)
 bool ProgramModeEditor::CanEdit()
 {
     return _game_state && _game_state->GetStage() && _game_state->GetStage()->GetCurrentInstance();
+}
+
+ptr<UIElement> ProgramModeEditor::ClickOnUIElement(int x, int y)
+{
+    if (!CanEdit())
+        return nullptr;
+
+    sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
+
+    for (auto root_container : _root_containers)
+    {
+        int x_pos = root_container->GetComponentValueFloat("Position", "x");
+        int y_pos = root_container->GetComponentValueFloat("Position", "y");
+        int width = root_container->GetComponentValueFloat("Graphics", "width");
+        int height = root_container->GetComponentValueFloat("Graphics", "height");
+
+        if (ClickInBoundingBox(world_pos.x, world_pos.y, x_pos, y_pos, width, height))
+        {
+            ptr<UIElement> e = root_container->ChildAtPos(world_pos.x, world_pos.y);
+
+            return e ? e : root_container;
+        }
+    }
+
+    return nullptr;
+}
+
+void ProgramModeEditor::OnNewUI()
+{
+    ui = std::make_shared<BaseUI>(_window);
+    OnModeChangeUI();
+}
+
+void ProgramModeEditor::OnModeChangeGame()
+{
+    std::cout << "Set Editor to GAME_STATE mode." << std::endl;
+    _edit_mode = GAME_STATE_MODE;
+}
+
+void ProgramModeEditor::OnModeChangeUI()
+{
+    std::cout << "Set Editor to UI mode." << std::endl;
+    _edit_mode = UI_MODE;
 }

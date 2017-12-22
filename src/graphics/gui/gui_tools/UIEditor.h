@@ -23,7 +23,7 @@ class UIEditor : public SFMLWindowListener
 
     void Draw(TextureCache &texture_cache, Brush& brush, bool *p_opened = NULL)
     {
-        ImGui::Begin("Instance Editor");
+        ImGui::Begin("UI Editor");
         
             _focused = ImGui::IsRootWindowOrAnyChildHovered();
             if (ImGui::TreeNode("UI Elements##UIEditor"))

@@ -18,7 +18,8 @@
 #include "src/graphics/gui/gui_tools/UIEditor.h"
 #include "src/game/GameState.h"
 
-class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListener
+class DevelopmentOverlay : public MainMenuListener, 
+                         public EditModeControlsListener
 {
     public:
         DevelopmentOverlay();
@@ -38,6 +39,8 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         void NewStagePressed();
         void NewUIPressed();
         void AttachUIPressed(std::string& file_name);
+        void GameModePressed();
+        void UIModePressed();
 
         //Inherited from EditModeControlListener
         void OnLaunchStage();

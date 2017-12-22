@@ -83,7 +83,7 @@ class ResourceFactory
 
     ResourceFactory(std::string script_type, bool configurable = false) : _script_type(script_type), _configurable(configurable) {}
 
-    void PopulateFactory(std::string search_directory, bool reset = false)
+    virtual void PopulateFactory(std::string search_directory, bool reset = false)
     {
         if (reset)
             Reset();

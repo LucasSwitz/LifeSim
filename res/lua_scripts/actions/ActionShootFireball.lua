@@ -2,11 +2,11 @@
 SpawnFireball = function(user,gs)
     FIREBALL_ENTITY_ID = 111
     user_entity = Entity.Downcast(user)
-    print(type(gs))
     e = Event(EventType.SPAWN_ENTITY_EVENT_PROTOTYPE,FIREBALL_ENTITY_ID,user_entity.instance)
     gs:Msg():LaunchEvent(e)
 
     fireball = gs:EntityManager():Last() --has to be done like this because of LuaBridge
+    
     user_position = 
     {
         x = user:GetNumber("Position","x"),

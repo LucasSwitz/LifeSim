@@ -11,12 +11,6 @@
 class UIElementFactory : public ResourceFactory<std::string>
 {
   public:
-    virtual void AddResource(Preamble &pre, std::string script_path) override
-    {
-        std::string prototype_name = pre.GetFlag("Name");
-        _ui_element_files.insert(std::make_pair(prototype_name, script_path));
-    };
-
     UIElement* GetUIElement(std::string name)
     {
         if (!PrototypeExists(name))
@@ -27,6 +21,12 @@ class UIElementFactory : public ResourceFactory<std::string>
          * Somehow parse this.
          * 
          */
+    }
+
+    virtual void PopulateFactory(std::string search_directory, bool reset = false)
+    {
+        FileCrawler crawler;
+        crawler.Crawl(search_directory,_ui_element_files);
     }
 
     static UIElementFactory *Instance()

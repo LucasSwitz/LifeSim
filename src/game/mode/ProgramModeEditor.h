@@ -7,7 +7,7 @@
 #include "src/graphics/gui/SFMLWindowListener.h"
 #include "src/graphics/gui/PMIDGEditorWindow.h"
 #include "src/graphics/gui/brush/Brush.h"
-#include "src/graphics/gui/brush/SelectEntityBrushState.h"
+#include "src/graphics/gui/brush/SelectMoveableBrushState.h"
 #include "src/game/FPSRunner.h"
 #include "src/game/GameState.h"
 #include "src/game/mode/ProgramMode.h"
@@ -18,6 +18,10 @@
 #include "src/game/PMIDGGameRunner.h"
 #include "src/utils/lua/InstanceFileBuilder.h"
 #include "src/controllers/ControllersSystem.h"
+#include "src/utils/math/Geometry.h"
+#include "src/ui/UI.h"
+#include "src/ui/BaseUI.h"
+#include "src/graphics/gui/gui_tools/UIVisualizer.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
@@ -32,6 +36,12 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     {
         DORMANT,
         PANNING
+    };
+
+    enum EditMode
+    {
+        GAME_STATE_MODE,
+        UI_MODE
     };
 
     ProgramModeEditor();
@@ -61,6 +71,12 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     void OnStopGameRunner();
 
     void OnGameRunnerShutdown();
+
+    void OnModeChangeGame();
+
+    void OnModeChangeUI();
+
+    void OnNewUI();
 
     //###################### ENGINE EVENTS ################################
     void OnEvent(Event &e);
@@ -105,6 +121,11 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     std::string file_path;
     std::string tile_maps_path;
     std::string instances_path;
+    std::list<ptr<Container>> _root_containers;
+    EditMode _edit_mode = GAME_STATE_MODE;
+    ptr<UI> ui = nullptr;
+
+    ptr<UIElement> ClickOnUIElement(int x, int y);
 };
 
 #endif

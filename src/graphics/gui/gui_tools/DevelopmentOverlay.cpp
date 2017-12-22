@@ -2,10 +2,9 @@
 
 DevelopmentOverlay::DevelopmentOverlay()
 {
-    
 }
 
-void DevelopmentOverlay::Init(PMIDGWindow& window)
+void DevelopmentOverlay::Init(PMIDGWindow &window)
 {
     ImGui::SFML::Init(window.SFWindow());
     window.AddWindowListener(&instance_editor);
@@ -20,7 +19,7 @@ Log &DevelopmentOverlay::GetLog()
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow& window, ptr<GameState> game_state,
+void DevelopmentOverlay::Render(PMIDGWindow &window, ptr<GameState> game_state,
                                 TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
 
@@ -35,22 +34,22 @@ void DevelopmentOverlay::Render(PMIDGWindow& window, ptr<GameState> game_state,
     main_menu.Draw(game_state);
     log.Draw("Log");
     system_monitor.Draw("System Monitor", game_state->GetSystemController());
-    edit_mode_controls.Draw("Edit Mode Controls", window,*game_state);
+    edit_mode_controls.Draw("Edit Mode Controls", window, *game_state);
 
-    if(game_state->GetStage())
+    if (game_state->GetStage())
     {
         stage_editor.Draw(game_state->GetStage());
-        entity_table.Draw("Entities", game_state->GetEntityManager()); 
-        instance_editor.Draw(texture_cache, brush);        
+        entity_table.Draw("Entities", game_state->GetEntityManager());
+        instance_editor.Draw(texture_cache, brush);
     }
 
-    ui_editor.Draw(texture_cache,brush);
+    ui_editor.Draw(texture_cache, brush);
     // #### RENDER GUI HERE
 
     ImGui::SFML::Render(window.SFWindow());
 }
 
-void DevelopmentOverlay::NewInstancePressed(std::string& instance_name)
+void DevelopmentOverlay::NewInstancePressed(std::string &instance_name)
 {
     if (_listener)
     {
@@ -84,12 +83,29 @@ void DevelopmentOverlay::SaveStagePressed(std::string &file_name)
 
 void DevelopmentOverlay::NewUIPressed()
 {
-    
+    std::cout << "New UI Pressed" << std::endl;
+    UIElementFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT + "/ui");
+    ui_editor.Init();
+
+    if(_listener)
+        _listener->OnNewUI();
 }
 
-void DevelopmentOverlay::AttachUIPressed(std::string& file_name)
+void DevelopmentOverlay::AttachUIPressed(std::string &file_name)
 {
-    
+
+}
+
+void DevelopmentOverlay::GameModePressed()
+{
+    if (_listener)
+        _listener->OnModeChangeGame();
+}
+
+void DevelopmentOverlay::UIModePressed()
+{
+    if (_listener)
+        _listener->OnModeChangeUI();
 }
 
 bool DevelopmentOverlay::IsFocused()
@@ -98,12 +114,13 @@ bool DevelopmentOverlay::IsFocused()
            instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() ||
            main_menu.IsFocused() || stage_editor.IsFocused();
 }
+
 void DevelopmentOverlay::Shutdown()
 {
     ImGui::SFML::Shutdown();
 }
 
-void DevelopmentOverlay::SetListener(DevelopmentOverlayListener* listener)
+void DevelopmentOverlay::SetListener(DevelopmentOverlayListener *listener)
 {
     _listener = listener;
 }

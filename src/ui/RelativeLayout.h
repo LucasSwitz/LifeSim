@@ -14,13 +14,23 @@ class RelativeLayout : public Layout
 
     }
 
-    void Format(int x_start, int y_start, const std::list<UIElement *>& elements)
+    template<typename T>
+    void Format(int x_start, int y_start, const T& elements)
     {
         int rel_x = x_start + _anchor_x;
         int rel_y = y_start + _anchor_y;
 
-        for(UIElement* e : elements)
-        {
+        for(ptr<UIElement> e : elements){
+            auto descriptors = e->GetDescriptors();
+
+            if(descriptors.find("right_of") != descriptors.end()){
+
+            }else if (descriptors.find("below") != descriptrs.end()){
+                
+            }
+            else{
+
+            }
             
         }
     }

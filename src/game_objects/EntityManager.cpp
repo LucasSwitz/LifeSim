@@ -136,6 +136,11 @@ ptr<Entity> EntityManager::GetNewest()
         return _entity_map.rbegin()->second;
 }
 
+Entity* EntityManager::GetNewestUnshared()
+{
+    return GetNewest().get();
+}
+
 int EntityManager::Size()
 {
     return _entity_map.size();

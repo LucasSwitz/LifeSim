@@ -5,7 +5,7 @@
 #include "src/graphics/gui/brush/BrushState.h"
 #include "src/graphics/gui/gui_tools/CurrentSelectionWindow.h"
 
-class SelectEntityBrushState : public BrushState
+class SelectMoveableBrushState : public BrushState
 {
   public:
     enum SelectionState
@@ -14,7 +14,7 @@ class SelectEntityBrushState : public BrushState
         MOVING
     };
 
-    SelectEntityBrushState(ptr<Entity> selected) : _selected(selected)
+    SelectMoveableBrushState(ptr<ComponentUser> selected) : _selected(selected)
     {
 
     }
@@ -87,7 +87,7 @@ class SelectEntityBrushState : public BrushState
     }
 
   private:
-    ptr<Entity> _selected = nullptr;
+    ptr<ComponentUser> _selected = nullptr;
     SelectionState _selection_state;
     CurrentSelectionWindow selection_window;
 };

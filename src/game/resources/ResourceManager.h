@@ -25,6 +25,7 @@ class ResourceManager
         FileCrawler crawler;
         crawler.Crawl(resource_directory_path,_resource_paths);
     }
+    
   private:
     std::unordered_map<std::string, std::string> _resource_paths;
 };

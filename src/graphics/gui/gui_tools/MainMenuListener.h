@@ -10,5 +10,7 @@ class MainMenuListener
         virtual void NewStagePressed() = 0;
         virtual void NewUIPressed() = 0;
         virtual void AttachUIPressed(std::string& ui_name) = 0;
+        virtual void GameModePressed() = 0;
+        virtual void UIModePressed() = 0;
 };
 #endif

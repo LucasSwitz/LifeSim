@@ -37,6 +37,7 @@ class MainMenu
                         }
                     }
                 }
+                ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Stage"))
             {
@@ -105,11 +106,23 @@ class MainMenu
             {
                 if (ImGui::MenuItem("New UI", "CTRL+W"))
                 {
-                    
+                    _listener->NewUIPressed();
                 }
                 if (ImGui::MenuItem("Attach UI", "CTRL+SHIFT+W"))
                 {
 
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Mode"))
+            {
+                if (ImGui::MenuItem("Game", "CTRL+W"))
+                {
+                    _listener->GameModePressed();
+                }
+                if (ImGui::MenuItem("UI", "CTRL+SHIFT+W"))
+                {
+                    _listener->UIModePressed();
                 }
                 ImGui::EndMenu();
             }

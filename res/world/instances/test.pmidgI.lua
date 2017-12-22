@@ -6,7 +6,7 @@ ID = 11
 
 test = 
  { 
-tile_map = "/home/lucas/Desktop/LifeSim/res/tile_maps/test.pmidgM", 
+tile_map = "/home/lucas/Desktop/ThunderBiscuit/res/world/tile_maps/test.pmidgM", 
 Load = function(instance)
 	
 end, 

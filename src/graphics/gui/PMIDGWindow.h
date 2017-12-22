@@ -85,6 +85,7 @@ class PMIDGWindow : public EventSubscriber
     void Draw(ptr<sf::Drawable> drawable)
     {
         ptr<LayeredGraphic> lg(new LayeredGraphic(drawable, nullptr, INT_MAX));
+        Draw(lg);
     }
 
     void Draw(ptr<LayeredGraphic> lg)

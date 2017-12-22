@@ -12,6 +12,9 @@ class DevelopmentOverlayListener
     virtual void OnSaveStageFile(const std::string &file_name){};
     virtual void OnLaunchInstance(){};
     virtual void OnLaunchStage(){};
+    virtual void OnModeChangeGame(){};
+    virtual void OnModeChangeUI(){};
+    virtual void OnNewUI(){};
 };
 
 #endif

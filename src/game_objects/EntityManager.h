@@ -46,6 +46,8 @@ public:
   int GetNumberOfEntities();
 
   ptr<Entity> GetNewest();
+  Entity* GetNewestUnshared();
+  
 
   void Clear();
   bool IDAvailable(int id);
