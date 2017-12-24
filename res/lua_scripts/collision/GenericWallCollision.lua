@@ -33,7 +33,7 @@ DoImpulse = function(collision_data)
         return
     end
 
-    restitution = .3
+    restitution = .9
 
     impulse_scale = -(1 + restitution) * vel_along_norm
 

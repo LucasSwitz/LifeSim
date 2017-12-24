@@ -1,12 +1,11 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include <SFML/Graphics/Drawable.hpp>
 #include "src/component/ComponentUser.h"
 #include "src/ui/UIElementTypes.h"
 #include "src/graphics/gui/PMIDGWindow.h"
 
-class UIElement : public ComponentUser, public sf::Drawable
+class UIElement : public ComponentUser
 {
   public:
     struct Padding
@@ -22,70 +21,28 @@ class UIElement : public ComponentUser, public sf::Drawable
         int bottom;
     };
 
-    UIElement(int type_, std::string _name = "", int x = 0, int y = 0) : ComponentUser(ComponentUserType::CU_TYPE_UI_ELEMENT),
-                                                                         type(type_),
-                                                                         name(_name)
-    {
-        SetPos(x, y);
-    }
+    UIElement(int type_, std::string _name = "", int x = 0, int y = 0);
 
-    void SetPadding(int left, int right, int top, int bottom)
-    {
-        padding = Padding(left, right, top, bottom);
-    }
+    void SetPadding(int left, int right, int top, int bottom);
 
-    void SetDescriptor(const std::string k, const std::string value)
-    {
-        descriptors[k] = value;
-    }
+    void SetDescriptor(const std::string k, const std::string value);
 
-    void SetPos(int x, int y)
-    {
-        SetX(x);
-        SetY(y);
-    }
+    void SetPos(int x, int y);
 
-    void SetX(int x)
-    {
-        AddComponentValue("Position", "x", (float)x);
-    }
+    void SetX(int x);
 
-    void SetY(int y)
-    {
-        AddComponentValue("Position", "y", (float)y);
-    }
+    void SetY(int y);
 
-    int Type()
-    {
-        return type;
-    }
+    int Type();
 
-    virtual void Draw(PMIDGWindow& window)
-    {
-        window.DrawComponentUser(this);
-    }
+    virtual void Draw(PMIDGWindow& window);
 
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates s) const
-    {
+    UIElement *Clone();
 
-    }
+    std::string Name();
 
-    UIElement *Clone()
-    {
-        UIElement *e = new UIElement(type, name);
-        return e;
-    }
-
-    std::string Name()
-    {
-        return name;
-    }
-
-    const std::unordered_map<std::string,std::string>& GetDescriptors()
-    {
-        return descriptors;
-    }
-
+    const std::unordered_map<std::string,std::string>& GetDescriptors();
+    
   protected:
     Padding padding;
     int id;

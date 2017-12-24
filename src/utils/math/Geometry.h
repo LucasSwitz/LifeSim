@@ -1,5 +1,5 @@
-#ifndef GEOMETRY_H
-#define GEOMETRY_H
+#ifndef GEOMETRYX_H
+#define GEOMETRYX_H
 
 #include <SFML/System/Vector2.hpp>
 #include "src/utils/sfml/SFMLUtils.h"

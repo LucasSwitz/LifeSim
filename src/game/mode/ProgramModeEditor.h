@@ -19,7 +19,6 @@
 #include "src/utils/lua/InstanceFileBuilder.h"
 #include "src/controllers/ControllersSystem.h"
 #include "src/utils/math/Geometry.h"
-#include "src/ui/UI.h"
 #include "src/ui/BaseUI.h"
 #include "src/graphics/gui/gui_tools/UIVisualizer.h"
 

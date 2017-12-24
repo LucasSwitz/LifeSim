@@ -25,15 +25,20 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
 
     void Draw(PMIDGWindow &window) override
     {
-        if (_layout)
-            _layout->Format((int)GetComponentValueFloat("Position", "x"),
-                            (int)GetComponentValueFloat("Position", "y"),
-                            children);
+        DoFormat();
 
         for (auto it = children.begin(); it != children.end(); it++)
         {
             it->second.get()->Draw(window);
         }
+    }
+
+    void DoFormat()
+    {
+        if (_layout)
+            _layout->Format((int)GetComponentValueFloat("Position", "x"),
+                            (int)GetComponentValueFloat("Position", "y"),
+                            children);  
     }
 
     ptr<UIElement> ChildAtPos(int x, int y) const

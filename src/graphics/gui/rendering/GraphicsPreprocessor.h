@@ -4,7 +4,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include "src/component/ComponentUser.h"
-#include "src/world/tile/Tile.h"
 
 class GraphicsPreprocessor
 {

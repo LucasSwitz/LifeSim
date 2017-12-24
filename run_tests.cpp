@@ -3,15 +3,16 @@
 #include <gtest/gtest.h>
 #include "src/utils/Globals.h"
 
-#include "test/lua_tests/systems/ScriptableSystemTest.h"
+/*#include "test/lua_tests/systems/ScriptableSystemTest.h"
 #include "test/events/EventManagerTest.h"
 #include "test/lua_tests/entity/ScriptableEntityTest.h"
 #include "test/game/game_systems/CollisionSystemTest.h"
 #include "test/game/game_components/ComponentUserBaseTest.h"
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
-#include "test/protobuf/GameStateProtoBufTest.h"
-#include "test/game/game_systems/GameSystemsLoadTest.h"
+#include "test/protobuf/GameStateProtoBufTest.h"*/
+//#include "test/game/game_systems/GameSystemsLoadTest.h"
+#include "test/ui/UITest.h"
 
 int RunTests(int argc, char** argv);
 

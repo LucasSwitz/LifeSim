@@ -1,43 +1,32 @@
 #ifndef UI_H
 #define UI_H
 
-#include "src/ui/UIElement.h"
+#include "src/ui/Container.h"
 
-
-class UI 
+class UI
 {
-    public:
-        void AddRootElement(ptr<UIElement> e)
+  public:
+    struct InvalidElement : public std::exception
+    {
+        std::string _msg;
+        InvalidElement(const std::string &msg) : _msg(msg) {}
+        const char *what() const throw()
         {
-            _root_elements[e->ID()] = e;
+            return _msg.c_str();
         }
+    };
+    void AddRootElement(ptr<UIElement> e);
 
-        void Draw(PMIDGWindow& window)
-        {
-            for(auto it = _root_elements.begin(); it != _root_elements.end(); it++)
-            {
-                it->second->Draw(window);
-            }
-        }
+    void Draw(PMIDGWindow &window);
 
-        void GetAllElementsOfType(int type, std::list<ptr<UIElement>>& lst)
-        {
-            for(auto it = _root_elements.begin(); it != _root_elements.end(); it++)
-            {
-                auto el = it->second;
-                if(el->Type() == type)
-                    lst.push_back(el);
+    void GetAllElementsOfType(int type, std::list<ptr<UIElement>> &lst);
 
-                if(el->Type() == UIELEMENT_CONTAINER)
-                {
-                    Container* cont = dynamic_cast<Container*>(el.get());
-                    cont->GetAllChildrenOfType(type,lst);
-                }
-            }
-        }
+    virtual void AddToRootContainer(int id, ptr<UIElement> e);
 
-    private:
-        std::unordered_map<int, ptr<UIElement>> _root_elements;
+    bool HasRootElement(int id);
+
+  private:
+    std::unordered_map<int, ptr<UIElement>> _root_elements;
 };
 
 #endif

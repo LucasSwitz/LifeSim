@@ -75,6 +75,10 @@ target_link_libraries(run_tests
     $ENV{GTEST_LIB_DIR}/libgtest.a
 )
 
+if(SFML_FOUND)
+    target_link_libraries(run_tests ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+endif()
+
 set_property(TARGET run_tests PROPERTY CXX_STANDARD 17)
 
 add_test(NAME ThunderBiscuitTests COMMAND run_tests)
