@@ -15,7 +15,6 @@
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
 #include "src/graphics/gui/gui_tools/MainMenu.h"
 #include "src/graphics/gui/gui_tools/StageEditor.h"
-#include "src/graphics/gui/gui_tools/UIEditor.h"
 #include "src/game/GameState.h"
 
 class DevelopmentOverlay : public MainMenuListener, 
@@ -53,7 +52,6 @@ class DevelopmentOverlay : public MainMenuListener,
         EditModeControls edit_mode_controls;
         MainMenu main_menu;
         StageEditor stage_editor;
-        UIEditor ui_editor;
 
     private:
         void DrawMenuBar();

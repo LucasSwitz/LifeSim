@@ -1,53 +1,47 @@
 #include "src/ui/RelativeLayout.h"
 
-RelativeLayout::RelativeLayout(int anchor_x, int anchor_y) : _anchor_x(anchor_x),
-                                                             _anchor_y(anchor_y)
-{
-}
-
 bool RelativeLayout::IsRelativeToLeftEdge(ptr<UIElement> child)
 {
-    auto descriptors = child->GetDescriptors();
-    return descriptors["right_of"].compare("LEFT_EDGE") == 0;
+    auto descriptors = child->GetComponent("UI");
+    return descriptors->GetStringValue("right_of").compare("LEFT_EDGE") == 0;
 }
 
 bool RelativeLayout::IsRelativeTopEdge(ptr<UIElement> child)
 {
-    auto descriptors = child->GetDescriptors();
-    return descriptors["below"].compare("TOP_EDGE") == 0;
+    auto descriptors = child->GetComponent("UI");
+    return descriptors->GetStringValue("below").compare("TOP_EDGE") == 0;
 }
 
-void RelativeLayout::FormatRightOfEdge(ptr<UIElement> child)
+void RelativeLayout::FormatRightOfEdge(int x_start, int y_start, ptr<UIElement> child)
 {
-    auto descriptors = child->GetDescriptors();
-    int x_rel = std::stoi(descriptors["margin_left"]);
+    auto descriptors = child->GetComponent("UI");
+    int x_rel = x_start + descriptors->GetFloatValue("margin_left");
     child->SetComponentValueFloat("Position", "x", x_rel);
 }
 
-void RelativeLayout::FormatBelowEdge(ptr<UIElement> child)
+void RelativeLayout::FormatBelowEdge(int x_start, int y_start, ptr<UIElement> child)
 {
-    auto descriptors = child->GetDescriptors();
-    int y_rel = std::stoi(descriptors["margin_top"]);
-
+    auto descriptors = child->GetComponent("UI");
+    int y_rel = y_start + descriptors->GetFloatValue("margin_top");
     child->SetComponentValueFloat("Position", "y", y_rel);
 }
 
 void RelativeLayout::FormatRight(ptr<UIElement> child, RelativeLayoutNode &parent_node)
 {
     ptr<UIElement> parent = parent_node.parent;
-    auto child_descriptors = child->GetDescriptors();
-    auto parent_descriptors = parent->GetDescriptors();
+    auto child_descriptors = child->GetComponent("UI");
+    auto parent_descriptors = parent->GetComponent("UI");
     if (parent_node.right == nullptr)
     {
         int x_rel = parent->GetComponentValueFloat("Position", "x") +
                     parent->GetComponentValueFloat("Graphics", "width") +
-                    std::stoi(parent_descriptors["margin_right"]) +
-                    std::stoi(child_descriptors["margin_left"]);
+                    parent_descriptors->GetFloatValue("margin_right") +
+                    child_descriptors->GetFloatValue("margin_left");
 
-        int y_rel = parent->GetComponentValueFloat("Position", "y");
+        //int y_rel = parent->GetComponentValueFloat("Position", "y");
 
         child->SetComponentValueFloat("Position", "x", x_rel);
-        child->SetComponentValueFloat("Position", "y", y_rel);
+        //child->SetComponentValueFloat("Position", "y", y_rel);
     }
     else
     {
@@ -58,18 +52,18 @@ void RelativeLayout::FormatRight(ptr<UIElement> child, RelativeLayoutNode &paren
 void RelativeLayout::FormatBelow(ptr<UIElement> child, RelativeLayoutNode &parent_node)
 {
     ptr<UIElement> parent = parent_node.parent;
-    auto child_descriptors = child->GetDescriptors();
-    auto parent_descriptors = parent->GetDescriptors();
+    auto child_descriptors = child->GetComponent("UI");
+    auto parent_descriptors = parent->GetComponent("UI");
     if (parent_node.below == nullptr)
     {
         int y_rel = parent->GetComponentValueFloat("Position", "y") +
                     parent->GetComponentValueFloat("Graphics", "height") +
-                    std::stoi(parent_descriptors["margin_bottom"]) +
-                    std::stoi(child_descriptors["margin_top"]);
+                    parent_descriptors->GetFloatValue("margin_bottom") +
+                    child_descriptors->GetFloatValue("margin_top");
 
-        int x_rel = parent->GetComponentValueFloat("Position", "x");
+        //int x_rel = parent->GetComponentValueFloat("Position", "x");
 
-        child->SetComponentValueFloat("Position", "x", x_rel);
+        //child->SetComponentValueFloat("Position", "x", x_rel);
         child->SetComponentValueFloat("Position", "y", y_rel);
     }
     else

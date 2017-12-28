@@ -12,11 +12,6 @@ void UIElement::SetPadding(int left, int right, int top, int bottom)
     padding = Padding(left, right, top, bottom);
 }
 
-void UIElement::SetDescriptor(const std::string k, const std::string value)
-{
-    descriptors[k] = value;
-}
-
 void UIElement::SetPos(int x, int y)
 {
     SetX(x);
@@ -54,16 +49,11 @@ std::string UIElement::Name()
     return name;
 }
 
-const std::unordered_map<std::string, std::string> &UIElement::GetDescriptors()
-{
-    return descriptors;
-}
-
 using json = nlohmann::json;
 ptr<UIElement> UIElement::FromJson(int type, const json &json)
 {
     ptr<UIElement> el = std::make_shared<UIElement>(type);
-    FromJson(el,json);
+    FromJson(el, json);
     return el;
 }
 

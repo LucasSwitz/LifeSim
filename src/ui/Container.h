@@ -4,6 +4,7 @@
 #include <list>
 #include "src/ui/Layout.h"
 #include "src/utils/math/Geometry.h"
+#include "src/ui/LayoutFactory.h"
 
 class Container : public UIElement, public std::enable_shared_from_this<Container>
 {
@@ -36,9 +37,19 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
     void DoFormat()
     {
         if (_layout)
+        {
+
+            std::unordered_map<std::string, ptr<UIElement>> children_strings;
+
+            for (auto it = _name_to_id_map.begin(); it != _name_to_id_map.end(); it++)
+            {
+                children_strings[it->first] = children[it->second];
+            }
+
             _layout->Format((int)GetComponentValueFloat("Position", "x"),
                             (int)GetComponentValueFloat("Position", "y"),
-                            children);
+                            children_strings);
+        }
     }
 
     ptr<UIElement> ChildAtPos(int x, int y) const
@@ -90,22 +101,22 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
         return children.find(id) != children.end();
     }
 
-    bool HasChild(const std::string& name)
+    bool HasChild(const std::string &name)
     {
         return HasChild(_name_to_id_map[name]);
     }
 
-    ptr<UIElement> GetChild(const std::string& name)
+    ptr<UIElement> GetChild(const std::string &name)
     {
         return GetChild(_name_to_id_map[name]);
     }
 
     ptr<UIElement> GetChild(int id)
     {
-        if(HasChild(id))
+        if (HasChild(id))
             return children[id];
-        throw UIElementException("Container: " + name + \
-            " does not have child with id: " + std::to_string(id));
+        throw UIElementException("Container: " + name +
+                                 " does not have child with id: " + std::to_string(id));
     }
 
     void Hide()
@@ -124,9 +135,22 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
         }
     }
 
+    using json = nlohmann::json;
+
+    void FromJson(const json &j)
+    {
+
+        if (j.find("layout") != j.end())
+        {
+            std::string layout = j["layout"];
+            LayoutFactory fact;
+            SetLayout(fact.Get(layout));
+        }
+    }
+
   protected:
     std::unordered_map<int, ptr<UIElement>> children;
-    std::unordered_map<std::string,int> _name_to_id_map;
+    std::unordered_map<std::string, int> _name_to_id_map;
 
   private:
     ptr<Layout> _layout = nullptr;

@@ -26,23 +26,22 @@ void DevelopmentOverlay::Render(PMIDGWindow &window, ptr<GameState> game_state,
     sf::Time deltaTime = sf::seconds(seconds_elapsed);
     ImGui::SFML::Update(window.SFWindow(), deltaTime);
 
-    /*brush.DrawExtras();
+    brush.DrawExtras();
 
     if (!IsFocused())
-        brush.PaintWindow(window);*/
+        brush.PaintWindow(window);
     // #### DESIGN GUI HERE_selcected_file
     main_menu.Draw(game_state);
     //log.Draw("Log");
-    ui_editor.Draw(texture_cache, brush);
-    //system_monitor.Draw("System Monitor", game_state->GetSystemController());
-   // edit_mode_controls.Draw("Edit Mode Controls", window, *game_state);
+    system_monitor.Draw("System Monitor", game_state->GetSystemController());
+    edit_mode_controls.Draw("Edit Mode Controls", window, *game_state);
 
-    /*if (game_state->GetStage())
+    if (game_state->GetStage())
     {
         stage_editor.Draw(game_state->GetStage());
         entity_table.Draw("Entities", game_state->GetEntityManager());
         instance_editor.Draw(texture_cache, brush);
-    }*/
+    }
 
     // #### RENDER GUI HERE
 
@@ -83,16 +82,13 @@ void DevelopmentOverlay::SaveStagePressed(std::string &file_name)
 
 void DevelopmentOverlay::NewUIPressed()
 {
-    std::cout << "New UI Pressed" << std::endl;
-    UIElementFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT + "/ui");
-    ui_editor.Init();
-
-    if (_listener)
-        _listener->OnNewUI();
+    
 }
 
 void DevelopmentOverlay::AttachUIPressed(std::string &file_name)
 {
+    if(_listener)
+        _listener->OnAttachUI(file_name);
 }
 
 void DevelopmentOverlay::GameModePressed()
@@ -111,7 +107,7 @@ bool DevelopmentOverlay::IsFocused()
 {
     return log.IsFocused() || entity_table.IsFocused() ||
            instance_editor.IsFocused() || system_monitor.IsFocused() || edit_mode_controls.IsFocused() ||
-           main_menu.IsFocused() || stage_editor.IsFocused() || ui_editor.IsFocused();
+           main_menu.IsFocused() || stage_editor.IsFocused();
 }
 
 void DevelopmentOverlay::Shutdown()

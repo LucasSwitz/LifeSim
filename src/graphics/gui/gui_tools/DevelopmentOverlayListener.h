@@ -15,6 +15,7 @@ class DevelopmentOverlayListener
     virtual void OnModeChangeGame(){};
     virtual void OnModeChangeUI(){};
     virtual void OnNewUI(){};
+    virtual void OnAttachUI(const std::string& file_name){};
 };
 
 #endif

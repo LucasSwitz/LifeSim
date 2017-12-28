@@ -1,0 +1,44 @@
+{
+    "name": "TestUI",
+    "elements": [
+        {
+            "name": "TestContainer",
+            "type": "Container",
+            "layout" : "Relative",
+            "components": {
+                "Position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "Graphics": {
+                    "width": 1000,
+                    "height": 1000
+                },
+                "UI" : {
+                    "right_of" : "LEFT_EDGE",
+                    "margin_left" : 500
+                }
+            },
+            "children": [
+                {
+                    "name": "TestGraphic",
+                    "type": "Graphic",
+                    "components": {
+                        "UI": {
+                            "right_of" : "LEFT_EDGE",
+                            "margin_left": 100,
+                            "margin_right": 100,
+                            "below" : "TOP_EDGE",
+                            "margin_top" : 50
+                        },
+                        "Graphics": {
+                            "width": 64,
+                            "height": 64,
+                            "sprite": "Res(mario_1.png)"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

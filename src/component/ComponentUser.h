@@ -34,7 +34,7 @@ public:
   int Type() const;
 
   void AddComponent(ptr<Component> component);
-  void AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value);
+  void AddComponentValue(const std::string &component_name, const std::string &value_name, const std::string& value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, bool value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, float value);
   void RemoveComponent(std::string name);

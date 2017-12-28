@@ -68,6 +68,7 @@ class UIElementFactory : public ResourceFactory<std::string>
         if (uie_type_map.at(type) == UIELEMENT_CONTAINER)
         {
             Container* container = new Container();
+            container->FromJson(element_json);
             ptr<UIElement> el(container);
             UIElement::FromJson(el, element_json);
             json children_arr = element_json["children"];

@@ -18,6 +18,6 @@ public:
   };
 
   virtual void Format(int x_start, int y_start,
-                      std::unordered_map<int, ptr<UIElement>> &elements) {}
+                      std::unordered_map<std::string, ptr<UIElement>> &elements) {}
 };
 #endif

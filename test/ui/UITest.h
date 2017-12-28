@@ -20,18 +20,18 @@ class UITest : public ::testing::Test
 
 TEST_F(UITest, TestRelativeLayoutLeft)
 {
-    ptr<UIElement> left = std::make_shared<UIElement>(0);
+    ptr<UIElement> left = std::make_shared<UIElement>(0,"left_test");
     left->AddComponentValue("Graphics", "width", 10.0f);
     left->AddComponentValue("Graphics", "height", 10.0f);
-    left->SetDescriptor("right_of", "LEFT_EDGE");
-    left->SetDescriptor("margin_left", "2");
-    left->SetDescriptor("margin_right", "6");
+    left->AddComponentValue("UI", "right_of", (std::string)"LEFT_EDGE");
+    left->AddComponentValue("UI", "margin_left", 2.0f);
+    left->AddComponentValue("UI", "margin_right", 6.0f);
 
-    ptr<UIElement> right = std::make_shared<UIElement>(0);
+    ptr<UIElement> right = std::make_shared<UIElement>(0,"right_test");
     right->AddComponentValue("Graphics", "width", 10.0f);
     right->AddComponentValue("Graphics", "height", 10.0f);
-    right->SetDescriptor("right_of", std::to_string(left->ID()));
-    right->SetDescriptor("margin_left", "3");
+    right->AddComponentValue("UI", "right_of", left->Name());
+    right->AddComponentValue("UI", "margin_left", 3.f);
 
     ui->AddToRootContainer(ui->GetBaseContainerID(), left);
     ui->AddToRootContainer(ui->GetBaseContainerID(), right);
@@ -49,18 +49,18 @@ TEST_F(UITest, TestRelativeLayoutLeft)
 
 TEST_F(UITest, TestRelativeLayoutTop)
 {
-    ptr<UIElement> top = std::make_shared<UIElement>(0);
+    ptr<UIElement> top = std::make_shared<UIElement>(0,"top_test");
     top->AddComponentValue("Graphics", "width", 10.0f);
     top->AddComponentValue("Graphics", "height", 10.0f);
-    top->SetDescriptor("below", "TOP_EDGE");
-    top->SetDescriptor("margin_bottom", "2");
-    top->SetDescriptor("margin_top", "6");
+    top->AddComponentValue("UI", "below", (std::string)"TOP_EDGE");
+    top->AddComponentValue("UI", "margin_bottom", 2.0f);
+    top->AddComponentValue("UI", "margin_top", 6.0f);
 
-    ptr<UIElement> bottom = std::make_shared<UIElement>(0);
+    ptr<UIElement> bottom = std::make_shared<UIElement>(1,"bottom_test");
     bottom->AddComponentValue("Graphics", "width", 10.0f);
     bottom->AddComponentValue("Graphics", "height", 10.0f);
-    bottom->SetDescriptor("below", std::to_string(top->ID()));
-    bottom->SetDescriptor("margin_top", "3");
+    bottom->AddComponentValue("UI", "below", top->Name());
+    bottom->AddComponentValue("UI", "margin_top", 3.0f);
 
     ui->AddToRootContainer(ui->GetBaseContainerID(), top);
     ui->AddToRootContainer(ui->GetBaseContainerID(), bottom);

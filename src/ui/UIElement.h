@@ -36,8 +36,6 @@ public:
 
   void SetPadding(int left, int right, int top, int bottom);
 
-  void SetDescriptor(const std::string k, const std::string value);
-
   void SetPos(int x, int y);
 
   void SetX(int x);
@@ -56,8 +54,6 @@ public:
 
   std::string Name();
 
-  const std::unordered_map<std::string, std::string> &GetDescriptors();
-
 protected:
   static ptr<UIElement> FromJson(int type, const nlohmann::json &json);
   static void FromJson(ptr<UIElement> e, const nlohmann::json &json);
@@ -66,6 +62,5 @@ protected:
   int id;
   int type;
   std::string name;
-  std::unordered_map<std::string, std::string> descriptors;
 };
 #endif

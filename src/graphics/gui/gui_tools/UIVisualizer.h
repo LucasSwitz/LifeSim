@@ -27,7 +27,7 @@ class UIVisualizer
             rect.setFillColor(sf::Color::Transparent);
             rect.setOutlineColor(sf::Color::Black);
             rect.setOutlineThickness(2);
-            rect.setPosition(x+10, y+10);
+            rect.setPosition(x, y);
             window.DrawNow(rect);
         }
     }

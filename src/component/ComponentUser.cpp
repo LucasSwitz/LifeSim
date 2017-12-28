@@ -157,7 +157,7 @@ component_map &ComponentUser::GetAllComponents()
     return _components;
 }
 
-void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value)
+void ComponentUser::AddComponentValue(const std::string &component_name, const std::string &value_name, const std::string& value)
 {
     if (!HasComponent(component_name))
     {
@@ -196,7 +196,7 @@ using json = nlohmann::json;
 ptr<ComponentUser> ComponentUser::FromJson(int type, const json &json_cu)
 {
     ptr<ComponentUser> user = std::make_shared<ComponentUser>(type);
-    FromJson(user,json_cu);
+    FromJson(user, json_cu);
     return user;
 }
 
@@ -207,7 +207,7 @@ void ComponentUser::FromJson(ptr<ComponentUser> user, const json &json_cu)
     for (auto it = components.begin(); it != components.end(); it++)
     {
         json component = *it;
-        user->AddComponent(Component::FromJson(component,it.key()));
+        user->AddComponent(Component::FromJson(component, it.key()));
     }
 }
 

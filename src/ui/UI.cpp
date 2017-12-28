@@ -34,10 +34,11 @@ void UI::AddToRootContainer(int id, ptr<UIElement> e)
 {
     if (HasRootElement(id))
     {
-        if (e->Type() != UIELEMENT_CONTAINER)
-            throw InvalidElement("Element " + std::to_string(id) + " is not a container");
+        auto root_el = _root_elements[id];
+        if (root_el->Type() != UIELEMENT_CONTAINER)
+            throw InvalidElement("Element " + root_el->Name() + " is not a container");
 
-        Container *c = dynamic_cast<Container *>(_root_elements[id].get());
+        Container *c = dynamic_cast<Container *>(root_el.get());
         c->AddChild(e);
     }
     else

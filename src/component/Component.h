@@ -10,6 +10,7 @@
 #include "src/utils/json/json.hpp"
 #include <unordered_map>
 #include <iostream>
+#include <regex>
 
 template <typename T>
 struct ComponentValue
@@ -203,17 +204,30 @@ class Component
             if (value.is_boolean())
             {
                 bool val = value;
-                comp->AddValue(value_name,val);
+                comp->AddValue(value_name, val);
             }
             else if (value.is_number())
             {
                 float val = value;
-                comp->AddValue(value_name,val);
+                comp->AddValue(value_name, val);
             }
             else if (value.is_string())
             {
                 std::string val = value;
-                comp->AddValue(value_name,val);
+
+                std::cout << val << std::endl;
+                std::regex regex("Res\\(([[:print:]]+)\\)");
+                std::smatch match;
+
+                if (std::regex_match(val, match, regex))
+                {
+                    std::ssub_match resource_name_match = match[1];
+                    std::string resource_name = resource_name_match.str();
+                    std::cout << match[1].str() << std::endl;
+                    val = Res(resource_name);
+                }
+
+                comp->AddValue(value_name, val);
             }
             else if (value.is_object())
             {

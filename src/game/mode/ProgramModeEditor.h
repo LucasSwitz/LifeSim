@@ -77,6 +77,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnNewUI();
 
+    void OnAttachUI(const std::string& file_name);
+
     //###################### ENGINE EVENTS ################################
     void OnEvent(Event &e);
 

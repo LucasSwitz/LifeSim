@@ -424,3 +424,15 @@ void ProgramModeEditor::OnModeChangeUI()
     std::cout << "Set Editor to UI mode." << std::endl;
     _edit_mode = UI_MODE;
 }
+
+void ProgramModeEditor::OnAttachUI(const std::string& file_name)
+{
+    if(ui)
+        ui->Hide();
+        
+    std::cout << "Loading UI: " << Res(file_name) << std::endl;
+    ui = std::make_shared<UI>();
+    ui->Load(Res(file_name));
+    ui->Show();
+    OnModeChangeUI();
+}

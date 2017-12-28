@@ -8,22 +8,17 @@
 class RelativeLayout : public Layout
 {
   public:
-    RelativeLayout(int anchor_x, int anchor_y);
-
-    void Format(int x_start, int y_start, std::unordered_map<int, ptr<UIElement>> &elements)
+    void Format(int x_start, int y_start, std::unordered_map<std::string, ptr<UIElement>> &elements)
     {
-        int rel_x = x_start + _anchor_x;
-        int rel_y = y_start + _anchor_y;
-
-        std::unordered_map<int, RelativeLayoutNode> formatted_cache;
+        std::unordered_map<std::string, RelativeLayoutNode> formatted_cache;
 
         for (auto it = elements.begin(); it != elements.end(); it++)
         {
             auto e = it->second;
-            if (formatted_cache.find(e->ID()) != formatted_cache.end())
+            if (formatted_cache.find(e->Name()) != formatted_cache.end())
                 continue;
 
-            Format(e, elements, formatted_cache);
+            Format(x_start, y_start, e, elements, formatted_cache);
         }
     }
 
@@ -44,58 +39,59 @@ class RelativeLayout : public Layout
     bool IsRelativeToLeftEdge(ptr<UIElement> child);
     bool IsRelativeTopEdge(ptr<UIElement> child);
 
-    void FormatRightOfEdge(ptr<UIElement> child);
+    void FormatRightOfEdge(int x, int y, ptr<UIElement> child);
 
-    void FormatBelowEdge(ptr<UIElement> child);
+    void FormatBelowEdge(int x, int y, ptr<UIElement> child);
 
     void FormatRight(ptr<UIElement> child, RelativeLayoutNode &parent_node);
 
     void FormatBelow(ptr<UIElement> child, RelativeLayoutNode &parent_node);
 
     template <typename T>
-    std::unordered_map<int, RelativeLayoutNode>::iterator Format(ptr<UIElement> el, T &elements, std::unordered_map<int, RelativeLayoutNode> &formatted)
+    std::unordered_map<std::string, RelativeLayoutNode>::iterator Format(int x_start, int y_start, ptr<UIElement> el, T &elements, std::unordered_map<std::string, RelativeLayoutNode> &formatted)
     {
-        auto descriptors = el->GetDescriptors();
+        auto descriptors = el->GetComponent("UI");
 
-        if (descriptors.find("right_of") != descriptors.end())
+        if (descriptors->HasStringValue("right_of"))
         {
             if (IsRelativeToLeftEdge(el))
             {
-                FormatRightOfEdge(el);
+                FormatRightOfEdge(x_start, y_start, el);
             }
             else
             {
-                int parent_id = std::stoi(descriptors["right_of"]);
+                std::string parent_id = descriptors->GetStringValue("right_of");
                 auto parent_it = formatted.find(parent_id);
 
                 if (parent_it == formatted.end())
-                    parent_it = Format(elements[parent_id], elements, formatted);
+                    parent_it = Format(x_start, y_start, elements[parent_id], elements, formatted);
 
                 FormatRight(el, parent_it->second);
                 parent_it->second.right = el;
             }
-            return (formatted.insert({el->ID(),RelativeLayoutNode(el)})).first;
         }
-        else if (descriptors.find("below") != descriptors.end())
+
+        if (descriptors->HasStringValue("below"))
         {
             if (IsRelativeTopEdge(el))
             {
-                FormatBelowEdge(el);
+                FormatBelowEdge(x_start, y_start, el);
             }
             else
             {
-                int parent_id = std::stoi(descriptors["below"]);
+                std::string parent_id = descriptors->GetStringValue("below");
                 auto parent_it = formatted.find(parent_id);
                 if (parent_it == formatted.end())
-                    parent_it = Format(elements[parent_id], elements, formatted);
+                    parent_it = Format(x_start, y_start, elements[parent_id], elements, formatted);
 
                 FormatBelow(el, parent_it->second);
                 parent_it->second.below = el;
             }
-            return (formatted.insert({el->ID(), RelativeLayoutNode(el)})).first;
         }
-        else
-            throw InvalidFormatException("No relative parent specified.");
+        return (formatted.insert({el->Name(), RelativeLayoutNode(el)})).first;
+
+        /*else
+            throw InvalidFormatException("No relative parent specified for element: " + el->Name());*/
     }
 };
 

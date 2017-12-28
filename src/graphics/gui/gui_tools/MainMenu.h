@@ -108,9 +108,22 @@ class MainMenu
                 {
                     _listener->NewUIPressed();
                 }
-                if (ImGui::MenuItem("Attach UI", "CTRL+SHIFT+W"))
-                {
 
+                if (ImGui::BeginMenu("Attach UI", "CTRL+SHIFT+W"))
+                {
+                    _focused = true;
+                    ImGui::BeginChild("UI Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                    FolderContents ui_files(Globals::RESOURCE_ROOT + "/ui/all");
+                    std::string file_name = ui_files.Draw();
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->AttachUIPressed(file_name);
+                        }
+                    }
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }
