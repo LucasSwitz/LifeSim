@@ -2,19 +2,19 @@
 #define UITEST_H
 
 #include "src/ui/BaseUI.h"
-#include "test/lua_tests/lua_core/LuaTest.h"
+#include <gtest/gtest.h>
 
-class UITest : public LuaTest
+class UITest : public ::testing::Test
 {
   public:
-    BaseUI *ui;
+    ptr<BaseUI> ui;
     UITest()
     {
     }
 
     void SetUp()
     {
-        ui = new BaseUI(100, 100);
+        ui = std::make_shared<BaseUI>(100, 100);
     }
 };
 
@@ -71,9 +71,9 @@ TEST_F(UITest, TestRelativeLayoutTop)
     ASSERT_EQ(top->GetComponentValueFloat("Position", "y"), 6);
     ASSERT_EQ(bottom->GetComponentValueFloat("Position", "x"), 0);
     ASSERT_EQ(bottom->GetComponentValueFloat("Position", "y"), top->GetComponentValueFloat("Position", "y") +
-                                                                  top->GetComponentValueFloat("Graphics", "height") +
-                                                                  2 +
-                                                                  3);
+                                                                   top->GetComponentValueFloat("Graphics", "height") +
+                                                                   2 +
+                                                                   3);
 }
 
 #endif

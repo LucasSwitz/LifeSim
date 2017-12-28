@@ -7,31 +7,31 @@
 #include "src/graphics/gui/SFMLWindowListener.h"
 #include "src/graphics/gui/gui_tools/UIElementEditor.h"
 
-
 #define DEFAULT_NEW_UI_SIZE 30
 
 class UIEditor : public SFMLWindowListener
 {
 
   public:
-      UIElementEditor uie_editor;
+    UIElementEditor uie_editor;
 
     void Init()
     {
         uie_editor.SetUIElementList(UIElementFactory::Instance()->GetAllUIElementBindings());
     }
 
-    void Draw(TextureCache &texture_cache, Brush& brush, bool *p_opened = NULL)
+    void Draw(TextureCache &texture_cache, Brush &brush, bool *p_opened = NULL)
     {
         ImGui::Begin("UI Editor");
-        
-            _focused = ImGui::IsRootWindowOrAnyChildHovered();
-            if (ImGui::TreeNode("UI Elements##UIEditor"))
-            {
-                uie_editor.Draw(texture_cache,brush);
-                ImGui::TreePop();
-            }
-        
+
+        uie_editor.Draw(texture_cache, brush);
+        _focused = ImGui::IsRootWindowOrAnyChildHovered();
+
+        if (ImGui::Button("Container Tool##UIElementEditor"))
+        {
+            brush.SetState(std::make_shared<PaintContainerBrushState>());
+        }
+
         ImGui::End();
     }
 
@@ -46,7 +46,6 @@ class UIEditor : public SFMLWindowListener
     }
 
   private:
-    int new_instance_dims[2] = {DEFAULT_NEW_UI_SIZE, DEFAULT_NEW_UI_SIZE};
     bool _focused = false;
 };
 

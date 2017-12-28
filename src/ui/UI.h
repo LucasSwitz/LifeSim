@@ -2,6 +2,9 @@
 #define UI_H
 
 #include "src/ui/Container.h"
+#include "src/ui/UIElementFactory.h"
+#include "src/utils/json/json.hpp"
+#include <fstream>
 
 class UI
 {
@@ -25,8 +28,28 @@ class UI
 
     bool HasRootElement(int id);
 
+    virtual void AddToRootContainer(const std::string &name, ptr<UIElement> e);
+
+    bool HasRootElement(const std::string &name);
+
+    virtual void Show();
+
+    virtual void Hide();
+
+    void Load(const std::string &file_path);
+
+    bool HasElement(const std::string &name);
+
+    bool HasElement(int id);
+
+    ptr<UIElement> GetElement(const std::string &name);
+
+    ptr<UIElement> GetElement(int id);
+
   private:
     std::unordered_map<int, ptr<UIElement>> _root_elements;
+    std::unordered_map<std::string, int> _name_to_id_map;
+    std::string _name;
 };
 
 #endif

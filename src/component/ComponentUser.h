@@ -5,6 +5,7 @@
 #include "src/component/Component.h"
 #include "src/component/ComponentUserType.h"
 #include "src/component/ComponentUserListener.h"
+#include "src/utils/json/json.hpp"
 
 /**
   Component User's simply maintain a list of active components, and also register themselves
@@ -60,6 +61,10 @@ public:
   void CallFunction(std::string component_name, std::string value_name);
 
   std::unordered_map<std::string, ptr<Component>> &GetAllComponents();
+
+  static ptr<ComponentUser> FromJson(int type, const nlohmann::json &json);
+  static void FromJson(ptr<ComponentUser> user,const nlohmann::json &json);
+
   virtual ~ComponentUser();
   static int last_id;
 

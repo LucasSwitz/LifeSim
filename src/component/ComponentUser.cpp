@@ -147,12 +147,12 @@ ptr<Component> ComponentUser::GetComponent(std::string name)
     return _components.at(name);
 }
 
-Component* ComponentUser::GetComponentUnshared(std::string name)
+Component *ComponentUser::GetComponentUnshared(std::string name)
 {
     return (GetComponent(name)).get();
 }
 
-component_map& ComponentUser::GetAllComponents()
+component_map &ComponentUser::GetAllComponents()
 {
     return _components;
 }
@@ -187,9 +187,28 @@ void ComponentUser::AddComponentValue(const std::string &component_name, const s
     GetComponent(component_name)->SetFloatValue(value_name, value);
 }
 
-void ComponentUser::SetListener(ComponentUserListener* listener)
+void ComponentUser::SetListener(ComponentUserListener *listener)
 {
     _listener = listener;
+}
+
+using json = nlohmann::json;
+ptr<ComponentUser> ComponentUser::FromJson(int type, const json &json_cu)
+{
+    ptr<ComponentUser> user = std::make_shared<ComponentUser>(type);
+    FromJson(user,json_cu);
+    return user;
+}
+
+void ComponentUser::FromJson(ptr<ComponentUser> user, const json &json_cu)
+{
+    auto components = json_cu["components"];
+
+    for (auto it = components.begin(); it != components.end(); it++)
+    {
+        json component = *it;
+        user->AddComponent(Component::FromJson(component,it.key()));
+    }
 }
 
 ComponentUser::~ComponentUser()

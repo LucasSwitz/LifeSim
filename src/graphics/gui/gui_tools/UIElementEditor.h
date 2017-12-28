@@ -35,20 +35,17 @@ class UIElementEditor
 
     void Draw(TextureCache &texture_cache, Brush &brush)
     {
-        if(ImGui::Button("Container Tool##UIElementEditor"))
-        {
-            brush.SetState(std::make_shared<PaintContainerBrushState>());
-        }
-
         ImGui::ListBoxVector("##UIElementEditorLBV", &selected_element, ui_elements);
 
         if (selected_element != -1)
         {
-            if (!selected_uie_prototype || selected_uie_prototype->Name() != ui_elements.at(selected_element))
+            if (!selected_uie_prototype || selected_uie_prototype->Name().compare(ui_elements.at(selected_element)) != 0)
             {
                 delete selected_uie_prototype;
                 selected_uie_prototype = UIElementFactory::Instance()
                                              ->GetUIElement(ui_elements.at(selected_element));
+                
+                brush.SetState(std::make_shared<PaintUIElementBrushState>(selected_uie_prototype));
             }
 
             if (selected_uie_prototype && selected_uie_prototype->HasComponent("Graphics"))
@@ -57,9 +54,8 @@ class UIElementEditor
                 ptr<sf::Texture> texture = texture_cache.GetTexture(texture_path);
                 ImGui::Image(*texture);
                 ImGui::SameLine();
-
-                brush.SetState(std::make_shared<PaintUIElementBrushState>(selected_uie_prototype));
             }
+
             _component_editor.Draw(*selected_uie_prototype);
         }
     }

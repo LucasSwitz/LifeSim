@@ -58,7 +58,7 @@ class SystemMonitor
 
     void DrawAvailableSystems(std::vector<std::string> &systems)
     {
-        ImGui::ListBoxVector("", &selected_system, systems);
+        ImGui::ListBoxVector("##LBVAvialbleSystems", &selected_system, systems);
     }
 
     void DrawSystemList(system_list &list, SystemController& system_controller, std::string type)

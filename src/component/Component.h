@@ -7,6 +7,7 @@
     should be consitent across all child classes that require unique identification (i.e Entity).
 **/
 #include "src/utils/Globals.h"
+#include "src/utils/json/json.hpp"
 #include <unordered_map>
 #include <iostream>
 
@@ -159,7 +160,7 @@ class Component
         return _sub_components.at(name);
     }
 
-    Component* GetSubcomponentUnshared(std::string name)
+    Component *GetSubcomponentUnshared(std::string name)
     {
         return (GetSubcomponent(name)).get();
     }
@@ -187,6 +188,40 @@ class Component
     void AddSubcomponent(ptr<Component> sub_component)
     {
         _sub_components.insert(std::make_pair(sub_component->_name, sub_component));
+    }
+
+    using json = nlohmann::json;
+    static ptr<Component> FromJson(const json &component, const std::string name)
+    {
+        ptr<Component> comp = std::make_shared<Component>(name);
+
+        for (auto value_it = component.begin(); value_it != component.end(); value_it++)
+        {
+            json value = *value_it;
+            std::string value_name = value_it.key();
+
+            if (value.is_boolean())
+            {
+                bool val = value;
+                comp->AddValue(value_name,val);
+            }
+            else if (value.is_number())
+            {
+                float val = value;
+                comp->AddValue(value_name,val);
+            }
+            else if (value.is_string())
+            {
+                std::string val = value;
+                comp->AddValue(value_name,val);
+            }
+            else if (value.is_object())
+            {
+                ptr<Component> sub_comp = Component::FromJson(value, value_it.key());
+                comp->AddSubcomponent(sub_comp);
+            }
+        }
+        return comp;
     }
 
   protected:

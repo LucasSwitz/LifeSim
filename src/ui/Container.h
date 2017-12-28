@@ -10,7 +10,6 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
   public:
     Container(int x = 0, int y = 0, std::string name = "") : UIElement(UIELEMENT_CONTAINER, name, x, y)
     {
-
     }
 
     void SetLayout(ptr<Layout> layout)
@@ -20,6 +19,7 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
 
     void AddChild(ptr<UIElement> e)
     {
+        _name_to_id_map[e->Name()] = e->ID();
         children[e->ID()] = e;
     }
 
@@ -38,7 +38,7 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
         if (_layout)
             _layout->Format((int)GetComponentValueFloat("Position", "x"),
                             (int)GetComponentValueFloat("Position", "y"),
-                            children);  
+                            children);
     }
 
     ptr<UIElement> ChildAtPos(int x, int y) const
@@ -85,8 +85,48 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
         }
     }
 
+    bool HasChild(int id)
+    {
+        return children.find(id) != children.end();
+    }
+
+    bool HasChild(const std::string& name)
+    {
+        return HasChild(_name_to_id_map[name]);
+    }
+
+    ptr<UIElement> GetChild(const std::string& name)
+    {
+        return GetChild(_name_to_id_map[name]);
+    }
+
+    ptr<UIElement> GetChild(int id)
+    {
+        if(HasChild(id))
+            return children[id];
+        throw UIElementException("Container: " + name + \
+            " does not have child with id: " + std::to_string(id));
+    }
+
+    void Hide()
+    {
+        for (auto it = children.begin(); it != children.end(); it++)
+        {
+            it->second->Hide();
+        }
+    }
+
+    void Show()
+    {
+        for (auto it = children.begin(); it != children.end(); it++)
+        {
+            it->second->Show();
+        }
+    }
+
   protected:
     std::unordered_map<int, ptr<UIElement>> children;
+    std::unordered_map<std::string,int> _name_to_id_map;
 
   private:
     ptr<Layout> _layout = nullptr;

@@ -7,47 +7,65 @@
 
 class UIElement : public ComponentUser
 {
-  public:
-    struct Padding
+  friend class UIElementFactory;
+
+public:
+  struct UIElementException : public std::exception
+  {
+    std::string _msg;
+    UIElementException(const std::string &msg) : _msg(msg) {}
+    const char *what() const throw()
     {
+      return _msg.c_str();
+    }
+  };
+  struct Padding
+  {
 
-        Padding(int _left = 0, int _right = 0, int _top = 0, int _bottom = 0) : left(_left),
-                                                                                right(_right),
-                                                                                top(_top),
-                                                                                bottom(_bottom){};
-        int left;
-        int right;
-        int top;
-        int bottom;
-    };
+    Padding(int _left = 0, int _right = 0, int _top = 0, int _bottom = 0) : left(_left),
+                                                                            right(_right),
+                                                                            top(_top),
+                                                                            bottom(_bottom){};
+    int left;
+    int right;
+    int top;
+    int bottom;
+  };
 
-    UIElement(int type_, std::string _name = "", int x = 0, int y = 0);
+  UIElement(int type_, std::string _name = "", int x = 0, int y = 0);
 
-    void SetPadding(int left, int right, int top, int bottom);
+  void SetPadding(int left, int right, int top, int bottom);
 
-    void SetDescriptor(const std::string k, const std::string value);
+  void SetDescriptor(const std::string k, const std::string value);
 
-    void SetPos(int x, int y);
+  void SetPos(int x, int y);
 
-    void SetX(int x);
+  void SetX(int x);
 
-    void SetY(int y);
+  void SetY(int y);
 
-    int Type();
+  int Type();
 
-    virtual void Draw(PMIDGWindow& window);
+  void Show();
 
-    UIElement *Clone();
+  void Hide();
 
-    std::string Name();
+  virtual void Draw(PMIDGWindow &window);
 
-    const std::unordered_map<std::string,std::string>& GetDescriptors();
-    
-  protected:
-    Padding padding;
-    int id;
-    int type;
-    std::string name;
-    std::unordered_map<std::string, std::string> descriptors;
+  UIElement *Clone();
+
+  std::string Name();
+
+  const std::unordered_map<std::string, std::string> &GetDescriptors();
+
+protected:
+  static ptr<UIElement> FromJson(int type, const nlohmann::json &json);
+  static void FromJson(ptr<UIElement> e, const nlohmann::json &json);
+
+  Padding padding;
+  int id;
+  int type;
+  std::string name;
+  std::unordered_map<std::string, std::string> descriptors;
 };
 #endif

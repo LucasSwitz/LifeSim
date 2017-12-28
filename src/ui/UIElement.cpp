@@ -1,8 +1,8 @@
 #include "src/ui/UIElement.h"
 
 UIElement::UIElement(int type_, std::string _name, int x, int y) : ComponentUser(ComponentUserType::CU_TYPE_UI_ELEMENT),
-                                                                                type(type_),
-                                                                                name(_name)
+                                                                   type(type_),
+                                                                   name(_name)
 {
     SetPos(x, y);
 }
@@ -57,4 +57,28 @@ std::string UIElement::Name()
 const std::unordered_map<std::string, std::string> &UIElement::GetDescriptors()
 {
     return descriptors;
+}
+
+using json = nlohmann::json;
+ptr<UIElement> UIElement::FromJson(int type, const json &json)
+{
+    ptr<UIElement> el = std::make_shared<UIElement>(type);
+    FromJson(el,json);
+    return el;
+}
+
+void UIElement::FromJson(ptr<UIElement> el, const nlohmann::json &json)
+{
+    ComponentUser::FromJson(el, json);
+    el->name = json["name"];
+}
+
+void UIElement::Show()
+{
+    EnableAll();
+}
+
+void UIElement::Hide()
+{
+    DisableAll();
 }

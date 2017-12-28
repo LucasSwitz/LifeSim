@@ -7,7 +7,6 @@ PrototypeID = 1000
 Mario = 
 {
         id = 0,
-        uses = "Italian"
         Components = 
         {
             Player = 

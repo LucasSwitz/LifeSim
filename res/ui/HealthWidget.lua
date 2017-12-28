@@ -1,17 +1,15 @@
 --PREAMBLE_START
-ScriptType = "UIWidget"
+ScriptType = "UIElement"
 Name = "HealthWidget"
 --PREAMBLE_END
 
---need cpp to understand UIWidget types
-
 HealthWidget = 
 {   
-    Components
+    Components =
     {
-        Graphics
+        Graphics =
         {
-            sprite_path = "path/to/heart_image"
+            sprite = Res("mario_1.png")
         },
         State = 
         {
@@ -20,6 +18,4 @@ HealthWidget =
             time = 0
         }
     }
-
-    end
 }

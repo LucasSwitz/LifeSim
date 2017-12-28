@@ -38,7 +38,7 @@ class TileMapEditor
 
     void Draw(TextureCache &texture_cache, Brush& brush)
     {
-        ImGui::ListBoxVector("", &selected_tile, tile_scripts);
+        ImGui::ListBoxVector("##TileEditorLBV", &selected_tile, tile_scripts);
         if (selected_tile != -1)
         {
             if(!selected_tile_prototype || selected_tile_prototype->GetName() != tile_scripts.at(selected_tile))

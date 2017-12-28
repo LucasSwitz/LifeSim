@@ -11,6 +11,7 @@ class PaintUIElementBrushState : public BrushState
   public:
     PaintUIElementBrushState(UIElement *prototype) : _prototype(prototype)
     {
+        
     }
 
     bool OnUIMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<UIElement> el,
@@ -26,6 +27,7 @@ class PaintUIElementBrushState : public BrushState
                     UIElement *e = _prototype->Clone();
                     e->SetComponentValueFloat("Position", "x", event_world_position.x);
                     e->SetComponentValueFloat("Position", "y", event_world_position.y);
+                    e->Show();
                     container->AddChild(ptr<UIElement>(e));
                 }
             }
