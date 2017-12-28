@@ -14,6 +14,7 @@
 #include "test/game/game_systems/GameSystemsLoadTest.h"
 #include "test/ui/UITest.h"
 #include "test/ui/JsonUITest.h"
+#include "test/game/game_components/JsonComponentUserTest.h"
 
 int RunTests(int argc, char** argv);
 

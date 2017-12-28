@@ -1,6 +1,6 @@
 #include "src/ui/UIElement.h"
 
-UIElement::UIElement(int type_, std::string _name, int x, int y) : ComponentUser(ComponentUserType::CU_TYPE_UI_ELEMENT),
+UIElement::UIElement(int type_, std::string _name, int x, int y) : ComponentUser(CU_TYPE_UI_ELEMENT),
                                                                    type(type_),
                                                                    name(_name)
 {
