@@ -1,5 +1,5 @@
-#ifndef PMIDGRUNNER_H
-#define PMIDGRUNNER_H
+#ifndef TBRUNNER_H
+#define TBRUNNER_H
 
 #include <chrono>
 #include "src/utils/lua/LuaUniversal.h"
@@ -8,16 +8,16 @@
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
 #include "src/game/mode/ProgramModeEditor.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 
 #define FRAMES_PER_SEC 30
 
 /**
-    Purpose: PMIDGRunner handles the main operating loop of the program. Instances of PMIDGRunner
-             have a PMIDGMode that will carry out operating procedures for the program. 
+    Purpose: TBRunner handles the main operating loop of the program. Instances of TBRunner
+             have a TBMode that will carry out operating procedures for the program. 
 **/
 
-class PMIDGRunner : public EventSubscriber
+class TBRunner : public EventSubscriber
 {
   public:
     enum Type
@@ -26,7 +26,7 @@ class PMIDGRunner : public EventSubscriber
         EDITOR
     };
 
-    PMIDGRunner();
+    TBRunner();
 
     void Init(Type type);
 

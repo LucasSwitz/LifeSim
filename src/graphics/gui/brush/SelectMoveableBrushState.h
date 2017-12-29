@@ -19,7 +19,7 @@ class SelectMoveableBrushState : public BrushState
 
     }
 
-    void MoveEntity(PMIDGWindow &window)
+    void MoveEntity(TBWindow &window)
     {
         if (_selected)
         {
@@ -32,7 +32,7 @@ class SelectMoveableBrushState : public BrushState
 
     }
 
-    bool PaintWindow(PMIDGWindow &window) override
+    bool PaintWindow(TBWindow &window) override
     {
         switch (_selection_state)
         {

@@ -1,6 +1,6 @@
 #include "src/ui/BaseUI.h"
 
-BaseUI::BaseUI(PMIDGWindow &window)
+BaseUI::BaseUI(TBWindow &window)
 {
     sf::Vector2u sf_window_size = window.SFWindow().getSize();
     _root_box = std::make_shared<BoxContainer>();

@@ -1,6 +1,6 @@
-#include "src/game/PMIDGRunner.h"
+#include "src/game/TBRunner.h"
 
-PMIDGRunner::PMIDGRunner()
+TBRunner::TBRunner()
 {
     LuaUniversal::Instance()->Init();
     LuaBindings::Bind(LUA_STATE);
@@ -9,7 +9,7 @@ PMIDGRunner::PMIDGRunner()
     EngineEventManager::Instance()->RegisterSubscriber(this);
 }
 
-void PMIDGRunner::Init(Type type)
+void TBRunner::Init(Type type)
 {
     switch (type)
     {
@@ -22,7 +22,7 @@ void PMIDGRunner::Init(Type type)
     }
 }
 
-void PMIDGRunner::Run()
+void TBRunner::Run()
 {
     while (!_program_stopped)
     {
@@ -34,7 +34,7 @@ void PMIDGRunner::Run()
     }
 }
 
-void PMIDGRunner::OnEvent(Event &e)
+void TBRunner::OnEvent(Event &e)
 {
     if (e.id == EventType::STOP_PROGRAM_EVENT)
     {
@@ -42,7 +42,7 @@ void PMIDGRunner::OnEvent(Event &e)
     }
 }
 
-std::list<Subscription> PMIDGRunner::GetSubscriptions()
+std::list<Subscription> TBRunner::GetSubscriptions()
 {
     std::list<Subscription> list = {Subscription(EventType::STOP_PROGRAM_EVENT)};
     return list;

@@ -2,29 +2,31 @@
 
 ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
                                          _editor_runner(EDITOR_MODE_FPS),
-                                         _game_runner(GAME_RUNNER_FPS),
+                                         _engine_runner(ENGINE_RUNNER_FPS),
                                          file_path(Globals::RESOURCE_ROOT + "/world/stages"),
                                          tile_maps_path(Globals::RESOURCE_ROOT + "/world/tile_maps"),
-                                         instances_path(Globals::RESOURCE_ROOT + "/world/instances")
+                                         instances_path(Globals::RESOURCE_ROOT + "/world/instances"),
+                                         _window(_engine.GetEngineEventManager())
 {
-    _game_state = ptr<GameState>(new GameState());
-
     LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
-    EngineEventManager::Instance()->RegisterSubscriber(this);
+    _engine.GetEngineEventManager().RegisterSubscriber(this);
 
     _dev_tools.Init(_window);
     _dev_tools.SetListener(this);
     _window.AddWindowListener(this);
 
+    _game_state = std::make_shared<GameState>();
     _game_state->Setup();
-    _game_runner.SetRunnable(_game_state);
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
+    _engine.Load(Res("engine_conf.json"));
+    _engine.LoadGameState(_game_state);
+    _engine_runner.SetRunnable(&_engine);
 }
 
 void ProgramModeEditor::Init()
 {
-    _editor_runner.SetRunnable(shared_from_this());
+    _editor_runner.SetRunnable(this);
 }
 
 void ProgramModeEditor::Load()
@@ -40,13 +42,14 @@ void ProgramModeEditor::Update(std::chrono::time_point<std::chrono::high_resolut
         _external_game_runner->Update(current_time);
     else
     {
-        _game_runner.Update(current_time);
+        _engine.Update(current_time);
+        _engine_runner.Update(current_time);
     }
 }
 
 void ProgramModeEditor::Tick(float seconds_elapsed)
 {
-    _controllers_system.Update(seconds_elapsed, _game_state);
+    _controllers_system.Update(seconds_elapsed, _game_state.get());
     _window.Clear();
     _window.PollEvents();
     _window.Render();
@@ -86,19 +89,19 @@ void ProgramModeEditor::OnCreateBlankStage()
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
-    _game_runner.SetRunnable(_game_state);
+    _engine.LoadGameState(_game_state);
 
-    _game_state->SetStage(std::make_shared<LuaStage>());
+    _game_state->SetStage(std::make_shared<LuaStage>(_engine.GetComponentUserBase()));
 
     _window.SetName("New Stage Name");
 }
 
 void ProgramModeEditor::OnLaunchInstance()
 {
-    _external_game_runner = ptr<PMIDGGameRunner>(new PMIDGGameRunner());
+    _external_game_runner = ptr<TBGameRunner>(new TBGameRunner());
     _external_game_runner->SetListener(this);
     _external_game_runner->RunGameState(*_game_state);
-    _editor_runner.SetRunnable(_external_game_runner);
+    _editor_runner.SetRunnable(_external_game_runner.get());
 }
 
 void ProgramModeEditor::OnLaunchStage()
@@ -109,7 +112,7 @@ void ProgramModeEditor::OnStopGameRunner()
 {
     _game_state->Setup();
     _external_game_runner = nullptr;
-    _editor_runner.SetRunnable(ptr<FPSRunnable>(this));
+    _editor_runner.SetRunnable(this);
     _window.Focus();
 }
 
@@ -126,7 +129,7 @@ void ProgramModeEditor::OnEvent(Event &e)
         if (e.sender_id == _window.ID())
         {
             Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
-            EngineEventManager::Instance()->LaunchEvent(e);
+            _engine.GetEngineEventManager().LaunchEvent(e);
         }
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
@@ -162,7 +165,7 @@ void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
     GameLoader loader;
     loader.Load(file_path, file_name, *_game_state);
 
-    _game_runner.SetRunnable(_game_state);
+    _engine.LoadGameState(_game_state);
 }
 
 void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)

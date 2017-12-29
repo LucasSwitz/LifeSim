@@ -24,7 +24,7 @@ class Container : public UIElement, public std::enable_shared_from_this<Containe
         children[e->ID()] = e;
     }
 
-    void Draw(PMIDGWindow &window) override
+    void Draw(TBWindow &window) override
     {
         DoFormat();
 

@@ -5,9 +5,9 @@ Name = "DrawGraphicsSystem"
 
 DrawGraphicsSystem = 
 {   
-    Update = function(graphics_system,time, g)
+    Update = function(graphics_system,time, engine)
         local drawables = LuaListComponentUser()
-        g:ComponentUsers():GetAll(drawables,{"Graphics","Position"})
+        engine:ComponentUsers():GetAll(drawables,{"Graphics","Position"})
         local it = drawables:Iterator()
         while it ~= nil do
             local drawable = it.data

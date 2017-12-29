@@ -23,6 +23,7 @@
                 {
                     "name": "TestGraphic",
                     "type": "Graphic",
+                    "system" : "DrawGraphicsSystem",
                     "components": {
                         "UI": {
                             "right_of" : "LEFT_EDGE",

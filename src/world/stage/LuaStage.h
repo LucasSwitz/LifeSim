@@ -13,6 +13,9 @@ class LuaStage : public Stage
 {
     public:
 
+    LuaStage(ComponentUserBase& cub) : Stage(cub){};
+    LuaStage(){}
+
     void Enter() override
     {
         if(_enter_function)

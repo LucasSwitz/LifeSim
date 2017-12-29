@@ -20,7 +20,7 @@ class UI
     };
     void AddRootElement(ptr<UIElement> e);
 
-    void Draw(PMIDGWindow &window);
+    void Draw(TBWindow &window);
 
     void GetAllElementsOfType(int type, std::list<ptr<UIElement>> &lst);
 

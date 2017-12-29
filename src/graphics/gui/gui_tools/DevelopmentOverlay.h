@@ -9,7 +9,7 @@
 #include "src/graphics/gui/gui_tools/InstanceEditor.h"
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/graphics/gui/TextureCache.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/graphics/gui/gui_tools/DevelopmentOverlayListener.h"
 #include "src/graphics/gui/gui_tools/SystemMonitor.h"
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
@@ -22,8 +22,8 @@ class DevelopmentOverlay : public MainMenuListener,
 {
     public:
         DevelopmentOverlay();
-        void Render(PMIDGWindow& render_window, ptr<GameState> game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
-        void Init(PMIDGWindow& render_window);
+        void Render(TBWindow& render_window, ptr<GameState> game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
+        void Init(TBWindow& render_window);
         void Shutdown();
         Log& GetLog();
         void SetListener(DevelopmentOverlayListener* listener);

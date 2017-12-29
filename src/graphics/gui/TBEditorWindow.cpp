@@ -1,13 +1,13 @@
-#include "src/graphics/gui/PMIDGEditorWindow.h"
+#include "src/graphics/gui/TBEditorWindow.h"
 
-void PMIDGEditorWindow::OnInstanceSizeChange(int width, int height)
+void TBEditorWindow::OnInstanceSizeChange(int width, int height)
 {
     orig_view = sf::View(sf::FloatRect(0, 0, width, height));
     orig_view.setCenter(width / 2, height / 2);
     _window.setView(orig_view);
 }
 
-void PMIDGEditorWindow::Zoom(float percent)
+void TBEditorWindow::Zoom(float percent)
 {
     if (percent > 1 || percent < 0)
         return;
@@ -17,7 +17,7 @@ void PMIDGEditorWindow::Zoom(float percent)
     _window.setView(view);
 }
 
-void PMIDGEditorWindow::MoveView(int delta_x, int delta_y)
+void TBEditorWindow::MoveView(int delta_x, int delta_y)
 {
     sf::Vector2f center = orig_view.getCenter();
     sf::Vector2f move_center(center.x + delta_x, center.y + delta_y);

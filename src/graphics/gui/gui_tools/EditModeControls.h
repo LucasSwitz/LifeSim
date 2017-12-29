@@ -3,7 +3,7 @@
 
 #include "imgui.h"
 #include "src/component/ComponentUserBase.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 
 class EditModeControlsListener
 {
@@ -15,7 +15,7 @@ class EditModeControlsListener
 class EditModeControls
 {
   public:
-    void Draw(const char *title, PMIDGWindow &window, GameState& gs, bool *opened = NULL)
+    void Draw(const char *title, TBWindow &window, GameState& gs, bool *opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);

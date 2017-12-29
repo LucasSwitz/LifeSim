@@ -9,7 +9,7 @@
 class BaseUI : public UI
 {
     public:
-        BaseUI(PMIDGWindow& window);
+        BaseUI(TBWindow& window);
 
         BaseUI(int width, int height);
 

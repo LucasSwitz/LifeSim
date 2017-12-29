@@ -13,6 +13,7 @@ class GameSystemLoadTest : public LuaTest
     ptr<GameState> g;
     ptr<Entity> e1;
     ptr<Entity> e2;
+    ComponentUserBase cub;
 
     GameSystemLoadTest()
     {
@@ -28,7 +29,7 @@ class GameSystemLoadTest : public LuaTest
         ptr<Instance> i = ptr<Instance>(new Instance(-2, "TestCollisionInstance"));
 
         i->SetTileMap(t);
-        ptr<Stage> s = ptr<Stage>(new Stage());
+        ptr<Stage> s = ptr<Stage>(new Stage(cub));
 
         s->AddInstance(i);
         s->SetRootInstance(i);

@@ -33,7 +33,7 @@ int UIElement::Type()
     return type;
 }
 
-void UIElement::Draw(PMIDGWindow &window)
+void UIElement::Draw(TBWindow &window)
 {
     window.DrawComponentUser(this);
 }

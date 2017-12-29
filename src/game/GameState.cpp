@@ -28,7 +28,7 @@ void GameState::Tick(float seconds_elapsed)
 
     if (_current_stage && _current_stage->GetCurrentInstance())
     {
-        _system_controller.Update(seconds_elapsed, shared_from_this());
+        _system_controller.Update(seconds_elapsed, this);
         _current_stage->Tick(seconds_elapsed);
     }
     else
@@ -69,7 +69,7 @@ void GameState::AddSystem(std::string system_name)
     _system_controller.AddToSystemExecutionSequence(system_name);
 }
 
-void GameState::AddSystem(ptr<System> system)
+void GameState::AddSystem(ptr<game_system> system)
 {
     _system_controller.AddToSystemExecutionSequence(system);
 }
@@ -101,7 +101,7 @@ EntityManager &GameState::GetEntityManager()
         throw no_stage_exn;
 }
 
-ComponentUserBase &GameState::GetComponentUserBase()
+ComponentUserBase& GameState::GetComponentUserBase()
 {
     if (_current_stage)
         return _current_stage->GetComponentUserBaseMutable();
@@ -109,7 +109,7 @@ ComponentUserBase &GameState::GetComponentUserBase()
         throw no_stage_exn;
 }
 
-SystemController &GameState::GetSystemController()
+SystemController<GameState> &GameState::GetSystemController()
 {
     return _system_controller;
 }

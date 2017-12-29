@@ -14,6 +14,7 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
     ptr<GameState> g;
     ptr<Entity> e1;
     ptr<Entity> e2;
+    ComponentUserBase cub;
 
     CollisionSystemTest()
     {
@@ -29,7 +30,7 @@ class CollisionSystemTest : public LuaTest, public EventSubscriber
         ptr<Instance> i = ptr<Instance>(new Instance(-2, "TestCollisionInstance"));
         
         i->SetTileMap(t);
-        ptr<Stage> s = ptr<Stage>(new Stage());
+        ptr<Stage> s = ptr<Stage>(new Stage(cub));
 
         s->AddInstance(i);
         s->SetRootInstance(i);

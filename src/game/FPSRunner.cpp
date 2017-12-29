@@ -24,7 +24,7 @@ void FPSRunner::TickRunnable(float seconds_elapsed)
         _runnable->Tick(seconds_elapsed);
 }
 
-void FPSRunner::SetRunnable(ptr<FPSRunnable> runnable)
+void FPSRunner::SetRunnable(FPSRunnable* runnable)
 {
     _runnable = runnable;
 }

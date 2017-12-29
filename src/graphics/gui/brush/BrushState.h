@@ -3,7 +3,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/game/GameState.h"
 #include "src/ui/Container.h"
 
@@ -15,7 +15,7 @@ class BrushState
                                        ptr<ComponentUser> c = nullptr){};
     virtual bool OnUIMouseEvent(sf::Event &e, sf::Vector2f &event_world_position, ptr<UIElement> el,
                                        ptr<ComponentUser> c = nullptr){};
-    virtual bool PaintWindow(PMIDGWindow &window) { return false; };
+    virtual bool PaintWindow(TBWindow &window) { return false; };
     virtual void DrawExtras(){};
 };
 #endif

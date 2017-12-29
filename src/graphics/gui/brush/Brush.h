@@ -2,13 +2,13 @@
 #define BRUSH_H
 
 #include "src/graphics/gui/brush/BrushState.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/game/GameState.h"
 
 class Brush
 {
   public:
-    void PaintWindow(PMIDGWindow &window)
+    void PaintWindow(TBWindow &window)
     {
         if (_state)
         {

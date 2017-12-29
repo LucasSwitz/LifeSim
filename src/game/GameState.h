@@ -17,7 +17,8 @@
              A GameState can be operated by an FPSRunnable.
 **/
 
-class GameState : public FPSRunnable, public std::enable_shared_from_this<GameState>
+typedef System<GameState> game_system;
+class GameState : public FPSRunnable
 {
 public:
   class stage_not_loaded_exn : public std::exception
@@ -46,24 +47,24 @@ public:
 
   void AddSystem(std::string system_name);
 
-  void AddSystem(ptr<System> system);
+  void AddSystem(ptr<game_system> system);
 
   void AddEntity(ptr<Entity> e);
 
   ptr<Stage> GetStage();
 
-  ComponentUserBase &GetComponentUserBase();
+  ComponentUserBase& GetComponentUserBase();
 
   EntityManager &GetEntityManager();
 
-  SystemController &GetSystemController();
+  SystemController<GameState> &GetSystemController();
 
   EventManager &GetMessageDispatch();
 
   PlayerBase &GetPlayerBase();
 
 private:
-  SystemController _system_controller;
+  SystemController<GameState> _system_controller;
   EventManager _message_dispatch;
   PlayerBase _player_base;
   ptr<Stage> _current_stage = nullptr;

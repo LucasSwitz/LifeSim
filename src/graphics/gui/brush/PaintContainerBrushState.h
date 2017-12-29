@@ -13,7 +13,7 @@ class PaintContainerBrushState : public BrushState
         PAINTING
     };
 
-    bool PaintWindow(PMIDGWindow &window) override
+    bool PaintWindow(TBWindow &window) override
     {
         if (_painting_state == PAINTING)
         {
@@ -56,7 +56,7 @@ class PaintContainerBrushState : public BrushState
     PaintingState _painting_state = DORMANT;
     MouseHistory _mouse_history;
 
-    void RenderContainerOutline(PMIDGWindow &window)
+    void RenderContainerOutline(TBWindow &window)
     {
         sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(window.SFWindow());
         sf::Vector2f world_mouse_position = window.SFWindow().mapPixelToCoords(screen_mouse_position);

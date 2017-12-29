@@ -30,7 +30,7 @@ void GameLoader::Save(std::string file_name, GameState &game_state)
 
 void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state)
 {
-    std::list<Entity *> entities;
+    /*std::list<Entity *> entities;
     std::list<std::string> systems;
     ptr<LuaStage> stage = std::make_shared<LuaStage>();
 
@@ -48,5 +48,5 @@ void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameS
     for (std::string &system : systems)
     {
         game_state.AddSystem(system);
-    }
+    }*/
 }

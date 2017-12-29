@@ -4,10 +4,10 @@
 #include <iostream>
 #include "test/lua_tests/lua_core/LuaTest.h"
 
+
 class ScriptableSystemTest : public LuaTest
 {
   public:
-
     ptr<GameState> g;
     ScriptableSystemTest()
     {
@@ -18,9 +18,9 @@ class ScriptableSystemTest : public LuaTest
 
 TEST_F(ScriptableSystemTest, TestOrderingMechanics)
 {
-    ptr<System> first = ptr<System>(SystemFactory::Instance()->GetSystem("TestSystem1"));
-    ptr<System> second = ptr<System>(SystemFactory::Instance()->GetSystem("TestSystem2"));
-    ptr<System> third = ptr<System>(SystemFactory::Instance()->GetSystem("TestSystem3"));
+    ptr<game_system> first = ptr<game_system>(SystemFactory::Instance()->GetSystem<GameState>("TestSystem1"));
+    ptr<game_system> second = ptr<game_system>(SystemFactory::Instance()->GetSystem<GameState>("TestSystem2"));
+    ptr<game_system> third = ptr<game_system>(SystemFactory::Instance()->GetSystem<GameState>("TestSystem3"));
 
     g->AddSystem(first);
     g->AddSystem(second);

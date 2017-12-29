@@ -4,7 +4,7 @@ DevelopmentOverlay::DevelopmentOverlay()
 {
 }
 
-void DevelopmentOverlay::Init(PMIDGWindow &window)
+void DevelopmentOverlay::Init(TBWindow &window)
 {
     ImGui::SFML::Init(window.SFWindow());
     window.AddWindowListener(&instance_editor);
@@ -19,7 +19,7 @@ Log &DevelopmentOverlay::GetLog()
     return log;
 }
 
-void DevelopmentOverlay::Render(PMIDGWindow &window, ptr<GameState> game_state,
+void DevelopmentOverlay::Render(TBWindow &window, ptr<GameState> game_state,
                                 TextureCache &texture_cache, float seconds_elapsed, Brush &brush)
 {
 
@@ -32,7 +32,6 @@ void DevelopmentOverlay::Render(PMIDGWindow &window, ptr<GameState> game_state,
         brush.PaintWindow(window);
     // #### DESIGN GUI HERE_selcected_file
     main_menu.Draw(game_state);
-    //log.Draw("Log");
     system_monitor.Draw("System Monitor", game_state->GetSystemController());
     edit_mode_controls.Draw("Edit Mode Controls", window, *game_state);
 

@@ -41,7 +41,7 @@ class InstanceEditor : public SFMLWindowListener
 
             if (ImGui::TreeNode("Entities##InstanceEditor"))
             {
-                Draw(texture_cache,brush);
+                entity_editor.Draw(texture_cache,brush);
                 ImGui::TreePop();
             }
 

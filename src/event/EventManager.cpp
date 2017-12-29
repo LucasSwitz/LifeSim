@@ -2,7 +2,7 @@
 #include "src/event/EventSubscriber.h"
 #include <iostream>
 
-void EventManager::RegisterSubscriber(EventSubscriber* subscriber)
+void EventManager::RegisterSubscriber(EventSubscriber *subscriber)
 {
     std::list<Subscription> subscriptions = subscriber->GetSubscriptions();
     for (auto sub_it = subscriptions.begin(); sub_it != subscriptions.end(); sub_it++)
@@ -46,12 +46,12 @@ void EventManager::LaunchEvent(Event &e)
         ptr<tag_sub_list> tag_subscribers_list = id_subscribers->at(*tag_it);
         for (auto it = tag_subscribers_list->begin(); it != tag_subscribers_list->end(); it++)
         {
-                (*it)->OnEvent(e);
+            (*it)->OnEvent(e);
         }
     }
 }
 
-void EventManager::Deregister(EventSubscriber* subscriber)
+void EventManager::Deregister(EventSubscriber *subscriber)
 {
     std::list<Subscription> subscriptions = subscriber->GetSubscriptions();
     for (auto sub_it = subscriptions.begin(); sub_it != subscriptions.end(); sub_it++)
@@ -69,7 +69,7 @@ void EventManager::Deregister(EventSubscriber* subscriber)
     }
 }
 
-void EventManager::Deregister(EventSubscriber* subscriber, int event_id, int event_tag)
+void EventManager::Deregister(EventSubscriber *subscriber, int event_id, int event_tag)
 {
 
     if (!EventExists(event_id) || !TagExists(event_id, event_tag))
@@ -87,7 +87,7 @@ void EventManager::Deregister(EventSubscriber* subscriber, int event_id, int eve
     }
 }
 
-void EventManager::AddSubscriberToSubscription(EventSubscriber* sub, int event_id, int event_tag)
+void EventManager::AddSubscriberToSubscription(EventSubscriber *sub, int event_id, int event_tag)
 {
     if (!EventExists(event_id))
     {
@@ -114,12 +114,12 @@ void EventManager::AddNewTag(int event_id, int tag)
 
 void EventManager::AddNewEvent(int event_id)
 {
-    _subscription_registry.insert(std::make_pair(event_id, std::make_shared<event_tag_map>()));   
+    _subscription_registry.insert(std::make_pair(event_id, std::make_shared<event_tag_map>()));
 }
 
 bool EventManager::EventExists(int event_id)
 {
-    return _subscription_registry.find(event_id) != _subscription_registry.end();
+    return !_subscription_registry.empty() && _subscription_registry.find(event_id) != _subscription_registry.end();
 }
 
 bool EventManager::TagExists(int event_id, int tag_id)

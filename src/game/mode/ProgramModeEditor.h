@@ -5,7 +5,7 @@
 
 #include "src/graphics/gui/gui_tools/DevelopmentOverlay.h"
 #include "src/graphics/gui/SFMLWindowListener.h"
-#include "src/graphics/gui/PMIDGEditorWindow.h"
+#include "src/graphics/gui/TBEditorWindow.h"
 #include "src/graphics/gui/brush/Brush.h"
 #include "src/graphics/gui/brush/SelectMoveableBrushState.h"
 #include "src/game/FPSRunner.h"
@@ -15,19 +15,20 @@
 #include "src/utils/window/WindowUtils.h"
 #include "src/utils/sfml/SFMLUtils.h"
 #include "src/system/SystemController.h"
-#include "src/game/PMIDGGameRunner.h"
+#include "src/game/TBGameRunner.h"
 #include "src/utils/lua/InstanceFileBuilder.h"
 #include "src/controllers/ControllersSystem.h"
 #include "src/utils/math/Geometry.h"
 #include "src/ui/BaseUI.h"
 #include "src/graphics/gui/gui_tools/UIVisualizer.h"
+#include "src/engine/Engine.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
-#define GAME_RUNNER_FPS 30
+#define ENGINE_RUNNER_FPS 30
 
 class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, 
-  public FPSRunner, public FPSRunnable, public EventSubscriber, public PMIDGGameRunnerListener,
+  public FPSRunner, public FPSRunnable, public EventSubscriber, public TBGameRunnerListener,
   public std::enable_shared_from_this<ProgramModeEditor>
 {
   public:
@@ -108,9 +109,10 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     bool CanEdit();
 
   private:
-    FPSRunner _game_runner;
+    Engine _engine;
     FPSRunner _editor_runner;
-    ptr<PMIDGGameRunner> _external_game_runner = nullptr;
+    FPSRunner _engine_runner;
+    ptr<TBGameRunner> _external_game_runner = nullptr;
     ControllersSystem _controllers_system;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
@@ -118,7 +120,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     Brush _brush;
     ptr<GameState> _game_state;
     WindowTransformState _window_transform_state = DORMANT;
-    PMIDGEditorWindow _window;
+    TBEditorWindow _window;
     std::string file_path;
     std::string tile_maps_path;
     std::string instances_path;

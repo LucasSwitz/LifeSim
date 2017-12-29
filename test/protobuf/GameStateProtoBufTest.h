@@ -62,11 +62,11 @@ TEST_F(GameStateProBufTest, AddSystemTest)
 {
     GameStateProtoBufWrapper game_state_proto_buf;
 
-    std::list<System *> systems =
+    std::list<System<GameState> *> systems =
         {
-            SystemFactory::Instance()->GetSystem("TestSystem1"),
-            SystemFactory::Instance()->GetSystem("TestSystem2"),
-            SystemFactory::Instance()->GetSystem("TestSystem3")};
+            SystemFactory::Instance()->GetSystem<GameState>("TestSystem1"),
+            SystemFactory::Instance()->GetSystem<GameState>("TestSystem2"),
+            SystemFactory::Instance()->GetSystem<GameState>("TestSystem3")};
 
     game_state_proto_buf.SetSystems(systems);
     game_state_proto_buf.SetStage(*s);

@@ -20,7 +20,7 @@
 #include "src/utils/debug/DebugFlags.h"
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/event/EventManager.h"
 #include "src/event/EngineEventManager.h"
 #include "src/controllers/Controller.h"
@@ -29,6 +29,7 @@
 #include "src/controllers/SideScrollerPlayerInterface.h"
 #include "src/controllers/ControllerBase.h"
 #include "src/utils/Globals.h"
+#include "src/engine/Engine.h"
 
 using namespace luabridge;
 class LuaBindings
@@ -176,6 +177,10 @@ class LuaBindings
                 .addFunction("SystemController",&GameState::GetSystemController)
                 .addFunction("EntityManager", &GameState::GetEntityManager)
                 .addFunction("ComponentUsers",&GameState::GetComponentUserBase)
+            .endClass()
+            .beginClass<Engine>("Engine")
+                .addFunction("ComponentUsers",&Engine::GetComponentUserBase)
+                .addFunction("EventManager",&Engine::GetEngineEventManager)
             .endClass();
     } 
  };

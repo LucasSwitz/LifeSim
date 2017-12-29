@@ -4,10 +4,10 @@
 #include "src/system/System.h"
 #include "src/controllers/ControllerBase.h"
 
-class ControllersSystem : public System
+class ControllersSystem : public System<GameState>
 {
     public:
-    virtual void Update(float seconds_since_last_update, ptr<GameState> game_state)
+    virtual void Update(float seconds_since_last_update, GameState* game_state)
     {
         auto& controllers = ControllerBase::Instance()->GetAll();
 

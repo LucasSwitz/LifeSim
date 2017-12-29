@@ -1,24 +1,23 @@
-#ifndef PMIDGGAMERUNNER
-#define PMIDGGAMERUNNER
+#ifndef TBGAMERUNNER
+#define TBGAMERUNNER
 
 #include "src/game/GameState.h"
 #include "src/game/FPSRunner.h"
-#include "src/graphics/gui/PMIDGWindow.h"
 
 #define GAME_FPS 30
 
-class PMIDGGameRunnerListener
+class TBGameRunnerListener
 {
   public:
     virtual void OnGameRunnerShutdown() = 0;
 };
 
-class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscriber
+class TBGameRunner : public FPSRunner, public FPSRunnable, public EventSubscriber
 {
 
   public:
-    PMIDGGameRunner();
-    ~PMIDGGameRunner();
+    TBGameRunner();
+    ~TBGameRunner();
 
     void RunGameState(const std::string &file_path);
 
@@ -36,7 +35,7 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     void Unload();
 
-    void SetListener(PMIDGGameRunnerListener* listener);
+    void SetListener(TBGameRunnerListener* listener);
 
     void OnEvent(Event &e);
 
@@ -44,10 +43,11 @@ class PMIDGGameRunner : public FPSRunner, public FPSRunnable, public EventSubscr
 
     std::list<Subscription> GetSubscriptions();
 
+    ptr<GameState> GetGameState();
+
   private:
-    PMIDGWindow _window;
     ptr<GameState> _game_state = nullptr;
-    PMIDGGameRunnerListener* _listener = nullptr;
+    TBGameRunnerListener* _listener = nullptr;
     bool _shutdown = false;
 };
 #endif

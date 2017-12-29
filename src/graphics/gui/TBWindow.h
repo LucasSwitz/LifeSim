@@ -1,5 +1,5 @@
-#ifndef PMIDGWINDOW_H
-#define PMIDGWINDOW_H
+#ifndef TBWINDOW_H
+#define TBWINDOW_H
 
 #include <queue>
 #include <unordered_map>
@@ -25,7 +25,7 @@
 
 #include "src/game/EngineGlobals.h"
 
-class PMIDGWindow : public EventSubscriber
+class TBWindow : public EventSubscriber
 {
   public:
     struct LayeredGraphic
@@ -37,10 +37,10 @@ class PMIDGWindow : public EventSubscriber
         ptr<sf::Texture> texture = nullptr;
     };
 
-    PMIDGWindow() : _window(sf::VideoMode(1200, 1200), "PMIDG")
+    TBWindow(EventManager& engine_event_manager) : _window(sf::VideoMode(1200, 1200), "TB")
     {
         _id = last_id;
-        EngineEventManager::Instance()->RegisterSubscriber(this);
+        engine_event_manager.RegisterSubscriber(this);
     }
 
     sf::RenderWindow &SFWindow()
@@ -239,7 +239,7 @@ class PMIDGWindow : public EventSubscriber
         return _id;
     }
 
-    ~PMIDGWindow()
+    ~TBWindow()
     {
         /*while (!_drawables_queue.empty())
         {

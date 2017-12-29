@@ -3,7 +3,7 @@
 
 #include "src/component/ComponentUser.h"
 #include "src/ui/UIElementTypes.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 
 class UIElement : public ComponentUser
 {
@@ -48,7 +48,7 @@ public:
 
   void Hide();
 
-  virtual void Draw(PMIDGWindow &window);
+  virtual void Draw(TBWindow &window);
 
   UIElement *Clone();
 

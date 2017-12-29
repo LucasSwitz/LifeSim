@@ -11,7 +11,7 @@ class UIVisualizer
     {
     }
 
-    void Draw(PMIDGWindow &window)
+    void Draw(TBWindow &window)
     {
         std::list<ptr<UIElement>> containers;
         _ui->GetAllElementsOfType(UIELEMENT_CONTAINER, containers);

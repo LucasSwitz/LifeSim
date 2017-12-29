@@ -15,7 +15,7 @@ class PaintTileBrushState : public BrushState
 
     PaintTileBrushState(ptr<Tile> selected) : _selected_tile(selected){};
 
-    bool PaintWindow(PMIDGWindow &window) override
+    bool PaintWindow(TBWindow &window) override
     {
         if (_painting_state == PAINTING)
         {
@@ -76,7 +76,7 @@ class PaintTileBrushState : public BrushState
     }
 
   private:
-    void RenderSelectBox(PMIDGWindow &window)
+    void RenderSelectBox(TBWindow &window)
     {
         sf::Vector2i screen_mouse_position = sf::Mouse::getPosition(window.SFWindow());
         sf::Vector2f world_mouse_position = window.SFWindow().mapPixelToCoords(screen_mouse_position);

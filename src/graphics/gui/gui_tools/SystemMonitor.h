@@ -8,7 +8,7 @@
 class SystemMonitor
 {
   public:
-    void Draw(const char *title, SystemController& system_controller, bool *opened = NULL)
+    void Draw(const char *title, SystemController<GameState>& system_controller, bool *opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);
@@ -61,7 +61,7 @@ class SystemMonitor
         ImGui::ListBoxVector("##LBVAvialbleSystems", &selected_system, systems);
     }
 
-    void DrawSystemList(system_list &list, SystemController& system_controller, std::string type)
+    void DrawSystemList(SystemController<GameState>::system_list &list, SystemController<GameState>& system_controller, std::string type)
     {
         int i = 0;
         for (auto it = list.begin(); it != list.end();)

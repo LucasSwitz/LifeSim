@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <iostream>
 
-#include "src/game/PMIDGRunner.h"
+#include "src/game/TBRunner.h"
 #include "src/game/mode/ProgramModeEditor.h"
 
 int RunEditor();
@@ -14,8 +14,8 @@ int main(int argc, char **argv)
 
 int RunEditor()
 {
-    PMIDGRunner runner;
-    runner.Init(PMIDGRunner::EDITOR);
+    TBRunner runner;
+    runner.Init(TBRunner::EDITOR);
     runner.Run();
     return 0;
 }

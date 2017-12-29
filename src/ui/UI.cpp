@@ -6,7 +6,7 @@ void UI::AddRootElement(ptr<UIElement> e)
     _root_elements[e->ID()] = e;
 }
 
-void UI::Draw(PMIDGWindow &window)
+void UI::Draw(TBWindow &window)
 {
     for (auto it = _root_elements.begin(); it != _root_elements.end(); it++)
     {
