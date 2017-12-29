@@ -3,18 +3,43 @@
 
 #include <unordered_map>
 #include "src/system/ScriptableSystem.h"
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
+#include "src/utils/Globals.h"
 
 /**
     Factory for all System classes. Systems can be retrieved by supplying a valid name.
 **/
-
-class SystemFactory : public ScriptFactory<std::string>
+class SystemFactory : public ResourceFactory<std::string>
 {
 public:
-  bool SystemExists(std::string name);
-  System *GetSystem(std::string name);
-  void AddScript(Preamble &pre, std::string scriptable_object) override;
+
+  template<typename T>
+  System<T>* GetSystem(std::string name)
+  {
+    if (!SystemExists(name))
+    {
+      throw AssetNotFoundException(name);
+    }
+
+    ScriptableSystem<T> *new_system = new ScriptableSystem<T>();
+    new_system->LoadScript(LUA_STATE, _system_directory.at(name), name);
+    return new_system;
+  }
+
+  bool SystemExists(std::string name)
+  {
+    return _system_directory.find(name) != _system_directory.end();
+  }
+
+  void AddResource(Preamble &pre, std::string scriptable_object)
+  {
+    _system_directory.insert(std::make_pair(pre.GetFlag("Name"), scriptable_object));
+  }
+
+  std::unordered_map<std::string, std::string> &GetAllSystems()
+  {
+    return _system_directory;
+  }
 
   void Reset() override
   {
@@ -28,11 +53,9 @@ public:
     return &instance;
   }
 
-  std::unordered_map<std::string, std::string> &GetAllSystems();
-
 protected:
   SystemFactory(std::string script_type)
-      : ScriptFactory<std::string>(script_type){};
+      : ResourceFactory<std::string>(script_type){};
 
 private:
   std::unordered_map<std::string, std::string> _system_directory;

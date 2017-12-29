@@ -8,22 +8,34 @@
 
 class ComponentUserBaseTest : public LuaTest
 {
-    public:
-        GameState g;
-        ComponentUser* user_1;
-        ComponentUser* user_2;
-        
-        ComponentUserBaseTest()
-        {
-            LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
-            user_1 = LuaEntityFactory::Instance()->GetEntityByName("TestComponentEntity1");
-            user_2 = LuaEntityFactory::Instance()->GetEntityByName("TestComponentEntity2");
+  public:
+    ComponentUserBase cub;
+    ptr<Entity> user_1;
+    ptr<Entity> user_2;
+
+    ComponentUserBaseTest()
+    {
         }
+
+    void SetUp()
+    {
+        LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
+
+        user_1 = ptr<Entity>(LuaEntityFactory::Instance()->GetEntityByName("TestComponentEntity1"));
+        user_2 = ptr<Entity>(LuaEntityFactory::Instance()->GetEntityByName("TestComponentEntity2"));
+
+        cub.AddComponentUser(user_1);
+        cub.AddComponentUser(user_2);
+
+        user_1->EnableAll();
+        user_2->EnableAll();
+        
+    }
 };
 
-/*TEST_F(ComponentUserBaseTest, SingleComponent)
+TEST_F(ComponentUserBaseTest, SingleComponent)
 {
-    const std::list<ComponentUser*>* comps = g.GetComponentUserBase()->GetAllUsersWithComponent("TestComponent1");
+    auto comps =cub.GetAllUsersWithComponent("TestComponent1");
     bool contains_user_1 = (std::find(comps->begin(), comps->end(), user_1) != comps->end());
     bool contains_user_2 = (std::find(comps->begin(), comps->end(), user_2) != comps->end());
     ASSERT_TRUE(contains_user_1);
@@ -32,12 +44,12 @@ class ComponentUserBaseTest : public LuaTest
 
 TEST_F(ComponentUserBaseTest, MultipleComponents)
 {
-    const std::list<ComponentUser*>* comps = g.GetComponentUserBase()->GetAllUsersWithComponent({"TestComponent1", "TestComponent2"});
-    bool contains_user_1 = (std::find(comps->begin(), comps->end(), user_1) != comps->end());
-    bool contains_user_2 = (std::find(comps->begin(), comps->end(), user_2) != comps->end());
+    std::list<ptr<ComponentUser>> comps; 
+    cub.GetAllUsersWithComponents({"TestComponent1", "TestComponent2"},comps);
+    bool contains_user_1 = (std::find(comps.begin(), comps.end(), user_1) != comps.end());
+    bool contains_user_2 = (std::find(comps.begin(), comps.end(), user_2) != comps.end());
     ASSERT_TRUE(contains_user_1);
     ASSERT_FALSE(contains_user_2);
-}*/
-
+}
 
 #endif

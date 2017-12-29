@@ -10,7 +10,7 @@
 class MainMenu
 {
   public:
-    void Draw(GameState *game_state)
+    void Draw(ptr<GameState> game_state)
     {
         if (ImGui::BeginMainMenuBar())
         {
@@ -20,7 +20,7 @@ class MainMenu
             {
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Instance", game_state->GetStage()))
+            if (ImGui::BeginMenu("Instance", game_state->GetStage().get()))
             {
                 if (ImGui::BeginMenu("New Instance", "CTRL+I"))
                 {
@@ -36,48 +36,7 @@ class MainMenu
                             _listener->NewInstancePressed(instance_name);
                         }
                     }
-
                 }
-
-                /*if (ImGui::BeginMenu("Load Instance", "CTRL+SHIFT+I"))
-                {
-                    _focused = true;
-                    FolderContents instance_files("/home/lucas/Desktop/LifeSim/build/instances");
-                    ImGui::BeginChild("Instance Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                    std::string file_name = instance_files.Draw();
-                    if (!file_name.empty())
-                    {
-                        if (_listener)
-                        {
-                            _listener->LoadInstancePressed(file_name);
-                        }
-                    }
-
-                    ImGui::EndChild();
-                    ImGui::EndMenu();
-                }
-                if (ImGui::MenuItem("Save Instance", "CTRL+SHIFT+I"))
-                {
-                    ImGui::BeginChild("Select Instance");
-
-                    ImGui::EndChild();
-                }
-                if (ImGui::BeginMenu("Save As Instance....", "CTRL+SHIFT+I"))
-                {
-                    ImGui::BeginChild("Save Instance##Menu", ImVec2(250, 50), true, ImGuiWindowFlags_NoScrollbar);
-                    std::string file_name = _save_dialog.Draw();
-
-                    if (!file_name.empty())
-                    {
-                        if (_listener)
-                        {
-                            _listener->SaveInstancePressed(file_name);
-                        }
-                    }
-
-                    ImGui::EndChild();
-                    ImGui::EndMenu();
-                }*/
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Stage"))
@@ -93,7 +52,7 @@ class MainMenu
                 {
                     _focused = true;
                     ImGui::BeginChild("Stage Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
-                    FolderContents stage_files("/home/lucas/Desktop/LifeSim/build/stages");
+                    FolderContents stage_files(Globals::RESOURCE_ROOT + "/world/stages");
                     std::string file_name = stage_files.Draw();
                     if (!file_name.empty())
                     {
@@ -140,6 +99,43 @@ class MainMenu
                 }
                 if (ImGui::MenuItem("Load Entity", "CTRL+SHIFT+E"))
                 {
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("UI"))
+            {
+                if (ImGui::MenuItem("New UI", "CTRL+W"))
+                {
+                    _listener->NewUIPressed();
+                }
+
+                if (ImGui::BeginMenu("Attach UI", "CTRL+SHIFT+W"))
+                {
+                    _focused = true;
+                    ImGui::BeginChild("UI Selection##Menu", ImVec2(300, 200), true, ImGuiWindowFlags_NoScrollbar);
+                    FolderContents ui_files(Globals::RESOURCE_ROOT + "/ui/all");
+                    std::string file_name = ui_files.Draw();
+                    if (!file_name.empty())
+                    {
+                        if (_listener)
+                        {
+                            _listener->AttachUIPressed(file_name);
+                        }
+                    }
+                    ImGui::EndChild();
+                    ImGui::EndMenu();
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Mode"))
+            {
+                if (ImGui::MenuItem("Game", "CTRL+W"))
+                {
+                    _listener->GameModePressed();
+                }
+                if (ImGui::MenuItem("UI", "CTRL+SHIFT+W"))
+                {
+                    _listener->UIModePressed();
                 }
                 ImGui::EndMenu();
             }

@@ -1,5 +1,7 @@
 #include "src/world/tile/TileMap.h"
 
+typedef std::vector<std::vector<ptr<Tile>>> tile_matrix;
+
 void TileMap::LoadFromArray(int **map, int rows, int columns)
 {
 }
@@ -13,7 +15,7 @@ void TileMap::LoadFromVector(std::vector<std::vector<int>> map)
         for (int k = 0; k < current_vector.size(); k++)
         {
             int tile_id = current_vector.at(k);
-            Tile *tile = LuaTileFactory::Instance()->GetTile(tile_id);
+            ptr<Tile> tile = ptr<Tile>(LuaTileFactory::Instance()->GetTile(tile_id));
             tile->SetComponentValueFloat("Position", "x", k * TILE_WIDTH);
             tile->SetComponentValueFloat("Position", "y", i * TILE_HEIGHT);
             _tiles.at(i).push_back(tile);
@@ -62,9 +64,9 @@ void TileMap::SaveToFile(std::string file_name)
 
     std::ofstream file_out(file_name);
 
-    for (std::vector<Tile *> &vect : _tiles)
+    for (std::vector<ptr<Tile>> &vect : _tiles)
     {
-        for (Tile *tile : vect)
+        for (ptr<Tile> tile : vect)
         {
             file_out << tile->GetID();
             file_out << " ";
@@ -137,7 +139,7 @@ void TileMap::Unload()
     //then delete all tiles
 }
 
-Tile *TileMap::TileAt(int x, int y)
+ptr<Tile> TileMap::TileAt(int x, int y)
 {
     int row = CoordToRow(x);
     int column = CoordToColumn(y);
@@ -148,7 +150,7 @@ Tile *TileMap::TileAt(int x, int y)
     return _tiles[row][column];
 }
 
-void TileMap::TilesInRange(int first_x, int first_y, int last_x, int last_y, std::list<Tile *> &tiles)
+void TileMap::TilesInRange(int first_x, int first_y, int last_x, int last_y, std::list<ptr<Tile>> &tiles)
 {
     int first_row = std::min((int)_tiles.size() - 1, CoordToRow(first_y));
     int last_row = std::min((int)_tiles.size() - 1, CoordToRow(last_y));
@@ -184,10 +186,10 @@ void TileMap::Blank(TileMap& map, int width, int height)
 {
     for (int i = 0; i < width; i++)
     {
-        std::vector<Tile *> row;
+        std::vector<ptr<Tile>> row;
         for (int k = 0; k < height; k++)
         {
-            Tile *tile = LuaTileFactory::Instance()->GetTile(BLANK_TILE_SCRIPT);
+            ptr<Tile> tile = ptr<Tile>(LuaTileFactory::Instance()->GetTile(BLANK_TILE_SCRIPT));
             tile->SetComponentValueFloat("Position", "x", k * TILE_WIDTH + (TILE_WIDTH / 2));
             tile->SetComponentValueFloat("Position", "y", i * TILE_HEIGHT + (TILE_HEIGHT / 2));
             row.push_back(tile);
@@ -215,9 +217,10 @@ void TileMap::Erase()
 {
     for (auto it = _tiles.begin(); it != _tiles.end();)
     {
-        for (auto tile_it = (*it).begin(); tile_it != (*it).end(); tile_it++)
+        for (auto tile_it = (*it).begin(); tile_it != (*it).end();)
         {
-            delete *tile_it;
+            (*tile_it)->DisableAll();
+            tile_it = (*it).erase(tile_it);
         }
 
         it = _tiles.erase(it);

@@ -1,22 +1,22 @@
 #ifndef LUAINSTANCEFACTORY_H
 #define LUAINSTANCEFACTORY_H
 
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
 #include "src/world/stage/LuaInstance.h"
 
 /**
   Purpose: LuaInstanceFactory can be used to create Lua defined instances by supplying
            a valid name or ID.
 **/
-class LuaInstanceFactory : public ScriptFactory<std::string>
+class LuaInstanceFactory : public ResourceFactory<std::string>
 {
   public:
   bool InstancePrototypeExists(std::string name);
   bool InstancePrototypeExists(int id);
   Instance* GetInstance(std::string name);
   Instance* GetInstance(int id);
-  void AddScript(Preamble &pre, std::string script_path) override;
-  void AddScript(std::string& name, int& id, std::string& script_path);
+  void AddResource(Preamble &pre, std::string script_path) override;
+  void AddResource(std::string& name, int& id, std::string& script_path);
   void Reset() override;
   int LowestUnassignedKey();
 
@@ -29,7 +29,7 @@ class LuaInstanceFactory : public ScriptFactory<std::string>
 
 protected:
   LuaInstanceFactory(std::string script_type) 
-                        : ScriptFactory<std::string>(script_type){};
+                        : ResourceFactory<std::string>(script_type){};
     
 private:    
     std::unordered_map<int, std::string> _instance_directory;

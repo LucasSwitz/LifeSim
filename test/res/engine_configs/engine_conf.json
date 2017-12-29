@@ -1,0 +1,7 @@
+{
+    "systems" :
+    [
+        "DrawGraphicsSystem",
+        "AnimationSystem"
+    ]
+}

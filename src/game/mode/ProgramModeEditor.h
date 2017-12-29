@@ -5,9 +5,9 @@
 
 #include "src/graphics/gui/gui_tools/DevelopmentOverlay.h"
 #include "src/graphics/gui/SFMLWindowListener.h"
-#include "src/graphics/gui/PMIDGEditorWindow.h"
+#include "src/graphics/gui/TBEditorWindow.h"
 #include "src/graphics/gui/brush/Brush.h"
-#include "src/graphics/gui/brush/SelectEntityBrushState.h"
+#include "src/graphics/gui/brush/SelectMoveableBrushState.h"
 #include "src/game/FPSRunner.h"
 #include "src/game/GameState.h"
 #include "src/game/mode/ProgramMode.h"
@@ -15,17 +15,22 @@
 #include "src/utils/window/WindowUtils.h"
 #include "src/utils/sfml/SFMLUtils.h"
 #include "src/system/SystemController.h"
-#include "src/game/PMIDGGameRunner.h"
+#include "src/game/TBGameRunner.h"
 #include "src/utils/lua/InstanceFileBuilder.h"
 #include "src/controllers/ControllersSystem.h"
+#include "src/utils/math/Geometry.h"
+#include "src/ui/BaseUI.h"
+#include "src/graphics/gui/gui_tools/UIVisualizer.h"
+#include "src/engine/Engine.h"
 
 #define MAX_SCROLL_TICKS 50
 #define EDITOR_MODE_FPS 30
-#define GAME_RUNNER_FPS 30
+#define ENGINE_RUNNER_FPS 30
 
-class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, public FPSRunner, public FPSRunnable, public EventSubscriber, public PMIDGGameRunnerListener
+class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public DevelopmentOverlayListener, 
+  public FPSRunner, public FPSRunnable, public EventSubscriber, public TBGameRunnerListener,
+  public std::enable_shared_from_this<ProgramModeEditor>
 {
-
   public:
     enum WindowTransformState
     {
@@ -33,7 +38,15 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         PANNING
     };
 
+    enum EditMode
+    {
+        GAME_STATE_MODE,
+        UI_MODE
+    };
+
     ProgramModeEditor();
+
+    void Init();
 
     void Load();
 
@@ -59,6 +72,14 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnGameRunnerShutdown();
 
+    void OnModeChangeGame();
+
+    void OnModeChangeUI();
+
+    void OnNewUI();
+
+    void OnAttachUI(const std::string& file_name);
+
     //###################### ENGINE EVENTS ################################
     void OnEvent(Event &e);
 
@@ -69,9 +90,9 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     void OnSaveStageFile(const std::string &file_name) override;
 
-    void SaveInstanceTilemap(Instance *instance);
+    void SaveInstanceTilemap(ptr<Instance> instance);
 
-    void GenerateInstanceTemplate(Instance *instance);
+    void GenerateInstanceTemplate(ptr<Instance> instance);
 
     bool OnWindowEvent(sf::Event &e);
 
@@ -83,25 +104,31 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
 
     bool ClickOnActiveTileMap(int x, int y);
 
-    Entity *ClickOnEntity(int x, int y);
+    ptr<Entity> ClickOnEntity(int x, int y);
 
     bool CanEdit();
 
   private:
-    FPSRunner _game_runner;
+    Engine _engine;
     FPSRunner _editor_runner;
-    PMIDGGameRunner *_external_game_runner = nullptr;
+    FPSRunner _engine_runner;
+    ptr<TBGameRunner> _external_game_runner = nullptr;
     ControllersSystem _controllers_system;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     int _abs_scroll_ticks = 50;
     Brush _brush;
-    GameState *_game_state;
+    ptr<GameState> _game_state;
     WindowTransformState _window_transform_state = DORMANT;
-    PMIDGEditorWindow _window;
-    std::string file_path = "/home/lucas/Desktop/LifeSim/build/stages";
-    std::string tile_maps_path = "/home/lucas/Desktop/LifeSim/res/tile_maps";
-    std::string instances_path = "/home/lucas/Desktop/LifeSim/res/lua_scripts/world/instances";
+    TBEditorWindow _window;
+    std::string file_path;
+    std::string tile_maps_path;
+    std::string instances_path;
+    std::list<ptr<Container>> _root_containers;
+    EditMode _edit_mode = GAME_STATE_MODE;
+    ptr<UI> ui = nullptr;
+
+    ptr<UIElement> ClickOnUIElement(int x, int y);
 };
 
 #endif

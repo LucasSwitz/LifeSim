@@ -2,12 +2,13 @@
 #include "src/game_objects/Entity.h"
 
 EntityManager *EntityManager::_instance = nullptr;
+typedef std::map<int, ptr<Entity>> entity_map;
 
 EntityManager::EntityManager()
 {
 }
 
-Entity *EntityManager::GetEntityByID(int id)
+ptr<Entity> EntityManager::GetEntityByID(int id)
 {
     auto it = _entity_map.find(id);
 
@@ -26,13 +27,13 @@ void EntityManager::DeregisterEntity(int id)
         _entity_map.erase(_entity_map.find(id));
 }
 
-void EntityManager::RegisterEntity(Entity *entity)
+void EntityManager::RegisterEntity(ptr<Entity> entity)
 {
     _entity_map.insert(std::make_pair(entity->_id, entity));
     entity->EnableAll();
 }
 
-const std::map<int, Entity *> &EntityManager::GetAllEntities() const
+const std::map<int, ptr<Entity>> &EntityManager::GetAllEntities() const
 {
     return _entity_map;
 }
@@ -49,7 +50,10 @@ bool EntityManager::HasEntity(int id)
 
 LuaList<Entity *> *EntityManager::AsLuaList()
 {
-    return LuaList<Entity *>::FromMapToLuaList<int, Entity *>(_entity_map);
+    std::map<int,Entity*> raw_entity_ptrs;
+    expose_ptrs(_entity_map, raw_entity_ptrs);
+
+    return LuaList<Entity *>::FromMapToLuaList<int, Entity *>(raw_entity_ptrs);
 }
 
 bool EntityManager::IDAvailable(int id)
@@ -96,39 +100,45 @@ std::list<Subscription> EntityManager::GetSubscriptions()
     return subs;
 }
 
-void EntityManager::MarkForDelete(Entity *e)
+void EntityManager::MarkForDelete(ptr<Entity> e)
 {
     _delete_set.insert(e);
 }
 
 void EntityManager::Clean()
 {
-    for (auto it = _delete_set.begin(); it != _delete_set.end();)
+    _delete_set.clear();
+    /*for (auto it = _delete_set.begin(); it != _delete_set.end();)
     {
-        Entity *e = *it;
+        ptr<Entity> e = *it;
         DeregisterEntity(e->ID());
         delete e;
         it = _delete_set.erase(it);
-    }
+    }*/
 }
 
 EntityManager::~EntityManager()
 {
-    std::cout << "Cleaning up entities...." << std::endl;
+    /*std::cout << "Cleaning up entities...." << std::endl;
     for (auto it = _entity_map.begin(); it != _entity_map.end();)
     {
-        Entity *to_delete = it->second;
+        ptr<Entity> to_delete = it->second;
         it = _entity_map.erase(it);
         delete to_delete;
-    }
+    }*/
 }
 
-Entity *EntityManager::GetNewest()
+ptr<Entity> EntityManager::GetNewest()
 {
     if (_entity_map.empty())
         return nullptr;
     else
         return _entity_map.rbegin()->second;
+}
+
+Entity* EntityManager::GetNewestUnshared()
+{
+    return GetNewest().get();
 }
 
 int EntityManager::Size()

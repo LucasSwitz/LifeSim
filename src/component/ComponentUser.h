@@ -5,6 +5,7 @@
 #include "src/component/Component.h"
 #include "src/component/ComponentUserType.h"
 #include "src/component/ComponentUserListener.h"
+#include "src/utils/json/json.hpp"
 
 /**
   Component User's simply maintain a list of active components, and also register themselves
@@ -19,6 +20,8 @@ class ComponentUser
   friend class GameState;
 
 public:
+  typedef std::unordered_map<std::string, ptr<Component>> component_map;
+
   ComponentUser(int type, int id = -1) : _id(id)
   {
     if (_id == -1)
@@ -30,8 +33,8 @@ public:
   int ID() const;
   int Type() const;
 
-  void AddComponent(Component *component);
-  void AddComponentValue(const std::string &component_name, const std::string &value_name, std::string value);
+  void AddComponent(ptr<Component> component);
+  void AddComponentValue(const std::string &component_name, const std::string &value_name, const std::string& value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, bool value);
   void AddComponentValue(const std::string &component_name, const std::string &value_name, float value);
   void RemoveComponent(std::string name);
@@ -44,7 +47,8 @@ public:
 
   void SetListener(ComponentUserListener *listener);
 
-  Component *GetComponent(std::string name);
+  ptr<Component> GetComponent(std::string name);
+  Component *GetComponentUnshared(std::string name);
 
   std::string GetComponentValueString(std::string component_name, std::string component_name_value) const;
   void SetComponentValueString(std::string component_name, std::string component_name_value, std::string value);
@@ -56,17 +60,21 @@ public:
   void SetComponentValueBool(std::string component_name, std::string component_name_value, bool value);
   void CallFunction(std::string component_name, std::string value_name);
 
-  std::unordered_map<std::string, Component *> &GetAllComponents();
+  std::unordered_map<std::string, ptr<Component>> &GetAllComponents();
+
+  static ptr<ComponentUser> FromJson(int type, const nlohmann::json &json);
+  static void FromJson(ptr<ComponentUser> user,const nlohmann::json &json);
+
   virtual ~ComponentUser();
   static int last_id;
 
-  ComponentUserListener* const GetComponentListener() const
+  ComponentUserListener *const GetComponentListener() const
   {
     return _listener;
   }
 
 protected:
-  std::unordered_map<std::string, Component *> _components;
+  component_map _components;
   ComponentUserListener *_listener = nullptr;
   bool _is_hidden;
   void SetID(int id);

@@ -4,12 +4,11 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include "src/component/ComponentUser.h"
-#include "src/world/tile/Tile.h"
 
 class GraphicsPreprocessor
 {
   public:
-    void ProcessComponentUser(ComponentUser *user, sf::Texture *texture, sf::Sprite *sprite)
+    void ProcessComponentUser(ComponentUser* user, ptr<sf::Texture> texture, ptr<sf::Sprite> sprite)
     {
         float width = user->GetComponentValueFloat("Graphics", "width");
         float height = user->GetComponentValueFloat("Graphics", "height");

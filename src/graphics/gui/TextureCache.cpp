@@ -2,7 +2,7 @@
 #include "src/utils/logging/Logging.h"
 
 
-sf::Texture* TextureCache::GetTexture(std::string name)
+ptr<sf::Texture> TextureCache::GetTexture(std::string name)
 {
     if(TextureCached(name) || LoadTexture(name))
     {
@@ -22,7 +22,7 @@ bool TextureCache::TextureCached(std::string name)
 
 bool TextureCache::LoadTexture(std::string file_path)
 {
-    sf::Texture* texture = new sf::Texture();
+    ptr<sf::Texture> texture (new sf::Texture());
     if(texture->loadFromFile(file_path))
     {
         _texture_cache.insert(std::make_pair(file_path,texture));
@@ -33,7 +33,6 @@ bool TextureCache::LoadTexture(std::string file_path)
     else
     {
         LOG->LogFile("Failed to load texture: " + file_path);
-        delete texture;
         return false;
     }
 }

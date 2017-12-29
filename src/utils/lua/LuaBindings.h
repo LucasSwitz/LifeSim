@@ -20,7 +20,7 @@
 #include "src/utils/debug/DebugFlags.h"
 #include "src/world/stage/LuaInstance.h"
 #include "src/world/stage/LuaStage.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/event/EventManager.h"
 #include "src/event/EngineEventManager.h"
 #include "src/controllers/Controller.h"
@@ -29,6 +29,7 @@
 #include "src/controllers/SideScrollerPlayerInterface.h"
 #include "src/controllers/ControllerBase.h"
 #include "src/utils/Globals.h"
+#include "src/engine/Engine.h"
 
 using namespace luabridge;
 class LuaBindings
@@ -48,7 +49,7 @@ class LuaBindings
                 .addFunction("SetString", &ComponentUser::SetComponentValueString)
                 .addFunction("SetBool", &ComponentUser::SetComponentValueBool)
                 .addFunction("GetBool", &ComponentUser::GetComponentValueBool)
-                .addFunction("GetComponent", &ComponentUser::GetComponent)
+                .addFunction("GetComponent", &ComponentUser::GetComponentUnshared)
                 .addFunction("HasComponent",&ComponentUser::HasComponent)
                 .addProperty("id",&ComponentUser::ID)
             .endClass()
@@ -92,7 +93,7 @@ class LuaBindings
                 .addFunction("size", &EntityManager::GetNumberOfEntities)
                 .addFunction("Get", &EntityManager::GetEntityByID)
                 .addFunction("AsLuaList", &EntityManager::AsLuaList)
-                .addFunction("Last",&EntityManager::GetNewest)
+                .addFunction("Last",&EntityManager::GetNewestUnshared)
             .endClass()
             .beginClass<Component>("Component")
                 .addFunction("GetNumber", &Component::GetFloatValue)
@@ -101,7 +102,7 @@ class LuaBindings
                 .addFunction("SetString", &Component::SetStringValue)
                 .addFunction("GetBool",&Component::GetBoolValue)
                 .addFunction("SetBool",&Component::SetBoolValue)
-                .addFunction("GetSubcomponent", &Component::GetSubcomponent)
+                .addFunction("GetSubcomponent", &Component::GetSubcomponentUnshared)
             .endClass()
             .beginClass<Subscription>("Subscription")
                 .addConstructor<void (*)(int)>()
@@ -176,6 +177,10 @@ class LuaBindings
                 .addFunction("SystemController",&GameState::GetSystemController)
                 .addFunction("EntityManager", &GameState::GetEntityManager)
                 .addFunction("ComponentUsers",&GameState::GetComponentUserBase)
+            .endClass()
+            .beginClass<Engine>("Engine")
+                .addFunction("ComponentUsers",&Engine::GetComponentUserBase)
+                .addFunction("EventManager",&Engine::GetEngineEventManager)
             .endClass();
     } 
  };

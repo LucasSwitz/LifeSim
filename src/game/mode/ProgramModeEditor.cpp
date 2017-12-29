@@ -1,22 +1,32 @@
 #include "src/game/mode/ProgramModeEditor.h"
 
 ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
-                                         _editor_runner(EDITOR_MODE_FPS), _game_runner(GAME_RUNNER_FPS)
+                                         _editor_runner(EDITOR_MODE_FPS),
+                                         _engine_runner(ENGINE_RUNNER_FPS),
+                                         file_path(Globals::RESOURCE_ROOT + "/world/stages"),
+                                         tile_maps_path(Globals::RESOURCE_ROOT + "/world/tile_maps"),
+                                         instances_path(Globals::RESOURCE_ROOT + "/world/instances"),
+                                         _window(_engine.GetEngineEventManager())
 {
-    _game_state = new GameState();
-
     LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
-    EngineEventManager::Instance()->RegisterSubscriber(this);
+    _engine.GetEngineEventManager().RegisterSubscriber(this);
 
-    _dev_tools.Init(&_window);
+    _dev_tools.Init(_window);
     _dev_tools.SetListener(this);
     _window.AddWindowListener(this);
 
+    _game_state = std::make_shared<GameState>();
     _game_state->Setup();
-    _game_runner.SetRunnable(_game_state);
-    _editor_runner.SetRunnable(this);
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
+    _engine.Load(Res("engine_conf.json"));
+    _engine.LoadGameState(_game_state);
+    _engine_runner.SetRunnable(&_engine);
+}
+
+void ProgramModeEditor::Init()
+{
+    _editor_runner.SetRunnable(this);
 }
 
 void ProgramModeEditor::Load()
@@ -32,13 +42,14 @@ void ProgramModeEditor::Update(std::chrono::time_point<std::chrono::high_resolut
         _external_game_runner->Update(current_time);
     else
     {
-        _game_runner.Update(current_time);
+        _engine.Update(current_time);
+        _engine_runner.Update(current_time);
     }
 }
 
 void ProgramModeEditor::Tick(float seconds_elapsed)
 {
-    _controllers_system.Update(seconds_elapsed, _game_state);
+    _controllers_system.Update(seconds_elapsed, _game_state.get());
     _window.Clear();
     _window.PollEvents();
     _window.Render();
@@ -56,13 +67,12 @@ void ProgramModeEditor::Exit()
 }
 
 //######################### DEV TOOL CALLBACKS ########################
-
 void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int rows, int columns)
 {
-    
+
     TileMap map;
-    TileMap::Blank(map,rows,columns);
-    Instance *i = new Instance(-1, instance_name);
+    TileMap::Blank(map, rows, columns);
+    ptr<Instance> i(new Instance(-1, instance_name));
     i->SetTileMap(map);
 
     _game_state->GetStage()->AddInstance(i);
@@ -75,25 +85,23 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
 
 void ProgramModeEditor::OnCreateBlankStage()
 {
-    _game_state = new GameState();
+    _game_state = std::make_shared<GameState>();
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
-    
-    _game_runner.SetRunnable(_game_state);
 
-    Stage *s = new LuaStage();
+    _engine.LoadGameState(_game_state);
 
-    _game_state->SetStage(s);
+    _game_state->SetStage(std::make_shared<LuaStage>(_engine.GetComponentUserBase()));
 
     _window.SetName("New Stage Name");
 }
 
 void ProgramModeEditor::OnLaunchInstance()
 {
-    _external_game_runner = new PMIDGGameRunner();
+    _external_game_runner = ptr<TBGameRunner>(new TBGameRunner());
     _external_game_runner->SetListener(this);
     _external_game_runner->RunGameState(*_game_state);
-    _editor_runner.SetRunnable(_external_game_runner);
+    _editor_runner.SetRunnable(_external_game_runner.get());
 }
 
 void ProgramModeEditor::OnLaunchStage()
@@ -121,19 +129,19 @@ void ProgramModeEditor::OnEvent(Event &e)
         if (e.sender_id == _window.ID())
         {
             Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
-            EngineEventManager::Instance()->LaunchEvent(e);
+            _engine.GetEngineEventManager().LaunchEvent(e);
         }
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
     {
-     Instance* current_instance = _game_state->GetStage()->GetCurrentInstance();
+        ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
 
-    _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
-                                 current_instance->GetTileMap().HeightPx());
+        _window.OnInstanceSizeChange(current_instance->GetTileMap().WidthPx(),
+                                     current_instance->GetTileMap().HeightPx());
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGING)
     {
-        Instance *current_instance = _game_state->GetStage()->GetCurrentInstance();
+        ptr<Instance> current_instance = _game_state->GetStage()->GetCurrentInstance();
         if (current_instance)
             SaveInstanceTilemap(current_instance);
     }
@@ -150,24 +158,22 @@ std::list<Subscription> ProgramModeEditor::GetSubscriptions()
 // ######################## LOADING / SAVING #################################
 void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 {
-    if (_game_state)
-        delete _game_state;
-
-    _game_state = new GameState();
+    _game_state = ptr<GameState>(new GameState());
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
     GameLoader loader;
     loader.Load(file_path, file_name, *_game_state);
 
-    _game_runner.SetRunnable(_game_state);
+    _engine.LoadGameState(_game_state);
 }
 
 void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)
 {
     if (_game_state && _game_state->GetStage())
     {
-        Stage *stage = _game_state->GetStage();
+        ptr<Stage> stage = _game_state->GetStage();
+
         if (stage->GetCurrentInstance())
             SaveInstanceTilemap(stage->GetCurrentInstance());
         stage->SetName(file_name);
@@ -177,13 +183,13 @@ void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)
     }
 }
 
-void ProgramModeEditor::SaveInstanceTilemap(Instance *instance)
+void ProgramModeEditor::SaveInstanceTilemap(ptr<Instance> instance)
 {
     std::string tile_map_path = tile_maps_path + "/" + instance->GetName() + ".pmidgM";
     instance->GetTileMap().SaveToFile(tile_map_path);
 }
 
-void ProgramModeEditor::GenerateInstanceTemplate(Instance *instance)
+void ProgramModeEditor::GenerateInstanceTemplate(ptr<Instance> instance)
 {
     SaveInstanceTilemap(instance);
 
@@ -194,7 +200,7 @@ void ProgramModeEditor::GenerateInstanceTemplate(Instance *instance)
     std::string instance_path = instances_path + "/" + instance->GetName() + ".pmidgI";
     instance_builder.Output(instance_path);
 
-    LuaInstanceFactory::Inst()->AddScript(instance->GetName(), instance->GetID(), instance_path);
+    LuaInstanceFactory::Inst()->AddResource(instance->GetName(), instance->GetID(), instance_path);
 }
 
 bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
@@ -205,48 +211,76 @@ bool ProgramModeEditor::OnWindowEvent(sf::Event &e)
     {
         sf::Vector2i pixel_pos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
         sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(pixel_pos);
-
-        if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
+        switch (_edit_mode)
         {
-            if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle)
+        case GAME_STATE_MODE:
+        {
+            if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
             {
-                sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
+                if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle)
+                {
+                    sf::Vector2i pixelPos = sf::Vector2i(e.mouseButton.x, e.mouseButton.y);
 
-                _mouse_history.x1 = pixelPos.x;
-                _mouse_history.y1 = pixelPos.y;
+                    _mouse_history.x1 = pixelPos.x;
+                    _mouse_history.y1 = pixelPos.y;
 
-                _window_transform_state = PANNING;
+                    _window_transform_state = PANNING;
+                }
+                else if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Middle)
+                {
+                    _window_transform_state = DORMANT;
+                }
+                else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+                {
+                    if (ptr<Entity> entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                    {
+                        if (e.type == sf::Event::MouseButtonPressed)
+                        {
+                            _brush.SetState(ptr<BrushState>(new SelectMoveableBrushState(entity)));
+                        }
+                        _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
+                    }
+                    else
+                    {
+                        _brush.OnGameStateMouseEvent(e, world_pos, _game_state);
+                    }
+                }
             }
-            else if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Middle)
+            else if (e.type == sf::Event::MouseWheelMoved)
             {
-                _window_transform_state = DORMANT;
+                _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
+                _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
+
+                _window.Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
             }
-            else if (ClickOnActiveTileMap(e.mouseButton.x, e.mouseButton.y))
+            else if (e.type == sf::Event::KeyPressed)
             {
-                if (Entity *entity = ClickOnEntity(pixel_pos.x, pixel_pos.y))
+                _brush.OnKeyboardEvent(e, _game_state);
+            }
+        }
+        break;
+        case UI_MODE:
+        {
+            if (e.type == sf::Event::MouseButtonPressed || e.type == sf::Event::MouseButtonReleased)
+            {
+                if (ptr<UIElement> ui_element = ClickOnUIElement(pixel_pos.x, pixel_pos.y))
                 {
                     if (e.type == sf::Event::MouseButtonPressed)
                     {
-                        _brush.SetState(new SelectEntityBrushState(entity));
+                        _brush.SetState(ptr<BrushState>(new SelectMoveableBrushState(ui_element)));
                     }
-                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state, entity);
+
+                    _brush.OnUIMouseEvent(e, world_pos, ui_element, nullptr); //container does not matter for now
                 }
                 else
                 {
-                    _brush.OnGameStateMouseEvent(e, world_pos, _game_state);
+                    _brush.OnUIMouseEvent(e, world_pos, nullptr);
                 }
             }
         }
-        else if (e.type == sf::Event::MouseWheelMoved)
-        {
-            _abs_scroll_ticks = _abs_scroll_ticks > 50 ? 50 : _abs_scroll_ticks - e.mouseWheel.delta;
-            _abs_scroll_ticks = _abs_scroll_ticks < 0 ? 0 : _abs_scroll_ticks - e.mouseWheel.delta;
-
-            _window.Zoom((float)_abs_scroll_ticks / (float)MAX_SCROLL_TICKS);
-        }
-        else if (e.type == sf::Event::KeyPressed)
-        {
-            _brush.OnKeyboardEvent(e, _game_state);
+        break;
+        default:
+            std::cout << "Should not get here" << std::endl;
         }
     }
 }
@@ -263,7 +297,23 @@ void ProgramModeEditor::Render(float seconds_elapsed)
             PanView();
         }
     }
-    _dev_tools.Render(&_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
+
+    switch (_edit_mode)
+    {
+    case GAME_STATE_MODE:
+
+        break;
+    case UI_MODE:
+        if (ui)
+        {
+            ui->Draw(_window);
+            UIVisualizer ui_visualizer(ui);
+            ui_visualizer.Draw(_window);
+        }
+
+        break;
+    }
+    _dev_tools.Render(_window, _game_state, _window.GetTextureCache(), seconds_elapsed, _brush);
 }
 
 void ProgramModeEditor::PanView()
@@ -283,23 +333,23 @@ bool ProgramModeEditor::ClickOnActiveTileMap(int x, int y)
     if (!CanEdit())
         return false;
 
-    Instance *instance = _game_state->GetStage()->GetCurrentInstance();
+    ptr<Instance> instance = _game_state->GetStage()->GetCurrentInstance();
     sf::Vector2f world_cords = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
-    return instance->GetTileMap().TileAt(world_cords.x, world_cords.y);
+    return (instance->GetTileMap().TileAt(world_cords.x, world_cords.y)) != nullptr;
 }
 
-Entity *ProgramModeEditor::ClickOnEntity(int x, int y)
+ptr<Entity> ProgramModeEditor::ClickOnEntity(int x, int y)
 {
     if (!CanEdit())
         return nullptr;
 
     sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
 
-    const std::map<int, Entity *> &entities = _game_state->GetEntityManager()->GetAllEntities();
+    auto entities = _game_state->GetEntityManager().GetAllEntities();
 
     for (auto it = entities.begin(); it != entities.end(); it++)
     {
-        Entity *e = it->second;
+        ptr<Entity> e = it->second;
 
         int pos_x = e->GetComponentValueFloat("Position", "x");
         int pos_y = e->GetComponentValueFloat("Position", "y");
@@ -322,23 +372,7 @@ Entity *ProgramModeEditor::ClickOnEntity(int x, int y)
             continue;
         }
 
-        sf::Vector2f corner_top_left(pos_x - width / 2.0, pos_y - height / 2.0);
-        sf::Vector2f corner_top_right(pos_x + width / 2.0, pos_y - height / 2.0);
-        sf::Vector2f corner_bot_right(pos_x + width / 2.0, pos_y + height / 2.0);
-
-        sf::Vector2f top_edge = corner_top_right - corner_top_left;    //AB
-        sf::Vector2f right_edge = corner_bot_right - corner_top_right; //BC
-
-        sf::Vector2f top_left_to_click = world_pos - corner_top_left;   //AM
-        sf::Vector2f top_right_to_click = world_pos - corner_top_right; //BM
-
-        float dot_top_click = sf::Dot(top_edge, top_left_to_click);
-        float dot_top_top = sf::Dot(top_edge, top_edge);
-        float dot_right_click = sf::Dot(right_edge, top_right_to_click);
-        float dot_right_right = sf::Dot(right_edge, right_edge);
-
-        if (0 <= dot_top_click && dot_top_click <= dot_top_top &&
-            0 <= dot_right_click && dot_right_click <= dot_right_right)
+        if (ClickInBoundingBox(world_pos.x, world_pos.y, pos_x, pos_y, width, height))
         {
             return e;
         }
@@ -349,4 +383,59 @@ Entity *ProgramModeEditor::ClickOnEntity(int x, int y)
 bool ProgramModeEditor::CanEdit()
 {
     return _game_state && _game_state->GetStage() && _game_state->GetStage()->GetCurrentInstance();
+}
+
+ptr<UIElement> ProgramModeEditor::ClickOnUIElement(int x, int y)
+{
+    if (!CanEdit())
+        return nullptr;
+
+    sf::Vector2f world_pos = _window.SFWindow().mapPixelToCoords(sf::Vector2i(x, y));
+
+    for (auto root_container : _root_containers)
+    {
+        int x_pos = root_container->GetComponentValueFloat("Position", "x");
+        int y_pos = root_container->GetComponentValueFloat("Position", "y");
+        int width = root_container->GetComponentValueFloat("Graphics", "width");
+        int height = root_container->GetComponentValueFloat("Graphics", "height");
+
+        if (ClickInBoundingBox(world_pos.x, world_pos.y, x_pos, y_pos, width, height))
+        {
+            ptr<UIElement> e = root_container->ChildAtPos(world_pos.x, world_pos.y);
+
+            return e ? e : root_container;
+        }
+    }
+
+    return nullptr;
+}
+
+void ProgramModeEditor::OnNewUI()
+{
+    ui = std::make_shared<BaseUI>(_window);
+    OnModeChangeUI();
+}
+
+void ProgramModeEditor::OnModeChangeGame()
+{
+    std::cout << "Set Editor to GAME_STATE mode." << std::endl;
+    _edit_mode = GAME_STATE_MODE;
+}
+
+void ProgramModeEditor::OnModeChangeUI()
+{
+    std::cout << "Set Editor to UI mode." << std::endl;
+    _edit_mode = UI_MODE;
+}
+
+void ProgramModeEditor::OnAttachUI(const std::string& file_name)
+{
+    if(ui)
+        ui->Hide();
+        
+    std::cout << "Loading UI: " << Res(file_name) << std::endl;
+    ui = std::make_shared<UI>();
+    ui->Load(Res(file_name));
+    ui->Show();
+    OnModeChangeUI();
 }

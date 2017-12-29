@@ -1,7 +1,7 @@
 #ifndef SCRIPTABLESTATEMACHINE_H
 #define SCRIPTABLESTATEMACHINE_H
 
-#include "src/utils/state/StateScriptFactory.h"
+#include "src/utils/state/StateResourceFactory.h"
 #include "src/utils/state/ScriptableState.h"
 
 template<typename T>
@@ -12,7 +12,7 @@ public:
 
     void SetCurrentState(std::string type_name, std::string script_name)
     {
-        _current_state = StateScriptFactory::Instance()->GetScriptableState(type_name,script_name);
+        _current_state = StateResourceFactory::Instance()->GetScriptableState(type_name,script_name);
     }
 
     void Update()
@@ -28,7 +28,7 @@ public:
 
     void ChangeState(std::string type_name, std::string script_name)
     {
-        ScriptableState* new_state = StateScriptFactory::Instance()->GetScriptableState(type_name,script_name);
+        ScriptableState* new_state = StateResourceFactory::Instance()->GetScriptableState(type_name,script_name);
          
         if(_current_state)
         {

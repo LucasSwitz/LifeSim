@@ -9,15 +9,26 @@
 
 #include "src/game/FPSRunnable.h"
 #include "src/world/stage/Stage.h"
+
+#include <exception>
 /**
     Purpose: GameState describes all game operating specific details. This includes 
              information about active entities, running systems, loaded instances, etc.
              A GameState can be operated by an FPSRunnable.
 **/
 
+typedef System<GameState> game_system;
 class GameState : public FPSRunnable
 {
 public:
+  class stage_not_loaded_exn : public std::exception
+  {
+    virtual const char *what() const throw()
+    {
+      return "No stage loaded in GameState.";
+    }
+  } no_stage_exn;
+
   GameState();
 
   GameState(const GameState &game_state);
@@ -30,32 +41,32 @@ public:
 
   void Unload();
 
-  void SetStage(Stage *stage);
+  void SetStage(ptr<Stage> stage);
 
-  void ChangeState(Stage *new_stage);
+  void ChangeState(ptr<Stage> new_stage);
 
   void AddSystem(std::string system_name);
 
-  void AddSystem(System *system);
+  void AddSystem(ptr<game_system> system);
 
-  void AddEntity(Entity *e);
+  void AddEntity(ptr<Entity> e);
 
-  Stage *GetStage();
+  ptr<Stage> GetStage();
 
-  ComponentUserBase *GetComponentUserBase();
+  ComponentUserBase& GetComponentUserBase();
 
-  EntityManager *GetEntityManager();
+  EntityManager &GetEntityManager();
 
-  SystemController &GetSystemController();
+  SystemController<GameState> &GetSystemController();
 
   EventManager &GetMessageDispatch();
 
   PlayerBase &GetPlayerBase();
 
 private:
-  SystemController _system_controller;
+  SystemController<GameState> _system_controller;
   EventManager _message_dispatch;
   PlayerBase _player_base;
-  Stage *_current_stage = nullptr;
+  ptr<Stage> _current_stage = nullptr;
 };
 #endif

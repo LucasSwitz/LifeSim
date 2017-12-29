@@ -13,6 +13,9 @@ class LuaStage : public Stage
 {
     public:
 
+    LuaStage(ComponentUserBase& cub) : Stage(cub){};
+    LuaStage(){}
+
     void Enter() override
     {
         if(_enter_function)
@@ -69,7 +72,8 @@ class LuaStage : public Stage
                 if((stage_table)["root"])
                 {
                     std::string root_instance_name = (stage_table)["root"].cast<std::string>(); 
-                    _root_instance = LuaInstanceFactory::Inst()->GetInstance(root_instance_name);   
+                    _root_instance = ptr<Instance>
+                        (LuaInstanceFactory::Inst()->GetInstance(root_instance_name));   
                 }
                 if((stage_table)["Instances"])
                 {
@@ -139,7 +143,7 @@ class LuaStage : public Stage
             }
 
             if(new_instance)
-                AddInstance(new_instance);
+                AddInstance(ptr<Instance>(new_instance));
         }
 
         void LoadRootInstanceFromRef(const LuaRef& root)
@@ -161,7 +165,7 @@ class LuaStage : public Stage
             }
 
             if(root_instance)
-                SetRootInstance(root_instance);
+                SetRootInstance(ptr<Instance>(root_instance));
         }   
 
         std::unique_ptr<LuaRef> _enter_function;

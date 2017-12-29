@@ -7,6 +7,7 @@
 #include "src/game_objects/Entity.h"
 #include "src/utils/lua/LuaUniversal.h"
 #include "src/component/LuaComponent.h"
+#include "src/utils/lua/LuaDefinedAsset.h"
 #include <unordered_map>
 
 using namespace luabridge;
@@ -16,23 +17,20 @@ using namespace luabridge;
     Components added to a LuaEntity will be added to the given LuaRef as well. This may change
     in the future.
 **/
-class LuaEntity : public Entity
+class LuaEntity : public Entity, public LuaDefinedAsset
 {
-    public:
+  public:
+    LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY, ""){
 
-    LuaEntity() : Entity(Entity::LUA_DEFINED_ENTITY,"")
-    {
-        
-    };
+                  };
 
-    void LoadScript(lua_State* lua_state, std::string script_path,std::string& entity_name);
+    void ConfigureAllComponentsFromLua(const LuaRef &ref);
 
-    void ConfigureAllComponentsFromLua(const LuaRef& ref);
-
-    void AddComponent(std::string name, const LuaRef& new_component) //only this gets exposed to lua
+    void AddComponent(std::string name, const LuaRef &new_component) //only this gets exposed to lua
     {
         (*_entity_table)["Components"][name] = new_component; //i guess keep this updated for good measure.
-        LuaComponent* c = new LuaComponent();
+
+        ptr<LuaComponent> c(new LuaComponent());
         c->FromLuaRef(new_component);
 
         ComponentUser::AddComponent(c);
@@ -45,16 +43,16 @@ class LuaEntity : public Entity
         ComponentUser::RemoveComponent(name);
     }
 
-    static LuaEntity* DownCastFromEntity(Entity* e)
+    static LuaEntity *DownCastFromEntity(Entity *e)
     {
-        return dynamic_cast<LuaEntity*>(e);
+        return dynamic_cast<LuaEntity *>(e);
     }
 
     void SetNumber(std::string component_name, std::string value_name, float value)
     {
-         LuaRef comps = ((*_entity_table)["Components"]);
-         LuaRef comp = comps[component_name];
-         comp[value_name] = value;
+        LuaRef comps = ((*_entity_table)["Components"]);
+        LuaRef comp = comps[component_name];
+        comp[value_name] = value;
 
         ComponentUser::SetComponentValueFloat(component_name, value_name, value);
     }
@@ -67,14 +65,16 @@ class LuaEntity : public Entity
         (func)(this);
     }
 
-    LuaRef& AsTable()
+    LuaRef &AsTable()
     {
         return *_entity_table;
     }
 
     virtual ~LuaEntity();
 
-    private:
+  protected:
+    void _LoadScript(lua_State *lua_state, const std::string &entity_name);
+  private:
     std::shared_ptr<LuaRef> _entity_table;
 };
 #endif

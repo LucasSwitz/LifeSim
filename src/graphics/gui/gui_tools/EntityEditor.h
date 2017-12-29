@@ -34,24 +34,21 @@ class EntityEditor
 
     void Draw(TextureCache &texture_cache, Brush& brush)
     {
-        ImGui::ListBoxVector("", &selected_entity, entity_scripts);
+        ImGui::ListBoxVector("##LBVEntityEditor", &selected_entity, entity_scripts);
         if (selected_entity != -1)
         {
-            if(!selected_entity_prototype || selected_entity_prototype->GetPrototypeName() != entity_scripts.at(selected_entity))
-            {
+            if(!selected_entity_prototype || selected_entity_prototype->GetPrototypeName().compare( 
+                entity_scripts.at(selected_entity)) != 0){
                 delete selected_entity_prototype;
                 selected_entity_prototype = LuaEntityFactory::Instance()
                     ->GetEntityByName(entity_scripts.at(selected_entity));
-
-                brush.SetState(new PaintEntityBrushState(selected_entity_prototype));
+                brush.SetState(ptr<BrushState>(new PaintEntityBrushState(selected_entity_prototype)));
             }
 
-            if (selected_entity_prototype && selected_entity_prototype->HasComponent("Graphics"))
-            {
+            if (selected_entity_prototype && selected_entity_prototype->HasComponent("Graphics")){
                 std::string texture_path = selected_entity_prototype->GetComponentValueString("Graphics", "sprite");
-                sf::Texture *texture = texture_cache.GetTexture(texture_path);
+                ptr<sf::Texture> texture = texture_cache.GetTexture(texture_path);
                 ImGui::Image(*texture);
-
                 ImGui::SameLine();
                 
             }

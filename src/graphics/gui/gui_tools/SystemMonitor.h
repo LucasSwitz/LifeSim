@@ -8,15 +8,15 @@
 class SystemMonitor
 {
   public:
-    void Draw(const char *title, SystemController& system_controller, bool *opened = NULL)
+    void Draw(const char *title, SystemController<GameState>& system_controller, bool *opened = NULL)
     {
         ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiSetCond_FirstUseEver);
         ImGui::Begin(title, opened);
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         std::unordered_map<std::string, std::string> available_systems = SystemFactory::Instance()->GetAllSystems();
-        std::list<System *> &active_systems = system_controller.GetExecutionSequenceMutable();
-        std::list<System *> &passive_systems = system_controller.GetPassiveSystemsMutable();
+        auto &active_systems = system_controller.GetExecutionSequenceMutable();
+        auto &passive_systems = system_controller.GetPassiveSystemsMutable();
 
         for (auto it = active_systems.begin(); it != active_systems.end(); it++)
         {
@@ -58,10 +58,10 @@ class SystemMonitor
 
     void DrawAvailableSystems(std::vector<std::string> &systems)
     {
-        ImGui::ListBoxVector("", &selected_system, systems);
+        ImGui::ListBoxVector("##LBVAvialbleSystems", &selected_system, systems);
     }
 
-    void DrawSystemList(std::list<System *> &list, SystemController& system_controller, std::string type)
+    void DrawSystemList(SystemController<GameState>::system_list &list, SystemController<GameState>& system_controller, std::string type)
     {
         int i = 0;
         for (auto it = list.begin(); it != list.end();)

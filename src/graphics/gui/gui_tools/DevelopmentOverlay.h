@@ -9,7 +9,7 @@
 #include "src/graphics/gui/gui_tools/InstanceEditor.h"
 #include "src/world/tile/LuaTileFactory.h"
 #include "src/graphics/gui/TextureCache.h"
-#include "src/graphics/gui/PMIDGWindow.h"
+#include "src/graphics/gui/TBWindow.h"
 #include "src/graphics/gui/gui_tools/DevelopmentOverlayListener.h"
 #include "src/graphics/gui/gui_tools/SystemMonitor.h"
 #include "src/graphics/gui/gui_tools/EditModeControls.h"
@@ -17,12 +17,13 @@
 #include "src/graphics/gui/gui_tools/StageEditor.h"
 #include "src/game/GameState.h"
 
-class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListener
+class DevelopmentOverlay : public MainMenuListener, 
+                         public EditModeControlsListener
 {
     public:
         DevelopmentOverlay();
-        void Render(PMIDGWindow* render_window, GameState* game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
-        void Init(PMIDGWindow* render_window);
+        void Render(TBWindow& render_window, ptr<GameState> game_state, TextureCache& texture_cache, float seconds_elapsed, Brush& brush);
+        void Init(TBWindow& render_window);
         void Shutdown();
         Log& GetLog();
         void SetListener(DevelopmentOverlayListener* listener);
@@ -35,6 +36,10 @@ class DevelopmentOverlay : public MainMenuListener, public EditModeControlsListe
         void LoadStagePressed(std::string& file_name);
         void SaveStagePressed(std::string& file_name);
         void NewStagePressed();
+        void NewUIPressed();
+        void AttachUIPressed(std::string& file_name);
+        void GameModePressed();
+        void UIModePressed();
 
         //Inherited from EditModeControlListener
         void OnLaunchStage();

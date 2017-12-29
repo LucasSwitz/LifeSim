@@ -2,14 +2,14 @@
 #define LUASTAGEFACTORY_H
 
 
-#include "src/utils/ScriptFactory.h"
+#include "src/utils/ResourceFactory.h"
 #include "src/world/stage/LuaStage.h"
 
 /**
     Purpose: LuaStageFactory can be used to create Lua defined Stages by supplying 
              a valid name or ID.
 **/
-class LuaStageFactory : public ScriptFactory<std::string>
+class LuaStageFactory : public ResourceFactory<std::string>
 {
 
   public:
@@ -17,7 +17,7 @@ class LuaStageFactory : public ScriptFactory<std::string>
   bool StagePrototypeExists(int id);
   Stage* GetStage(std::string name);
   Stage* GetStage(int id);
-  void AddScript(Preamble &pre, std::string script_path) override;
+  void AddResource(Preamble &pre, std::string script_path) override;
 
   void Reset() override;
 
@@ -30,7 +30,7 @@ class LuaStageFactory : public ScriptFactory<std::string>
 
 protected:
   LuaStageFactory(std::string script_type) 
-                        : ScriptFactory<std::string>(script_type){};
+                        : ResourceFactory<std::string>(script_type){};
     
 private:    
     std::unordered_map<int, std::string> _stage_directory;

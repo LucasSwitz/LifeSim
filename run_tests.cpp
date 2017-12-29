@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <iostream>
 #include <gtest/gtest.h>
+#include "src/utils/Globals.h"
 
 #include "test/lua_tests/systems/ScriptableSystemTest.h"
 #include "test/events/EventManagerTest.h"
@@ -10,12 +11,17 @@
 #include "test/world/InstanceTest.h"
 #include "test/world/StageTest.h"
 #include "test/protobuf/GameStateProtoBufTest.h"
+#include "test/game/game_systems/GameSystemsLoadTest.h"
+#include "test/ui/UITest.h"
+#include "test/ui/JsonUITest.h"
+#include "test/game/game_components/JsonComponentUserTest.h"
+#include "test/engine/EngineTest.h"
 
 int RunTests(int argc, char** argv);
 
 int main(int argc, char **argv)
 {
-    Globals::SetResourceRoot("/home/lucas/Desktop/LifeSim/test/res");
+    Globals::SetResourceRoot("/home/lucas/Desktop/ThunderBiscuit/test/res");
     return RunTests(argc,argv);
 }
 

@@ -11,7 +11,7 @@ class StageEditor
     {
     }
 
-    void Draw(Stage *stage)
+    void Draw(ptr<Stage> stage)
     {
         if (!stage)
             return;
@@ -20,7 +20,7 @@ class StageEditor
         _focused = ImGui::IsRootWindowOrAnyChildHovered();
 
         _instance_names.clear();
-        const std::unordered_map<std::string, Instance *> &instance_map = stage->GetInstances();
+        auto& instance_map = stage->GetInstances();
         for (auto it = instance_map.begin(); it != instance_map.end(); it++)
         {
             _instance_names.push_back(it->first);
@@ -52,6 +52,6 @@ class StageEditor
     int _selected_instance = -1;
     int _last_selection = -1;
     bool _focused = false;
-    Stage *_last_stage = 0;
+    ptr<Stage> _last_stage = 0;
 };
 #endif

@@ -24,26 +24,30 @@ public:
   ~EntityManager();
   EntityManager();
 
+  typedef std::map<int, ptr<Entity>> entity_map;
+
   EntityManager(const EntityManager& manager, ComponentUserBase& component_user_base)
   {
-    const std::map<int, Entity*>& entities = manager.GetAllEntities();
+    const entity_map entities = manager.GetAllEntities();
 
     for(auto it = entities.begin(); it != entities.end(); it++)
     {
-      Entity* e = new Entity(*it->second);
+      ptr<Entity> e (new Entity(*it->second));
       e->EnableAll(component_user_base);
       _entity_map.insert(std::make_pair(e->_id, e));
     }
   }
 
-  void RegisterEntity(Entity *entity);
-  Entity *GetEntityByID(int id);
+  void RegisterEntity(ptr<Entity> entity);
+  ptr<Entity> GetEntityByID(int id);
   void DeregisterEntity(int id);
 
-  const std::map<int, Entity *>& GetAllEntities() const;
+  const entity_map& GetAllEntities() const;
   int GetNumberOfEntities();
 
-  Entity* GetNewest();
+  ptr<Entity> GetNewest();
+  Entity* GetNewestUnshared();
+  
 
   void Clear();
   bool IDAvailable(int id);
@@ -56,13 +60,13 @@ public:
   std::list<Subscription> GetSubscriptions();
   void OnEvent(Event &e);
 
-  void MarkForDelete(Entity* e);
+  void MarkForDelete(ptr<Entity> e);
   void Clean();
 
 private:
-  std::map<int, Entity *> _entity_map;
+  entity_map _entity_map;
   static EntityManager *_instance;
-  std::set<Entity*> _delete_set;
+  std::set<ptr<Entity>> _delete_set;
 };
 
 #endif

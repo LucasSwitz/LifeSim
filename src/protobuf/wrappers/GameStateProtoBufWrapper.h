@@ -12,6 +12,9 @@
     Purpose: Wrapper for protocol buffer classes generated using the Google protocol buffer compiler. 
 **/
 
+
+typedef std::map<int, ptr<Entity>> entity_map;
+
 class GameStateProtoBufWrapper
 {
 public:
@@ -31,7 +34,7 @@ public:
   {
     for (auto it = entities_list.begin(); it != entities_list.end(); it++)
     {
-      Entity *e = *it;
+      ptr<Entity> e (*it);
       pmidgserialized::Entity *serialized_entity = serialized_game_state.add_entities();
 
       int id = e->ID();
@@ -43,7 +46,7 @@ public:
       serialized_entity->set_instance(instance);
       serialized_entity->set_name(name);
 
-      std::unordered_map<std::string, Component *> components = e->GetAllComponents();
+      auto components = e->GetAllComponents();
 
       if (components.size() > 0)
       {
@@ -100,23 +103,23 @@ public:
     }
   }
 
-  void GetStage(LuaStage *stage);
+  void GetStage(ptr<LuaStage> stage);
 
   void FromFile(std::string file_name);
 
   void ToFile(std::string file_name);
 
-  void SetEntities(const std::map<int, Entity *> &entities_list);
+  void SetEntities(const entity_map &entities_list);
   
   void SetStage(Stage &stage);
 
-  void ConfigureSerializedComponent(pmidgserialized::Component *serialized_component, Component *component);
+  void ConfigureSerializedComponent(pmidgserialized::Component *serialized_component, ptr<Component> component);
 
-  Component *GenerateComponent(pmidgserialized::Component component);
+  ptr<Component> GenerateComponent(pmidgserialized::Component component);
 
 private:
   template <typename ST, typename T>
-  void ConfigureComponent(Component *c, ST serialized_value)
+  void ConfigureComponent(ptr<Component> c, ST serialized_value)
   {
     std::string value_name = serialized_value.value_name();
     T value = serialized_value.value();
@@ -124,7 +127,7 @@ private:
   }
 
   template <typename ST, typename T>
-  void ConfigureSerializedComponentValue(Component::ComponentValue<T> &component_value, ST *serialized_component_value)
+  void ConfigureSerializedComponentValue(ComponentValue<T> &component_value, ST *serialized_component_value)
   {
     std::string component_value_name = component_value.GetName();
     T value = component_value.GetValue();

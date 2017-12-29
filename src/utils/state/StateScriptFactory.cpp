@@ -1,6 +1,6 @@
-#include "StateScriptFactory.h"
+#include "StateResourceFactory.h"
 
-ScriptableState *StateScriptFactory::GetScriptableState(std::string script_template_class, std::string script_name)
+ScriptableState *StateResourceFactory::GetScriptableState(std::string script_template_class, std::string script_name)
 {
     if (_scripts_map.find(script_template_class) == _scripts_map.end() || _scripts_map.at(script_template_class).find(script_name) == _scripts_map.at(script_template_class).end())
     {
@@ -12,14 +12,14 @@ ScriptableState *StateScriptFactory::GetScriptableState(std::string script_templ
     return _scripts_map.at(script_template_class).at(script_name);
 }
 
-ScriptableState *StateScriptFactory::Configure(std::string full_script_path, std::string scriptable_name)
+ScriptableState *StateResourceFactory::Configure(std::string full_script_path, std::string scriptable_name)
 {
     ScriptableState *new_state = new ScriptableState();
     new_state->LoadScript(LUA_STATE, full_script_path, scriptable_name);
     return new_state;
 }
 
-void StateScriptFactory::AddScript(Preamble &pre, ScriptableState *scriptable_object)
+void StateResourceFactory::AddResource(Preamble &pre, ScriptableState *scriptable_object)
 {
 
     auto it = _scripts_map.find(pre.GetFlag("StateOwner"));

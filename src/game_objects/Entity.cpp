@@ -6,7 +6,8 @@ int Entity::CPP_DEFINED_ENTITY = 0;
 int Entity::LUA_DEFINED_ENTITY = 1;
 
 Entity::Entity(int type, std::string prototype_name, int id) : ComponentUser(CU_TYPE_ENTITY,id), 
-        _type(type), _prototype_name(prototype_name)
+                                                               _type(type), 
+                                                               _prototype_name(prototype_name)
 {
     
 }
@@ -21,7 +22,7 @@ std::string &Entity::GetPrototypeName()
     return _prototype_name;
 }
 
-void Entity::SetPrototypeName(std::string &name)
+void Entity::SetPrototypeName(const std::string &name)
 {
     _prototype_name = name;
 }
@@ -29,10 +30,10 @@ void Entity::SetPrototypeName(std::string &name)
 Entity *Entity::Clone()
 {
     Entity *e = new Entity(0, _prototype_name);
-    std::unordered_map<std::string, Component *> components = GetAllComponents();
+    auto components = GetAllComponents();
     for (auto it = components.begin(); it != components.end(); it++)
     {
-        Component *c = new Component(*(it->second));
+        ptr<Component> c (new Component(*(it->second)));
         e->AddComponent(c);
     }
 

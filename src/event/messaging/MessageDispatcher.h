@@ -30,7 +30,7 @@ public:
     }
 
 private:
-    EventManager* _dispatch;
+    EventManager* _dispatch = nullptr;
 
 };
 #endif

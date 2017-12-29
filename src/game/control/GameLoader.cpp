@@ -23,16 +23,16 @@ void GameLoader::Save(std::string file_name, GameState &game_state)
     std::cout << "Saving game to file: " << file_name << std::endl;
     GameStateProtoBufWrapper gameStateProtoBuf;
     gameStateProtoBuf.SetStage(*game_state.GetStage());
-    gameStateProtoBuf.SetEntities(game_state.GetEntityManager()->GetAllEntities());
+    gameStateProtoBuf.SetEntities(game_state.GetEntityManager().GetAllEntities());
     gameStateProtoBuf.SetSystems(game_state.GetSystemController().GetExecutionSequence());
     gameStateProtoBuf.ToFile(file_name);
 }
 
 void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state)
 {
-    std::list<Entity *> entities;
+    /*std::list<Entity *> entities;
     std::list<std::string> systems;
-    LuaStage *stage = new LuaStage();
+    ptr<LuaStage> stage = std::make_shared<LuaStage>();
 
     protobuf.GetEntities(entities);
     protobuf.GetSystems(systems);
@@ -42,11 +42,11 @@ void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameS
 
     for (Entity *e : entities)
     {
-        game_state.AddEntity(e);
+        game_state.AddEntity(ptr<Entity>(e));
     }
 
     for (std::string &system : systems)
     {
         game_state.AddSystem(system);
-    }
+    }*/
 }

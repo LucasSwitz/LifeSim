@@ -1,8 +1,11 @@
 #include "src/protobuf/wrappers/GameStateProtoBufWrapper.h"
 
-void GameStateProtoBufWrapper::SetEntities(const std::map<int, Entity *> &entities_list)
+typedef std::map<int, ptr<Entity>> entity_map;
+
+
+void GameStateProtoBufWrapper::SetEntities(const entity_map &entities_list)
 {
-    std::list<Entity *> entities;
+    std::list<ptr<Entity>> entities;
     for (auto it = entities_list.begin(); it != entities_list.end(); it++)
     {
         entities.push_back(it->second);
@@ -11,41 +14,37 @@ void GameStateProtoBufWrapper::SetEntities(const std::map<int, Entity *> &entiti
     SetEntities(entities);
 }
 
-void GameStateProtoBufWrapper::ConfigureSerializedComponent(pmidgserialized::Component *serialized_component, Component *component)
+void GameStateProtoBufWrapper::ConfigureSerializedComponent(pmidgserialized::Component *serialized_component, ptr<Component> component)
 {
     std::string name = component->GetName();
     serialized_component->set_name(name);
 
-    std::unordered_map<std::string, Component::ComponentValue<float>> &float_values =
-        component->GetAllFloatValues();
-
-    std::unordered_map<std::string, Component::ComponentValue<std::string>> &string_values =
-        component->GetAllStringValues();
-
-    std::unordered_map<std::string, Component::ComponentValue<bool>> &bool_values =
-        component->GetAllBoolValues();
-
-    std::unordered_map<std::string, Component *> &sub_components =
-        component->GetSubcomponents();
+    auto& float_values =component->GetAllFloatValues();
+    auto& string_values =component->GetAllStringValues();
+    auto& bool_values = component->GetAllBoolValues();
+    auto& sub_components =component->GetSubcomponents();
 
     for (auto it_vals = float_values.begin(); it_vals != float_values.end(); it_vals++){
         pmidgserialized::ComponentValueFloat *serialized_component_value =
             serialized_component->add_float_values();
 
-        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueFloat, float>(it_vals->second, serialized_component_value);
+        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueFloat, float>(it_vals->second, 
+            serialized_component_value);
     }
 
     for (auto it_vals = string_values.begin(); it_vals != string_values.end(); it_vals++){
         pmidgserialized::ComponentValueString *serialized_component_value =
             serialized_component->add_string_values();
-        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueString, std::string>(it_vals->second, serialized_component_value);
+        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueString, std::string>(it_vals->second, 
+            serialized_component_value);
     }
 
     for (auto it_vals = bool_values.begin(); it_vals != bool_values.end(); it_vals++){
         pmidgserialized::ComponentValueBool *serialized_component_value =
             serialized_component->add_bool_values();
 
-        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueBool, bool>(it_vals->second, serialized_component_value);
+        ConfigureSerializedComponentValue<pmidgserialized::ComponentValueBool, bool>(it_vals->second,
+            serialized_component_value);
     }
 
     for (auto it_vals = sub_components.begin(); it_vals != sub_components.end(); it_vals++){
@@ -77,11 +76,11 @@ void GameStateProtoBufWrapper::SetStage(Stage &stage)
     serialzied_stage->set_name(name);
 }
 
-Component *GameStateProtoBufWrapper::GenerateComponent(pmidgserialized::Component component)
+ptr<Component> GameStateProtoBufWrapper::GenerateComponent(pmidgserialized::Component component)
 {
 
     std::string component_name = component.name();
-    Component *component_to_add = new Component(component_name);
+    ptr<Component> component_to_add (new Component(component_name));
 
     int num_of_bool_values = component.bool_values_size();
     int num_of_string_values = component.string_values_size();
@@ -108,14 +107,14 @@ Component *GameStateProtoBufWrapper::GenerateComponent(pmidgserialized::Componen
     }
 
     for (int j = 0; j < num_of_subcomponents; j++){
-        Component *sub = GenerateComponent(component.subcomponents(j));
+        ptr<Component> sub = GenerateComponent(component.subcomponents(j));
         component_to_add->AddSubcomponent(sub);
     }
 
     return component_to_add;
 }
 
-void GameStateProtoBufWrapper::GetStage(LuaStage *stage)
+void GameStateProtoBufWrapper::GetStage(ptr<LuaStage> stage)
 {
     pmidgserialized::Stage serialized_stage = serialized_game_state.stage();
 

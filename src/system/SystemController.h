@@ -18,19 +18,23 @@
 **/
 class GameState;
 
+template <typename T>
 class SystemController : public EventSubscriber, public MessageDispatcher
 {
   friend class GameState;
 
 public:
-  SystemController(EventManager& msgd)
+  typedef ptr<System<T>> sys_ptr;
+  typedef std::list<sys_ptr> system_list;
+
+  SystemController()
   {
-    msgd.RegisterSubscriber(this);
+    
   }
 
   SystemController(const SystemController &system_controller)
   {
-    const std::list<System *> &systems = system_controller.GetExecutionSequence();
+    const system_list &systems = system_controller.GetExecutionSequence();
 
     for (auto it = systems.begin(); it != systems.end(); it++)
     {
@@ -38,21 +42,244 @@ public:
     }
   }
 
-  void AddToSystemExecutionSequence(const std::string &system_name);
-  void AddPassiveSystem(const std::string &system_name);
-  void AddPassiveSystem(System *system);
-  void AddToSystemExecutionSequence(System *system);
-  std::list<System *>::iterator RemoveFromSystemExecutionSequence(const std::string &system_name);
-  void MoveUp(std::string system_name);
-  void MoveDown(std::string system_down);
-  void Lock();
-  void Unlock();
+  void AddPassiveSystem(const std::string &system_name)
+  {
+    System<T> *system = SystemFactory::Instance()->GetSystem<T>(system_name);
+    AddPassiveSystem(sys_ptr(system));
+  }
 
-  const System *GetExecutionSequenceAt(int index);
+  typename system_list::iterator RemoveFromSystemExecutionSequence(const std::string &system_name)
+  {
+    auto it = _systems_execution_sequence.begin();
 
-  int GetSequenceSize();
+    for (; it != _systems_execution_sequence.end(); it++)
+    {
+      if ((*it)->GetName().compare(system_name) == 0)
+      {
+        it = _systems_execution_sequence.erase(it);
+        break;
+      }
+    }
 
-  void Update(float seconds_since_last_update, GameState* g);
+    return it;
+  }
+
+  void AddPassiveSystem(sys_ptr system)
+  {
+    LOG->LogInfo(1, "Adding Passive System: %s \n", system->GetName().c_str());
+    _passive_systems.push_back(system);
+  }
+
+  void AddToSystemExecutionSequence(const std::string &system_name)
+  {
+    sys_ptr system = sys_ptr(SystemFactory::Instance()->GetSystem<T>(system_name));
+    AddToSystemExecutionSequence(system);
+  }
+
+  void AddToSystemExecutionSequence(sys_ptr system)
+  {
+    typename system_list::iterator insert_position = _systems_execution_sequence.end();
+
+    //Make sure system isn't already added
+    auto it = std::find_if(_systems_execution_sequence.begin(),
+                           _systems_execution_sequence.end(),
+                           SystemNameComparator(system->GetName()));
+
+    if (it == _systems_execution_sequence.end())
+    {
+      std::string system_before_name = system->GetAfter();
+
+      //After is defined
+      if (!system_before_name.empty())
+      {
+        sys_ptr before_system = sys_ptr(SystemFactory::Instance()->GetSystem<T>(system_before_name));
+
+        //previous system is a real system
+        if (before_system)
+        {
+          auto it = std::find_if(_systems_execution_sequence.begin(),
+                                 _systems_execution_sequence.end(),
+                                 SystemNameComparator(system_before_name));
+
+          //previous system is already in Sequence
+          if (it != _systems_execution_sequence.end())
+          {
+            insert_position = std::next(it, 1);
+          }
+
+          //previous system is not in sequence
+          else
+          {
+            AddToSystemExecutionSequence(sys_ptr(before_system));
+
+            auto it = std::find(_systems_execution_sequence.begin(),
+                                _systems_execution_sequence.end(),
+                                before_system);
+
+            insert_position = std::next(it, 1);
+          }
+        }
+      }
+
+      if (system)
+      {
+        LOG->LogInfo(1, "Adding System to Execution: %s \n", system->GetName().c_str());
+        _systems_execution_sequence.insert(insert_position, system);
+
+        //Assign all systems to the message dispatch
+        if (IsAssignedToDispatch())
+          GetAssignedDispatch()->RegisterSubscriber(system.get());
+      }
+    }
+  }
+
+  const sys_ptr GetExecutionSequenceAt(int index)
+  {
+    typename system_list::iterator it =
+        std::next(_systems_execution_sequence.begin(), index);
+    return *it;
+  }
+
+  int GetSequenceSize()
+  {
+    return _systems_execution_sequence.size();
+  }
+
+  const system_list &GetExecutionSequence() const
+  {
+    return _systems_execution_sequence;
+  }
+
+  system_list &GetExecutionSequenceMutable()
+  {
+    return _systems_execution_sequence;
+  }
+
+  const system_list &GetPassiveSystems() const
+  {
+    return _passive_systems;
+  }
+
+  system_list &GetPassiveSystemsMutable()
+  {
+    return _passive_systems;
+  }
+
+  void MoveUp(std::string system_name)
+  {
+    if (SystemFactory::Instance()->SystemExists(system_name))
+    {
+      System<T> *system = SystemFactory::Instance()->GetSystem<T>(system_name);
+      MoveUp(sys_ptr(system));
+    }
+    else
+    {
+      std::cout << "System does not exists" << std::endl;
+    }
+  }
+
+  void MoveUp(sys_ptr system)
+  {
+    for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+    {
+      auto next = std::next(it);
+      if (next != _systems_execution_sequence.end())
+      {
+        if ((*next)->GetName().compare(system->GetName()) == 0)
+        {
+          std::swap(*it, *(next));
+          return;
+        };
+      }
+    }
+  }
+
+  void MoveDown(std::string system_name)
+  {
+    if (SystemFactory::Instance()->SystemExists(system_name))
+    {
+      System<T> *system = SystemFactory::Instance()->GetSystem<T>(system_name);
+      MoveDown(sys_ptr(system));
+    }
+  }
+
+  void MoveDown(sys_ptr system)
+  {
+    for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+    {
+      auto next = std::next(it);
+      if (next != _systems_execution_sequence.end())
+      {
+        if ((*it)->GetName().compare(system->GetName()) == 0)
+        {
+          std::swap(*it, *(next));
+          return;
+        };
+      }
+    }
+  }
+
+  void Lock()
+  {
+    _system_lock.lock();
+  }
+
+  void Unlock()
+  {
+    _system_lock.unlock();
+  }
+
+  void OnEvent(Event &e)
+  {
+    if (e.id == EventType::START_SYSTEM_EVENT)
+    {
+      std::vector<std::string> *system_names = e.InfoToType<std::vector<std::string> *>();
+
+      for (std::string system_name : *system_names)
+      {
+        AddToSystemExecutionSequence(system_name);
+      }
+
+      delete system_names;
+    }
+    else if (e.id == EventType::STOP_SYSTEM_EVENT)
+    {
+      std::vector<std::string> *system_names = e.InfoToType<std::vector<std::string> *>();
+
+      for (std::string system_name : *system_names)
+      {
+        RemoveFromSystemExecutionSequence(system_name);
+      }
+
+      delete system_names;
+    }
+  }
+
+  std::list<Subscription> GetSubscriptions()
+  {
+    std::list<Subscription> subs = {Subscription(EventType::START_SYSTEM_EVENT),
+                                    Subscription(EventType::STOP_SYSTEM_EVENT)};
+
+    return subs;
+  }
+
+  void Update(float seconds_since_last_update, T* pass)
+  {
+    for (auto it = _systems_execution_sequence.begin(); it != _systems_execution_sequence.end(); it++)
+    {
+      if ((*it)->IsPaused())
+        continue;
+
+      auto start_time = std::chrono::high_resolution_clock::now();
+
+      (*it)->Update(seconds_since_last_update, pass);
+
+      auto end_time = std::chrono::high_resolution_clock::now();
+      std::chrono::duration<double> elapsed =
+          std::chrono::duration_cast<std::chrono::duration<double>>(end_time - start_time);
+      (*it)->SetLastRuntime(elapsed.count() * 1000);
+    }
+  }
 
   void Reset()
   {
@@ -61,30 +288,27 @@ public:
     _passive_systems.clear();
   }
 
-  const std::list<System *> &GetExecutionSequence() const;
-  const std::list<System *> &GetPassiveSystems() const;
-  std::list<System *> &GetExecutionSequenceMutable();
-  std::list<System *> &GetPassiveSystemsMutable();
-
-  //Inherited from EventSubscriber
-  void OnEvent(Event &e);
-  std::list<Subscription> GetSubscriptions();
-
-protected:
-  SystemController()
+  bool HasSystem(const std::string& system_name)
   {
     
+    return std::find_if(_systems_execution_sequence.begin(),
+                           _systems_execution_sequence.end(),
+                           SystemNameComparator(system_name)) != _systems_execution_sequence.end() ||
+           std::find_if(_passive_systems.begin(),
+                           _passive_systems.end(),
+                           SystemNameComparator(system_name)) != _passive_systems.end();
   }
 
-  std::list<System *> _systems_execution_sequence;
-  std::list<System *> _passive_systems;
+protected:
+  system_list _systems_execution_sequence;
+  system_list _passive_systems;
 
 private:
   class SystemNameComparator
   {
   public:
     explicit SystemNameComparator(std::string name) : _name(name) {}
-    inline bool operator()(System *&s)
+    inline bool operator()(sys_ptr s)
     {
       return s->GetName().compare(_name) == 0;
     }
@@ -93,8 +317,6 @@ private:
     std::string _name;
   };
 
-  void MoveUp(System *system_name);
-  void MoveDown(System *system_down);
   std::mutex _system_lock;
 };
 

@@ -43,9 +43,9 @@ class Instance : public EventSubscriber, public FPSRunnable
         // make component user base aware of these tiles
         for(auto row : _tile_map.GetTiles())
         {
-            for(Tile* tile : row)
+            for(ptr<Tile> tile : row)
             {
-                component_user_base.AddComponentUser(tile);
+                component_user_base.AddComponentUser(ptr<Tile>(tile));
             }
         }
         
@@ -77,7 +77,7 @@ class Instance : public EventSubscriber, public FPSRunnable
 
         for(int& i: _local_entities)
         {
-            Entity* e = em.GetEntityByID(i);
+            ptr<Entity> e = em.GetEntityByID(i);
             e->EnableComponent("Graphics");
         }
 
@@ -112,7 +112,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         //should have different options for what components to remove at different levels of closing.
         for(int& i: _local_entities)
         {
-            Entity* e = em.GetEntityByID(i);
+            ptr<Entity> e = em.GetEntityByID(i);
             e->DisableComponent("Graphics");
         }      
 

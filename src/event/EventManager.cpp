@@ -34,7 +34,7 @@ void EventManager::LaunchEvent(Event &e)
     e.tags.insert(e.sender_id);
     e.tags.insert(e.target_id);
 
-    event_tag_map *id_subscribers = _subscription_registry.at(e.id);
+    ptr<event_tag_map> id_subscribers = _subscription_registry.at(e.id);
     for (auto tag_it = e.tags.begin(); tag_it != e.tags.end(); tag_it++)
     {
         if (!TagExists(e.id, *tag_it))
@@ -43,10 +43,10 @@ void EventManager::LaunchEvent(Event &e)
             continue; //cause nobody cares
         }
 
-        tag_sub_list *tag_subscribers_list = id_subscribers->at(*tag_it);
+        ptr<tag_sub_list> tag_subscribers_list = id_subscribers->at(*tag_it);
         for (auto it = tag_subscribers_list->begin(); it != tag_subscribers_list->end(); it++)
         {
-                (*it)->OnEvent(e);
+            (*it)->OnEvent(e);
         }
     }
 }
@@ -77,8 +77,8 @@ void EventManager::Deregister(EventSubscriber *subscriber, int event_id, int eve
         return;
     }
 
-    event_tag_map *tag_map = _subscription_registry.at(event_id);
-    tag_sub_list *sub_list = tag_map->at(event_tag);
+    ptr<event_tag_map> tag_map = _subscription_registry.at(event_id);
+    ptr<tag_sub_list> sub_list = tag_map->at(event_tag);
     auto subscriber_it = std::find(sub_list->begin(), sub_list->end(), subscriber);
 
     if (subscriber_it != sub_list->end())
@@ -99,28 +99,27 @@ void EventManager::AddSubscriberToSubscription(EventSubscriber *sub, int event_i
         AddNewTag(event_id, event_tag);
     }
 
-    event_tag_map *tag_map = _subscription_registry.at(event_id);
+    ptr<event_tag_map> tag_map = _subscription_registry.at(event_id);
 
-    tag_sub_list *sub_list = tag_map->at(event_tag);
+    ptr<tag_sub_list> sub_list = tag_map->at(event_tag);
 
     sub_list->push_back(sub);
 }
 
 void EventManager::AddNewTag(int event_id, int tag)
 {
-    event_tag_map *tag_map = _subscription_registry.at(event_id);
-    tag_map->insert(std::make_pair(tag, new tag_sub_list()));
+    ptr<event_tag_map> tag_map = _subscription_registry.at(event_id);
+    tag_map->insert(std::make_pair(tag, std::make_shared<tag_sub_list>()));
 }
 
 void EventManager::AddNewEvent(int event_id)
 {
-    event_tag_map* new_tag_map = new event_tag_map();
-    _subscription_registry.insert(std::make_pair(event_id, new_tag_map));   
+    _subscription_registry.insert(std::make_pair(event_id, std::make_shared<event_tag_map>()));
 }
 
 bool EventManager::EventExists(int event_id)
 {
-    return _subscription_registry.find(event_id) != _subscription_registry.end();
+    return !_subscription_registry.empty() && _subscription_registry.find(event_id) != _subscription_registry.end();
 }
 
 bool EventManager::TagExists(int event_id, int tag_id)
@@ -129,7 +128,7 @@ bool EventManager::TagExists(int event_id, int tag_id)
         return false;
     else
     {
-        event_tag_map *tag_map = _subscription_registry.at(event_id);
+        ptr<event_tag_map> tag_map = _subscription_registry.at(event_id);
         return tag_map->find(tag_id) != tag_map->end();
     }
 }

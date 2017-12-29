@@ -14,8 +14,8 @@ class PaintEntityBrushState : public BrushState
 
     }
 
-    bool OnGameStateMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, GameState* gs,
-        ComponentUser* c = nullptr) override
+    bool OnGameStateMouseEvent(sf::Event& e, sf::Vector2f& event_world_position, ptr<GameState> gs,
+        ptr<ComponentUser> c = nullptr) override
     {
         if (e.type == sf::Event::MouseButtonPressed)
         {
