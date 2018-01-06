@@ -16,18 +16,18 @@
 #include <thread>
 #include <sys/poll.h>
 
-#define CHUNK_SIZE 1024
+#define CHUNK_SIZE 4
 #define POLL_TIMEOUT 100
 
 namespace DomainSocket
 {
-    struct exception
-    {
-        exception(int _id, const std::string &_msg) : id(_id), msg(_msg) {}
+struct exception
+{
+    exception(int _id, const std::string &_msg) : id(_id), msg(_msg) {}
 
-        int id;
-        std::string msg;
-    };
+    int id;
+    std::string msg;
+};
 }
 
 class UnixDomainSocketListener
@@ -77,7 +77,7 @@ class UnixDomainSocket
 
         _client_socketaddr.sun_family = AF_UNIX;
 
-        _client_addr =  _client_path + "/" + _client_name;
+        _client_addr = _client_path + "/" + _client_name;
 
         strcpy(_client_socketaddr.sun_path, _client_addr.c_str());
         len = sizeof(_client_socketaddr);
@@ -104,6 +104,8 @@ class UnixDomainSocket
             close(_client_socket);
             exit(1);
         }
+
+        _reading = true;
     }
 
     void SetDataListener(UnixDomainSocketListener *listener)
@@ -113,29 +115,32 @@ class UnixDomainSocket
 
     void Read()
     {
-        struct pollfd ufds[1];
-        unsigned char buf[CHUNK_SIZE];
-
-        ufds[0].fd = _client_socket;
-        ufds[0].events = POLLIN;
-
-        int rv = poll(ufds, 1, 100);
-
-        if (rv == -1)
+        while (_reading)
         {
-            perror("poll");
-            UpdateListener(buf, DomainSocket::exception(POLL_FAILED_EXN, "Polling failed."));
-        }
-        else if (rv == 0)
-        {
-            UpdateListener(buf, DomainSocket::exception(TIMEOUT_EXN, "Poll timeout."));
-        }
-        else
-        {
-            if (ufds[0].revents & POLLIN)
+            struct pollfd ufds[1];
+            unsigned char buf[CHUNK_SIZE];
+
+            ufds[0].fd = _client_socket;
+            ufds[0].events = POLLIN;
+
+            int rv = poll(ufds, 1, 100);
+
+            if (rv == -1)
             {
-                int read = recv(_client_socket, buf, CHUNK_SIZE, 0);
-                UpdateListener(buf, DomainSocket::exception(0, "No Exception."));
+                perror("poll");
+                UpdateListener(buf, DomainSocket::exception(POLL_FAILED_EXN, "Polling failed."));
+            }
+            else if (rv == 0)
+            {
+                UpdateListener(buf, DomainSocket::exception(TIMEOUT_EXN, "Poll timeout."));
+            }
+            else
+            {
+                if (ufds[0].revents & POLLIN)
+                {
+                    int read = recv(_client_socket, buf, CHUNK_SIZE, 0);
+                    UpdateListener(buf, DomainSocket::exception(0, "No Exception."));
+                }
             }
         }
     }
@@ -144,6 +149,7 @@ class UnixDomainSocket
     {
         if (_read_thread.joinable())
         {
+            _reading = false;
             _read_thread.join();
         }
 

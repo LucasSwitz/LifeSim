@@ -20,7 +20,7 @@ int main()
         }
         else if (rv == 0)
         {
-            printf("[Arcade Controller] | XAxis: %i | YAxis: %i | LeftButton: %i | RightButton: %i \n",
+            printf("[Arcade Controller] | XAxis: %d | YAxis: %d | LeftButton: %d | RightButton: %d \n",
             controller.XAxis(), controller.YAxis(), controller.LeftButton(), controller.RightButton());
         }
         else

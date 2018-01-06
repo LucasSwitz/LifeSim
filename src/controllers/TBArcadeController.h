@@ -12,12 +12,12 @@ class TBArcadeController
 
     int YAxis()
     {
-        _controller_service.Get().y_axis;
+        return _controller_service.Get().y_axis;
     }
 
     int XAxis()
     {
-        _controller_service.Get().x_axis;
+        return _controller_service.Get().x_axis;
     }
 
     bool LeftButton()
