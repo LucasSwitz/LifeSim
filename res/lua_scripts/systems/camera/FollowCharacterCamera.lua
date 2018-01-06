@@ -5,7 +5,7 @@ Name = "FollowCharacterCamera"
 
 FollowCharacterCamera =
 {
-    Update = function(follower_camera,time,g)
+    Update = function(follower_camera,time,engine)
         players = LuaListComponentUser()
         g:ComponentUsers():GetAll(players,{"Player","Position"})
         players_it = players:Iterator()
@@ -15,6 +15,6 @@ FollowCharacterCamera =
         y = player:GetNumber("Position","y")
 
         e = Event.FloatsEvent(EventType.RECENTER_VIEW_EVENT,-1,TARGET_WINDOW(),{x,y})
-        EngineEventManager.Instance():LaunchEvent(e)
+        engine:EngineEventManager():LaunchEvent(e)
     end
 }

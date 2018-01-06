@@ -6,7 +6,7 @@ TBRunner::TBRunner()
     LuaBindings::Bind(LUA_STATE);
     LuaEntityFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     SystemFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
-    EngineEventManager::Instance()->RegisterSubscriber(this);
+    _program_event_manager.RegisterSubscriber(this);
 }
 
 void TBRunner::Init(Type type)
@@ -14,7 +14,7 @@ void TBRunner::Init(Type type)
     switch (type)
     {
     case EDITOR:
-        _mode = std::make_shared<ProgramModeEditor>();
+        _mode = std::make_shared<ProgramModeEditor>(_program_event_manager);
         _mode->Init();
         break;
     case GAME:

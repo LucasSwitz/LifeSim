@@ -39,6 +39,7 @@ class TBRunner : public EventSubscriber
   private:
     ptr<ProgramMode> _mode = nullptr;
     bool _program_stopped = false;
+    EventManager _program_event_manager;
 };
 
 #endif

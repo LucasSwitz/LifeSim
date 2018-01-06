@@ -10,7 +10,6 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "src/event/EngineEventManager.h"
 #include "src/event/EventType.h"
 #include "src/graphics/gui/TextureCache.h"
 #include "src/graphics/gui/SFMLWindowListener.h"
@@ -20,6 +19,7 @@
 
 #include "src/event/EventSubscriber.h"
 #include "src/event/EventType.h"
+#include "src/event/EventManager.h"
 
 #include "src/graphics/gui/rendering/GraphicsPreprocessor.h"
 
@@ -37,10 +37,11 @@ class TBWindow : public EventSubscriber
         ptr<sf::Texture> texture = nullptr;
     };
 
-    TBWindow(EventManager& engine_event_manager) : _window(sf::VideoMode(1200, 1200), "TB")
+    TBWindow(EventManager& program_event_manager,EventManager& engine_event_manager) : 
+        _program_event_manager(program_event_manager), _engine_event_manager(engine_event_manager), _window(sf::VideoMode(1200, 1200), "TB")
     {
         _id = last_id;
-        engine_event_manager.RegisterSubscriber(this);
+        _engine_event_manager.RegisterSubscriber(this);
     }
 
     sf::RenderWindow &SFWindow()
@@ -132,7 +133,7 @@ class TBWindow : public EventSubscriber
 
     void Shutdown()
     {
-        EngineEventManager::Instance()->Deregister(this);
+        _engine_event_manager.Deregister(this);
         _window.close();
     }
 
@@ -164,34 +165,34 @@ class TBWindow : public EventSubscriber
         if (e.type == sf::Event::Closed)
         {
             Event new_event(EventType::CLOSE_WINDOW_EVENT, _id, -1);
-            EngineEventManager::Instance()->LaunchEvent(new_event);
+            _program_event_manager.LaunchEvent(new_event);
         }
         else if (e.type == sf::Event::KeyPressed)
         {
             if (e.key.code == sf::Keyboard::W)
             {
                 Event new_event(EventType::W_DOWN_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::A)
             {
                 Event new_event(EventType::A_DOWN_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::S)
             {
                 Event new_event(EventType::S_DOWN_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::D)
             {
                 Event new_event(EventType::D_DOWN_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::E)
             {
                 Event new_event(EventType::E_DOWN_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
         }
         else if (e.type == sf::Event::KeyReleased)
@@ -199,27 +200,27 @@ class TBWindow : public EventSubscriber
             if (e.key.code == sf::Keyboard::W)
             {
                 Event new_event(EventType::W_UP_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::A)
             {
                 Event new_event(EventType::A_UP_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::S)
             {
                 Event new_event(EventType::S_UP_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::D)
             {
                 Event new_event(EventType::D_UP_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
             else if (e.key.code == sf::Keyboard::E)
             {
                 Event new_event(EventType::E_UP_EVENT, -1, -1);
-                EngineEventManager::Instance()->LaunchEvent(new_event);
+                _program_event_manager.LaunchEvent(new_event);
             }
         }
         for (SFMLWindowListener* listener : _window_listeners)
@@ -241,11 +242,7 @@ class TBWindow : public EventSubscriber
 
     ~TBWindow()
     {
-        /*while (!_drawables_queue.empty())
-        {
-            delete _drawables_queue.top();
-            _drawables_queue.pop();
-        }*/
+        
     }
 
     void SetViewCenter(float x, float y)
@@ -277,6 +274,8 @@ class TBWindow : public EventSubscriber
     std::priority_queue<ptr<LayeredGraphic>, std::vector<ptr<LayeredGraphic>>, GraphicsComparator> _drawables_queue;
     std::list<SFMLWindowListener*> _window_listeners;
     GraphicsPreprocessor _preprocesser;
+    EventManager& _program_event_manager;
+    EventManager& _engine_event_manager;
     int _id;
     static int last_id;
 };

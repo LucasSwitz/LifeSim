@@ -30,7 +30,6 @@ class Instance : public EventSubscriber, public FPSRunnable
 
     void Load(ComponentUserBase& component_user_base)
     {
-        //load all local entites, do a cutscene, whatevs
         if(!_tile_map_name.empty() && !_loaded)
         {
             _tile_map.LoadFromFile(_tile_map_name);
@@ -44,8 +43,8 @@ class Instance : public EventSubscriber, public FPSRunnable
         for(auto row : _tile_map.GetTiles())
         {
             for(ptr<Tile> tile : row)
-            {
-                component_user_base.AddComponentUser(ptr<Tile>(tile));
+            {                
+                component_user_base.AddComponentUser(tile);
             }
         }
         
@@ -59,12 +58,35 @@ class Instance : public EventSubscriber, public FPSRunnable
         _loaded = true;
     }
 
+    virtual void Unload(ComponentUserBase& component_user_base, EntityManager& em)
+    {
+        /*for(auto row : _tile_map.GetTiles())
+        {
+            for(ptr<Tile> tile : row)
+            {                
+                component_user_base.DeRegister(*(tile.get()));
+            }
+        }*/
+
+        for(int id : _local_entities)
+        {
+            ptr<Entity> e = em.GetEntityByID(id);
+            em.DeregisterEntity(id);
+            component_user_base.DeRegister(*(e.get()));
+        }
+
+        _Unload();
+
+        _loaded = false;
+    }
+
     virtual void Unload() override{
         //delete all local entities
         _tile_map.Unload();
+        _Unload();
+
         _loaded = false;
 
-        _Unload();
     }
 
     virtual void Open(EntityManager& em){
@@ -78,7 +100,7 @@ class Instance : public EventSubscriber, public FPSRunnable
         for(int& i: _local_entities)
         {
             ptr<Entity> e = em.GetEntityByID(i);
-            e->EnableComponent("Graphics");
+            e->EnableAll();
         }
 
         _Open();

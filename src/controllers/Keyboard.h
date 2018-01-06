@@ -2,8 +2,8 @@
 #define KEYBOARD_H
 
 #include  <unordered_map>
+#include "src/event/EventManager.h"
 #include "src/event/EventSubscriber.h"
-#include "src/event/EngineEventManager.h"
 #include "src/event/EventType.h"
 
 /*
@@ -15,9 +15,9 @@
 class Keyboard : public EventSubscriber
 {
     public:
-    Keyboard()
+    Keyboard(EventManager& engine_event_manager)
     {
-        EngineEventManager::Instance()->RegisterSubscriber(this);
+        engine_event_manager.RegisterSubscriber(this);
     }
 
     void OnEvent(Event& e)

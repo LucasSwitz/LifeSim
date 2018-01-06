@@ -22,7 +22,6 @@
 #include "src/world/stage/LuaStage.h"
 #include "src/graphics/gui/TBWindow.h"
 #include "src/event/EventManager.h"
-#include "src/event/EngineEventManager.h"
 #include "src/controllers/Controller.h"
 #include "src/controllers/KeyboardSideScrollerPlayerController.h"
 #include "src/controllers/ControllerBase.h"
@@ -135,9 +134,6 @@ class LuaBindings
             .endClass()
             .beginClass<EventManager>("EventManager")
                 .addFunction("LaunchEvent",&EventManager::LaunchEvent)
-            .endClass()
-            .deriveClass<EngineEventManager,EventManager>("EngineEventManager")
-                .addStaticFunction("Instance",&EngineEventManager::Instance)
             .endClass()
             .beginClass<ComponentUserBase>("ComponentUsers")
                 .addFunction("GetAll",&ComponentUserBase::GetAllUsersWithComponentsAsLuaList)

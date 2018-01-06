@@ -6,7 +6,7 @@
 class TBEditorWindow : public TBWindow
 {
     public:
-    TBEditorWindow(EventManager& manager) : TBWindow(manager) {}
+    TBEditorWindow(EventManager& program_event_manager, EventManager& engine_event_manager) : TBWindow(program_event_manager, engine_event_manager) {}
     void OnInstanceSizeChange(int width, int height);
 
     void Zoom(float percent);

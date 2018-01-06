@@ -14,14 +14,14 @@
 class GameLoader
 {
   public:
-    void Load(std::string file_path, std::string file_name, GameState &state);
+    void Load(std::string file_path, std::string file_name, GameState &state, ComponentUserBase& cub);
 
-    void Load(std::string file_path, GameState &state);
+    void Load(std::string file_path, GameState &state, ComponentUserBase& cub);
 
     void Save(const std::string &file_path, const std::string &file_name, GameState &state);
 
     void Save(std::string file_name, GameState &game_state);
 
-    void GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state);
+    void GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state, ComponentUserBase& cub);
 };
 #endif

@@ -29,7 +29,7 @@ class EditModeControls
 
             if (users)
             {
-                for (ptr<ComponentUser> user : *users)
+                for (ComponentUser* user : *users)
                 {
                     int width = user->GetComponentValueFloat("Collision", "width");
                     int height = user->GetComponentValueFloat("Collision", "height");

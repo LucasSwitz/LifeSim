@@ -29,8 +29,7 @@ void EntityManager::DeregisterEntity(int id)
 
 void EntityManager::RegisterEntity(ptr<Entity> entity)
 {
-    _entity_map.insert(std::make_pair(entity->_id, entity));
-    entity->EnableAll();
+    _entity_map[entity->_id]  = entity;
 }
 
 const std::map<int, ptr<Entity>> &EntityManager::GetAllEntities() const
@@ -50,7 +49,7 @@ bool EntityManager::HasEntity(int id)
 
 LuaList<Entity *> *EntityManager::AsLuaList()
 {
-    std::map<int,Entity*> raw_entity_ptrs;
+    std::map<int, Entity *> raw_entity_ptrs;
     expose_ptrs(_entity_map, raw_entity_ptrs);
 
     return LuaList<Entity *>::FromMapToLuaList<int, Entity *>(raw_entity_ptrs);
@@ -107,14 +106,14 @@ void EntityManager::MarkForDelete(ptr<Entity> e)
 
 void EntityManager::Clean()
 {
-    _delete_set.clear();
-    /*for (auto it = _delete_set.begin(); it != _delete_set.end();)
+    for (auto it = _delete_set.begin(); it != _delete_set.end();)
     {
         ptr<Entity> e = *it;
         DeregisterEntity(e->ID());
-        delete e;
+        Event event(EventType::ENTITY_DELETED_EVENT, -1, e->ID(), e.get());
+        DispatchMessage(event);
         it = _delete_set.erase(it);
-    }*/
+    }
 }
 
 EntityManager::~EntityManager()
@@ -136,7 +135,7 @@ ptr<Entity> EntityManager::GetNewest()
         return _entity_map.rbegin()->second;
 }
 
-Entity* EntityManager::GetNewestUnshared()
+Entity *EntityManager::GetNewestUnshared()
 {
     return GetNewest().get();
 }

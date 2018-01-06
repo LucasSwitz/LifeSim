@@ -30,7 +30,7 @@ void ComponentUser::RemoveComponent(std::string name)
 void ComponentUser::EnableComponent(std::string name)
 {
     if (HasComponent(name) && _listener)
-        _listener->OnEnableComponent(this, name);
+        _listener->OnEnableComponent(shared_from_this(), name);
 }
 
 void ComponentUser::EnableAll()
@@ -39,12 +39,12 @@ void ComponentUser::EnableAll()
     {
         for (auto it = _components.begin(); it != _components.end(); it++)
         {
-            _listener->OnEnableComponent(this, it->first);
+            _listener->OnEnableComponent(shared_from_this(), it->first);
         }
     }
     else
     {
-        std::cout << "No Listener" << std::endl;
+        std::cout << "Enabled All: No Listener" << std::endl;
     }
 }
 
@@ -54,15 +54,19 @@ void ComponentUser::DisableAll()
     {
         for (auto it = _components.begin(); it != _components.end(); it++)
         {
-            _listener->OnDisableComponent(this, it->first);
+            _listener->OnDisableComponent(shared_from_this(), it->first);
         }
+    }
+    else
+    {
+        std::cout << "Disable All : No Listener" << std::endl;
     }
 }
 
 void ComponentUser::DisableComponent(std::string name)
 {
     if (HasComponent(name) && _listener)
-        _listener->OnDisableComponent(this, name);
+        _listener->OnDisableComponent(shared_from_this(), name);
 }
 
 bool ComponentUser::HasComponent(std::string name) const
@@ -72,7 +76,7 @@ bool ComponentUser::HasComponent(std::string name) const
 
 void ComponentUser::AddComponent(ptr<Component> component)
 {
-    std::string component_name = component->GetName();
+std::string component_name = component->GetName();
 
     _components.insert(std::make_pair(component_name, component));
 }
@@ -213,16 +217,5 @@ void ComponentUser::FromJson(ptr<ComponentUser> user, const json &json_cu)
 
 ComponentUser::~ComponentUser()
 {
-    /*for (auto it = _components.begin(); it != _components.end();)
-    {
-        if (ComponentUserBase::Instance())
-        {
-            ComponentUserBase::Instance()->DeRegister(it->first, *this);
-        }
 
-        Component *to_delete = it->second;
-        it = _components.erase(it);
-
-        delete to_delete;
-    }*/
 }

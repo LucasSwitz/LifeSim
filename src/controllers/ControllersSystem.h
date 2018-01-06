@@ -1,13 +1,16 @@
 #ifndef CONTROLLERSYSTEM_H
 #define CONTROLLERSYSTEM_H
 
+#include "src/system/SystemFactory.h"
 #include "src/system/System.h"
 #include "src/controllers/ControllerBase.h"
 
-class ControllersSystem : public System<GameState>
+class Engine;
+
+class ControllersSystem : public System<Engine>
 {
     public:
-    virtual void Update(float seconds_since_last_update, GameState* game_state)
+    virtual void Update(float seconds_since_last_update, Engine* e)
     {
         auto& controllers = ControllerBase::Instance()->GetAll();
 

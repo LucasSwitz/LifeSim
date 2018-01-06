@@ -15,6 +15,8 @@ void TileMap::LoadFromVector(std::vector<std::vector<int>> map)
         for (int k = 0; k < current_vector.size(); k++)
         {
             int tile_id = current_vector.at(k);
+            if(tile_id == -1)
+                continue;
             ptr<Tile> tile = ptr<Tile>(LuaTileFactory::Instance()->GetTile(tile_id));
             tile->SetComponentValueFloat("Position", "x", k * TILE_WIDTH);
             tile->SetComponentValueFloat("Position", "y", i * TILE_HEIGHT);
@@ -102,7 +104,6 @@ void TileMap::split(const std::string &s, char delim, T result)
 void TileMap::Show()
 {
     _active = true;
-
     for (auto it = _tiles.begin(); it != _tiles.end(); it++)
     {
         for (auto tile_it = (*it).begin(); tile_it != (*it).end(); tile_it++)
@@ -112,9 +113,9 @@ void TileMap::Show()
     }
 }
 
-//remove all tiles from CUB.
 void TileMap::Hide()
 {
+    std::cout << "Hiding TileMap" << std::endl;
     _active = false;
 
     for (auto it = _tiles.begin(); it != _tiles.end(); it++)
@@ -133,10 +134,7 @@ bool TileMap::IsActive()
 
 void TileMap::Unload()
 {
-    if (IsActive())
-        Hide();
-
-    //then delete all tiles
+    
 }
 
 ptr<Tile> TileMap::TileAt(int x, int y)
@@ -229,5 +227,5 @@ void TileMap::Erase()
 
 TileMap::~TileMap()
 {
-    Erase();
+    
 }

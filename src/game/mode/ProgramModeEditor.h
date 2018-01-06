@@ -17,7 +17,6 @@
 #include "src/system/SystemController.h"
 #include "src/game/TBGameRunner.h"
 #include "src/utils/lua/InstanceFileBuilder.h"
-#include "src/controllers/ControllersSystem.h"
 #include "src/utils/math/Geometry.h"
 #include "src/ui/BaseUI.h"
 #include "src/graphics/gui/gui_tools/UIVisualizer.h"
@@ -44,7 +43,7 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
         UI_MODE
     };
 
-    ProgramModeEditor();
+    ProgramModeEditor(EventManager& program_event_manager);
 
     void Init();
 
@@ -113,7 +112,6 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     FPSRunner _editor_runner;
     FPSRunner _engine_runner;
     ptr<TBGameRunner> _external_game_runner = nullptr;
-    ControllersSystem _controllers_system;
     MouseHistory _mouse_history;
     DevelopmentOverlay _dev_tools;
     int _abs_scroll_ticks = 50;
@@ -129,6 +127,8 @@ class ProgramModeEditor : public ProgramMode, public SFMLWindowListener, public 
     ptr<UI> ui = nullptr;
 
     ptr<UIElement> ClickOnUIElement(int x, int y);
+    void UnloadGameState();
+
 };
 
 #endif

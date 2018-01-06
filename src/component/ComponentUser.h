@@ -15,7 +15,7 @@
 
 class ComponentUserBase;
 
-class ComponentUser
+class ComponentUser : public std::enable_shared_from_this<ComponentUser>
 {
   friend class GameState;
 

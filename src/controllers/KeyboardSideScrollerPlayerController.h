@@ -15,7 +15,7 @@ class KeyboardSideScrollerPlayerController : public Keyboard, public SideScrolle
     static int D_KEY_TRIGGER;
     static int E_KEY_TRIGGER;
 
-    KeyboardSideScrollerPlayerController(int id) : SideScrollerPlayerInterface(id) {
+    KeyboardSideScrollerPlayerController(int id, EventManager& ev) : SideScrollerPlayerInterface(id), Keyboard(ev) {
         
     }
 

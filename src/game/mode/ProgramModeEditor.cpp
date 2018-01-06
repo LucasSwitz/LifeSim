@@ -1,12 +1,13 @@
 #include "src/game/mode/ProgramModeEditor.h"
 
-ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
-                                         _editor_runner(EDITOR_MODE_FPS),
-                                         _engine_runner(ENGINE_RUNNER_FPS),
-                                         file_path(Globals::RESOURCE_ROOT + "/world/stages"),
-                                         tile_maps_path(Globals::RESOURCE_ROOT + "/world/tile_maps"),
-                                         instances_path(Globals::RESOURCE_ROOT + "/world/instances"),
-                                         _window(_engine.GetEngineEventManager())
+ProgramModeEditor::ProgramModeEditor(EventManager &program_event_manager) : FPSRunner(EDITOR_MODE_FPS),
+                                                                            ProgramMode(program_event_manager),
+                                                                            _editor_runner(EDITOR_MODE_FPS),
+                                                                            _engine_runner(ENGINE_RUNNER_FPS),
+                                                                            file_path(Globals::RESOURCE_ROOT + "/world/stages"),
+                                                                            tile_maps_path(Globals::RESOURCE_ROOT + "/world/tile_maps"),
+                                                                            instances_path(Globals::RESOURCE_ROOT + "/world/instances"),
+                                                                            _window(program_event_manager, _engine.GetEngineEventManager())
 {
     LuaTileFactory::Instance()->PopulateFactory(Globals::RESOURCE_ROOT);
     LuaInstanceFactory::Inst()->PopulateFactory(Globals::RESOURCE_ROOT);
@@ -22,6 +23,8 @@ ProgramModeEditor::ProgramModeEditor() : FPSRunner(EDITOR_MODE_FPS),
     _engine.Load(Res("engine_conf.json"));
     _engine.LoadGameState(_game_state);
     _engine_runner.SetRunnable(&_engine);
+
+    _program_event_manager.RegisterSubscriber(this);
 }
 
 void ProgramModeEditor::Init()
@@ -49,7 +52,6 @@ void ProgramModeEditor::Update(std::chrono::time_point<std::chrono::high_resolut
 
 void ProgramModeEditor::Tick(float seconds_elapsed)
 {
-    _controllers_system.Update(seconds_elapsed, _game_state.get());
     _window.Clear();
     _window.PollEvents();
     _window.Render();
@@ -72,7 +74,7 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
 
     TileMap map;
     TileMap::Blank(map, rows, columns);
-    ptr<Instance> i(new Instance(-1, instance_name));
+    ptr<Instance> i = std::make_shared<Instance>(-1, instance_name);
     i->SetTileMap(map);
 
     _game_state->GetStage()->AddInstance(i);
@@ -85,15 +87,29 @@ void ProgramModeEditor::OnCreateBlankInstance(std::string &instance_name, int ro
 
 void ProgramModeEditor::OnCreateBlankStage()
 {
+    UnloadGameState();
+
     _game_state = std::make_shared<GameState>();
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
-    _engine.LoadGameState(_game_state);
-
     _game_state->SetStage(std::make_shared<LuaStage>(_engine.GetComponentUserBase()));
 
+    _engine.LoadGameState(_game_state);
+
     _window.SetName("New Stage Name");
+}
+
+void ProgramModeEditor::UnloadGameState()
+{
+    if (_game_state)
+    {
+        ptr<Stage> cur_stage = _game_state->GetStage();
+        if (cur_stage)
+        {
+            cur_stage->Unload();
+        }
+    }
 }
 
 void ProgramModeEditor::OnLaunchInstance()
@@ -129,7 +145,7 @@ void ProgramModeEditor::OnEvent(Event &e)
         if (e.sender_id == _window.ID())
         {
             Event e = Event(EventType::STOP_PROGRAM_EVENT, -1, -1);
-            _engine.GetEngineEventManager().LaunchEvent(e);
+            _program_event_manager.LaunchEvent(e);
         }
     }
     if (e.id == EventType::STAGE_INSTANCE_CHANGED)
@@ -158,14 +174,18 @@ std::list<Subscription> ProgramModeEditor::GetSubscriptions()
 // ######################## LOADING / SAVING #################################
 void ProgramModeEditor::OnLoadStageFile(const std::string &file_name)
 {
+    UnloadGameState();
+
     _game_state = ptr<GameState>(new GameState());
     _game_state->Setup();
     _game_state->GetMessageDispatch().RegisterSubscriber(this);
 
     GameLoader loader;
-    loader.Load(file_path, file_name, *_game_state);
+    loader.Load(file_path, file_name, *_game_state, _engine.GetComponentUserBase());
 
     _engine.LoadGameState(_game_state);
+
+    OnModeChangeGame();
 }
 
 void ProgramModeEditor::OnSaveStageFile(const std::string &file_name)
@@ -428,11 +448,11 @@ void ProgramModeEditor::OnModeChangeUI()
     _edit_mode = UI_MODE;
 }
 
-void ProgramModeEditor::OnAttachUI(const std::string& file_name)
+void ProgramModeEditor::OnAttachUI(const std::string &file_name)
 {
-    if(ui)
+    if (ui)
         ui->Hide();
-        
+
     std::cout << "Loading UI: " << Res(file_name) << std::endl;
     ui = std::make_shared<UI>();
     ui->Load(Res(file_name));

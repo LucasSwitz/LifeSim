@@ -61,12 +61,9 @@ public:
 
   EventManager &GetMessageDispatch();
 
-  PlayerBase &GetPlayerBase();
-
 private:
   SystemController<GameState> _system_controller;
   EventManager _message_dispatch;
-  PlayerBase _player_base;
   ptr<Stage> _current_stage = nullptr;
 };
 #endif

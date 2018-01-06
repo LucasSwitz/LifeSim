@@ -53,8 +53,6 @@ file(GLOB_RECURSE TEST_SOURCES
     test/*.cpp
     test/*.cc)
     
-
-add_subdirectory($ENV{GTEST_DIR})
 include_directories($ENV{GTEST_DIR}/include ".")
 
 add_library(tb_test ${TEST_SOURCES})
@@ -84,5 +82,6 @@ set_property(TARGET run_tests PROPERTY CXX_STANDARD 17)
 add_test(NAME ThunderBiscuitTests COMMAND run_tests)
 
 
-
-
+add_executable(arcade_controller_test test/controllers/arcade_controller/arcade_controller_test.cpp)
+set_property(TARGET arcade_controller_test PROPERTY CXX_STANDARD 17)
+target_link_libraries(arcade_controller_test tb_lib ${CMAKE_THREAD_LIBS_INIT})

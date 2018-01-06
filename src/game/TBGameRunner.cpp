@@ -2,7 +2,7 @@
 
 TBGameRunner::TBGameRunner() : FPSRunner(GAME_FPS)
 {
-    EngineEventManager::Instance()->RegisterSubscriber(this);
+
 }
 
 void TBGameRunner::RunGameState(const std::string &file_path)

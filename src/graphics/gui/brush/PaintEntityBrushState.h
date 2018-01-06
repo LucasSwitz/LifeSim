@@ -26,6 +26,7 @@ class PaintEntityBrushState : public BrushState
                 e->SetComponentValueFloat("Position", "y", event_world_position.y);
                 Event event(EventType::SPAWN_ENTITY_EVENT,-1,gs->GetStage()->GetCurrentInstance()->GetID(),e);
                 gs->GetMessageDispatch().LaunchEvent(event);
+                e->EnableAll();
             }
             return true;
         }

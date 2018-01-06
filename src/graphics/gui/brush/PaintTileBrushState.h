@@ -52,14 +52,12 @@ class PaintTileBrushState : public BrushState
 
                 if (_selected_tile)
                 {
-                    for (auto it = _boxed_tiles.begin(); it != _boxed_tiles.end();)
+                    for (auto it = _boxed_tiles.begin(); it != _boxed_tiles.end();it++)
                     {
                         ptr<Tile> replaced =  *it;
-
                         float x = replaced->GetComponentValueFloat("Position", "x");
                         float y = replaced->GetComponentValueFloat("Position", "y");
 
-                        it = _boxed_tiles.erase(it);
                         ComponentUserListener* listener = replaced->GetComponentListener();
 
                         *replaced = *_selected_tile->Clone();
@@ -68,6 +66,8 @@ class PaintTileBrushState : public BrushState
                         replaced->SetListener(listener);
                         replaced->EnableAll();
                     }
+
+                    _boxed_tiles.clear();
                 }
                 _painting_state = DORMANT;
                 return true;

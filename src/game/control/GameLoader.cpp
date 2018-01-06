@@ -1,16 +1,16 @@
 #include "src/game/control/GameLoader.h"
 
-void GameLoader::Load(std::string file_path, std::string file_name, GameState &state)
+void GameLoader::Load(std::string file_path, std::string file_name, GameState &state, ComponentUserBase& cub)
 {
-    Load(file_path + "/" + file_name, state);
+    Load(file_path + "/" + file_name, state, cub);
 }
 
-void GameLoader::Load(std::string file_path, GameState &state)
+void GameLoader::Load(std::string file_path, GameState &state, ComponentUserBase& cub)
 {
     std::cout << "Loading game from file: " << file_path << std::endl;
     GameStateProtoBufWrapper gameStateProtoBuf;
     gameStateProtoBuf.FromFile(file_path);
-    GameStateFromProtoBuf(gameStateProtoBuf, state);
+    GameStateFromProtoBuf(gameStateProtoBuf, state, cub);
 }
 
 void GameLoader::Save(const std::string &file_path, const std::string &file_name, GameState &state)
@@ -28,11 +28,11 @@ void GameLoader::Save(std::string file_name, GameState &game_state)
     gameStateProtoBuf.ToFile(file_name);
 }
 
-void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state)
+void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameState &game_state, ComponentUserBase& cub)
 {
-    /*std::list<Entity *> entities;
+    std::list<Entity *> entities;
     std::list<std::string> systems;
-    ptr<LuaStage> stage = std::make_shared<LuaStage>();
+    ptr<LuaStage> stage = std::make_shared<LuaStage>(cub);
 
     protobuf.GetEntities(entities);
     protobuf.GetSystems(systems);
@@ -42,11 +42,12 @@ void GameLoader::GameStateFromProtoBuf(GameStateProtoBufWrapper &protobuf, GameS
 
     for (Entity *e : entities)
     {
-        game_state.AddEntity(ptr<Entity>(e));
+        ptr<Entity> ent(e);
+        game_state.AddEntity(ent);
     }
 
     for (std::string &system : systems)
     {
         game_state.AddSystem(system);
-    }*/
+    }
 }

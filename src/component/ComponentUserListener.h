@@ -6,7 +6,7 @@ class ComponentUser;
 class ComponentUserListener
 {
 public:
-    virtual void OnDisableComponent (ComponentUser* user,const std::string& component_name){};
-    virtual void OnEnableComponent(ComponentUser* user, const std::string component_name){};
+    virtual void OnDisableComponent (ptr<ComponentUser> user,const std::string& component_name) = 0;
+    virtual void OnEnableComponent(ptr<ComponentUser> user, const std::string& component_name) = 0;
 };
 #endif

@@ -38,6 +38,7 @@ class EventType
     static int STAGE_INSTANCE_CHANGING;
     static int STAGE_INSTANCE_CHANGED;
     static int COMPONENT_USER_MOVE_EVENT;
+    static int ENTITY_DELETED_EVENT;
 
 };
 #endif

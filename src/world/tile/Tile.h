@@ -15,16 +15,18 @@
 class Tile : public ComponentUser
 {
   public:
-    Tile(int id, std::string name) : _id(id), _name(name), ComponentUser(CU_TYPE_TILE){}
+    Tile(int id, std::string name) : _id(id), _name(name), ComponentUser(CU_TYPE_TILE) {}
     int GetID()
     {
         return _id;
     }
+
     std::string GetName()
     {
         return _name;
     }
     virtual ~Tile(){
+
     };
 
     Tile *Clone()
@@ -33,7 +35,7 @@ class Tile : public ComponentUser
         auto components = GetAllComponents();
         for (auto it = components.begin(); it != components.end(); it++)
         {
-            ptr<Component> c (new Component(*(it->second)));
+            ptr<Component> c = std::make_shared<Component>(*(it->second));
             t->AddComponent(c);
         }
         return t;

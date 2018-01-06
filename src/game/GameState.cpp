@@ -7,6 +7,7 @@ GameState::GameState()
 }
 
 GameState::GameState(const GameState &game_state) : _message_dispatch(),
+
                                                     _system_controller(game_state._system_controller),
                                                     _current_stage(game_state._current_stage)
 {
@@ -48,7 +49,6 @@ void GameState::SetStage(ptr<Stage> stage)
     _current_stage = stage;
     _current_stage->AssignToDispatch(&_message_dispatch);
     _message_dispatch.RegisterSubscriber(_current_stage.get());
-    _current_stage->GetComponentUserBaseMutable().AddSubscriber(&_player_base, "Player");
     _current_stage->Load();
     _current_stage->Enter();
 }
@@ -117,9 +117,4 @@ SystemController<GameState> &GameState::GetSystemController()
 EventManager &GameState::GetMessageDispatch()
 {
     return _message_dispatch;
-}
-
-PlayerBase &GameState::GetPlayerBase()
-{
-    return _player_base;
 }

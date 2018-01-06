@@ -15,7 +15,7 @@
 /**
     Purpose: Stages are purely logical containers for handling asset loading,
     active instances, and transitioning to other stages. When a stage is loaded, it will
-    load all graphics asset requgired by the root instance. Every stage can have multiple
+    load all graphics asset required by the root instance. Every stage can have multiple
     instances, but will only ever have one active instance (the instance that is rendered and
     players can interact with).
 **/
@@ -53,6 +53,23 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
 
     void Unload() override
     {
+        for (auto it = _instances_names.begin(); it != _instances_names.end(); it++)
+        {
+            ptr<Instance> inst = it->second;
+
+            if (inst->IsOpen())
+                inst->Close(_entity_manager);
+            if (inst->IsLoaded())
+                inst->Unload(GetComponentUserBaseMutable(),_entity_manager);
+        }
+
+        if (_root_instance)
+        {
+            if (_root_instance->IsOpen())
+                _root_instance->Close(_entity_manager);
+
+            _root_instance->Unload();
+        }
     }
 
     virtual void Tick(float seconds_elapsed) override
@@ -71,29 +88,13 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         }
         else
         {
-            std::cout << "Root Instance not Specified";
+            std::cout << "Root Instance not Specified" << std::endl;
         }
     }
     //Unload all loaded instances
     virtual void Exit()
     {
-        for (auto it = _instances_names.begin(); it != _instances_names.end(); it++)
-        {
-            ptr<Instance> inst = it->second;
-
-            if (inst->IsOpen())
-                inst->Close(_entity_manager);
-            if (inst->IsLoaded())
-                inst->Unload();
-        }
-
-        if (_root_instance)
-        {
-            if (_root_instance->IsOpen())
-                _root_instance->Close(_entity_manager);
-
-            _root_instance->Unload();
-        }
+        
     }
 
     void AddInstance(ptr<Instance> instance)
@@ -105,13 +106,13 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     void AddInstance(int id)
     {
         ptr<Instance> inst = ptr<Instance>(LuaInstanceFactory::Inst()->GetInstance(id));
-        SetRootInstance(inst);
+        AddInstance(inst);
     }
 
     void AddInstance(std::string name)
     {
         ptr<Instance> inst = ptr<Instance>(LuaInstanceFactory::Inst()->GetInstance(name));
-        SetRootInstance(inst);
+        AddInstance(inst);
     }
 
     void SetRootInstance(ptr<Instance> instance)
@@ -126,13 +127,16 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     }
 
     void SetCurrentInstance(std::string name, bool do_load = true)
-    {
+    {        
         if (!HasInstance(name))
             return;
 
         Event e = Event(EventType::STAGE_INSTANCE_CHANGING, -1, -1);
         DispatchMessage(e);
 
+        if(_current_instance)
+            _current_instance->Close(_entity_manager);
+        
         _current_instance = GetInstance(name);
 
         if (do_load && !_current_instance->IsLoaded())
@@ -153,9 +157,6 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
     {
         if (!HasInstance(name))
             return;
-
-        if (_current_instance)
-            _current_instance->Close(_entity_manager);
 
         SetCurrentInstance(name);
     }
@@ -192,6 +193,11 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         return _current_instance;
     }
 
+    ptr<Instance> GetCurrentInstanceID()
+    {
+        return _current_instance;
+    }
+
     ptr<Instance> GetInstance(const std::string &name)
     {
         if (!HasInstance(name))
@@ -216,7 +222,6 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
         }
         else if (e.id == EventType::ENTITY_SPAWNED_EVENT)
         {
-            std::cout << "Entity Spawned!" << std::endl;
             ptr<Entity> entity(e.InfoToType<Entity *>());
             int instance_id = e.target_id;
 
@@ -231,12 +236,18 @@ class Stage : public MessageDispatcher, public EventSubscriber, public FPSRunnab
             else
                 std::cout << "Invalid instance id: " << instance_id << std::endl;
         }
+        else if (e.id == EventType::ENTITY_DELETED_EVENT)
+        {
+            Entity* entity = e.InfoToType<Entity*>();
+            _component_users->DeRegister(*entity);
+        }
     }
 
     virtual std::list<Subscription> GetSubscriptions()
     {
         std::list<Subscription> subs = {Subscription(EventType::CHANGE_INSTANCE_EVENT),
-                                        Subscription(EventType::ENTITY_SPAWNED_EVENT)};
+                                        Subscription(EventType::ENTITY_SPAWNED_EVENT),
+                                        Subscription(EventType::ENTITY_DELETED_EVENT)};
         return subs;
     }
 

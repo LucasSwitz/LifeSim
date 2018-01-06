@@ -3,5 +3,9 @@
     [
         "DrawGraphicsSystem",
         "AnimationSystem"
-    ]
+    ],
+    "flags":
+    {
+        "ControllersSystem" : true
+    }
 }
